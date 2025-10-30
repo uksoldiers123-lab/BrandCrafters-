@@ -2,75 +2,171 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Pricing — BrandCrafters</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
+  <script defer src="script.js"></script>
   <script type="module" src="js/supabaseForm.js"></script>
 </head>
 <body>
 <header class="site-header">
   <div class="container header-inner">
-    <a class="logo" href="index.html"><span class="logo-mark">BC</span><span>BrandCrafters</span></a>
-    <nav class="nav">
-      <a href="index.html">Home</a>
-      <a href="pricing.html" class="active">Pricing</a>
-      <a href="#inquiryForm" class="btn btn-outline">Get Started</a>
+    <a class="logo" href="index.html">
+      <span class="logo-mark">BC</span><span>BrandCrafters</span>
+    </a>
+
+    <!-- Desktop Nav -->
+    <nav class="nav desktop-nav">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="pricing.html" class="nav-link active">Pricing</a>
+      <a href="#inquiry" class="btn btn-outline">Get Started</a>
     </nav>
+
+    <!-- Mobile Menu -->
+    <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </div>
+
+  <!-- Mobile Drawer (V8) -->
+  <nav class="mobile-drawer" aria-hidden="true">
+    <div class="drawer-header">
+      <a class="logo" href="index.html"><span class="logo-mark">BC</span><span>BrandCrafters</span></a>
+      <button class="menu-close" aria-label="Close menu">✕</button>
+    </div>
+    <a class="drawer-link" href="index.html">Home</a>
+    <a class="drawer-link" href="pricing.html">Pricing</a>
+    <a class="drawer-link highlight" href="#inquiry">Get Started</a>
+  </nav>
+  <div class="drawer-backdrop" aria-hidden="true"></div>
 </header>
 
 <section class="page-hero">
   <div class="container">
     <h1 class="headline">Plans that grow with your business</h1>
-    <p class="subhead">Domains & SSL included. Dashboards and add-ons available.  
-    <b>All inquiries are saved to Supabase and email notifications are sent automatically.</b></p>
+    <p class="subhead">
+      Domains & SSL included. Dashboards and add-ons available.<br>
+      <b>Hosting & Care plans</b> cover infrastructure usage for dashboards.
+    </p>
   </div>
 </section>
 
+<!-- Descriptive plans -->
 <div class="container plans">
   <div class="plan-grid">
     <div class="plan">
+      <div class="badge">Launch fast</div>
       <h3>Starter Craft</h3>
       <div class="price">$249</div>
-      <p>1-page site (Home • About • Contact) + Domain & SSL included.</p>
+      <ul class="features">
+        <li>1-page site (Home • About • Contact)</li>
+        <li>Basic logo (1 concept + 1 revision)</li>
+        <li><b>Domain + SSL included</b></li>
+        <li>Mobile optimization & basic SEO</li>
+        <li>Delivery: <b>5–7 business days</b></li>
+      </ul>
+      <p class="fit-note">Best for: solopreneurs, quick launches, landing pages.</p>
     </div>
+
     <div class="plan plan-popular">
       <div class="badge">Most popular</div>
       <h3>Business Builder</h3>
       <div class="price">$699</div>
-      <p>3–5 page responsive website with premium logo + brand kit + SEO.</p>
+      <ul class="features">
+        <li><b>3–5 page</b> responsive website</li>
+        <li>Premium logo (3 concepts + 3 revisions)</li>
+        <li>Brand kit (colors, fonts, export files)</li>
+        <li><b>Domain + SSL included</b></li>
+        <li>Basic analytics & SEO</li>
+        <li>Delivery: <b>2–3 weeks</b></li>
+      </ul>
+      <p class="fit-note">Best for: growing brands that need clarity, depth, and trust.</p>
     </div>
+
     <div class="plan">
+      <div class="badge">Sell online</div>
       <h3>E-Commerce Store</h3>
       <div class="price">$1,199</div>
-      <p>6–10 page online store + admin dashboard + analytics integration.</p>
+      <ul class="features">
+        <li>6–10 page store (Shop • Cart • Checkout)</li>
+        <li>Secure payment integration</li>
+        <li>Basic product admin + analytics</li>
+        <li><b>Domain + SSL included</b></li>
+        <li>SEO foundation</li>
+        <li>Delivery: <b>3–5 weeks</b></li>
+      </ul>
+      <p class="fit-note">Best for: product catalogs, bookings, memberships.</p>
     </div>
   </div>
 
   <div class="notice">
-    <b>BrandPort Dashboards:</b>  
-    Lite $199 | Pro $299 | Full $399 — powered by Replit (included in Hosting & Care plans).
+    <b>BrandPort Dashboards:</b> Lite $199 • Pro $299 • Full $399 (Admin/User portals, analytics, files).
+    <br>Payment Link Setup: <b>$50 per link</b> — adds <b>+1 week</b> for verification & testing.
   </div>
+
+  <h2 id="dashboards">Hosting & Care (covers infrastructure)</h2>
+  <div class="plan-grid care">
+    <div class="plan">
+      <h3>Lite</h3>
+      <div class="price">$29<span>/mo</span></div>
+      <ul class="features">
+        <li>Static/basic sites</li>
+        <li>Uptime checks & monthly backup</li>
+        <li>30 minutes of edits</li>
+      </ul>
+    </div>
+    <div class="plan">
+      <h3>Standard</h3>
+      <div class="price">$59<span>/mo</span></div>
+      <ul class="features">
+        <li>3–5 page sites</li>
+        <li>Security & library updates</li>
+        <li>1 hour of edits</li>
+      </ul>
+    </div>
+    <div class="plan">
+      <h3>Pro</h3>
+      <div class="price">$99<span>/mo</span></div>
+      <ul class="features">
+        <li><b>Dashboards</b> (includes infrastructure usage)</li>
+        <li>Weekly backups, priority fixes</li>
+        <li>2 hours of edits</li>
+      </ul>
+    </div>
+    <div class="plan">
+      <h3>Commerce</h3>
+      <div class="price">$149<span>/mo</span></div>
+      <ul class="features">
+        <li>Stores + dashboards</li>
+        <li>Webhook/checkout monitoring</li>
+        <li>2 hours of edits</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Add-Ons</h2>
+  <ul class="addons">
+    <li><b>Payment Link Setup</b> — $50 per link (+1 week)</li>
+    <li><b>Email Forwarding</b> — $25</li>
+    <li><b>Business Email</b> — $75–$150 per mailbox</li>
+    <li><b>SEO Setup</b> — $125–$200</li>
+    <li><b>Social Media Kit</b> — $75–$150</li>
+  </ul>
 </div>
 
-<!-- 🔽 INQUIRY FORM SECTION -->
+<!-- Inquiry Form on Pricing -->
 <section id="inquiry" class="container inquiry-section">
   <h2>Start Your Plan</h2>
-  <p class="subhead">Fill out the form below to begin your project.  
-  We'll contact you within 24 hours to finalize your setup and send your invoice.</p>
+  <p class="subhead">Tell us what you need. We’ll reply with your setup plan and invoice.</p>
 
   <form id="inquiryForm" class="form glass" autocomplete="on">
-    <!-- Clear placeholders for Supabase integration -->
-    <!-- Replace SUPABASE_URL and SUPABASE_ANON_KEY inside supabaseForm.js -->
     <label>Full Name
       <input name="name" required />
     </label>
-
     <label>Email
       <input type="email" name="email" required />
     </label>
-
     <label>Company (optional)
       <input name="company" />
     </label>
@@ -95,17 +191,17 @@
 
     <label>Interested Add-Ons
       <select name="addons" multiple size="6">
-        <option>Payment Link Setup (+$50/link)</option>
+        <option>Payment Link Setup (+$50/link — adds +1 week)</option>
         <option>Email Forwarding (+$25)</option>
         <option>Business Email (+$75–$150)</option>
         <option>SEO Setup (+$125–$200)</option>
         <option>Social Media Kit (+$75–$150)</option>
-        <option>Maintenance Plan</option>
+        <option>Maintenance Plan (Lite/Standard/Pro/Commerce)</option>
       </select>
     </label>
 
     <label>Project Details
-      <textarea name="details" rows="5" placeholder="Goals, deadline, special requests..."></textarea>
+      <textarea name="details" rows="6" placeholder="Goals, pages, examples, deadline…"></textarea>
     </label>
 
     <button class="btn btn-primary" type="submit">Submit Inquiry</button>
