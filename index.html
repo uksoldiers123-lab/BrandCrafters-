@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BrandCrafters — Where ideas become icons.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="logo" href="index.html"><span class="logo-mark">BC</span><span>BrandCrafters</span></a>
+    <nav class="nav">
+      <a class="active" href="index.html">Home</a>
+      <a href="pricing.html">Pricing</a>
+      <a class="btn btn-outline" href="pricing.html#inquiry">Get in touch</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <h1 class="headline">Where ideas become icons.</h1>
+    <p class="subhead">Websites, branding, and dashboards that help entrepreneurs grow. <b>Domain + SSL included.</b></p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="pricing.html">See plans</a>
+      <a class="btn btn-ghost" href="pricing.html#inquiry">Book a consult</a>
+    </div>
+  </div>
+  <div class="hero-ambient"></div>
+</section>
+
+<section class="grid-4 container">
+  <article class="card"><div class="icon">💻</div><h3>Web Design</h3><p>Fast, secure, mobile-ready sites. Starter or Business Builder (3–5 pages).</p></article>
+  <article class="card"><div class="icon">🎨</div><h3>Brand Identity</h3><p>Logos, color systems, social kits — look professional everywhere.</p></article>
+  <article class="card"><div class="icon">📊</div><h3>BrandPort Dashboards</h3><p>Admin/User portals with analytics, files, and payment links.</p></article>
+  <article class="card"><div class="icon">🔌</div><h3>Payments</h3><p>Payment Link Setup ($50/link). Adds <b>+1 week</b> for verification & testing.</p></article>
+</section>
+
+<section class="feature container">
+  <div class="feature-copy">
+    <h2>Introducing <span class="grad">BrandPort</span></h2>
+    <p>Custom dashboards for admins and users. Toggle modules like users, invoices, analytics, and payment links. Hosting & Care plans cover infrastructure usage.</p>
+    <ul class="list">
+      <li>Lite (Client view), Pro (Admin or User), Full (Admin + User)</li>
+      <li>Payment Link Setup <b>$50/link</b> — adds <b>+1 week</b></li>
+    </ul>
+    <a class="btn btn-primary" href="pricing.html#dashboards">View dashboard pricing</a>
+  </div>
+  <div class="feature-art"><div class="glass demo" aria-hidden="true"></div></div>
+</section>
+
+<section class="cta container">
+  <h2>Ready to craft something iconic?</h2>
+  <p class="subhead">Tell us what you need — we’ll reply with a plan, price, and timeline.</p>
+  <a class="btn btn-primary" href="pricing.html#inquiry">Start your project</a>
+</section>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>© <span id="year"></span> BrandCrafters — A division of Egyptian Hype LLC</div>
+    <div class="footer-nav">
+      <a href="pricing.html">Pricing</a>
+      <a href="pricing.html#inquiry">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
