@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pricing — BrandCrafters</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Supabase JS (browser) -->
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script defer src="supabase-form.js"></script>
+</head>
+<body>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="logo" href="index.html"><span class="logo-mark">BC</span><span>BrandCrafters</span></a>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a class="active" href="pricing.html">Pricing</a>
+      <a class="btn btn-outline" href="#inquiry">Get in touch</a>
+    </nav>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <h1 class="headline">Plans that grow with you</h1>
+    <p class="subhead">Domains & SSL included. Dashboards are add-ons. <b>Hosting & Care plans cover infrastructure usage.</b></p>
+  </div>
+</section>
+
+<div class="container plans">
+  <h2>Websites</h2>
+  <div class="plan-grid">
+    <div class="plan">
+      <h3>Starter Craft</h3>
+      <div class="price">$249 <span>one-time</span></div>
+      <ul>
+        <li>1-page site (Home • About • Contact)</li>
+        <li>Basic logo (1 concept + 1 revision)</li>
+        <li><b>Domain + SSL</b> included</li>
+        <li>Mobile optimization & basic SEO</li>
+      </ul>
+      <div class="meta">Timeline: 5–7 business days</div>
+      <a class="btn btn-primary" href="#inquiry">Start Starter</a>
+    </div>
+
+    <div class="plan plan-popular">
+      <div class="badge">Most popular</div>
+      <h3>Business Builder</h3>
+      <div class="price">$699 <span>one-time</span></div>
+      <ul>
+        <li><b>3–5 page</b> responsive website</li>
+        <li>Premium logo (3 concepts + 3 revisions)</li>
+        <li>Brand kit (colors, fonts, files)</li>
+        <li><b>Domain + SSL</b> included</li>
+        <li>Basic analytics & SEO</li>
+      </ul>
+      <div class="meta">Timeline: 2–3 weeks</div>
+      <a class="btn btn-primary" href="#inquiry">Start Builder</a>
+    </div>
+
+    <div class="plan">
+      <h3>E-Commerce Store</h3>
+      <div class="price">$1,199 <span>one-time</span></div>
+      <ul>
+        <li>6–10 page store (Shop • Cart • Checkout)</li>
+        <li>Secure payment integration</li>
+        <li>Basic product admin</li>
+        <li><b>Domain + SSL</b> included</li>
+        <li>SEO & analytics</li>
+      </ul>
+      <div class="meta">Timeline: 3–5 weeks</div>
+      <a class="btn btn-primary" href="#inquiry">Start Store</a>
+    </div>
+  </div>
+
+  <h2 id="dashboards">Dashboards (BrandPort)</h2>
+  <p class="hint">Dashboards run on our infrastructure. <b>Hosting & Care</b> plans below include usage & support.</p>
+  <div class="plan-grid">
+    <div class="plan">
+      <h3>Lite</h3>
+      <div class="price">$199 <span>add-on</span></div>
+      <ul>
+        <li>Client view (invoices/files/analytics)</li>
+        <li>Single organization</li>
+        <li>Module toggles</li>
+      </ul>
+    </div>
+    <div class="plan">
+      <h3>Pro</h3>
+      <div class="price">$299 <span>add-on</span></div>
+      <ul>
+        <li><b>Admin or User</b> role</li>
+        <li>Users + files + analytics modules</li>
+        <li>Payment Links module ready</li>
+      </ul>
+    </div>
+    <div class="plan">
+      <h3>Full</h3>
+      <div class="price">$399 <span>add-on</span></div>
+      <ul>
+        <li><b>Admin + User</b> roles</li>
+        <li>All modules unlocked</li>
+        <li>Scales with your plan</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="notice">
+    <b>Payment Link Setup</b> — $50 per link. Adds <b>+1 week</b> to your project (verification & testing).
+  </div>
+
+  <h2>Hosting & Care (covers infra usage)</h2>
+  <div class="plan-grid care">
+    <div class="plan"><h3>Lite</h3><div class="price">$29 <span>/mo</span></div><ul><li>Static/basic sites</li><li>Uptime checks, monthly backup</li><li>30 minutes of edits</li></ul></div>
+    <div class="plan"><h3>Standard</h3><div class="price">$59 <span>/mo</span></div><ul><li>3–5 page sites</li><li>Security & library updates</li><li>1 hour of edits</li></ul></div>
+    <div class="plan"><h3>Pro</h3><div class="price">$99 <span>/mo</span></div><ul><li><b>Dashboards</b> (includes infra usage)</li><li>Weekly backups, priority fixes</li><li>2 hours of edits</li></ul></div>
+    <div class="plan"><h3>Commerce</h3><div class="price">$149 <span>/mo</span></div><ul><li>Stores + dashboards</li><li>Webhook/checkout monitoring</li><li>2 hours of edits</li></ul></div>
+  </div>
+</div>
+
+<!-- INQUIRY FORM (Supabase) -->
+<section id="inquiry" class="container contact-grid">
+  <form id="inquiryForm" class="form glass" autocomplete="on">
+    <!-- Honeypot -->
+    <input type="text" name="gotcha" style="display:none" tabindex="-1" autocomplete="off">
+
+    <h2>Start your project</h2>
+    <label>Full Name<input name="name" required/></label>
+    <label>Email<input type="email" name="email" required/></label>
+    <label>Company (optional)<input name="company"/></label>
+
+    <label>Service
+      <select name="service" required>
+        <option value="Starter Craft">Starter Craft (1 page)</option>
+        <option value="Business Builder">Business Builder (3–5 pages)</option>
+        <option value="E-Commerce Store">E-Commerce Store</option>
+        <option value="Dashboard Only">BrandPort Dashboard only</option>
+      </select>
+    </label>
+
+    <label>Dashboards (BrandPort)
+      <select name="dashboard" required>
+        <option value="None">None</option>
+        <option value="Lite">Lite (Client View)</option>
+        <option value="Pro">Pro (Admin or User)</option>
+        <option value="Full">Full (Admin + User)</option>
+      </select>
+    </label>
+
+    <label>Interested Add-Ons (hold Ctrl/⌘ for multiple)
+      <select name="addons" multiple size="6">
+        <option>Payment Link Setup (+$50/link — adds +1 week)</option>
+        <option>Email forwarding (+$25)</option>
+        <option>Business email (+$75–$150)</option>
+        <option>SEO setup (+$125–$200)</option>
+        <option>Social media kit (+$75–$150)</option>
+        <option>Maintenance plan (Lite/Standard/Pro/Commerce)</option>
+      </select>
+    </label>
+
+    <label>Project Details
+      <textarea name="details" rows="6" placeholder="Goals, pages, examples, deadline…"></textarea>
+    </label>
+
+    <button class="btn btn-primary" type="submit">Send request</button>
+    <p id="formMsg" class="form-note"></p>
+
+    <!-- ===== Supabase config placeholders =====
+      1) Set your values in supabase-form.js:
+         - SUPABASE_URL
+         - SUPABASE_ANON_KEY
+         - EDGE_FUNCTION_URL (optional for emails)
+      2) Table: public.inquiries (see SQL below)
+      3) RLS policies: enabled (see SQL below)
+    ========================================== -->
+  </form>
+
+  <aside class="contact-side">
+    <div class="card">
+      <h3>What happens next?</h3>
+      <ol class="list">
+        <li>We review your request and follow up (usually same day).</li>
+        <li>We confirm scope, price, and timeline.</li>
+        <li>We set your plan and email an invoice.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Note</h3>
+      <p>Dashboards run on our infrastructure. Hosting & Care plans cover usage and support.</p>
+    </div>
+  </aside>
+</section>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>© <span id="year"></span> BrandCrafters — A division of Egyptian Hype LLC</div>
+    <div class="footer-nav">
+      <a href="pricing.html">Pricing</a>
+      <a href="#inquiry">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
