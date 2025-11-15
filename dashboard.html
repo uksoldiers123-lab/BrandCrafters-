@@ -4,141 +4,85 @@
   <meta charset="utf-8" />
   <title>BrandCrafters — Admin Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <!-- BrandCrafters base styles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <script defer src="script.js"></script>
+
   <style>
-    :root{
-      --bg:#050713;
-      --panel:rgba(255,255,255,.04);
-      --border:rgba(255,255,255,.08);
-      --text:#f5f5ff;
-      --muted:#b5b7d8;
-      --grad:linear-gradient(135deg,#6ea8ff,#b166ff);
-    }
-    *{box-sizing:border-box;}
+    /* Admin dashboard-specific layout (doesn't override site header/footer) */
     body{
-      margin:0;
-      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-      background:
-        radial-gradient(1200px 600px at -10% -10%, #18122f 0, rgba(24,18,47,0) 60%),
-        var(--bg);
-      color:var(--text);
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color:#f5f5ff;
     }
-    a{text-decoration:none;color:inherit;}
-
-    /* HEADER */
-    header{
-      position:sticky;top:0;z-index:40;
-      background:rgba(5,7,19,.96);
-      backdrop-filter:blur(14px);
-      border-bottom:1px solid rgba(255,255,255,.08);
-      padding:10px 18px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-    }
-    .brand{
-      display:flex;flex-direction:column;gap:2px;
-    }
-    .brand-title{
-      font-weight:700;
-      letter-spacing:.08em;
-      font-size:14px;
-      text-transform:uppercase;
-    }
-    .brand-sub{
-      font-size:12px;
-      color:var(--muted);
-    }
-    .header-right{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      font-size:12px;
-      color:var(--muted);
-    }
-    .user-email{
-      max-width:200px;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-    .logout-btn{
-      border-radius:999px;
-      padding:6px 12px;
-      border:1px solid rgba(255,255,255,.7);
-      background:rgba(255,255,255,.06);
-      color:var(--text);
-      font-size:12px;
-      cursor:pointer;
-      transition:.18s;
-    }
-    .logout-btn:hover{
-      background:rgba(255,255,255,.16);
-      transform:translateY(-1px);
-    }
-
-    /* LAYOUT */
-    main{
+    .dash-main{
       max-width:1100px;
-      margin:18px auto 60px;
-      padding:0 16px;
+      margin:32px auto 80px;
+      padding:0 20px;
     }
-    h1{margin:0 0 6px;font-size:22px;}
-    h2{margin:0 0 8px;font-size:16px;}
-    .subhead{margin:0 0 18px;font-size:13px;color:var(--muted);}
+    .dash-main h1{
+      margin:0 0 6px;
+      font-size:24px;
+    }
+    .dash-subhead{
+      margin:0 0 20px;
+      font-size:13px;
+      color:var(--muted);
+    }
 
-    .grid{
+    .dash-grid-3{
       display:grid;
       grid-template-columns:repeat(3,minmax(0,1fr));
-      gap:12px;
+      gap:16px;
+      margin-bottom:16px;
     }
-    .grid-2{
+    .dash-grid-2{
       display:grid;
       grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:12px;
+      gap:16px;
+      margin-top:16px;
     }
-    @media (max-width:900px){
-      .grid{grid-template-columns:1fr;}
-      .grid-2{grid-template-columns:1fr;}
+    @media(max-width:900px){
+      .dash-grid-3,
+      .dash-grid-2{
+        grid-template-columns:1fr;
+      }
     }
 
-    .card{
+    .dash-card{
       background:var(--panel);
       border-radius:16px;
-      border:1px solid var(--border);
+      border:1px solid rgba(255,255,255,.10);
       padding:16px 14px;
-      box-shadow:0 18px 40px rgba(0,0,0,.6);
     }
-    .card p{margin:0 0 6px;font-size:13px;}
-    .small{font-size:12px;color:var(--muted);}
+    .dash-card h2{
+      margin:0 0 6px;
+      font-size:16px;
+    }
+    .dash-card p{
+      margin:0 0 6px;
+      font-size:13px;
+      color:var(--muted);
+    }
 
-    .stat-label{
+    .dash-stat-label{
       font-size:11px;
       text-transform:uppercase;
       letter-spacing:.06em;
       color:var(--muted);
     }
-    .stat-value{
-      font-size:20px;
+    .dash-stat-value{
+      font-size:22px;
       font-weight:700;
       margin-top:4px;
     }
-    .stat-sub{
+    .dash-stat-sub{
       font-size:11px;
       color:var(--muted);
       margin-top:2px;
     }
-
-    .pill{
-      display:inline-block;
-      padding:2px 8px;
-      border-radius:999px;
-      font-size:11px;
-    }
-    .pill-green{background:rgba(155,255,191,.15);}
-    .pill-red{background:rgba(255,155,155,.15);}
-    .pill-blue{background:rgba(110,168,255,.15);}
 
     table{
       width:100%;
@@ -158,205 +102,180 @@
       letter-spacing:.05em;
       color:var(--muted);
     }
-
-    .btn{
+    .small{
+      font-size:12px;
+      color:var(--muted);
+    }
+    .pill{
       display:inline-block;
       border-radius:999px;
-      padding:7px 11px;
-      font-size:12px;
-      font-weight:600;
-      border:0;
-      cursor:pointer;
-      transition:.18s;
+      padding:2px 7px;
+      font-size:11px;
     }
-    .btn-ghost{
-      background:rgba(255,255,255,.06);
-      color:var(--text);
-      border:1px solid rgba(255,255,255,.18);
-    }
-    .btn-ghost:hover{
-      filter:brightness(1.05);
-      transform:translateY(-1px);
-    }
+    .pill-green{background:rgba(155,255,191,.15);}
+    .pill-red{background:rgba(255,155,155,.15);}
+    .pill-blue{background:rgba(110,168,255,.15);}
 
-    /* LOGIN VIEW */
-    .login-wrapper{
-      min-height:calc(100vh - 64px);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:24px 16px;
-    }
-    .login-panel{
-      max-width:360px;
-      width:100%;
-      background:var(--panel);
-      border-radius:18px;
-      border:1px solid var(--border);
-      padding:20px 18px;
-      box-shadow:0 18px 40px rgba(0,0,0,.7);
-    }
-    .login-panel h1{
-      font-size:20px;
-      margin:0 0 6px;
-    }
-    .login-panel p{
-      margin-top:0;
+    .dash-lead-status{
       font-size:13px;
       color:var(--muted);
-      margin-bottom:12px;
     }
-    .grad{
-      background:var(--grad);
-      -webkit-background-clip:text;
-      background-clip:text;
-      color:transparent;
-    }
-    label{
-      display:block;
-      font-size:13px;
-      margin-bottom:10px;
-    }
-    input[type="email"],
-    input[type="password"]{
-      width:100%;
-      margin-top:5px;
-      padding:10px 11px;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,.16);
-      background:rgba(5,7,19,.9);
-      color:var(--text);
-      font-size:14px;
-    }
-    input::placeholder{
-      color:rgba(181,183,216,.8);
-    }
-    .login-msg{
-      font-size:12px;
-      min-height:16px;
-      margin-top:8px;
-    }
-    .login-msg.error{color:#ff9b9b;}
-    .login-msg.success{color:#9bffbf;}
 
-    /* default: show login, hide dashboard until JS decides */
-    #dashboardContent{display:none;}
+    /* Header extra bits for email + logout */
+    .header-user{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-size:11px;
+      color:var(--muted);
+      margin-left:12px;
+    }
+    .btn-logout{
+      border-radius:999px;
+      padding:6px 10px;
+      border:1px solid rgba(255,255,255,.55);
+      background:rgba(255,255,255,.08);
+      font-size:11px;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+    }
+    .btn-logout:hover{
+      background:rgba(255,255,255,.16);
+      transform:translateY(-1px);
+    }
+    @media(max-width:940px){
+      .header-user{
+        display:none;
+      }
+    }
   </style>
 </head>
 <body>
-<header>
-  <div class="brand">
-    <span class="brand-title">BrandCrafters</span>
-    <span class="brand-sub">Admin · Money & Projects</span>
+
+<!-- BrandCrafters site header with dashboard links (Version B) -->
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="logo" href="index.html">
+      <span class="logo-mark">BC</span><span>BrandCrafters</span>
+    </a>
+
+    <!-- Desktop Nav -->
+    <nav class="nav desktop-nav">
+      <!-- Public nav -->
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="pricing.html" class="nav-link">Pricing</a>
+      <a href="customer-inquiry.html" class="btn btn-outline">Customer Portal</a>
+
+      <!-- Dashboard-specific links -->
+      <a href="dashboard.html" class="nav-link active">Admin Dashboard</a>
+      <a href="dashboard-leads-upload.html" class="nav-link">Leads &amp; CSV</a>
+      <a href="contractor-portal.html" class="nav-link">Contractor Portal</a>
+
+      <!-- User + logout -->
+      <div class="header-user">
+        <span id="userEmail"></span>
+        <button id="logoutBtn" class="btn-logout">Log Out</button>
+      </div>
+    </nav>
+
+    <!-- Mobile: Hamburger -->
+    <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </div>
-  <div class="header-right">
-    <span id="userEmail" class="user-email"></span>
-    <button id="logoutBtn" class="logout-btn">Log Out</button>
-  </div>
+
+  <!-- Mobile Drawer (V8) -->
+  <nav class="mobile-drawer" aria-hidden="true">
+    <div class="drawer-header">
+      <a class="logo" href="index.html">
+        <span class="logo-mark">BC</span><span>BrandCrafters</span>
+      </a>
+      <button class="menu-close" aria-label="Close menu">✕</button>
+    </div>
+
+    <!-- Public nav -->
+    <a class="drawer-link" href="index.html">Home</a>
+    <a class="drawer-link" href="pricing.html">Pricing</a>
+    <a class="drawer-link" href="customer-inquiry.html">Customer Portal</a>
+
+    <!-- Dashboard-specific -->
+    <a class="drawer-link" href="dashboard.html">Admin Dashboard</a>
+    <a class="drawer-link" href="dashboard-leads-upload.html">Leads &amp; CSV</a>
+    <a class="drawer-link" href="contractor-portal.html">Contractor Portal</a>
+  </nav>
+  <div class="drawer-backdrop" aria-hidden="true"></div>
 </header>
 
-<!-- LOGIN STATE -->
-<div id="loginWrapper" class="login-wrapper">
-  <div class="login-panel">
-    <h1><span class="grad">Sign in</span> to your dashboard</h1>
-    <p>Use your Supabase email and password. Admin (you) sees this dashboard. Contractors are redirected to their portal.</p>
-
-    <form id="loginForm">
-      <label>Email
-        <input type="email" id="loginEmail" required placeholder="you@example.com" />
-      </label>
-      <label>Password
-        <input type="password" id="loginPassword" required placeholder="••••••••" />
-      </label>
-      <button type="submit" class="btn btn-ghost" id="loginBtn" style="width:100%;">Login</button>
-      <div id="loginMsg" class="login-msg"></div>
-    </form>
-  </div>
-</div>
-
-<!-- ADMIN DASHBOARD -->
-<main id="dashboardContent">
-  <section style="margin-bottom:12px;">
-    <h1>Overview</h1>
-    <p class="subhead">
-      One-time project money, monthly maintenance, upcoming bills, and lead pipeline.
+<main class="dash-main">
+  <section>
+    <h1>Admin Overview</h1>
+    <p class="dash-subhead">
+      Snapshot of project revenue, monthly maintenance, recurring bills, and lead performance.
     </p>
-  </section>
-
-  <!-- ADMIN MENU -->
-  <section class="card" style="margin-bottom:16px;">
-    <h2>Admin Menu</h2>
-    <p class="small">
-      Quick links to other admin pages.
-    </p>
-    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;">
-      <button class="btn btn-ghost" onclick="window.location.href='dashboard-leads-upload.html'">
-        Leads & CSV Upload
-      </button>
-      <button class="btn btn-ghost" onclick="window.location.href='contractor-portal.html'">
-        Contractor Portal
-      </button>
-    </div>
   </section>
 
   <!-- MONEY SUMMARY -->
-  <section class="grid">
-    <article class="card">
-      <div class="stat-label">Lifetime Project Revenue (one-time)</div>
-      <div class="stat-value" id="lifetimeRevenue">$0.00</div>
-      <div class="stat-sub">Sum of total_price on completed onboarding submissions.</div>
-    </article>
-
-    <article class="card">
-      <div class="stat-label">Active Monthly Income</div>
-      <div class="stat-value" id="monthlyIncome">$0.00</div>
-      <div class="stat-sub">
-        Sum of monthly_fee for all projects with monthly_fee &gt; 0.
+  <section class="dash-grid-3">
+    <article class="dash-card">
+      <div class="dash-stat-label">Lifetime Project Revenue (one-time)</div>
+      <div class="dash-stat-value" id="lifetimeRevenue">$0.00</div>
+      <div class="dash-stat-sub">
+        Sum of <code>total_price</code> on completed onboarding submissions.
       </div>
     </article>
 
-    <article class="card">
-      <div class="stat-label">Active Monthly Bills (Tools & Client Bills)</div>
-      <div class="stat-value" id="monthlyBills">$0.00</div>
-      <div class="stat-sub">
-        Recurring_expenses where frequency = 'monthly' and is_active = true.
+    <article class="dash-card">
+      <div class="dash-stat-label">Active Monthly Income</div>
+      <div class="dash-stat-value" id="monthlyIncome">$0.00</div>
+      <div class="dash-stat-sub">
+        Sum of <code>monthly_fee</code> across all active projects.
+      </div>
+    </article>
+
+    <article class="dash-card">
+      <div class="dash-stat-label">Active Monthly Bills (Tools &amp; Client Bills)</div>
+      <div class="dash-stat-value" id="monthlyBills">$0.00</div>
+      <div class="dash-stat-sub">
+        From <code>recurring_expenses</code> where frequency = "monthly" and is_active = true.
       </div>
     </article>
   </section>
 
   <!-- PROFITS & LEADS -->
-  <section class="grid" style="margin-top:12px;">
-    <article class="card">
-      <div class="stat-label">Est. Monthly Net (Maintenance - Bills)</div>
-      <div class="stat-value" id="monthlyNet">$0.00</div>
-      <div class="stat-sub">
-        Quick check if maintenance fees cover recurring expenses.
+  <section class="dash-grid-3">
+    <article class="dash-card">
+      <div class="dash-stat-label">Est. Monthly Net</div>
+      <div class="dash-stat-value" id="monthlyNet">$0.00</div>
+      <div class="dash-stat-sub">
+        Maintenance income minus recurring expenses (rough check if BrandCrafters covers its own bills).
       </div>
     </article>
 
-    <article class="card">
-      <div class="stat-label">Closed Won Leads · This Month</div>
-      <div class="stat-value" id="closedWonMonth">0</div>
-      <div class="stat-sub">
-        From call_leads with status = 'closed won' this month.
+    <article class="dash-card">
+      <div class="dash-stat-label">Closed Won Leads · This Month</div>
+      <div class="dash-stat-value" id="closedWonMonth">0</div>
+      <div class="dash-stat-sub">
+        Leads in <code>call_leads</code> where status = "closed won" and last_contact_date is this month.
       </div>
     </article>
 
-    <article class="card">
-      <div class="stat-label">Estimated Commissions · This Month</div>
-      <div class="stat-value" id="commissionMonth">$0.00</div>
-      <div class="stat-sub">
-        $100 per closed website sale (no commission on add-ons only).
+    <article class="dash-card">
+      <div class="dash-stat-label">Estimated Commissions · This Month</div>
+      <div class="dash-stat-value" id="commissionMonth">$0.00</div>
+      <div class="dash-stat-sub">
+        $100 per closed website sale (no commission on add-ons-only jobs).
       </div>
     </article>
   </section>
 
   <!-- PROJECTS & EXPENSES -->
-  <section class="grid-2" style="margin-top:16px;">
-    <article class="card">
+  <section class="dash-grid-2">
+    <article class="dash-card">
       <h2>Client Projects (Onboarding)</h2>
       <p class="small">
-        Last 6 onboarding submissions with totals and monthly fees.
+        Last 6 onboarding submissions with total price, monthly fees, and status. Use your main dashboard views to drill in.
       </p>
       <table id="projectsTable">
         <thead>
@@ -371,10 +290,10 @@
       </table>
     </article>
 
-    <article class="card">
+    <article class="dash-card">
       <h2>Upcoming Recurring Bills</h2>
       <p class="small">
-        Next 6 active recurring_expenses sorted by next_due_date.
+        Next 6 active recurring expenses sorted by next_due_date.
       </p>
       <table id="billsTable">
         <thead>
@@ -392,18 +311,18 @@
   </section>
 
   <!-- LEAD SNAPSHOT -->
-  <section class="card" style="margin-top:16px;">
+  <section class="dash-card" style="margin-top:16px;">
     <h2>Lead Pipeline Snapshot</h2>
     <p class="small">
-      Quick check before going into the full Leads & CSV dashboard.
+      Quick view of where your cold-call/web leads are, before you open the full Leads &amp; CSV dashboard.
     </p>
-    <div class="grid-2">
+    <div class="dash-grid-2">
       <div>
-        <p class="stat-label">Counts by Status</p>
-        <p class="small" id="leadStatusStats">Loading…</p>
+        <p class="dash-stat-label">Counts by Status</p>
+        <p class="dash-lead-status" id="leadStatusStats">Loading…</p>
       </div>
       <div>
-        <p class="stat-label">Top Callers (Closed Won)</p>
+        <p class="dash-stat-label">Top Callers (Closed Won)</p>
         <table id="topCallersTable">
           <thead>
             <tr>
@@ -419,14 +338,30 @@
   </section>
 </main>
 
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      © <span id="year"></span> BrandCrafters — A division of Egyptian Hype LLC
+      <a href="dashboard.html" class="admin-link">Admin</a>
+    </div>
+  </div>
+</footer>
+
+<!-- Year -->
+<script>
+  const yearSpan = document.getElementById('year');
+  if (yearSpan) {
+    yearSpan.textContent = new Date().getFullYear();
+  }
+</script>
+
+<!-- Supabase + Dashboard Logic -->
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script>
   const SUPABASE_URL = "https://vekoulqehexqosgwacwa.supabase.co";
-  const SUPABASE_ANON_KEY =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
-
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiIsInZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
   const ADMIN_EMAIL = "srarnold216@gmail.com";
-  const CONTRACTOR_PORTAL_URL = "contractor-portal.html";
+  const LOGIN_PAGE_URL = "dashboard.html"; // you are using dashboard as the gate
 
   const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -440,22 +375,41 @@
   const closedWonMonth  = document.getElementById("closedWonMonth");
   const commissionMonth = document.getElementById("commissionMonth");
 
-  const projectsTableBody    = document.querySelector("#projectsTable tbody");
-  const billsTableBody       = document.querySelector("#billsTable tbody");
-  const billsNote            = document.getElementById("billsNote");
-  const leadStatusStats      = document.getElementById("leadStatusStats");
-  const topCallersTableBody  = document.querySelector("#topCallersTable tbody");
+  const projectsTableBody = document.querySelector("#projectsTable tbody");
+  const billsTableBody    = document.querySelector("#billsTable tbody");
+  const billsNote         = document.getElementById("billsNote");
+  const leadStatusStats   = document.getElementById("leadStatusStats");
+  const topCallersTableBody = document.querySelector("#topCallersTable tbody");
 
-  const loginWrapper     = document.getElementById("loginWrapper");
-  const dashboardContent = document.getElementById("dashboardContent");
-  const loginForm        = document.getElementById("loginForm");
-  const loginEmail       = document.getElementById("loginEmail");
-  const loginPassword    = document.getElementById("loginPassword");
-  const loginBtn         = document.getElementById("loginBtn");
-  const loginMsg         = document.getElementById("loginMsg");
+  async function guardAdmin() {
+    const { data, error } = await supabaseClient.auth.getUser();
+    if (error) {
+      console.error("auth.getUser error:", error);
+    }
+    if (!data || !data.user) {
+      // not logged in -> you can optionally show a login state instead
+      return null;
+    }
+    const email = data.user.email;
+    if (userEmailSpan) userEmailSpan.textContent = email || "";
+
+    if (email !== ADMIN_EMAIL) {
+      // Non admin goes to contractor portal
+      window.location.href = "contractor-portal.html";
+      return null;
+    }
+    return data.user;
+  }
+
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", async () => {
+      await supabaseClient.auth.signOut();
+      window.location.href = LOGIN_PAGE_URL;
+    });
+  }
 
   function formatMoney(n) {
-    if (n === null || n === undefined || isNaN(n)) return "$0.00";
+    if (!n || isNaN(n)) return "$0.00";
     return "$" + Number(n).toFixed(2);
   }
 
@@ -466,57 +420,10 @@
     return new Date(date.getFullYear(), date.getMonth() + 1, 0);
   }
 
-  function showLogin() {
-    loginWrapper.style.display = "flex";
-    dashboardContent.style.display = "none";
-    userEmailSpan.textContent = "";
-  }
-
-  function showDashboard(email) {
-    loginWrapper.style.display = "none";
-    dashboardContent.style.display = "block";
-    userEmailSpan.textContent = email;
-  }
-
-  logoutBtn.addEventListener("click", async () => {
-    await supabaseClient.auth.signOut();
-    showLogin();
-  });
-
-  loginForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    loginMsg.textContent = "Logging in…";
-    loginMsg.className = "login-msg";
-    loginBtn.disabled = true;
-
-    const email = loginEmail.value.trim().toLowerCase();
-    const password = loginPassword.value;
-
-    const { data, error } = await supabaseClient.auth.signInWithPassword({
-      email,
-      password
-    });
-
-    if (error || !data || !data.user) {
-      loginMsg.textContent = "Login failed. Check email & password.";
-      loginMsg.className = "login-msg error";
-      loginBtn.disabled = false;
-      return;
-    }
-
-    if (email === ADMIN_EMAIL.toLowerCase()) {
-      loginMsg.textContent = "Login successful. Loading dashboard…";
-      loginMsg.className = "login-msg success";
-      await initAdmin();
-    } else {
-      window.location.href = CONTRACTOR_PORTAL_URL;
-    }
-  });
-
   async function loadDashboard() {
     const today = new Date();
     const monthStart = startOfMonth(today);
-    const monthEnd   = endOfMonth(today);
+    const monthEnd = endOfMonth(today);
 
     const [onboardingRes, billsRes, leadsRes] = await Promise.all([
       supabaseClient.from("onboarding_submissions").select("*"),
@@ -525,19 +432,19 @@
     ]);
 
     if (onboardingRes.error) console.error("Onboarding error:", onboardingRes.error);
-    if (billsRes.error)      console.error("Bills error:", billsRes.error);
-    if (leadsRes.error)      console.error("Leads error:", leadsRes.error);
+    if (billsRes.error) console.error("Bills error:", billsRes.error);
+    if (leadsRes.error) console.error("Leads error:", leadsRes.error);
 
     const onboarding = onboardingRes.data || [];
     const bills      = billsRes.data || [];
     const leads      = leadsRes.data || [];
 
     // MONEY SUMMARY
-    let lifetimeRev      = 0;
-    let monthlyFeeTotal  = 0;
+    let lifetimeRev = 0;
+    let monthlyFeeTotal = 0;
 
     onboarding.forEach(p => {
-      if (p.total_price) lifetimeRev     += Number(p.total_price) || 0;
+      if (p.total_price) lifetimeRev += Number(p.total_price) || 0;
       if (p.monthly_fee) monthlyFeeTotal += Number(p.monthly_fee) || 0;
     });
 
@@ -546,7 +453,7 @@
 
     let monthlyBillsTotal = 0;
     bills.forEach(b => {
-      if ((b.frequency || "").toLowerCase() === "monthly" && b.amount) {
+      if (b.frequency === "monthly" && b.amount) {
         monthlyBillsTotal += Number(b.amount) || 0;
       }
     });
@@ -559,10 +466,9 @@
       .sort((a, b) => new Date(b.created_at || b.first_paid_at || 0) - new Date(a.created_at || a.first_paid_at || 0))
       .slice(0, 6)
       .forEach(p => {
-        const tr         = document.createElement("tr");
-        const clientName =
-          p.business_name || p.client_name || p.business || p.name || "(No name)";
-        const status     = (p.status || "new").toLowerCase();
+        const tr = document.createElement("tr");
+        const clientName = p.business_name || p.client_name || "(No name)";
+        const status = (p.status || "new").toLowerCase();
 
         const tdClient = document.createElement("td");
         tdClient.innerHTML = `<strong>${clientName}</strong><br><span class="small">${p.currency || "USD"}</span>`;
@@ -577,8 +483,12 @@
         tr.appendChild(tdMonthly);
 
         const tdStatus = document.createElement("td");
-        const pill     = document.createElement("span");
-        pill.className = "pill " + (status === "completed" ? "pill-green" : status === "cancelled" ? "pill-red" : "pill-blue");
+        const pill = document.createElement("span");
+        pill.className = "pill " + (status === "completed"
+          ? "pill-green"
+          : status === "cancelled"
+          ? "pill-red"
+          : "pill-blue");
         pill.textContent = status;
         tdStatus.appendChild(pill);
         tr.appendChild(tdStatus);
@@ -613,13 +523,14 @@
 
         billsTableBody.appendChild(tr);
       });
-    billsNote.textContent = bills.length ? "" : "No recurring_expenses yet. Add them in Supabase.";
+
+    billsNote.textContent = bills.length ? "" : "No recurring_expenses found yet. You can add them in Supabase.";
 
     // LEADS SNAPSHOT
-    const statusCounts        = {};
-    let closedThisMonth       = 0;
-    let commissionThisMonth   = 0;
-    const callerStats         = new Map();
+    const statusCounts = {};
+    let closedThisMonth = 0;
+    let commissionThisMonth = 0;
+    const callerStats = new Map();
 
     leads.forEach(ld => {
       const status = (ld.call_status || "new").toLowerCase();
@@ -628,7 +539,7 @@
       if (status === "closed won" && ld.last_contact_date) {
         const d = new Date(ld.last_contact_date);
         if (d >= monthStart && d <= monthEnd) {
-          closedThisMonth     += 1;
+          closedThisMonth += 1;
           commissionThisMonth += 100;
         }
       }
@@ -670,7 +581,8 @@
       topCallersTableBody.appendChild(tr);
     } else {
       sortedCallers.forEach(([email, stats]) => {
-        const tr      = document.createElement("tr");
+        const tr = document.createElement("tr");
+
         const tdEmail = document.createElement("td");
         tdEmail.textContent = email;
         tr.appendChild(tdEmail);
@@ -688,28 +600,11 @@
     }
   }
 
-  async function initAdmin() {
-    const { data } = await supabaseClient.auth.getUser();
-    if (!data || !data.user) {
-      showLogin();
-      loginBtn.disabled = false;
-      return;
-    }
-    const email = (data.user.email || "").toLowerCase();
-
-    if (email !== ADMIN_EMAIL.toLowerCase()) {
-      window.location.href = CONTRACTOR_PORTAL_URL;
-      return;
-    }
-
-    showDashboard(email);
-    await loadDashboard();
-    loginBtn.disabled = false;
-  }
-
   (async () => {
-    await initAdmin();
+    const user = await guardAdmin();
+    if (!user) return;
+    await loadDashboard();
   })();
 </script>
 </body>
-  </html>
+</html>
