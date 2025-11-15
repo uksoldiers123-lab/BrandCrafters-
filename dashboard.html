@@ -58,6 +58,11 @@
       border:1px solid rgba(255,255,255,.25);
       opacity:.85;
     }
+
+    /* Highlight very fresh "new" items (last 24h) */
+    tr.row-recent td {
+      background:rgba(110,168,255,.08);
+    }
   </style>
   <script defer src="script.js"></script>
 </head>
@@ -101,7 +106,7 @@
   <div class="container">
     <h1 class="headline">Admin Dashboard</h1>
     <p class="subhead">
-      Track website orders, support, maintenance, and your bills in one view.<br>
+      Track website orders, support, maintenance, bills, and contractor commissions.<br>
       Admin-only, powered by Supabase Auth.
     </p>
   </div>
@@ -127,6 +132,34 @@
   <!-- ADMIN APP -->
   <div id="appSection" style="display:none;">
 
+    <!-- Notifications Card -->
+    <div class="card" style="margin-bottom:16px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;">
+        <div>
+          <h2 style="margin:0 0 4px;display:flex;align-items:center;gap:8px;">
+            <span>Notifications</span>
+            <span style="font-size:18px;">🔔</span>
+          </h2>
+          <p class="subhead" style="margin:0;">Last 24 hours & open tasks.</p>
+        </div>
+        <div class="status-filter-wrap">
+          <span>Table view:</span>
+          <select id="statusFilter">
+            <option value="new">New Only</option>
+            <option value="in_progress">In Progress Only</option>
+            <option value="not_done">Incomplete (New + In Progress)</option>
+            <option value="done">Done Only</option>
+            <option value="maintenance">Maintenance Clients</option>
+            <option value="all">All Statuses</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="notificationsBox" style="margin-top:10px;font-size:14px;">
+        Loading notifications…
+      </div>
+    </div>
+
     <!-- Summary Card -->
     <div class="card" style="margin-bottom:20px;">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;">
@@ -136,18 +169,8 @@
         </div>
 
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
-          <div class="status-filter-wrap">
-            <span>Show:</span>
-            <select id="statusFilter">
-              <option value="new">New Only</option>
-              <option value="in_progress">In Progress Only</option>
-              <option value="not_done">Incomplete (New + In Progress)</option>
-              <option value="done">Done Only</option>
-              <option value="maintenance">Maintenance Clients</option>
-              <option value="all">All Statuses</option>
-            </select>
-          </div>
           <button id="logoutBtn" class="btn btn-ghost">Log Out</button>
+          <span id="sessionNote" style="font-size:11px;opacity:.7;">Auto-logout after inactivity.</span>
         </div>
       </div>
     </div>
@@ -156,6 +179,7 @@
     <div class="cta-row" style="justify-content:flex-start;gap:10px;margin-bottom:20px;">
       <button id="tabOnboarding" class="btn btn-primary">Website Orders</button>
       <button id="tabSupport" class="btn btn-ghost">Support Requests</button>
+      <button id="tabContractors" class="btn btn-ghost">Contractors</button>
     </div>
 
     <!-- Website Orders -->
@@ -173,7 +197,7 @@
             <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Add-ons</th>
             <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Status</th>
             <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Project Links / Stack</th>
-            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Money / Notes</th>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Money / Contractor</th>
           </tr>
           </thead>
           <tbody id="onboardingBody">
@@ -206,8 +230,34 @@
       </div>
     </section>
 
+    <!-- Contractors -->
+    <section id="contractorsSection" style="display:none;margin-top:8px;margin-bottom:32px;">
+      <h2>Contractors &amp; Commissions</h2>
+      <p class="form-note">
+        Cold callers and closers who bring you clients. Totals are calculated from attached projects.
+      </p>
+      <div class="glass" style="overflow-x:auto;padding:0;margin-top:10px;">
+        <table style="width:100%;border-collapse:collapse;font-size:14px;">
+          <thead>
+          <tr>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Contractor</th>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Contact</th>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Payment</th>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Projects</th>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Total Commission</th>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Unpaid</th>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Notes / Actions</th>
+          </tr>
+          </thead>
+          <tbody id="contractorsBody">
+          <tr><td colspan="7" style="padding:10px;">No contractors yet. Attach one from a Website Order.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
     <!-- Bills & Recurring Expenses -->
-    <section id="expensesSection" style="margin-top:32px;margin-bottom:40px;">
+    <section id="expensesSection" style="margin-top:8px;margin-bottom:40px;">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
         <h2 style="margin:0;">Bills &amp; Recurring Expenses</h2>
         <button id="addExpenseBtn" class="btn btn-primary" type="button">Add Expense</button>
@@ -259,25 +309,72 @@
   const loginForm = document.getElementById("loginForm");
   const loginMsg = document.getElementById("loginMsg");
   const logoutBtn = document.getElementById("logoutBtn");
+  const sessionNote = document.getElementById("sessionNote");
 
   const onboardingBody = document.getElementById("onboardingBody");
   const supportBody = document.getElementById("supportBody");
+  const contractorsBody = document.getElementById("contractorsBody");
+  const expensesBody = document.getElementById("expensesBody");
+
   const summaryText = document.getElementById("summaryText");
+  const notificationsBox = document.getElementById("notificationsBox");
 
   const onboardingSection = document.getElementById("onboardingSection");
   const supportSection = document.getElementById("supportSection");
+  const contractorsSection = document.getElementById("contractorsSection");
+  const expensesSection = document.getElementById("expensesSection");
+
   const tabOnboarding = document.getElementById("tabOnboarding");
   const tabSupport = document.getElementById("tabSupport");
+  const tabContractors = document.getElementById("tabContractors");
   const statusFilterSelect = document.getElementById("statusFilter");
-
-  const expensesBody = document.getElementById("expensesBody");
   const addExpenseBtn = document.getElementById("addExpenseBtn");
 
   let onbData = [];
   let supData = [];
+  let contractorsData = [];
   let expensesData = [];
   let statusFilter = "new";
 
+  // ---- SESSION / INACTIVITY ----
+  const INACTIVITY_LIMIT_MS = 20 * 60 * 1000; // 20 minutes
+  let lastActivity = Date.now();
+  let isAuthenticated = false;
+
+  function resetActivity() {
+    lastActivity = Date.now();
+  }
+
+  ["click", "mousemove", "keydown", "scroll", "touchstart"].forEach(evt => {
+    document.addEventListener(evt, resetActivity, { passive: true });
+  });
+
+  async function doLogout(timedOut = false) {
+    await supabase.auth.signOut();
+    isAuthenticated = false;
+    appSection.style.display = "none";
+    authSection.style.display = "";
+    if (timedOut) {
+      loginMsg.textContent = "Session timed out due to inactivity. Please sign in again.";
+      if (sessionNote) {
+        sessionNote.textContent = "You were auto-logged out. Sign in again to continue.";
+      }
+    } else {
+      loginMsg.textContent = "";
+    }
+  }
+
+  setInterval(() => {
+    if (!isAuthenticated) return;
+    if (appSection.style.display === "none") return;
+
+    const now = Date.now();
+    if (now - lastActivity > INACTIVITY_LIMIT_MS) {
+      doLogout(true);
+    }
+  }, 60 * 1000);
+
+  // ---- HELPERS ----
   function shorten(text, max = 120) {
     if (!text) return "";
     text = String(text);
@@ -309,6 +406,7 @@
     const n = parseFloat(v);
     return Number.isNaN(n) ? 0 : n;
   }
+
   function isMaintenanceRow(row, table) {
     if (table === "onboarding_submissions") {
       const addons = Array.isArray(row.addons) ? row.addons : [];
@@ -323,8 +421,9 @@
     }
     return false;
   }
+
   function statusPass(row, table) {
-    const s = row.status || "new";
+    const s = (row.status || "new").toLowerCase();
     switch (statusFilter) {
       case "new": return s === "new";
       case "in_progress": return s === "in_progress";
@@ -333,6 +432,43 @@
       case "maintenance": return isMaintenanceRow(row, table);
       default: return true;
     }
+  }
+
+  function renderNotifications() {
+    if (!notificationsBox) return;
+
+    const now = new Date();
+    const since = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+
+    const newOrdersToday = onbData.filter(r => (r.status || "new") === "new" && new Date(r.created_at) >= since).length;
+    const openOrders = onbData.filter(r => (r.status || "new") !== "done").length;
+
+    const newSupportToday = supData.filter(r => (r.status || "new") === "new" && new Date(r.created_at) >= since).length;
+    const openSupport = supData.filter(r => (r.status || "new") !== "done").length;
+
+    notificationsBox.innerHTML = `
+      <div style="display:flex;flex-wrap:wrap;gap:16px;">
+        <div>
+          <div style="font-size:12px;opacity:.75;">New orders (last 24h)</div>
+          <div style="font-size:20px;font-weight:800;">${newOrdersToday}</div>
+        </div>
+        <div>
+          <div style="font-size:12px;opacity:.75;">Open website orders</div>
+          <div style="font-size:20px;font-weight:800;">${openOrders}</div>
+        </div>
+        <div>
+          <div style="font-size:12px;opacity:.75;">New support (last 24h)</div>
+          <div style="font-size:20px;font-weight:800;">${newSupportToday}</div>
+        </div>
+        <div>
+          <div style="font-size:12px;opacity:.75;">Open support tickets</div>
+          <div style="font-size:20px;font-weight:800;">${openSupport}</div>
+        </div>
+      </div>
+      <div style="margin-top:6px;font-size:12px;opacity:.7;">
+        Tip: Use the "Table view" dropdown above to quickly see just new work, in-progress jobs, or maintenance clients.
+      </div>
+    `;
   }
 
   function computeSummary() {
@@ -371,6 +507,18 @@
 
     const netMonthly = mrr - recurringMonthly;
 
+    // Contractor commissions: sum of all commissions not marked "paid"
+    let unpaidCommissions = 0;
+    onbData.forEach(row => {
+      const cAmt = toNum(row.contractor_commission);
+      const cStatus = (row.contractor_commission_status || "unpaid").toLowerCase();
+      if (cAmt > 0 && cStatus !== "paid") {
+        unpaidCommissions += cAmt;
+      }
+    });
+
+    const netAfterCommissions = netMonthly - unpaidCommissions;
+
     summaryText.innerHTML = `
       <b>Last month one-time:</b> $${lastMonthRevenue.toFixed(2)}
       &nbsp;|&nbsp;
@@ -380,6 +528,9 @@
       <b>Recurring bills (est.):</b> $${recurringMonthly.toFixed(2)}
       &nbsp;|&nbsp;
       <b>Net monthly after bills:</b> $${netMonthly.toFixed(2)}<br>
+      <b>Unpaid contractor commissions (all-time):</b> $${unpaidCommissions.toFixed(2)}
+      &nbsp;|&nbsp;
+      <b>Net after bills &amp; unpaid commissions (simple view):</b> $${netAfterCommissions.toFixed(2)}<br>
       <span style="font-size:12px;opacity:.8;">
         Orders: ${onbData.length} · Support tickets: ${supData.length} · Active bills: ${expensesData.filter(e => e.is_active !== false).length}
       </span>
@@ -474,6 +625,89 @@
       .eq("id", row.id);
 
     if (error) alert("Error saving money info");
+  }
+
+  async function getOrCreateContractorByName(name) {
+    const trimmed = name.trim();
+    if (!trimmed) return null;
+
+    const existing = contractorsData.find(c => (c.name || "").toLowerCase() === trimmed.toLowerCase());
+    if (existing) return existing;
+
+    const { data, error } = await supabase
+      .from("contractors")
+      .insert({ name: trimmed })
+      .select("*")
+      .single();
+
+    if (error) {
+      alert("Error creating contractor");
+      return null;
+    }
+
+    contractorsData.push(data);
+    renderContractors();
+    return data;
+  }
+
+  async function editContractorForProject(projectId) {
+    const row = onbData.find(r => String(r.id) === String(projectId));
+    if (!row) return;
+
+    const currentContractor = contractorsData.find(c => c.id === row.contractor_id);
+    const defaultName = currentContractor ? currentContractor.name : "";
+
+    const name = prompt("Contractor name (blank to clear):", defaultName) ?? defaultName;
+    if (name === null) return;
+
+    let contractor = null;
+    let contractor_id = null;
+
+    if (name.trim()) {
+      contractor = await getOrCreateContractorByName(name);
+      if (!contractor) return;
+      contractor_id = contractor.id;
+    }
+
+    const commissionInput = prompt(
+      "Commission amount owed for this project (e.g. 100):",
+      row.contractor_commission ?? ""
+    );
+    if (commissionInput === null) return;
+
+    const statusInput = prompt(
+      "Commission status: unpaid / partial / paid",
+      row.contractor_commission_status || "unpaid"
+    ) ?? (row.contractor_commission_status || "unpaid");
+
+    const notesInput = prompt(
+      "Contractor notes for this project (optional):",
+      row.contractor_notes || ""
+    ) ?? row.contractor_notes;
+
+    const status = (statusInput || "unpaid").toLowerCase();
+    const commission = commissionInput === "" || commissionInput == null ? null : Number(commissionInput);
+    const paidAt = status === "paid" ? new Date().toISOString() : null;
+
+    const updated = {
+      contractor_id,
+      contractor_commission: commission,
+      contractor_commission_status: status,
+      contractor_paid_at: paidAt,
+      contractor_notes: notesInput || null
+    };
+
+    onbData = onbData.map(r => r.id === row.id ? { ...r, ...updated } : r);
+    renderTables();
+    renderContractors();
+    computeSummary();
+
+    const { error } = await supabase
+      .from("onboarding_submissions")
+      .update(updated)
+      .eq("id", row.id);
+
+    if (error) alert("Error saving contractor info");
   }
 
   async function addExpense() {
@@ -691,6 +925,119 @@
     });
   }
 
+  function renderContractors() {
+    contractorsBody.innerHTML = "";
+    if (!contractorsData.length) {
+      contractorsBody.innerHTML = `<tr><td colspan="7" style="padding:10px;">No contractors yet. Attach one from a Website Order.</td></tr>`;
+      return;
+    }
+
+    contractorsData.forEach(c => {
+      const projects = onbData.filter(p => p.contractor_id === c.id);
+      const projectCount = projects.length;
+
+      let totalCommission = 0;
+      let unpaidCommission = 0;
+
+      projects.forEach(p => {
+        const amt = toNum(p.contractor_commission);
+        totalCommission += amt;
+        const s = (p.contractor_commission_status || "unpaid").toLowerCase();
+        if (s !== "paid") unpaidCommission += amt;
+      });
+
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td style="padding:8px;vertical-align:top;">
+          <div><b>${c.name || ""}</b></div>
+          <div style="font-size:11px;opacity:.7;">
+            ${c.active === false ? '<span class="chip" style="opacity:.7;">Inactive</span>' : '<span class="chip">Active</span>'}
+          </div>
+        </td>
+        <td style="padding:8px;vertical-align:top;">
+          ${c.phone ? `<div>${c.phone}</div>` : ""}
+          ${c.email ? `<div style="font-size:12px;opacity:.75;">${c.email}</div>` : ""}
+        </td>
+        <td style="padding:8px;vertical-align:top;">
+          ${c.payment_method ? `<div>${c.payment_method}</div>` : ""}
+          ${c.payout_handle ? `<div style="font-size:12px;opacity:.8;">${c.payout_handle}</div>` : ""}
+          ${c.payout_notes ? `<div style="font-size:11px;opacity:.7;">${shorten(c.payout_notes, 80)}</div>` : ""}
+        </td>
+        <td style="padding:8px;vertical-align:top;">${projectCount}</td>
+        <td style="padding:8px;vertical-align:top;">$${totalCommission.toFixed(2)}</td>
+        <td style="padding:8px;vertical-align:top;">$${unpaidCommission.toFixed(2)}</td>
+        <td style="padding:8px;vertical-align:top;">
+          ${c.notes ? `<div style="font-size:12px;opacity:.75;">${shorten(c.notes, 80)}</div>` : ""}
+          <button class="btn-mini" data-contractor-id="${c.id}">Edit Contractor</button>
+        </td>
+      `;
+      contractorsBody.appendChild(tr);
+    });
+
+    document.querySelectorAll("[data-contractor-id]").forEach(el => {
+      el.addEventListener("click", () => editContractorRecord(el.dataset.contractorId));
+    });
+  }
+
+  async function editContractorRecord(id) {
+    const contractor = contractorsData.find(c => String(c.id) === String(id));
+    if (!contractor) return;
+
+    const name = prompt("Contractor name:", contractor.name || "") ?? contractor.name;
+    if (name === null) return;
+
+    const phone = prompt("Phone:", contractor.phone || "") ?? contractor.phone;
+    if (phone === null) return;
+
+    const email = prompt("Email:", contractor.email || "") ?? contractor.email;
+    if (email === null) return;
+
+    const payment_method = prompt(
+      "Payment method (CashApp, Zelle, PayPal, Bank, etc.):",
+      contractor.payment_method || ""
+    ) ?? contractor.payment_method;
+    if (payment_method === null) return;
+
+    const payout_handle = prompt(
+      "Payout handle (e.g. $cashtag, Zelle email, etc.):",
+      contractor.payout_handle || ""
+    ) ?? contractor.payout_handle;
+    if (payout_handle === null) return;
+
+    const payout_notes = prompt(
+      "Payout notes (e.g. 'Pay every Friday'):",
+      contractor.payout_notes || ""
+    ) ?? contractor.payout_notes;
+    if (payout_notes === null) return;
+
+    const notes = prompt("Internal notes:", contractor.notes || "") ?? contractor.notes;
+    if (notes === null) return;
+
+    const activeInput = prompt("Active? yes/no", contractor.active === false ? "no" : "yes") ?? (contractor.active === false ? "no" : "yes");
+    const active = !activeInput.toLowerCase().startsWith("n");
+
+    const updated = {
+      name,
+      phone,
+      email,
+      payment_method,
+      payout_handle,
+      payout_notes,
+      notes,
+      active
+    };
+
+    contractorsData = contractorsData.map(c => c.id === contractor.id ? { ...c, ...updated } : c);
+    renderContractors();
+
+    const { error } = await supabase
+      .from("contractors")
+      .update(updated)
+      .eq("id", contractor.id);
+
+    if (error) alert("Error saving contractor");
+  }
+
   function attachHandlers() {
     document.querySelectorAll("[data-status-id]").forEach(el => {
       el.addEventListener("click", () => {
@@ -709,9 +1056,15 @@
     document.querySelectorAll("[data-money-id]").forEach(el => {
       el.addEventListener("click", () => editMoney(el.dataset.moneyId));
     });
+
+    document.querySelectorAll("[data-contractor-project-id]").forEach(el => {
+      el.addEventListener("click", () => editContractorForProject(el.dataset.contractorProjectId));
+    });
   }
 
   function renderTables() {
+    const recentSince = new Date(Date.now() - 24 * 60 * 60 * 1000);
+
     onboardingBody.innerHTML = "";
     const filteredOnb = onbData.filter(row => statusPass(row, "onboarding_submissions"));
 
@@ -719,7 +1072,7 @@
       onboardingBody.innerHTML = `<tr><td colspan="9" style="padding:10px;">No orders in this view.</td></tr>`;
     } else {
       filteredOnb.forEach(row => {
-        const st = row.status || "new";
+        const st = (row.status || "new").toLowerCase();
         const addonsText = Array.isArray(row.addons) ? row.addons.join(", ") : "";
         const pagesText = Array.isArray(row.pages) ? row.pages.join(", ") : "";
 
@@ -739,16 +1092,37 @@
           <button type="button" class="btn-mini" data-edit-id="${row.id}">Edit Project</button>
         `;
 
+        const contractor = row.contractor_id
+          ? contractorsData.find(c => c.id === row.contractor_id)
+          : null;
+
+        const commissionLine = contractor
+          ? `Contractor: ${contractor.name || "Unnamed"} · $${toNum(row.contractor_commission).toFixed(2)} (${(row.contractor_commission_status || "unpaid").toLowerCase()})`
+          : "No contractor assigned";
+
         const moneyHTML = `
           ${moneySummary ? `<div>${moneySummary}</div>` : ""}
           ${row.payment_notes ? `<div style="font-size:12px;opacity:.75;">${shorten(row.payment_notes, 80)}</div>` : ""}
           <div style="margin-top:4px;font-size:12px;opacity:.75;">
             ${shorten(row.page_notes || row.extra_notes || "", 100)}
           </div>
-          <button type="button" class="btn-mini" data-money-id="${row.id}">Edit Money</button>
+          <hr style="border:none;border-top:1px solid rgba(255,255,255,.08);margin:8px 0;">
+          <div style="font-size:12px;opacity:.9;">${commissionLine}</div>
+          ${row.contractor_notes ? `<div style="font-size:11px;opacity:.7;margin-top:2px;">${shorten(row.contractor_notes, 80)}</div>` : ""}
+          <button type="button" class="btn-mini" data-contractor-project-id="${row.id}">
+            Edit Contractor / Commission
+          </button>
+          <button type="button" class="btn-mini" data-money-id="${row.id}">
+            Edit Money
+          </button>
         `;
 
         const tr = document.createElement("tr");
+        const createdAt = row.created_at ? new Date(row.created_at) : null;
+        if (st === "new" && createdAt && createdAt >= recentSince) {
+          tr.classList.add("row-recent");
+        }
+
         tr.innerHTML = `
           <td style="padding:8px;vertical-align:top;">${formatDateTime(row.created_at)}</td>
           <td style="padding:8px;vertical-align:top;">
@@ -780,8 +1154,14 @@
       supportBody.innerHTML = `<tr><td colspan="7" style="padding:10px;">No requests in this view.</td></tr>`;
     } else {
       filteredSup.forEach(row => {
-        const st = row.status || "new";
+        const st = (row.status || "new").toLowerCase();
         const tr = document.createElement("tr");
+
+        const createdAt = row.created_at ? new Date(row.created_at) : null;
+        if (st === "new" && createdAt && createdAt >= recentSince) {
+          tr.classList.add("row-recent");
+        }
+
         tr.innerHTML = `
           <td style="padding:8px;vertical-align:top;">${formatDateTime(row.created_at)}</td>
           <td style="padding:8px;vertical-align:top;">
@@ -806,43 +1186,48 @@
     }
 
     attachHandlers();
+    renderNotifications();
+    renderContractors();
   }
 
   async function loadData() {
     summaryText.textContent = "Loading…";
+    if (notificationsBox) notificationsBox.textContent = "Loading notifications…";
 
-    const [onbRes, supRes, expRes] = await Promise.all([
+    const [onbRes, supRes, expRes, conRes] = await Promise.all([
       supabase.from("onboarding_submissions").select("*").order("created_at", { ascending:false }),
       supabase.from("support_requests").select("*").order("created_at", { ascending:false }),
-      supabase.from("recurring_expenses").select("*").order("next_due_date", { ascending:true })
+      supabase.from("recurring_expenses").select("*").order("next_due_date", { ascending:true }),
+      supabase.from("contractors").select("*").order("created_at", { ascending:false })
     ]);
 
     onbData = onbRes.data || [];
     supData = supRes.data || [];
     expensesData = expRes.data || [];
+    contractorsData = conRes.data || [];
 
     renderTables();
     renderExpenses();
     computeSummary();
   }
 
-  tabOnboarding.addEventListener("click", () => {
-    onboardingSection.style.display = "";
-    supportSection.style.display = "none";
-    tabOnboarding.classList.add("btn-primary");
-    tabOnboarding.classList.remove("btn-ghost");
-    tabSupport.classList.add("btn-ghost");
-    tabSupport.classList.remove("btn-primary");
-  });
+  // Tabs
+  function setTab(active) {
+    onboardingSection.style.display = active === "onboarding" ? "" : "none";
+    supportSection.style.display = active === "support" ? "" : "none";
+    contractorsSection.style.display = active === "contractors" ? "" : "none";
 
-  tabSupport.addEventListener("click", () => {
-    onboardingSection.style.display = "none";
-    supportSection.style.display = "";
-    tabSupport.classList.add("btn-primary");
-    tabSupport.classList.remove("btn-ghost");
-    tabOnboarding.classList.add("btn-ghost");
-    tabOnboarding.classList.remove("btn-primary");
-  });
+    tabOnboarding.classList.toggle("btn-primary", active === "onboarding");
+    tabOnboarding.classList.toggle("btn-ghost", active !== "onboarding");
+    tabSupport.classList.toggle("btn-primary", active === "support");
+    tabSupport.classList.toggle("btn-ghost", active !== "support");
+    tabContractors.classList.toggle("btn-primary", active === "contractors");
+    tabContractors.classList.toggle("btn-ghost", active !== "contractors");
+  }
+
+  tabOnboarding.addEventListener("click", () => setTab("onboarding"));
+  tabSupport.addEventListener("click", () => setTab("support"));
+  tabContractors.addEventListener("click", () => setTab("contractors"));
 
   statusFilterSelect.addEventListener("change", () => {
     statusFilter = statusFilterSelect.value;
@@ -866,25 +1251,31 @@
       return;
     }
 
+    resetActivity();
+    isAuthenticated = true;
     loginMsg.textContent = "";
     authSection.style.display = "none";
     appSection.style.display = "";
+    setTab("onboarding");
     loadData();
   });
 
   logoutBtn.addEventListener("click", async () => {
-    await supabase.auth.signOut();
-    appSection.style.display = "none";
-    authSection.style.display = "";
+    await doLogout(false);
   });
 
+  // Initial session check
   (async () => {
     const { data } = await supabase.auth.getUser();
     if (data && data.user) {
+      isAuthenticated = true;
+      resetActivity();
       authSection.style.display = "none";
       appSection.style.display = "";
+      setTab("onboarding");
       loadData();
     } else {
+      isAuthenticated = false;
       authSection.style.display = "";
       appSection.style.display = "none";
     }
@@ -893,4 +1284,4 @@
 </script>
 
 </body>
-</html>
+          </html>
