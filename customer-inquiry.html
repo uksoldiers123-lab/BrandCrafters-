@@ -7,27 +7,29 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
   <script defer src="script.js"></script>
+  <script type="module" src="js/supportForm.js"></script>
 </head>
 <body>
-
 <header class="site-header">
   <div class="container header-inner">
     <a class="logo" href="index.html">
       <span class="logo-mark">BC</span><span>BrandCrafters</span>
     </a>
 
+    <!-- Desktop Nav -->
     <nav class="nav desktop-nav">
       <a href="index.html" class="nav-link">Home</a>
       <a href="pricing.html" class="nav-link">Pricing</a>
-      <a href="customer-inquiry.html" class="nav-link active">Customer Portal</a>
-      <a href="pricing.html#how-it-works" class="nav-link">How It Works</a>
+      <a href="customer-inquiry.html" class="btn btn-outline">Customer Portal</a>
     </nav>
 
+    <!-- Mobile Menu -->
     <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
   </div>
 
+  <!-- Mobile Drawer (V8) -->
   <nav class="mobile-drawer" aria-hidden="true">
     <div class="drawer-header">
       <a class="logo" href="index.html">
@@ -35,12 +37,10 @@
       </a>
       <button class="menu-close" aria-label="Close menu">✕</button>
     </div>
-
     <a class="drawer-link" href="index.html">Home</a>
     <a class="drawer-link" href="pricing.html">Pricing</a>
     <a class="drawer-link highlight" href="customer-inquiry.html">Customer Portal</a>
   </nav>
-
   <div class="drawer-backdrop" aria-hidden="true"></div>
 </header>
 
@@ -48,170 +48,75 @@
   <div class="container">
     <h1 class="headline">Customer Portal</h1>
     <p class="subhead">
-      This page is for current BrandCrafters clients only.<br>
-      Use it to request updates, add-ons, upgrades, maintenance changes, or to book a call.
-      Perfect for restaurants, food trucks, barbershops, salons, lawn care, HVAC, trucking,
-      contractors, churches, and other service brands we’ve already built sites for.
+      Already a BrandCrafters client? Use this form to request updates, add-ons, or a quick check-in on your site.
     </p>
   </div>
 </section>
 
 <section class="container inquiry-section">
-  <form id="customerForm" class="form glass" autocomplete="on">
-    <h2>1. Who you are</h2>
-
-    <label>Full Name
-      <input name="name" required />
-    </label>
-
-    <label>Email (the one you used when you purchased)
-      <input type="email" name="email" required />
-    </label>
-
-    <label>Your Business / Website
-      <input name="business" placeholder="Example: Jones Lawn Care / www.joneslawn.com" />
-    </label>
-
-    <label>Industry / Type of Business
-      <select name="industry">
-        <option value="">Choose one (optional)</option>
-        <option>Restaurant / Food Truck</option>
-        <option>Barbershop / Salon / Beauty</option>
-        <option>Lawn Care / Landscaping</option>
-        <option>HVAC / Plumbing / Trades</option>
-        <option>Trucking / Logistics</option>
-        <option>Cleaning / Detailing</option>
-        <option>Medical / Dental / Health</option>
-        <option>Legal / Tax / Professional</option>
-        <option>Church / Nonprofit</option>
-        <option>Other</option>
-      </select>
-    </label>
-
-    <hr>
-
-    <h2>2. What you need today</h2>
-
-    <label>Request Type
-      <select name="requestType" required>
-        <option value="">Select one</option>
-        <option value="Site Update">Website update (per-call)</option>
-        <option value="Add Stripe Basic">Add Basic Stripe Setup</option>
-        <option value="Add Stripe Full">Add Full Stripe Integration</option>
-        <option value="Upgrade Package">Upgrade my website package</option>
-        <option value="Add Maintenance">Add a maintenance plan</option>
-        <option value="Cancel Maintenance">Cancel my maintenance plan</option>
-        <option value="Book Call">Book a call (phone or video)</option>
-        <option value="Upload Content">Send new content or images</option>
-        <option value="Other">Other request</option>
-      </select>
-    </label>
-
-    <label>Describe your request
-      <textarea name="details" rows="6"
-        placeholder="Tell us what you want changed, added, upgraded, or what the call should cover."></textarea>
-    </label>
-
-    <label>Is this time-sensitive?
-      <select name="urgency">
-        <option value="">Select one</option>
-        <option>Normal</option>
-        <option>Need this done soon</option>
-        <option>Urgent (deadline coming up)</option>
-      </select>
-    </label>
-
-    <hr>
-
-    <h2>3. Files (optional)</h2>
-    <p class="form-note">
-      If you’re sending new photos, menus, service lists, logos, or documents, you can attach them here
-      or send them using your usual cloud links (Google Drive, Dropbox, etc.) in the description above.
+  <div class="form glass" style="max-width:720px;margin:0 auto 40px;">
+    <h2>Request Support or Changes</h2>
+    <p class="subhead">
+      Tell us what you need and we’ll follow up by email with timelines and next steps.
     </p>
 
-    <!-- Visual only for now; we store a note, not the file itself -->
-    <label>Upload files (optional)
-      <input type="file" name="uploads" multiple />
-    </label>
+    <form id="supportForm" autocomplete="on">
+      <label>Full Name
+        <input name="name" required />
+      </label>
 
-    <p class="form-note">
-      For add-ons and upgrades, we’ll confirm everything and send a Stripe link or invoice
-      before work begins.
-    </p>
+      <label>Email
+        <input type="email" name="email" required />
+      </label>
 
-    <button class="btn btn-primary" type="submit">Submit Request</button>
-    <p id="formMsg" class="form-note"></p>
-  </form>
+      <label>Business / Brand Name
+        <input name="business" placeholder="Example: SnowApp, AFT Solutions LLC…" />
+      </label>
+
+      <label>Existing Website or Project (optional)
+        <input name="site_url" placeholder="Your domain or project link" />
+      </label>
+
+      <label>Request Type
+        <select name="request_type" required>
+          <option value="content-update">Content / image updates</option>
+          <option value="new-page">Add a new page</option>
+          <option value="maintenance">Monthly maintenance / bug fix</option>
+          <option value="addon-upgrade">Add-ons / upgrade my package</option>
+          <option value="billing-question">Billing question</option>
+          <option value="other">Other</option>
+        </select>
+      </label>
+
+      <label>Urgency
+        <select name="urgency" required>
+          <option value="normal">Normal (3–5 business days)</option>
+          <option value="soon">Soon (1–2 business days)</option>
+          <option value="rush">Rush (same day if possible)</option>
+        </select>
+      </label>
+
+      <label>Details
+        <textarea name="details" rows="6" placeholder="Tell us what to change, add, or fix. Include links or examples if helpful."></textarea>
+      </label>
+
+      <button class="btn btn-primary" type="submit">Submit Request</button>
+      <p id="supportMsg" class="form-note"></p>
+    </form>
+  </div>
 </section>
 
 <footer class="site-footer">
   <div class="container footer-inner">
-    <div>© <span id="year"></span> BrandCrafters — A division of Egyptian Hype LLC</div>
+    <div>
+      © <span id="year"></span> BrandCrafters — A division of Egyptian Hype LLC
+      <a href="dashboard.html" class="admin-link">Admin</a>
+    </div>
   </div>
 </footer>
 
-<!-- Supabase wiring for support_requests -->
-<script type="module">
-  import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
-  const supabase = createClient(
-    "https://vekoulqehexqosgwacwa.supabase.co",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4"
-  );
-
+<script>
   document.getElementById('year').textContent = new Date().getFullYear();
-
-  const form = document.getElementById('customerForm');
-  const msg = document.getElementById('formMsg');
-  const submitBtn = form.querySelector("button[type='submit']");
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    msg.textContent = "Submitting your request...";
-    submitBtn.disabled = true;
-
-    const fd = new FormData(form);
-
-    // we’re not actually uploading files to Supabase here, just marking if they attached anything
-    const fileInput = form.querySelector('input[name="uploads"]');
-    let uploadInfo = null;
-    if (fileInput && fileInput.files && fileInput.files.length > 0) {
-      const names = Array.from(fileInput.files).map(f => f.name);
-      uploadInfo = `Client attached files: ${names.join(', ')}`;
-    }
-
-    const payload = {
-      name: fd.get("name") || null,
-      email: fd.get("email") || null,
-      business: fd.get("business") || null,
-      industry: fd.get("industry") || null,
-      request_type: fd.get("requestType") || null,
-      details: fd.get("details") || null,
-      urgency: fd.get("urgency") || null,
-      upload_info: uploadInfo
-    };
-
-    try {
-      const { error } = await supabase
-        .from("support_requests")
-        .insert(payload);
-
-      if (error) {
-        console.error(error);
-        msg.textContent = "There was an error saving your request. Please try again or email us directly.";
-      } else {
-        msg.textContent = "Thank you! Your request has been submitted. We’ll follow up by email.";
-        form.reset();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-    } catch (err) {
-      console.error(err);
-      msg.textContent = "Unexpected error. Please try again.";
-    } finally {
-      submitBtn.disabled = false;
-    }
-  });
 </script>
-
 </body>
 </html>
