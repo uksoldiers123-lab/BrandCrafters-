@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>BrandCrafters — Leads & CSV</title>
+  <title>BrandCrafters — Contractor Portal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
@@ -85,7 +85,6 @@
     }
     h1{margin:0 0 6px;font-size:22px;}
     .subhead{margin:0 0 18px;font-size:13px;color:var(--muted);}
-
     .card{
       background:var(--panel);
       border-radius:16px;
@@ -96,34 +95,6 @@
     .card h2{margin:0 0 8px;font-size:16px;}
     .card p{margin:0 0 6px;font-size:13px;}
     .small{font-size:12px;color:var(--muted);}
-
-    input[type="file"]{
-      margin-top:8px;
-      padding:8px;
-      border-radius:10px;
-      border:1px solid rgba(255,255,255,.2);
-      background:rgba(8,10,24,.9);
-      color:var(--text);
-      font-size:13px;
-      max-width:100%;
-    }
-    .btn{
-      display:inline-block;
-      margin-top:10px;
-      padding:8px 14px;
-      border-radius:999px;
-      border:none;
-      cursor:pointer;
-      font-size:13px;
-      font-weight:600;
-      background:var(--grad);
-      color:#050713;
-      box-shadow:0 0 0 1px rgba(110,168,255,.4);
-    }
-    .btn:hover{
-      filter:brightness(1.05);
-      transform:translateY(-1px);
-    }
     table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;}
     th,td{
       border-bottom:1px solid rgba(255,255,255,.08);
@@ -137,98 +108,97 @@
       letter-spacing:.05em;
       color:var(--muted);
     }
-    .pill{
+    .status-pill{
       display:inline-block;
       padding:2px 8px;
       border-radius:999px;
       font-size:11px;
       background:rgba(110,168,255,.15);
     }
-    .status-badge{
+    .status-pill.new{background:rgba(111,255,193,.15);}
+    .status-pill.working{background:rgba(255,230,150,.15);}
+    .status-pill["closed won"]{background:rgba(174,255,174,.2);}
+    .status-pill["closed lost"]{background:rgba(255,164,164,.2);}
+    .btn{
       display:inline-block;
-      font-size:11px;
-      padding:2px 8px;
+      margin-top:4px;
+      padding:6px 10px;
       border-radius:999px;
-      background:rgba(110,168,255,.15);
+      border:none;
+      cursor:pointer;
+      font-size:11px;
+      font-weight:600;
+      background:var(--grad);
+      color:#050713;
+      box-shadow:0 0 0 1px rgba(110,168,255,.4);
     }
-    .status-badge.a{background:rgba(111,255,193,.15);}
-    .status-badge.b{background:rgba(255,230,150,.15);}
-    .status-badge.c{background:rgba(255,164,164,.15);}
-
-    .notice{
-      margin-top:8px;
-      padding:8px 10px;
-      border-radius:10px;
-      background:rgba(255,255,255,.05);
-      font-size:12px;
-      color:var(--muted);
+    .btn:hover{
+      filter:brightness(1.05);
+      transform:translateY(-1px);
     }
-    .error{
-      color:#ffb3b3;
-      font-size:12px;
-      margin-top:6px;
-    }
-    .hidden{display:none;}
     .center-msg{
       text-align:center;
       margin-top:40px;
       color:var(--muted);
       font-size:13px;
     }
+    .hidden{display:none;}
   </style>
 </head>
 <body>
 <header>
   <div class="brand">
     <span class="brand-title">BrandCrafters</span>
-    <span class="brand-sub">Admin · Leads & CSV</span>
+    <span class="brand-sub">Contractor Portal</span>
   </div>
   <div class="nav">
-    <a href="dashboard.html">Dashboard</a>
-    <a href="dashboard-leads-upload.html" class="primary">Leads & CSV</a>
-    <a href="contractor-portal.html" target="_blank">Contractor Portal</a>
+    <a href="dashboard.html">Admin Dashboard</a>
+    <a href="dashboard-leads-upload.html">Leads & CSV</a>
+    <a href="contractor-portal.html" class="primary">Contractor Portal</a>
     <span class="user-email" id="userEmail"></span>
     <button id="logoutBtn" class="logout-btn" type="button">Log Out</button>
   </div>
 </header>
 
 <main>
-  <section id="accessMessage" class="center-msg hidden"></section>
+  <section id="accessMessage" class="center-msg"></section>
 
-  <section id="leadsContent" class="hidden">
-    <h1>Leads & CSV Upload</h1>
+  <section id="portalContent" class="hidden">
+    <h1>Your Leads</h1>
     <p class="subhead">
-      Upload CSVs, see top leads, and keep contractors fed. This page is admin-only, but contractors can view leads from their portal.
+      These are your assigned and unclaimed leads. Once you mark a lead as working, it will be locked to you.
     </p>
 
     <article class="card">
-      <h2>Upload / Replace Leads CSV</h2>
-      <p class="small">
-        Upload a CSV with columns like <b>BusinessName, Phone, Email, AltEmail, Website, Social, City, State, Priority, CallStatus, Notes</b>.
-        New leads will be inserted; matching existing ones (same BusinessName + Phone) can be updated.
-      </p>
-      <input type="file" id="csvFile" accept=".csv" />
-      <button class="btn" id="uploadBtn" type="button">Upload Leads</button>
-      <div id="uploadStatus" class="small"></div>
-      <div id="uploadError" class="error"></div>
-      <div class="notice">
-        Contractors will see these leads in their portal. Once a caller marks a lead as "working", it becomes visible only to them.
-      </div>
-    </article>
-
-    <article class="card">
-      <h2>Lead Snapshot (Latest 20)</h2>
-      <p class="small">
-        Quick log of your current list. Edit status & details from Supabase or your contractor portal.
-      </p>
-      <table id="leadsTable">
+      <h2>Assigned to You</h2>
+      <p class="small">Leads already assigned to your email.</p>
+      <table id="assignedTable">
         <thead>
           <tr>
             <th>Business</th>
             <th>Phone</th>
             <th>Priority</th>
             <th>Status</th>
+            <th>Last Contact</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </article>
+
+    <article class="card">
+      <h2>Unclaimed Leads</h2>
+      <p class="small">
+        These are available to claim. Once you click "Start Working", the lead will be yours and will disappear from other callers.
+      </p>
+      <table id="unclaimedTable">
+        <thead>
+          <tr>
+            <th>Business</th>
+            <th>Phone</th>
+            <th>Priority</th>
             <th>City</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -240,177 +210,167 @@
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script>
   const SUPABASE_URL = "https://vekoulqehexqosgwacwa.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiIsInZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
   const ADMIN_EMAIL = "srarnold216@gmail.com";
 
   const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  const userEmailSpan   = document.getElementById("userEmail");
-  const logoutBtn       = document.getElementById("logoutBtn");
-  const accessMessage   = document.getElementById("accessMessage");
-  const leadsContent    = document.getElementById("leadsContent");
+  const userEmailSpan    = document.getElementById("userEmail");
+  const logoutBtn        = document.getElementById("logoutBtn");
+  const accessMessage    = document.getElementById("accessMessage");
+  const portalContent    = document.getElementById("portalContent");
 
-  const csvFileInput    = document.getElementById("csvFile");
-  const uploadBtn       = document.getElementById("uploadBtn");
-  const uploadStatus    = document.getElementById("uploadStatus");
-  const uploadError     = document.getElementById("uploadError");
-  const leadsTableBody  = document.querySelector("#leadsTable tbody");
+  const assignedTableBody  = document.querySelector("#assignedTable tbody");
+  const unclaimedTableBody = document.querySelector("#unclaimedTable tbody");
 
   function showMsg(text) {
     accessMessage.textContent = text;
-    accessMessage.classList.remove("hidden");
   }
-  function hideMsg() {
-    accessMessage.classList.add("hidden");
-    accessMessage.textContent = "";
+  function showPortal() {
+    portalContent.classList.remove("hidden");
   }
 
-  async function initPage() {
+  function statusClass(status) {
+    const s = (status || "").toLowerCase();
+    if (s === "new") return "status-pill new";
+    if (s === "working") return "status-pill working";
+    if (s === "closed won") return "status-pill closedwon";
+    if (s === "closed lost") return "status-pill closedlost";
+    return "status-pill";
+  }
+
+  async function initPortal() {
     const { data, error } = await supabaseClient.auth.getUser();
     if (error) {
       console.error("Auth error:", error);
-      showMsg("Error checking login. Try refreshing or log in again via the main dashboard.");
-      leadsContent.classList.add("hidden");
+      showMsg("Error checking login. Ask admin to log you in again.");
       return;
     }
     if (!data || !data.user) {
-      showMsg("Not signed in. Go to the Admin Dashboard and log in first, then come back here.");
-      leadsContent.classList.add("hidden");
+      showMsg("Not signed in. Ask admin to log you in through the Admin Dashboard first.");
       return;
     }
 
     const email = data.user.email;
     userEmailSpan.textContent = email || "";
+    showMsg("Signed in as " + (email || "unknown") + ".");
 
-    if (email !== ADMIN_EMAIL) {
-      showMsg("This page is for admin only. Contractors can work leads from the Contractor Portal.");
-      leadsContent.classList.add("hidden");
-      return;
-    }
-
-    // Admin access allowed
-    hideMsg();
-    leadsContent.classList.remove("hidden");
-    loadLeads();
+    // Admin can still see this page too, but normally it's for contractors.
+    showPortal();
+    loadLeads(email);
   }
 
   logoutBtn.addEventListener("click", async () => {
     await supabaseClient.auth.signOut();
     userEmailSpan.textContent = "";
-    showMsg("Logged out. Go to the Admin Dashboard to sign in again.");
-    leadsContent.classList.add("hidden");
+    portalContent.classList.add("hidden");
+    showMsg("Logged out. Ask admin to log you in again when you're ready to work.");
   });
 
-  async function loadLeads() {
-    const { data, error } = await supabaseClient
-      .from("call_leads")
-      .select("*")
-      .order("created_at", { ascending: false })
-      .limit(20);
+  async function loadLeads(email) {
+    // Assigned to this caller
+    const [assignedRes, unclaimedRes] = await Promise.all([
+      supabaseClient
+        .from("call_leads")
+        .select("*")
+        .eq("assigned_caller_email", email),
+      supabaseClient
+        .from("call_leads")
+        .select("*")
+        .is("assigned_caller_email", null)
+    ]);
 
-    if (error) {
-      console.error("loadLeads error:", error);
-      return;
-    }
+    if (assignedRes.error) console.error("Assigned error:", assignedRes.error);
+    if (unclaimedRes.error) console.error("Unclaimed error:", unclaimedRes.error);
 
-    leadsTableBody.innerHTML = "";
-    (data || []).forEach(ld => {
+    const assigned = assignedRes.data || [];
+    const unclaimed = unclaimedRes.data || [];
+
+    // Assigned table
+    assignedTableBody.innerHTML = "";
+    assigned.forEach(ld => {
       const tr = document.createElement("tr");
-      const priority = (ld.priority || "").toString().toUpperCase();
-      const status = (ld.call_status || "new").toLowerCase();
 
       const tdBiz = document.createElement("td");
-      tdBiz.innerHTML = `<strong>${ld.business_name || ld.BusinessName || "(No name)"}</strong><br><span class="small">${ld.email || ""}</span>`;
+      tdBiz.innerHTML = `<strong>${ld.business_name || "(No name)"}</strong><br><span class="small">${ld.email || ""}</span>`;
       tr.appendChild(tdBiz);
 
       const tdPhone = document.createElement("td");
-      tdPhone.textContent = ld.phone || ld.Phone || "";
+      tdPhone.textContent = ld.phone || "";
       tr.appendChild(tdPhone);
 
       const tdPriority = document.createElement("td");
-      const spanP = document.createElement("span");
-      spanP.className = "status-badge " + (priority === "A" ? "a" : priority === "B" ? "b" : "c");
-      spanP.textContent = priority || "-";
-      tdPriority.appendChild(spanP);
+      tdPriority.textContent = (ld.priority || "").toUpperCase();
       tr.appendChild(tdPriority);
 
       const tdStatus = document.createElement("td");
-      tdStatus.textContent = status;
+      const spanS = document.createElement("span");
+      spanS.className = statusClass(ld.call_status);
+      spanS.textContent = (ld.call_status || "new");
+      tdStatus.appendChild(spanS);
       tr.appendChild(tdStatus);
 
+      const tdLast = document.createElement("td");
+      tdLast.textContent = ld.last_contact_date || "";
+      tr.appendChild(tdLast);
+
+      assignedTableBody.appendChild(tr);
+    });
+
+    // Unclaimed table
+    unclaimedTableBody.innerHTML = "";
+    unclaimed.forEach(ld => {
+      const tr = document.createElement("tr");
+
+      const tdBiz = document.createElement("td");
+      tdBiz.innerHTML = `<strong>${ld.business_name || "(No name)"}</strong><br><span class="small">${ld.email || ""}</span>`;
+      tr.appendChild(tdBiz);
+
+      const tdPhone = document.createElement("td");
+      tdPhone.textContent = ld.phone || "";
+      tr.appendChild(tdPhone);
+
+      const tdPriority = document.createElement("td");
+      tdPriority.textContent = (ld.priority || "").toUpperCase();
+      tr.appendChild(tdPriority);
+
       const tdCity = document.createElement("td");
-      tdCity.textContent = ld.city || ld.City || "";
+      tdCity.textContent = ld.city || "";
       tr.appendChild(tdCity);
 
-      leadsTableBody.appendChild(tr);
+      const tdAction = document.createElement("td");
+      const btn = document.createElement("button");
+      btn.className = "btn";
+      btn.textContent = "Start Working";
+      btn.addEventListener("click", () => claimLead(ld.id, email));
+      tdAction.appendChild(btn);
+      tr.appendChild(tdAction);
+
+      unclaimedTableBody.appendChild(tr);
     });
   }
 
-  // Very simple CSV parser (no redirects; safe)
-  function parseCsv(text) {
-    const lines = text.split(/\r?\n/).filter(l => l.trim().length);
-    if (!lines.length) return [];
-    const headers = lines[0].split(",").map(h => h.trim());
-    const rows = [];
+  async function claimLead(id, email) {
+    const { error } = await supabaseClient
+      .from("call_leads")
+      .update({
+        assigned_caller_email: email,
+        call_status: "working",
+        last_contact_date: new Date().toISOString().slice(0,10)
+      })
+      .eq("id", id)
+      .is("assigned_caller_email", null); // only if still unclaimed
 
-    for (let i = 1; i < lines.length; i++) {
-      const cols = lines[i].split(",");
-      const row = {};
-      headers.forEach((h, idx) => {
-        row[h] = (cols[idx] || "").trim();
-      });
-      rows.push(row);
+    if (error) {
+      console.error("claimLead error:", error);
+      alert("Could not claim lead. It might have been taken by another caller.");
+      return;
     }
-    return rows;
+
+    loadLeads(email);
   }
 
-  uploadBtn.addEventListener("click", async () => {
-    uploadError.textContent = "";
-    uploadStatus.textContent = "";
-
-    const file = csvFileInput.files[0];
-    if (!file) {
-      uploadError.textContent = "Choose a CSV file first.";
-      return;
-    }
-
-    const text = await file.text();
-    const rows = parseCsv(text);
-    if (!rows.length) {
-      uploadError.textContent = "No rows found in CSV.";
-      return;
-    }
-
-    uploadStatus.textContent = "Uploading " + rows.length + " leads…";
-
-    // Map CSV fields to table columns
-    const mapped = rows.map(r => ({
-      business_name: r.BusinessName || null,
-      phone: r.Phone || null,
-      email: r.Email || null,
-      alt_email: r.AltEmail || null,
-      website: r.Website || null,
-      social: r.Social || null,
-      city: r.City || null,
-      state: r.State || null,
-      priority: (r.Priority || "A").toUpperCase(),
-      call_status: (r.CallStatus || "new").toLowerCase(),
-      notes: r.Notes || null
-    }));
-
-    const { error } = await supabaseClient.from("call_leads").insert(mapped);
-    if (error) {
-      console.error("Insert error:", error);
-      uploadError.textContent = "Error inserting some rows: " + error.message;
-      uploadStatus.textContent = "";
-      return;
-    }
-
-    uploadStatus.textContent = "Leads uploaded successfully.";
-    loadLeads();
-  });
-
-  initPage();
+  initPortal();
 </script>
 </body>
-      </html>
+</html>
