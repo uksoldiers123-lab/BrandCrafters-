@@ -2,1286 +2,508 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
+  <title>BrandCrafters — Admin Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Admin Dashboard — BrandCrafters</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
-
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
-    .status-pill {
-      display:inline-block;
-      padding:4px 8px;
-      border-radius:999px;
+    :root{
+      --bg:#050713;
+      --panel:rgba(255,255,255,.04);
+      --border:rgba(255,255,255,.08);
+      --text:#f5f5ff;
+      --muted:#b5b7d8;
+      --grad:linear-gradient(135deg,#6ea8ff,#b166ff);
+    }
+    *{box-sizing:border-box;}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:
+        radial-gradient(1200px 600px at -10% -10%, #18122f 0, rgba(24,18,47,0) 60%),
+        var(--bg);
+      color:var(--text);
+    }
+    a{text-decoration:none;color:var(--text);}
+    header{
+      position:sticky;top:0;z-index:40;
+      background:rgba(5,7,19,.95);
+      backdrop-filter:blur(16px);
+      border-bottom:1px solid rgba(255,255,255,.08);
+      padding:10px 18px;
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+    }
+    .brand{
+      display:flex;flex-direction:column;gap:2px;
+    }
+    .brand-title{
+      font-weight:700;letter-spacing:.08em;font-size:14px;text-transform:uppercase;
+    }
+    .brand-sub{font-size:12px;color:var(--muted);}
+    .nav{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+    .nav a{
+      font-size:13px;padding:6px 10px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.22);
+    }
+    .nav a.primary{
+      border-color:transparent;
+      background:var(--grad);
+      color:#050713;
+      font-weight:600;
+    }
+    .user-email{font-size:12px;color:var(--muted);}
+    .logout-btn{
+      border-radius:999px;padding:6px 10px;
+      border:1px solid rgba(255,255,255,.4);
+      background:transparent;color:var(--text);
+      font-size:12px;cursor:pointer;
+    }
+    main{
+      max-width:1100px;margin:18px auto 60px;
+      padding:0 16px;
+    }
+    h1{margin:0 0 6px;font-size:22px;}
+    .subhead{margin:0 0 18px;font-size:13px;color:var(--muted);}
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:12px;
+    }
+    .grid-2{
+      display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px;
+    }
+    @media (max-width:900px){
+      .grid{grid-template-columns:1fr;}
+      .grid-2{grid-template-columns:1fr;}
+    }
+    .card{
+      background:var(--panel);
+      border-radius:16px;
+      border:1px solid var(--border);
+      padding:16px 14px;
+    }
+    .card h2{margin:0 0 8px;font-size:16px;}
+    .card p{margin:0 0 6px;font-size:13px;}
+    .stat-label{
+      font-size:11px;text-transform:uppercase;
+      letter-spacing:.06em;color:var(--muted);
+    }
+    .stat-value{
+      font-size:20px;font-weight:700;margin-top:4px;
+    }
+    .stat-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+    .pill{
+      display:inline-block;padding:2px 8px;border-radius:999px;
+      font-size:11px;
+    }
+    .pill-green{background:rgba(155,255,191,.15);}
+    .pill-red{background:rgba(255,155,155,.15);}
+    .pill-blue{background:rgba(110,168,255,.15);}
+    table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;}
+    th,td{
+      border-bottom:1px solid rgba(255,255,255,.08);
+      padding:5px 4px;
+      vertical-align:top;
+    }
+    th{
+      text-align:left;
       font-size:11px;
       text-transform:uppercase;
       letter-spacing:.05em;
-      cursor:pointer;
-      border:1px solid rgba(255,255,255,.25);
-      opacity:.95;
-      white-space:nowrap;
+      color:var(--muted);
     }
-    .status-new { background:rgba(110,168,255,.18); }
-    .status-in_progress { background:rgba(240,196,25,.18); }
-    .status-done { background:rgba(72,199,116,.18); }
-
-    .btn-mini {
-      padding:4px 8px;
-      border-radius:999px;
-      font-size:11px;
-      border:1px solid rgba(255,255,255,.25);
-      background:rgba(255,255,255,.04);
-      cursor:pointer;
-      margin-top:4px;
-      display:inline-block;
-    }
-
-    .status-filter-wrap {
-      display:flex;
-      align-items:center;
-      gap:6px;
-      font-size:13px;
-    }
-    .status-filter-wrap select {
-      padding:5px 8px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.25);
-      background:rgba(20,18,32,.9);
-      color:inherit;
-      font:inherit;
-    }
-
-    .chip {
-      display:inline-block;
-      padding:2px 7px;
-      border-radius:999px;
-      font-size:11px;
-      border:1px solid rgba(255,255,255,.25);
-      opacity:.85;
-    }
-
-    /* Highlight very fresh "new" items (last 24h) */
-    tr.row-recent td {
-      background:rgba(110,168,255,.08);
+    .small{font-size:12px;color:var(--muted);}
+    .tag{
+      display:inline-block;border-radius:999px;
+      border:1px solid rgba(255,255,255,.2);
+      padding:2px 7px;font-size:11px;
     }
   </style>
-  <script defer src="script.js"></script>
 </head>
 <body>
-
-<header class="site-header">
-  <div class="container header-inner">
-    <a class="logo" href="index.html">
-      <span class="logo-mark">BC</span><span>BrandCrafters</span>
-    </a>
-
-    <nav class="nav desktop-nav">
-      <a href="index.html" class="nav-link">Home</a>
-      <a href="pricing.html" class="nav-link">Pricing</a>
-      <a href="customer-inquiry.html" class="nav-link">Customer Portal</a>
-      <a href="dashboard.html" class="nav-link active">Admin</a>
-    </nav>
-
-    <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
+<header>
+  <div class="brand">
+    <span class="brand-title">BrandCrafters</span>
+    <span class="brand-sub">Admin · Money & Projects</span>
   </div>
-
-  <nav class="mobile-drawer" aria-hidden="true">
-    <div class="drawer-header">
-      <a class="logo" href="index.html">
-        <span class="logo-mark">BC</span><span>BrandCrafters</span>
-      </a>
-      <button class="menu-close" aria-label="Close menu">✕</button>
-    </div>
-    <a class="drawer-link" href="index.html">Home</a>
-    <a class="drawer-link" href="pricing.html">Pricing</a>
-    <a class="drawer-link" href="customer-inquiry.html">Customer Portal</a>
-    <a class="drawer-link highlight" href="dashboard.html">Admin</a>
-  </nav>
-
-  <div class="drawer-backdrop" aria-hidden="true"></div>
+  <div class="nav">
+    <a href="dashboard.html" class="primary">Dashboard</a>
+    <a href="dashboard-leads-upload.html">Leads & CSV</a>
+    <a href="contractor-portal.html" target="_blank">Contractor Portal</a>
+    <span class="user-email" id="userEmail"></span>
+    <button id="logoutBtn" class="logout-btn">Log Out</button>
+  </div>
 </header>
 
-<section class="page-hero">
-  <div class="container">
-    <h1 class="headline">Admin Dashboard</h1>
+<main>
+  <section>
+    <h1>Overview</h1>
     <p class="subhead">
-      Track website orders, support, maintenance, bills, and contractor commissions.<br>
-      Admin-only, powered by Supabase Auth.
+      Quick snapshot of one-time project money, monthly maintenance, upcoming bills, and lead pipeline.
     </p>
-  </div>
-</section>
+  </section>
 
-<section class="container">
+  <!-- MONEY SUMMARY -->
+  <section class="grid">
+    <article class="card">
+      <div class="stat-label">Lifetime Project Revenue (one-time)</div>
+      <div class="stat-value" id="lifetimeRevenue">$0.00</div>
+      <div class="stat-sub">Sum of total_price on completed onboarding submissions.</div>
+    </article>
 
-  <!-- AUTH SECTION -->
-  <div id="authSection" class="form glass" style="max-width:420px;margin:0 auto 40px;display:none;">
-    <h2>Admin Sign In</h2>
-    <form id="loginForm">
-      <label>Email
-        <input type="email" name="email" required />
-      </label>
-      <label>Password
-        <input type="password" name="password" required />
-      </label>
-      <button class="btn btn-primary" type="submit">Sign In</button>
-      <p id="loginMsg" class="form-note"></p>
-    </form>
-  </div>
-
-  <!-- ADMIN APP -->
-  <div id="appSection" style="display:none;">
-
-    <!-- Notifications Card -->
-    <div class="card" style="margin-bottom:16px;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;">
-        <div>
-          <h2 style="margin:0 0 4px;display:flex;align-items:center;gap:8px;">
-            <span>Notifications</span>
-            <span style="font-size:18px;">🔔</span>
-          </h2>
-          <p class="subhead" style="margin:0;">Last 24 hours & open tasks.</p>
-        </div>
-        <div class="status-filter-wrap">
-          <span>Table view:</span>
-          <select id="statusFilter">
-            <option value="new">New Only</option>
-            <option value="in_progress">In Progress Only</option>
-            <option value="not_done">Incomplete (New + In Progress)</option>
-            <option value="done">Done Only</option>
-            <option value="maintenance">Maintenance Clients</option>
-            <option value="all">All Statuses</option>
-          </select>
-        </div>
+    <article class="card">
+      <div class="stat-label">Active Monthly Income</div>
+      <div class="stat-value" id="monthlyIncome">$0.00</div>
+      <div class="stat-sub">
+        Sum of monthly_fee for all projects with monthly_fee &gt; 0.
       </div>
+    </article>
 
-      <div id="notificationsBox" style="margin-top:10px;font-size:14px;">
-        Loading notifications…
+    <article class="card">
+      <div class="stat-label">Active Monthly Bills (Tools & Client Bills)</div>
+      <div class="stat-value" id="monthlyBills">$0.00</div>
+      <div class="stat-sub">
+        Recurring_expenses where frequency = 'monthly' and is_active = true.
       </div>
-    </div>
+    </article>
+  </section>
 
-    <!-- Summary Card -->
-    <div class="card" style="margin-bottom:20px;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;">
-        <div>
-          <h2 style="margin:0 0 4px;">Summary</h2>
-          <p id="summaryText" class="subhead" style="margin:0;">Loading…</p>
-        </div>
-
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
-          <button id="logoutBtn" class="btn btn-ghost">Log Out</button>
-          <span id="sessionNote" style="font-size:11px;opacity:.7;">Auto-logout after inactivity.</span>
-        </div>
+  <!-- PROFITS & LEADS -->
+  <section class="grid" style="margin-top:12px;">
+    <article class="card">
+      <div class="stat-label">Est. Monthly Net (Maintenance - Bills)</div>
+      <div class="stat-value" id="monthlyNet">$0.00</div>
+      <div class="stat-sub">
+        Quick check if maintenance fees can cover recurring expenses.
       </div>
-    </div>
+    </article>
 
-    <!-- Tabs -->
-    <div class="cta-row" style="justify-content:flex-start;gap:10px;margin-bottom:20px;">
-      <button id="tabOnboarding" class="btn btn-primary">Website Orders</button>
-      <button id="tabSupport" class="btn btn-ghost">Support Requests</button>
-      <button id="tabContractors" class="btn btn-ghost">Contractors</button>
-    </div>
-
-    <!-- Website Orders -->
-    <section id="onboardingSection">
-      <h2>Website Orders</h2>
-      <div class="glass" style="overflow-x:auto;padding:0;margin-top:12px;">
-        <table style="width:100%;border-collapse:collapse;font-size:14px;">
-          <thead>
-          <tr>
-            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Created</th>
-            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Client</th>
-            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Business</th>
-            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Package</th>
-            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Pages</th>
-            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Add-ons</th>
-            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Status</th>
-            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Project Links / Stack</th>
-            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Money / Contractor</th>
-          </tr>
-          </thead>
-          <tbody id="onboardingBody">
-          <tr><td colspan="9" style="padding:10px;">Loading…</td></tr>
-          </tbody>
-        </table>
+    <article class="card">
+      <div class="stat-label">Closed Won Leads · This Month</div>
+      <div class="stat-value" id="closedWonMonth">0</div>
+      <div class="stat-sub">
+        Leads in call_leads where status = 'closed won' and last_contact_date is in this month.
       </div>
-    </section>
+    </article>
 
-    <!-- Support Requests -->
-    <section id="supportSection" style="display:none;">
-      <h2>Support Requests</h2>
-      <div class="glass" style="overflow-x:auto;padding:0;margin-top:12px;">
-        <table style="width:100%;border-collapse:collapse;font-size:14px;">
-          <thead>
-          <tr>
-            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Created</th>
-            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Client</th>
-            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Business</th>
-            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Type</th>
-            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Urgency</th>
-            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Status</th>
-            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Details</th>
-          </tr>
-          </thead>
-          <tbody id="supportBody">
-          <tr><td colspan="7" style="padding:10px;">No requests yet.</td></tr>
-          </tbody>
-        </table>
+    <article class="card">
+      <div class="stat-label">Estimated Commissions · This Month</div>
+      <div class="stat-value" id="commissionMonth">$0.00</div>
+      <div class="stat-sub">
+        $100 per closed website sale (no commission on add-ons only).
       </div>
-    </section>
+    </article>
+  </section>
 
-    <!-- Contractors -->
-    <section id="contractorsSection" style="display:none;margin-top:8px;margin-bottom:32px;">
-      <h2>Contractors &amp; Commissions</h2>
-      <p class="form-note">
-        Cold callers and closers who bring you clients. Totals are calculated from attached projects.
+  <!-- PROJECTS & EXPENSES -->
+  <section class="grid-2" style="margin-top:16px;">
+    <article class="card">
+      <h2>Client Projects (Onboarding)</h2>
+      <p class="small">
+        Last 6 onboarding submissions with totals and monthly fees. You’ll use the dashboard page to drill into each.
       </p>
-      <div class="glass" style="overflow-x:auto;padding:0;margin-top:10px;">
-        <table style="width:100%;border-collapse:collapse;font-size:14px;">
-          <thead>
+      <table id="projectsTable">
+        <thead>
           <tr>
-            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Contractor</th>
-            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Contact</th>
-            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Payment</th>
-            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Projects</th>
-            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Total Commission</th>
-            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Unpaid</th>
-            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Notes / Actions</th>
+            <th>Client</th>
+            <th>Total Price</th>
+            <th>Monthly Fee</th>
+            <th>Status</th>
           </tr>
-          </thead>
-          <tbody id="contractorsBody">
-          <tr><td colspan="7" style="padding:10px;">No contractors yet. Attach one from a Website Order.</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </article>
 
-    <!-- Bills & Recurring Expenses -->
-    <section id="expensesSection" style="margin-top:8px;margin-bottom:40px;">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
-        <h2 style="margin:0;">Bills &amp; Recurring Expenses</h2>
-        <button id="addExpenseBtn" class="btn btn-primary" type="button">Add Expense</button>
-      </div>
-      <p class="form-note">
-        Track domains, hosting, tools, and subscriptions – including which ones are billable to clients.
+    <article class="card">
+      <h2>Upcoming Recurring Bills</h2>
+      <p class="small">
+        Next 6 active recurring_expenses sorted by next_due_date.
       </p>
-      <div class="glass" style="overflow-x:auto;padding:0;margin-top:10px;">
-        <table style="width:100%;border-collapse:collapse;font-size:14px;">
-          <thead>
+      <table id="billsTable">
+        <thead>
           <tr>
-            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Name / Vendor</th>
-            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Amount</th>
-            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Frequency</th>
-            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Next Due</th>
-            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Category</th>
-            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Client Billing</th>
-            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Notes / Actions</th>
+            <th>Bill</th>
+            <th>Due</th>
+            <th>Vendor</th>
+            <th>Amount</th>
           </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <p class="small" id="billsNote"></p>
+    </article>
+  </section>
+
+  <!-- LEAD SNAPSHOT -->
+  <section class="card" style="margin-top:16px;">
+    <h2>Lead Pipeline Snapshot</h2>
+    <p class="small">
+      Quick check before you go deeper into the full Leads & CSV dashboard.
+    </p>
+    <div class="grid-2">
+      <div>
+        <p class="stat-label">Counts by Status</p>
+        <p class="small" id="leadStatusStats">Loading…</p>
+      </div>
+      <div>
+        <p class="stat-label">Top Callers (Closed Won)</p>
+        <table id="topCallersTable">
+          <thead>
+            <tr>
+              <th>Caller</th>
+              <th>Closed Won</th>
+              <th>Est. Commission</th>
+            </tr>
           </thead>
-          <tbody id="expensesBody">
-          <tr><td colspan="7" style="padding:10px;">No expenses yet. Add your first domain, hosting, or email bill.</td></tr>
-          </tbody>
+          <tbody></tbody>
         </table>
       </div>
-    </section>
+    </div>
+  </section>
+</main>
 
-  </div>
-</section>
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = "https://vekoulqehexqosgwacwa.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
+  const ADMIN_EMAIL = "srarnold216@gmail.com";
+  const LOGIN_PAGE_URL = "dashboard-login.html";
 
-<footer class="site-footer">
-  <div class="container footer-inner">
-    <div>© <span id="year"></span> BrandCrafters — Admin</div>
-  </div>
-</footer>
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-<script type="module">
-  import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+  const userEmailSpan   = document.getElementById("userEmail");
+  const logoutBtn       = document.getElementById("logoutBtn");
 
-  const supabase = createClient(
-    "https://vekoulqehexqosgwacwa.supabase.co",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4"
-  );
+  const lifetimeRevenue = document.getElementById("lifetimeRevenue");
+  const monthlyIncome   = document.getElementById("monthlyIncome");
+  const monthlyBills    = document.getElementById("monthlyBills");
+  const monthlyNet      = document.getElementById("monthlyNet");
+  const closedWonMonth  = document.getElementById("closedWonMonth");
+  const commissionMonth = document.getElementById("commissionMonth");
 
-  document.getElementById("year").textContent = new Date().getFullYear();
+  const projectsTableBody = document.querySelector("#projectsTable tbody");
+  const billsTableBody    = document.querySelector("#billsTable tbody");
+  const billsNote         = document.getElementById("billsNote");
+  const leadStatusStats   = document.getElementById("leadStatusStats");
+  const topCallersTableBody = document.querySelector("#topCallersTable tbody");
 
-  const authSection = document.getElementById("authSection");
-  const appSection = document.getElementById("appSection");
-  const loginForm = document.getElementById("loginForm");
-  const loginMsg = document.getElementById("loginMsg");
-  const logoutBtn = document.getElementById("logoutBtn");
-  const sessionNote = document.getElementById("sessionNote");
-
-  const onboardingBody = document.getElementById("onboardingBody");
-  const supportBody = document.getElementById("supportBody");
-  const contractorsBody = document.getElementById("contractorsBody");
-  const expensesBody = document.getElementById("expensesBody");
-
-  const summaryText = document.getElementById("summaryText");
-  const notificationsBox = document.getElementById("notificationsBox");
-
-  const onboardingSection = document.getElementById("onboardingSection");
-  const supportSection = document.getElementById("supportSection");
-  const contractorsSection = document.getElementById("contractorsSection");
-  const expensesSection = document.getElementById("expensesSection");
-
-  const tabOnboarding = document.getElementById("tabOnboarding");
-  const tabSupport = document.getElementById("tabSupport");
-  const tabContractors = document.getElementById("tabContractors");
-  const statusFilterSelect = document.getElementById("statusFilter");
-  const addExpenseBtn = document.getElementById("addExpenseBtn");
-
-  let onbData = [];
-  let supData = [];
-  let contractorsData = [];
-  let expensesData = [];
-  let statusFilter = "new";
-
-  // ---- SESSION / INACTIVITY ----
-  const INACTIVITY_LIMIT_MS = 20 * 60 * 1000; // 20 minutes
-  let lastActivity = Date.now();
-  let isAuthenticated = false;
-
-  function resetActivity() {
-    lastActivity = Date.now();
-  }
-
-  ["click", "mousemove", "keydown", "scroll", "touchstart"].forEach(evt => {
-    document.addEventListener(evt, resetActivity, { passive: true });
-  });
-
-  async function doLogout(timedOut = false) {
-    await supabase.auth.signOut();
-    isAuthenticated = false;
-    appSection.style.display = "none";
-    authSection.style.display = "";
-    if (timedOut) {
-      loginMsg.textContent = "Session timed out due to inactivity. Please sign in again.";
-      if (sessionNote) {
-        sessionNote.textContent = "You were auto-logged out. Sign in again to continue.";
-      }
-    } else {
-      loginMsg.textContent = "";
-    }
-  }
-
-  setInterval(() => {
-    if (!isAuthenticated) return;
-    if (appSection.style.display === "none") return;
-
-    const now = Date.now();
-    if (now - lastActivity > INACTIVITY_LIMIT_MS) {
-      doLogout(true);
-    }
-  }, 60 * 1000);
-
-  // ---- HELPERS ----
-  function shorten(text, max = 120) {
-    if (!text) return "";
-    text = String(text);
-    return text.length > max ? text.slice(0, max) + "…" : text;
-  }
-  function formatDate(isoOrDate) {
-    if (!isoOrDate) return "";
-    const d = isoOrDate instanceof Date ? isoOrDate : new Date(isoOrDate);
-    if (Number.isNaN(d.getTime())) return "";
-    return d.toLocaleDateString();
-  }
-  function formatDateTime(iso) {
-    if (!iso) return "";
-    const d = new Date(iso);
-    return d.toLocaleString();
-  }
-  function humanStatus(s) {
-    if (!s || s === "new") return "New";
-    if (s === "in_progress") return "In Progress";
-    if (s === "done") return "Done";
-    return s;
-  }
-  function nextStatus(s) {
-    if (!s || s === "new") return "in_progress";
-    if (s === "in_progress") return "done";
-    return "new";
-  }
-  function toNum(v) {
-    const n = parseFloat(v);
-    return Number.isNaN(n) ? 0 : n;
-  }
-
-  function isMaintenanceRow(row, table) {
-    if (table === "onboarding_submissions") {
-      const addons = Array.isArray(row.addons) ? row.addons : [];
-      const t = addons.join(" ").toLowerCase();
-      if (t.includes("care lite") || t.includes("care standard") || t.includes("care pro")) return true;
-      if (toNum(row.monthly_fee) > 0) return true;
-      return false;
-    }
-    if (table === "support_requests") {
-      const rt = (row.request_type || "").toLowerCase();
-      return rt.includes("maintenance");
-    }
-    return false;
-  }
-
-  function statusPass(row, table) {
-    const s = (row.status || "new").toLowerCase();
-    switch (statusFilter) {
-      case "new": return s === "new";
-      case "in_progress": return s === "in_progress";
-      case "not_done": return s !== "done";
-      case "done": return s === "done";
-      case "maintenance": return isMaintenanceRow(row, table);
-      default: return true;
-    }
-  }
-
-  function renderNotifications() {
-    if (!notificationsBox) return;
-
-    const now = new Date();
-    const since = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-
-    const newOrdersToday = onbData.filter(r => (r.status || "new") === "new" && new Date(r.created_at) >= since).length;
-    const openOrders = onbData.filter(r => (r.status || "new") !== "done").length;
-
-    const newSupportToday = supData.filter(r => (r.status || "new") === "new" && new Date(r.created_at) >= since).length;
-    const openSupport = supData.filter(r => (r.status || "new") !== "done").length;
-
-    notificationsBox.innerHTML = `
-      <div style="display:flex;flex-wrap:wrap;gap:16px;">
-        <div>
-          <div style="font-size:12px;opacity:.75;">New orders (last 24h)</div>
-          <div style="font-size:20px;font-weight:800;">${newOrdersToday}</div>
-        </div>
-        <div>
-          <div style="font-size:12px;opacity:.75;">Open website orders</div>
-          <div style="font-size:20px;font-weight:800;">${openOrders}</div>
-        </div>
-        <div>
-          <div style="font-size:12px;opacity:.75;">New support (last 24h)</div>
-          <div style="font-size:20px;font-weight:800;">${newSupportToday}</div>
-        </div>
-        <div>
-          <div style="font-size:12px;opacity:.75;">Open support tickets</div>
-          <div style="font-size:20px;font-weight:800;">${openSupport}</div>
-        </div>
-      </div>
-      <div style="margin-top:6px;font-size:12px;opacity:.7;">
-        Tip: Use the "Table view" dropdown above to quickly see just new work, in-progress jobs, or maintenance clients.
-      </div>
-    `;
-  }
-
-  function computeSummary() {
-    const now = new Date();
-    const y = now.getFullYear();
-    const m = now.getMonth();
-    const thisMonth = d => d.getFullYear() === y && d.getMonth() === m;
-    const lastMonthDate = new Date(y, m - 1, 1);
-    const lastMonth = d => d.getFullYear() === lastMonthDate.getFullYear() && d.getMonth() === lastMonthDate.getMonth();
-
-    let lastMonthRevenue = 0;
-    let thisMonthRevenue = 0;
-    let mrr = 0;
-
-    onbData.forEach(row => {
-      const paidAt = row.first_paid_at ? new Date(row.first_paid_at) : null;
-      const price = toNum(row.total_price);
-      const monthlyFee = toNum(row.monthly_fee);
-
-      if (paidAt) {
-        if (lastMonth(paidAt)) lastMonthRevenue += price;
-        if (thisMonth(paidAt)) thisMonthRevenue += price;
-      }
-      mrr += monthlyFee;
-    });
-
-    let recurringMonthly = 0;
-    expensesData.forEach(exp => {
-      if (exp.is_active === false) return;
-      const amt = toNum(exp.amount);
-      const freq = (exp.frequency || "monthly").toLowerCase();
-      if (freq === "monthly") recurringMonthly += amt;
-      else if (freq === "yearly") recurringMonthly += (amt / 12);
-      else recurringMonthly += amt;
-    });
-
-    const netMonthly = mrr - recurringMonthly;
-
-    // Contractor commissions: sum of all commissions not marked "paid"
-    let unpaidCommissions = 0;
-    onbData.forEach(row => {
-      const cAmt = toNum(row.contractor_commission);
-      const cStatus = (row.contractor_commission_status || "unpaid").toLowerCase();
-      if (cAmt > 0 && cStatus !== "paid") {
-        unpaidCommissions += cAmt;
-      }
-    });
-
-    const netAfterCommissions = netMonthly - unpaidCommissions;
-
-    summaryText.innerHTML = `
-      <b>Last month one-time:</b> $${lastMonthRevenue.toFixed(2)}
-      &nbsp;|&nbsp;
-      <b>This month one-time:</b> $${thisMonthRevenue.toFixed(2)}<br>
-      <b>Monthly recurring (MRR):</b> $${mrr.toFixed(2)}
-      &nbsp;|&nbsp;
-      <b>Recurring bills (est.):</b> $${recurringMonthly.toFixed(2)}
-      &nbsp;|&nbsp;
-      <b>Net monthly after bills:</b> $${netMonthly.toFixed(2)}<br>
-      <b>Unpaid contractor commissions (all-time):</b> $${unpaidCommissions.toFixed(2)}
-      &nbsp;|&nbsp;
-      <b>Net after bills &amp; unpaid commissions (simple view):</b> $${netAfterCommissions.toFixed(2)}<br>
-      <span style="font-size:12px;opacity:.8;">
-        Orders: ${onbData.length} · Support tickets: ${supData.length} · Active bills: ${expensesData.filter(e => e.is_active !== false).length}
-      </span>
-    `;
-  }
-
-  async function updateStatus(table, id, currentStatus) {
-    const newStatus = nextStatus(currentStatus);
-    if (table === "onboarding_submissions") {
-      onbData = onbData.map(r => r.id === id ? { ...r, status:newStatus } : r);
-    } else {
-      supData = supData.map(r => r.id === id ? { ...r, status:newStatus } : r);
-    }
-    renderTables();
-
-    const { error } = await supabase
-      .from(table)
-      .update({ status:newStatus })
-      .eq("id", id);
-
-    if (error) alert("Error saving status");
-  }
-
-  async function editProject(id) {
-    const row = onbData.find(r => String(r.id) === String(id));
-    if (!row) return;
-
-    const live = prompt("Live website URL:", row.live_url || "") ?? row.live_url;
-    if (live === null) return;
-
-    const repo = prompt("GitHub / Replit repo URL:", row.repo_url || "") ?? row.repo_url;
-    if (repo === null) return;
-
-    const stack = prompt("Stack notes (Supabase, Stripe, email provider, etc.):", row.stack_notes || "") ?? row.stack_notes;
-    if (stack === null) return;
-
-    const updated = {
-      live_url: live.trim() || null,
-      repo_url: repo.trim() || null,
-      stack_notes: stack.trim() || null
-    };
-
-    onbData = onbData.map(r => r.id === row.id ? { ...r, ...updated } : r);
-    renderTables();
-
-    const { error } = await supabase
-      .from("onboarding_submissions")
-      .update(updated)
-      .eq("id", row.id);
-
-    if (error) alert("Error saving project info");
-  }
-
-  async function editMoney(id) {
-    const row = onbData.find(r => String(r.id) === String(id));
-    if (!row) return;
-
-    const totalPrice = prompt("Total one-time price charged (website + add-ons):", row.total_price ?? "") ?? row.total_price;
-    if (totalPrice === null) return;
-
-    const oneTimeCost = prompt("One-time cost to you (optional):", row.one_time_cost ?? "") ?? row.one_time_cost;
-    if (oneTimeCost === null) return;
-
-    const monthlyFee = prompt("Monthly maintenance fee (0 if none):", row.monthly_fee ?? "") ?? row.monthly_fee;
-    if (monthlyFee === null) return;
-
-    const monthlyCost = prompt("Your monthly cost (hosting, etc.):", row.monthly_cost ?? "") ?? row.monthly_cost;
-    if (monthlyCost === null) return;
-
-    const billingDay = prompt("Billing day of month (1–31):", row.billing_day ?? "") ?? row.billing_day;
-    if (billingDay === null) return;
-
-    const paymentNotes = prompt("Payment notes (discounts, cash, etc.):", row.payment_notes ?? "") ?? row.payment_notes;
-    if (paymentNotes === null) return;
-
-    const updated = {
-      total_price: totalPrice === "" ? null : Number(totalPrice),
-      one_time_cost: oneTimeCost === "" ? null : Number(oneTimeCost),
-      monthly_fee: monthlyFee === "" ? 0 : Number(monthlyFee),
-      monthly_cost: monthlyCost === "" ? 0 : Number(monthlyCost),
-      billing_day: billingDay === "" ? null : Number(billingDay),
-      payment_notes: paymentNotes === "" ? null : paymentNotes
-    };
-
-    onbData = onbData.map(r => r.id === row.id ? { ...r, ...updated } : r);
-    renderTables();
-    computeSummary();
-
-    const { error } = await supabase
-      .from("onboarding_submissions")
-      .update(updated)
-      .eq("id", row.id);
-
-    if (error) alert("Error saving money info");
-  }
-
-  async function getOrCreateContractorByName(name) {
-    const trimmed = name.trim();
-    if (!trimmed) return null;
-
-    const existing = contractorsData.find(c => (c.name || "").toLowerCase() === trimmed.toLowerCase());
-    if (existing) return existing;
-
-    const { data, error } = await supabase
-      .from("contractors")
-      .insert({ name: trimmed })
-      .select("*")
-      .single();
-
-    if (error) {
-      alert("Error creating contractor");
+  async function guardAdmin() {
+    const { data } = await supabaseClient.auth.getUser();
+    if (!data || !data.user) {
+      window.location.href = LOGIN_PAGE_URL;
       return null;
     }
+    const email = data.user.email;
+    userEmailSpan.textContent = email;
 
-    contractorsData.push(data);
-    renderContractors();
-    return data;
-  }
-
-  async function editContractorForProject(projectId) {
-    const row = onbData.find(r => String(r.id) === String(projectId));
-    if (!row) return;
-
-    const currentContractor = contractorsData.find(c => c.id === row.contractor_id);
-    const defaultName = currentContractor ? currentContractor.name : "";
-
-    const name = prompt("Contractor name (blank to clear):", defaultName) ?? defaultName;
-    if (name === null) return;
-
-    let contractor = null;
-    let contractor_id = null;
-
-    if (name.trim()) {
-      contractor = await getOrCreateContractorByName(name);
-      if (!contractor) return;
-      contractor_id = contractor.id;
+    if (email !== ADMIN_EMAIL) {
+      // Non admin goes to contractor portal
+      window.location.href = "contractor-portal.html";
+      return null;
     }
-
-    const commissionInput = prompt(
-      "Commission amount owed for this project (e.g. 100):",
-      row.contractor_commission ?? ""
-    );
-    if (commissionInput === null) return;
-
-    const statusInput = prompt(
-      "Commission status: unpaid / partial / paid",
-      row.contractor_commission_status || "unpaid"
-    ) ?? (row.contractor_commission_status || "unpaid");
-
-    const notesInput = prompt(
-      "Contractor notes for this project (optional):",
-      row.contractor_notes || ""
-    ) ?? row.contractor_notes;
-
-    const status = (statusInput || "unpaid").toLowerCase();
-    const commission = commissionInput === "" || commissionInput == null ? null : Number(commissionInput);
-    const paidAt = status === "paid" ? new Date().toISOString() : null;
-
-    const updated = {
-      contractor_id,
-      contractor_commission: commission,
-      contractor_commission_status: status,
-      contractor_paid_at: paidAt,
-      contractor_notes: notesInput || null
-    };
-
-    onbData = onbData.map(r => r.id === row.id ? { ...r, ...updated } : r);
-    renderTables();
-    renderContractors();
-    computeSummary();
-
-    const { error } = await supabase
-      .from("onboarding_submissions")
-      .update(updated)
-      .eq("id", row.id);
-
-    if (error) alert("Error saving contractor info");
+    return data.user;
   }
-
-  async function addExpense() {
-    const name = prompt("Expense name (example: IONOS - clientdomain.com):");
-    if (!name) return;
-
-    const vendor = prompt("Vendor (IONOS, Google, Replit, etc.):") || null;
-    const amountInput = prompt("Amount per billing cycle:", "10.00");
-    if (amountInput === null) return;
-    const amount = Number(amountInput);
-
-    const frequency = prompt("Frequency: monthly / yearly / other", "monthly") || "monthly";
-    const nextDue = prompt("Next due date (YYYY-MM-DD):") || null;
-    const category = prompt("Category (domain, hosting, tools, email, etc.):") || null;
-
-    const billClientAnswer = prompt("Bill client for this? yes/no", "yes") || "yes";
-    const bill_client = !billClientAnswer.toLowerCase().startsWith("n");
-    let client_amount = null;
-    let client_notes = null;
-    let client_project_id = null;
-
-    if (bill_client) {
-      const clientAmountInput = prompt("Client amount (what you charge them per cycle):", amountInput) || amountInput;
-      client_amount = Number(clientAmountInput);
-
-      client_notes = prompt("Client billing notes (e.g. 'Client billed yearly at $30'):", "") || null;
-
-      const projectIdInput = prompt("Link to project ID (UUID from onboarding_submissions.id) or leave blank:", "") || "";
-      client_project_id = projectIdInput.trim() || null;
-    }
-
-    const row = {
-      name,
-      vendor,
-      amount,
-      frequency,
-      next_due_date: nextDue || null,
-      category,
-      notes: null,
-      is_active: true,
-      client_project_id,
-      bill_client,
-      client_amount,
-      client_notes
-    };
-
-    const { data, error } = await supabase
-      .from("recurring_expenses")
-      .insert(row)
-      .select("*")
-      .single();
-
-    if (error) {
-      alert("Error adding expense");
-      return;
-    }
-
-    expensesData.push(data);
-    renderExpenses();
-    computeSummary();
-  }
-
-  async function editExpense(id) {
-    const row = expensesData.find(e => String(e.id) === String(id));
-    if (!row) return;
-
-    const name = prompt("Expense name:", row.name || "") ?? row.name;
-    if (name === null) return;
-
-    const vendor = prompt("Vendor:", row.vendor || "") ?? row.vendor;
-    if (vendor === null) return;
-
-    const amountInput = prompt("Amount per billing cycle:", row.amount ?? "") ?? row.amount;
-    if (amountInput === null) return;
-
-    const frequency = prompt("Frequency: monthly / yearly / other", row.frequency || "monthly") ?? row.frequency;
-    if (frequency === null) return;
-
-    const nextDue = prompt("Next due date (YYYY-MM-DD):", row.next_due_date || "") ?? row.next_due_date;
-    if (nextDue === null) return;
-
-    const category = prompt("Category:", row.category || "") ?? row.category;
-    if (category === null) return;
-
-    const billClientAnswer = prompt("Bill client for this? yes/no", row.bill_client ? "yes" : "no") ?? (row.bill_client ? "yes" : "no");
-    const bill_client = !billClientAnswer.toLowerCase().startsWith("n");
-
-    let client_amount = row.client_amount;
-    let client_notes = row.client_notes;
-    let client_project_id = row.client_project_id;
-
-    if (bill_client) {
-      const clientAmountInput = prompt("Client amount (what you charge them per cycle):", row.client_amount ?? amountInput) ?? row.client_amount;
-      client_amount = clientAmountInput === "" || clientAmountInput == null ? null : Number(clientAmountInput);
-
-      client_notes = prompt("Client billing notes:", row.client_notes || "") ?? row.client_notes;
-
-      const projectIdInput = prompt("Link to project ID (UUID from onboarding_submissions.id) or leave blank:", row.client_project_id ?? "") ?? row.client_project_id;
-      client_project_id = projectIdInput && projectIdInput.trim() !== "" ? projectIdInput.trim() : null;
-    } else {
-      client_amount = null;
-      client_notes = row.client_notes;
-      client_project_id = null;
-    }
-
-    const activeInput = prompt("Active? yes/no", row.is_active === false ? "no" : "yes") ?? (row.is_active === false ? "no" : "yes");
-    const is_active = !String(activeInput).toLowerCase().startsWith("n");
-
-    const notes = prompt("Internal notes:", row.notes || "") ?? row.notes;
-
-    const updated = {
-      name,
-      vendor,
-      amount: Number(amountInput),
-      frequency,
-      next_due_date: nextDue || null,
-      category,
-      notes,
-      is_active,
-      client_project_id,
-      bill_client,
-      client_amount,
-      client_notes
-    };
-
-    expensesData = expensesData.map(e => e.id === row.id ? { ...e, ...updated } : e);
-    renderExpenses();
-    computeSummary();
-
-    const { error } = await supabase
-      .from("recurring_expenses")
-      .update(updated)
-      .eq("id", row.id);
-
-    if (error) alert("Error saving expense");
-  }
-
-  function renderExpenses() {
-    expensesBody.innerHTML = "";
-    if (!expensesData.length) {
-      expensesBody.innerHTML = `<tr><td colspan="7" style="padding:10px;">No expenses yet. Add your first bill.</td></tr>`;
-      return;
-    }
-
-    const now = new Date();
-    const in30 = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
-
-    expensesData
-      .slice()
-      .sort((a, b) => {
-        const da = a.next_due_date ? new Date(a.next_due_date) : null;
-        const db = b.next_due_date ? new Date(b.next_due_date) : null;
-        if (!da && !db) return 0;
-        if (!da) return 1;
-        if (!db) return -1;
-        return da - db;
-      })
-      .forEach(exp => {
-        const amt = toNum(exp.amount);
-        const freq = (exp.frequency || "monthly").toLowerCase();
-        const nextDue = exp.next_due_date ? new Date(exp.next_due_date) : null;
-        const active = exp.is_active !== false;
-
-        let soonChip = "";
-        if (nextDue && active && nextDue <= in30) {
-          soonChip = `<span class="chip" style="border-color:rgba(240,196,25,.8);">Due soon</span>`;
-        }
-
-        let clientInfo = "";
-        if (exp.bill_client) {
-          const clientAmt = exp.client_amount != null ? `$${toNum(exp.client_amount).toFixed(2)}` : "yes";
-          let clientName = "";
-          if (exp.client_project_id && onbData.length) {
-            const proj = onbData.find(p => String(p.id) === String(exp.client_project_id));
-            if (proj) {
-              clientName = proj.business_name || proj.name || "";
-            }
-          }
-          clientInfo = `
-            <div><span class="chip" style="border-color:rgba(110,168,255,.8);">Client-billable</span></div>
-            <div style="font-size:12px;opacity:.8;">Client: ${clientName || "N/A"} · ${clientAmt}</div>
-            ${exp.client_notes ? `<div style="font-size:11px;opacity:.65;">${shorten(exp.client_notes, 80)}</div>` : ""}
-          `;
-        } else {
-          clientInfo = `<span class="chip" style="opacity:.6;">Not billed to client</span>`;
-        }
-
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td style="padding:8px;vertical-align:top;">
-            <div><b>${exp.name || ""}</b></div>
-            <div style="font-size:12px;opacity:.7;">${exp.vendor || ""}</div>
-          </td>
-          <td style="padding:8px;vertical-align:top;">$${amt.toFixed(2)}</td>
-          <td style="padding:8px;vertical-align:top;">${freq}</td>
-          <td style="padding:8px;vertical-align:top;">
-            ${exp.next_due_date ? formatDate(exp.next_due_date) : ""}
-            ${soonChip ? `<div style="margin-top:4px;">${soonChip}</div>` : ""}
-          </td>
-          <td style="padding:8px;vertical-align:top;">${exp.category || ""}</td>
-          <td style="padding:8px;vertical-align:top;">${clientInfo}</td>
-          <td style="padding:8px;vertical-align:top;">
-            ${exp.notes ? `<div style="font-size:12px;opacity:.75;">${shorten(exp.notes, 80)}</div>` : ""}
-            <div style="margin-top:4px;">
-              ${active ? '<span class="chip">Active</span>' : '<span class="chip" style="opacity:.6;">Paused</span>'}
-            </div>
-            <button class="btn-mini" data-expense-id="${exp.id}">Edit</button>
-          </td>
-        `;
-        expensesBody.appendChild(tr);
-      });
-
-    document.querySelectorAll("[data-expense-id]").forEach(el => {
-      el.addEventListener("click", () => editExpense(el.dataset.expenseId));
-    });
-  }
-
-  function renderContractors() {
-    contractorsBody.innerHTML = "";
-    if (!contractorsData.length) {
-      contractorsBody.innerHTML = `<tr><td colspan="7" style="padding:10px;">No contractors yet. Attach one from a Website Order.</td></tr>`;
-      return;
-    }
-
-    contractorsData.forEach(c => {
-      const projects = onbData.filter(p => p.contractor_id === c.id);
-      const projectCount = projects.length;
-
-      let totalCommission = 0;
-      let unpaidCommission = 0;
-
-      projects.forEach(p => {
-        const amt = toNum(p.contractor_commission);
-        totalCommission += amt;
-        const s = (p.contractor_commission_status || "unpaid").toLowerCase();
-        if (s !== "paid") unpaidCommission += amt;
-      });
-
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td style="padding:8px;vertical-align:top;">
-          <div><b>${c.name || ""}</b></div>
-          <div style="font-size:11px;opacity:.7;">
-            ${c.active === false ? '<span class="chip" style="opacity:.7;">Inactive</span>' : '<span class="chip">Active</span>'}
-          </div>
-        </td>
-        <td style="padding:8px;vertical-align:top;">
-          ${c.phone ? `<div>${c.phone}</div>` : ""}
-          ${c.email ? `<div style="font-size:12px;opacity:.75;">${c.email}</div>` : ""}
-        </td>
-        <td style="padding:8px;vertical-align:top;">
-          ${c.payment_method ? `<div>${c.payment_method}</div>` : ""}
-          ${c.payout_handle ? `<div style="font-size:12px;opacity:.8;">${c.payout_handle}</div>` : ""}
-          ${c.payout_notes ? `<div style="font-size:11px;opacity:.7;">${shorten(c.payout_notes, 80)}</div>` : ""}
-        </td>
-        <td style="padding:8px;vertical-align:top;">${projectCount}</td>
-        <td style="padding:8px;vertical-align:top;">$${totalCommission.toFixed(2)}</td>
-        <td style="padding:8px;vertical-align:top;">$${unpaidCommission.toFixed(2)}</td>
-        <td style="padding:8px;vertical-align:top;">
-          ${c.notes ? `<div style="font-size:12px;opacity:.75;">${shorten(c.notes, 80)}</div>` : ""}
-          <button class="btn-mini" data-contractor-id="${c.id}">Edit Contractor</button>
-        </td>
-      `;
-      contractorsBody.appendChild(tr);
-    });
-
-    document.querySelectorAll("[data-contractor-id]").forEach(el => {
-      el.addEventListener("click", () => editContractorRecord(el.dataset.contractorId));
-    });
-  }
-
-  async function editContractorRecord(id) {
-    const contractor = contractorsData.find(c => String(c.id) === String(id));
-    if (!contractor) return;
-
-    const name = prompt("Contractor name:", contractor.name || "") ?? contractor.name;
-    if (name === null) return;
-
-    const phone = prompt("Phone:", contractor.phone || "") ?? contractor.phone;
-    if (phone === null) return;
-
-    const email = prompt("Email:", contractor.email || "") ?? contractor.email;
-    if (email === null) return;
-
-    const payment_method = prompt(
-      "Payment method (CashApp, Zelle, PayPal, Bank, etc.):",
-      contractor.payment_method || ""
-    ) ?? contractor.payment_method;
-    if (payment_method === null) return;
-
-    const payout_handle = prompt(
-      "Payout handle (e.g. $cashtag, Zelle email, etc.):",
-      contractor.payout_handle || ""
-    ) ?? contractor.payout_handle;
-    if (payout_handle === null) return;
-
-    const payout_notes = prompt(
-      "Payout notes (e.g. 'Pay every Friday'):",
-      contractor.payout_notes || ""
-    ) ?? contractor.payout_notes;
-    if (payout_notes === null) return;
-
-    const notes = prompt("Internal notes:", contractor.notes || "") ?? contractor.notes;
-    if (notes === null) return;
-
-    const activeInput = prompt("Active? yes/no", contractor.active === false ? "no" : "yes") ?? (contractor.active === false ? "no" : "yes");
-    const active = !activeInput.toLowerCase().startsWith("n");
-
-    const updated = {
-      name,
-      phone,
-      email,
-      payment_method,
-      payout_handle,
-      payout_notes,
-      notes,
-      active
-    };
-
-    contractorsData = contractorsData.map(c => c.id === contractor.id ? { ...c, ...updated } : c);
-    renderContractors();
-
-    const { error } = await supabase
-      .from("contractors")
-      .update(updated)
-      .eq("id", contractor.id);
-
-    if (error) alert("Error saving contractor");
-  }
-
-  function attachHandlers() {
-    document.querySelectorAll("[data-status-id]").forEach(el => {
-      el.addEventListener("click", () => {
-        updateStatus(
-          el.dataset.table,
-          el.dataset.statusId,
-          el.dataset.status
-        );
-      });
-    });
-
-    document.querySelectorAll("[data-edit-id]").forEach(el => {
-      el.addEventListener("click", () => editProject(el.dataset.editId));
-    });
-
-    document.querySelectorAll("[data-money-id]").forEach(el => {
-      el.addEventListener("click", () => editMoney(el.dataset.moneyId));
-    });
-
-    document.querySelectorAll("[data-contractor-project-id]").forEach(el => {
-      el.addEventListener("click", () => editContractorForProject(el.dataset.contractorProjectId));
-    });
-  }
-
-  function renderTables() {
-    const recentSince = new Date(Date.now() - 24 * 60 * 60 * 1000);
-
-    onboardingBody.innerHTML = "";
-    const filteredOnb = onbData.filter(row => statusPass(row, "onboarding_submissions"));
-
-    if (!filteredOnb.length) {
-      onboardingBody.innerHTML = `<tr><td colspan="9" style="padding:10px;">No orders in this view.</td></tr>`;
-    } else {
-      filteredOnb.forEach(row => {
-        const st = (row.status || "new").toLowerCase();
-        const addonsText = Array.isArray(row.addons) ? row.addons.join(", ") : "";
-        const pagesText = Array.isArray(row.pages) ? row.pages.join(", ") : "";
-
-        const moneyBits = [];
-        if (row.total_price != null) moneyBits.push(`One-time: $${toNum(row.total_price).toFixed(2)}`);
-        if (row.one_time_cost != null) moneyBits.push(`Cost: $${toNum(row.one_time_cost).toFixed(2)}`);
-        if (row.monthly_fee) moneyBits.push(`Monthly: $${toNum(row.monthly_fee).toFixed(2)}`);
-        if (row.monthly_cost) moneyBits.push(`Monthly cost: $${toNum(row.monthly_cost).toFixed(2)}`);
-        if (row.billing_day) moneyBits.push(`Billing day: ${row.billing_day}`);
-
-        const moneySummary = moneyBits.join(" · ");
-
-        const linksHTML = `
-          ${row.live_url ? `<div><a href="${row.live_url}" target="_blank" rel="noopener">Live site</a></div>` : ""}
-          ${row.repo_url ? `<div><a href="${row.repo_url}" target="_blank" rel="noopener">Repo</a></div>` : ""}
-          ${row.stack_notes ? `<div style="font-size:12px;opacity:.75;">${shorten(row.stack_notes, 80)}</div>` : ""}
-          <button type="button" class="btn-mini" data-edit-id="${row.id}">Edit Project</button>
-        `;
-
-        const contractor = row.contractor_id
-          ? contractorsData.find(c => c.id === row.contractor_id)
-          : null;
-
-        const commissionLine = contractor
-          ? `Contractor: ${contractor.name || "Unnamed"} · $${toNum(row.contractor_commission).toFixed(2)} (${(row.contractor_commission_status || "unpaid").toLowerCase()})`
-          : "No contractor assigned";
-
-        const moneyHTML = `
-          ${moneySummary ? `<div>${moneySummary}</div>` : ""}
-          ${row.payment_notes ? `<div style="font-size:12px;opacity:.75;">${shorten(row.payment_notes, 80)}</div>` : ""}
-          <div style="margin-top:4px;font-size:12px;opacity:.75;">
-            ${shorten(row.page_notes || row.extra_notes || "", 100)}
-          </div>
-          <hr style="border:none;border-top:1px solid rgba(255,255,255,.08);margin:8px 0;">
-          <div style="font-size:12px;opacity:.9;">${commissionLine}</div>
-          ${row.contractor_notes ? `<div style="font-size:11px;opacity:.7;margin-top:2px;">${shorten(row.contractor_notes, 80)}</div>` : ""}
-          <button type="button" class="btn-mini" data-contractor-project-id="${row.id}">
-            Edit Contractor / Commission
-          </button>
-          <button type="button" class="btn-mini" data-money-id="${row.id}">
-            Edit Money
-          </button>
-        `;
-
-        const tr = document.createElement("tr");
-        const createdAt = row.created_at ? new Date(row.created_at) : null;
-        if (st === "new" && createdAt && createdAt >= recentSince) {
-          tr.classList.add("row-recent");
-        }
-
-        tr.innerHTML = `
-          <td style="padding:8px;vertical-align:top;">${formatDateTime(row.created_at)}</td>
-          <td style="padding:8px;vertical-align:top;">
-            <div><b>${row.name || ""}</b></div>
-            <div style="font-size:12px;opacity:.7;">${row.email || ""}</div>
-          </td>
-          <td style="padding:8px;vertical-align:top;">${shorten(row.business_name || "", 40)}</td>
-          <td style="padding:8px;vertical-align:top;">${row.package_name || ""}</td>
-          <td style="padding:8px;vertical-align:top;">${pagesText}</td>
-          <td style="padding:8px;vertical-align:top;">${addonsText}</td>
-          <td style="padding:8px;vertical-align:top;">
-            <span class="status-pill status-${st}"
-                  data-status-id="${row.id}"
-                  data-table="onboarding_submissions"
-                  data-status="${st}">
-              ${humanStatus(st)}
-            </span>
-          </td>
-          <td style="padding:8px;vertical-align:top;">${linksHTML}</td>
-          <td style="padding:8px;vertical-align:top;">${moneyHTML}</td>
-        `;
-        onboardingBody.appendChild(tr);
-      });
-    }
-
-    supportBody.innerHTML = "";
-    const filteredSup = supData.filter(row => statusPass(row, "support_requests"));
-    if (!filteredSup.length) {
-      supportBody.innerHTML = `<tr><td colspan="7" style="padding:10px;">No requests in this view.</td></tr>`;
-    } else {
-      filteredSup.forEach(row => {
-        const st = (row.status || "new").toLowerCase();
-        const tr = document.createElement("tr");
-
-        const createdAt = row.created_at ? new Date(row.created_at) : null;
-        if (st === "new" && createdAt && createdAt >= recentSince) {
-          tr.classList.add("row-recent");
-        }
-
-        tr.innerHTML = `
-          <td style="padding:8px;vertical-align:top;">${formatDateTime(row.created_at)}</td>
-          <td style="padding:8px;vertical-align:top;">
-            <div><b>${row.name || ""}</b></div>
-            <div style="font-size:12px;opacity:.7;">${row.email || ""}</div>
-          </td>
-          <td style="padding:8px;vertical-align:top;">${shorten(row.business || "", 40)}</td>
-          <td style="padding:8px;vertical-align:top;">${row.request_type || ""}</td>
-          <td style="padding:8px;vertical-align:top;">${row.urgency || ""}</td>
-          <td style="padding:8px;vertical-align:top;">
-            <span class="status-pill status-${st}"
-                  data-status-id="${row.id}"
-                  data-table="support_requests"
-                  data-status="${st}">
-              ${humanStatus(st)}
-            </span>
-          </td>
-          <td style="padding:8px;vertical-align:top;">${shorten(row.details || "", 160)}</td>
-        `;
-        supportBody.appendChild(tr);
-      });
-    }
-
-    attachHandlers();
-    renderNotifications();
-    renderContractors();
-  }
-
-  async function loadData() {
-    summaryText.textContent = "Loading…";
-    if (notificationsBox) notificationsBox.textContent = "Loading notifications…";
-
-    const [onbRes, supRes, expRes, conRes] = await Promise.all([
-      supabase.from("onboarding_submissions").select("*").order("created_at", { ascending:false }),
-      supabase.from("support_requests").select("*").order("created_at", { ascending:false }),
-      supabase.from("recurring_expenses").select("*").order("next_due_date", { ascending:true }),
-      supabase.from("contractors").select("*").order("created_at", { ascending:false })
-    ]);
-
-    onbData = onbRes.data || [];
-    supData = supRes.data || [];
-    expensesData = expRes.data || [];
-    contractorsData = conRes.data || [];
-
-    renderTables();
-    renderExpenses();
-    computeSummary();
-  }
-
-  // Tabs
-  function setTab(active) {
-    onboardingSection.style.display = active === "onboarding" ? "" : "none";
-    supportSection.style.display = active === "support" ? "" : "none";
-    contractorsSection.style.display = active === "contractors" ? "" : "none";
-
-    tabOnboarding.classList.toggle("btn-primary", active === "onboarding");
-    tabOnboarding.classList.toggle("btn-ghost", active !== "onboarding");
-    tabSupport.classList.toggle("btn-primary", active === "support");
-    tabSupport.classList.toggle("btn-ghost", active !== "support");
-    tabContractors.classList.toggle("btn-primary", active === "contractors");
-    tabContractors.classList.toggle("btn-ghost", active !== "contractors");
-  }
-
-  tabOnboarding.addEventListener("click", () => setTab("onboarding"));
-  tabSupport.addEventListener("click", () => setTab("support"));
-  tabContractors.addEventListener("click", () => setTab("contractors"));
-
-  statusFilterSelect.addEventListener("change", () => {
-    statusFilter = statusFilterSelect.value;
-    renderTables();
-  });
-
-  addExpenseBtn.addEventListener("click", addExpense);
-
-  loginForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    loginMsg.textContent = "Signing in…";
-
-    const fd = new FormData(loginForm);
-    const { error } = await supabase.auth.signInWithPassword({
-      email: fd.get("email"),
-      password: fd.get("password")
-    });
-
-    if (error) {
-      loginMsg.textContent = "Invalid login.";
-      return;
-    }
-
-    resetActivity();
-    isAuthenticated = true;
-    loginMsg.textContent = "";
-    authSection.style.display = "none";
-    appSection.style.display = "";
-    setTab("onboarding");
-    loadData();
-  });
 
   logoutBtn.addEventListener("click", async () => {
-    await doLogout(false);
+    await supabaseClient.auth.signOut();
+    window.location.href = LOGIN_PAGE_URL;
   });
 
-  // Initial session check
-  (async () => {
-    const { data } = await supabase.auth.getUser();
-    if (data && data.user) {
-      isAuthenticated = true;
-      resetActivity();
-      authSection.style.display = "none";
-      appSection.style.display = "";
-      setTab("onboarding");
-      loadData();
+  function formatMoney(n) {
+    if (!n || isNaN(n)) return "$0.00";
+    return "$" + Number(n).toFixed(2);
+  }
+
+  function startOfMonth(date) {
+    return new Date(date.getFullYear(), date.getMonth(), 1);
+  }
+  function endOfMonth(date) {
+    return new Date(date.getFullYear(), date.getMonth() + 1, 0);
+  }
+
+  async function loadDashboard() {
+    const today = new Date();
+    const monthStart = startOfMonth(today);
+    const monthEnd = endOfMonth(today);
+
+    const [onboardingRes, billsRes, leadsRes] = await Promise.all([
+      supabaseClient.from("onboarding_submissions").select("*"),
+      supabaseClient.from("recurring_expenses").select("*").eq("is_active", true),
+      supabaseClient.from("call_leads").select("*")
+    ]);
+
+    if (onboardingRes.error) console.error("Onboarding error:", onboardingRes.error);
+    if (billsRes.error) console.error("Bills error:", billsRes.error);
+    if (leadsRes.error) console.error("Leads error:", leadsRes.error);
+
+    const onboarding = onboardingRes.data || [];
+    const bills      = billsRes.data || [];
+    const leads      = leadsRes.data || [];
+
+    // MONEY SUMMARY
+    let lifetimeRev = 0;
+    let monthlyFeeTotal = 0;
+
+    onboarding.forEach(p => {
+      if (p.total_price) lifetimeRev += Number(p.total_price) || 0;
+      if (p.monthly_fee) monthlyFeeTotal += Number(p.monthly_fee) || 0;
+    });
+
+    lifetimeRevenue.textContent = formatMoney(lifetimeRev);
+    monthlyIncome.textContent   = formatMoney(monthlyFeeTotal);
+
+    let monthlyBillsTotal = 0;
+    bills.forEach(b => {
+      if (b.frequency === "monthly" && b.amount) {
+        monthlyBillsTotal += Number(b.amount) || 0;
+      }
+    });
+    monthlyBills.textContent = formatMoney(monthlyBillsTotal);
+    monthlyNet.textContent   = formatMoney(monthlyFeeTotal - monthlyBillsTotal);
+
+    // PROJECTS TABLE
+    projectsTableBody.innerHTML = "";
+    onboarding
+      .sort((a, b) => new Date(b.created_at || b.first_paid_at || 0) - new Date(a.created_at || a.first_paid_at || 0))
+      .slice(0, 6)
+      .forEach(p => {
+        const tr = document.createElement("tr");
+        const clientName = p.business_name || p.client_name || "(No name)";
+        const status = (p.status || "new").toLowerCase();
+
+        const tdClient = document.createElement("td");
+        tdClient.innerHTML = `<strong>${clientName}</strong><br><span class="small">${p.currency || "USD"}</span>`;
+        tr.appendChild(tdClient);
+
+        const tdTotal = document.createElement("td");
+        tdTotal.textContent = p.total_price ? formatMoney(p.total_price) : "—";
+        tr.appendChild(tdTotal);
+
+        const tdMonthly = document.createElement("td");
+        tdMonthly.textContent = p.monthly_fee ? formatMoney(p.monthly_fee) : "—";
+        tr.appendChild(tdMonthly);
+
+        const tdStatus = document.createElement("td");
+        const pill = document.createElement("span");
+        pill.className = "pill " + (status === "completed" ? "pill-green" : status === "cancelled" ? "pill-red" : "pill-blue");
+        pill.textContent = status;
+        tdStatus.appendChild(pill);
+        tr.appendChild(tdStatus);
+
+        projectsTableBody.appendChild(tr);
+      });
+
+    // BILLS TABLE
+    billsTableBody.innerHTML = "";
+    bills
+      .filter(b => b.next_due_date)
+      .sort((a,b) => new Date(a.next_due_date) - new Date(b.next_due_date))
+      .slice(0,6)
+      .forEach(b => {
+        const tr = document.createElement("tr");
+        const tdName = document.createElement("td");
+        tdName.innerHTML = `<strong>${b.name}</strong><br><span class="small">${b.category || ""}</span>`;
+        tr.appendChild(tdName);
+
+        const tdDue = document.createElement("td");
+        tdDue.textContent = b.next_due_date || "";
+        tr.appendChild(tdDue);
+
+        const tdVendor = document.createElement("td");
+        tdVendor.textContent = b.vendor || "";
+        tr.appendChild(tdVendor);
+
+        const tdAmt = document.createElement("td");
+        tdAmt.textContent = formatMoney(b.amount);
+        tr.appendChild(tdAmt);
+
+        billsTableBody.appendChild(tr);
+      });
+    billsNote.textContent = bills.length ? "" : "No recurring_expenses found yet. You can add them in Supabase.";
+
+    // LEADS SNAPSHOT
+    const statusCounts = {};
+    let closedThisMonth = 0;
+    let commissionThisMonth = 0;
+    const callerStats = new Map();
+
+    leads.forEach(ld => {
+      const status = (ld.call_status || "new").toLowerCase();
+      statusCounts[status] = (statusCounts[status] || 0) + 1;
+
+      // This month closed won?
+      if (status === "closed won" && ld.last_contact_date) {
+        const d = new Date(ld.last_contact_date);
+        if (d >= monthStart && d <= monthEnd) {
+          closedThisMonth += 1;
+          commissionThisMonth += 100; // $100 per closed website sale
+        }
+      }
+
+      // Per caller
+      if (ld.assigned_caller_email) {
+        const email = ld.assigned_caller_email;
+        if (!callerStats.has(email)) {
+          callerStats.set(email, { closedWon:0, commission:0 });
+        }
+        const obj = callerStats.get(email);
+        if (status === "closed won") {
+          obj.closedWon += 1;
+          obj.commission += 100;
+        }
+      }
+    });
+
+    closedWonMonth.textContent  = closedThisMonth;
+    commissionMonth.textContent = formatMoney(commissionThisMonth);
+
+    // Status text
+    const parts = [];
+    Object.entries(statusCounts).forEach(([s, count]) => {
+      parts.push(`${s}: ${count}`);
+    });
+    leadStatusStats.textContent = parts.length ? parts.join(" · ") : "No leads yet.";
+
+    // Top callers
+    topCallersTableBody.innerHTML = "";
+    const sortedCallers = Array.from(callerStats.entries())
+      .sort((a,b) => b[1].commission - a[1].commission)
+      .slice(0,5);
+
+    if (!sortedCallers.length) {
+      const tr = document.createElement("tr");
+      const td = document.createElement("td");
+      td.colSpan = 3;
+      td.className = "small";
+      td.textContent = "No closed-won leads yet.";
+      tr.appendChild(td);
+      topCallersTableBody.appendChild(tr);
     } else {
-      isAuthenticated = false;
-      authSection.style.display = "";
-      appSection.style.display = "none";
+      sortedCallers.forEach(([email, stats]) => {
+        const tr = document.createElement("tr");
+        const tdEmail = document.createElement("td");
+        tdEmail.textContent = email;
+        tr.appendChild(tdEmail);
+
+        const tdClosed = document.createElement("td");
+        tdClosed.textContent = stats.closedWon;
+        tr.appendChild(tdClosed);
+
+        const tdComm = document.createElement("td");
+        tdComm.textContent = formatMoney(stats.commission);
+        tr.appendChild(tdComm);
+
+        topCallersTableBody.appendChild(tr);
+      });
     }
+  }
+
+  (async () => {
+    const user = await guardAdmin();
+    if (!user) return;
+    await loadDashboard();
   })();
-
 </script>
-
 </body>
-          </html>
+      </html>
