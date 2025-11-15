@@ -277,7 +277,6 @@
   let expensesData = [];
   let statusFilter = "new";
 
-  /* Utils */
   function shorten(text, max = 120) {
     if (!text) return "";
     text = String(text);
@@ -335,7 +334,6 @@
     }
   }
 
-  /* Money summary */
   function computeSummary() {
     const now = new Date();
     const y = now.getFullYear();
@@ -352,7 +350,6 @@
       const paidAt = row.first_paid_at ? new Date(row.first_paid_at) : null;
       const price = toNum(row.total_price);
       const monthlyFee = toNum(row.monthly_fee);
-      const monthlyCost = toNum(row.monthly_cost);
 
       if (paidAt) {
         if (lastMonth(paidAt)) lastMonthRevenue += price;
