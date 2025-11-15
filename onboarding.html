@@ -271,18 +271,83 @@
     <div>© <span id="year"></span> BrandCrafters — A division of Egyptian Hype LLC</div>
   </div>
 </footer>
-<script>
+
+<!-- Supabase wiring -->
+<script type="module">
+  import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+  // TODO: replace with your actual Supabase project URL and anon public key
+  const supabaseUrl = "https://YOUR-PROJECT-ID.supabase.co";
+  const supabaseAnonKey = "YOUR-ANON-PUBLIC-KEY";
+
+  const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  // TEMPORARY: prevent full reload so the form feels responsive
-  // We’ll replace this with Supabase or another backend later.
   const form = document.getElementById('onboardingForm');
   const msg = document.getElementById('formMsg');
-  form.addEventListener('submit', function(e) {
+  const submitBtn = form.querySelector('button[type="submit"]');
+
+  // optional: capture Stripe session_id from URL if present
+  const params = new URLSearchParams(window.location.search);
+  const stripeSessionId = params.get("session_id") || null;
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    msg.textContent = 'Thank you! Your details were captured. (We’ll wire this to Supabase next.)';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    msg.textContent = "Submitting your details...";
+    submitBtn.disabled = true;
+
+    const fd = new FormData(form);
+
+    const selectedAddons = fd.getAll("addons");
+    const selectedPages = fd.getAll("pages");
+
+    const payload = {
+      stripe_session_id: stripeSessionId,
+      name: fd.get("name") || null,
+      email: fd.get("email") || null,
+      business_name: fd.get("business") || null,
+      phone: fd.get("phone") || null,
+      current_web: fd.get("current_web") || null,
+      package_name: fd.get("package") || null,
+      addons: selectedAddons.length ? selectedAddons : null,
+      pages: selectedPages.length ? selectedPages : null,
+      page_notes: fd.get("page_notes") || null,
+      colors: fd.get("colors") || null,
+      style_vibe: fd.get("style_vibe") || null,
+      example_sites: fd.get("example_sites") || null,
+      logo_info: fd.get("logo_info") || null,
+      has_domain: fd.get("has_domain") || null,
+      domain_details: fd.get("domain_details") || null,
+      email_needs: fd.get("email_needs") || null,
+      has_stripe: fd.get("has_stripe") || null,
+      stripe_usage: fd.get("stripe_usage") || null,
+      primary_button_text: fd.get("primary_button_text") || null,
+      launch_window: fd.get("launch_window") || null,
+      deadlines: fd.get("deadlines") || null,
+      extra_notes: fd.get("extra_notes") || null,
+    };
+
+    try {
+      const { error } = await supabase
+        .from("onboarding_submissions")
+        .insert(payload);
+
+      if (error) {
+        console.error(error);
+        msg.textContent = "There was an error saving your details. Please try again or contact support.";
+      } else {
+        msg.textContent = "Thank you! Your onboarding details were submitted successfully.";
+        form.reset();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    } catch (err) {
+      console.error(err);
+      msg.textContent = "Unexpected error. Please try again.";
+    } finally {
+      submitBtn.disabled = false;
+    }
   });
 </script>
 </body>
-  </html>
+</html>
