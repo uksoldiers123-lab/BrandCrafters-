@@ -13,6 +13,7 @@
       --text:#f5f5ff;
       --muted:#b5b7d8;
       --grad:linear-gradient(135deg,#6ea8ff,#b166ff);
+      --accent:#6ea8ff;
     }
     *{box-sizing:border-box;}
     body{
@@ -23,120 +24,101 @@
         var(--bg);
       color:var(--text);
     }
-    a{text-decoration:none;color:inherit;}
-
+    a{text-decoration:none;color:var(--text);}
     header{
       position:sticky;top:0;z-index:40;
-      background:rgba(5,7,19,.96);
-      backdrop-filter:blur(14px);
+      background:rgba(5,7,19,.95);
+      backdrop-filter:blur(16px);
       border-bottom:1px solid rgba(255,255,255,.08);
       padding:10px 18px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
     }
-    .brand{
-      display:flex;flex-direction:column;gap:2px;
+    .brand{display:flex;flex-direction:column;gap:2px;}
+    .brand-title{font-weight:700;letter-spacing:.08em;font-size:14px;text-transform:uppercase;}
+    .brand-sub{font-size:12px;color:var(--muted);}
+    .nav{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+    .nav a{
+      font-size:13px;padding:6px 10px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.22);
+      text-decoration:none;color:var(--text);
+      transition:.18s;background:rgba(255,255,255,.02);
     }
-    .brand-title{
-      font-weight:700;
-      letter-spacing:.08em;
-      font-size:14px;
-      text-transform:uppercase;
+    .nav a.primary{
+      border-color:transparent;
+      background:var(--grad);
+      color:#050713;
+      font-weight:600;
+      box-shadow:0 0 0 1px rgba(110,168,255,.4);
     }
-    .brand-sub{
-      font-size:12px;
-      color:var(--muted);
-    }
-    .header-right{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      font-size:12px;
-      color:var(--muted);
-    }
-    .user-email{
-      max-width:200px;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
+    .nav a:hover{background:rgba(255,255,255,.08);transform:translateY(-1px);}
+    .nav a.primary:hover{filter:brightness(1.05);}
+    .user-email{font-size:12px;color:var(--muted);}
     .logout-btn{
       border-radius:999px;
       padding:6px 12px;
       border:1px solid rgba(255,255,255,.7);
-      background:rgba(255,255,255,.06);
+      background:rgba(255,255,255,.08);
       color:var(--text);
       font-size:12px;
       cursor:pointer;
+      box-shadow:0 0 0 1px rgba(110,168,255,.4);
       transition:.18s;
     }
-    .logout-btn:hover{
-      background:rgba(255,255,255,.16);
-      transform:translateY(-1px);
-    }
+    .logout-btn:hover{background:rgba(255,255,255,.16);transform:translateY(-1px);}
 
-    main{
-      max-width:900px;
-      margin:18px auto 60px;
-      padding:0 16px;
-    }
-    h1{margin:0 0 6px;font-size:22px;}
-    h2{margin:0 0 8px;font-size:16px;}
-    .subhead{margin:0 0 14px;font-size:13px;color:var(--muted);}
-    .small{font-size:12px;color:var(--muted);}
+    main{max-width:1100px;margin:18px auto 60px;padding:0 16px;}
+    h1{margin:0 0 4px;font-size:22px;}
+    .subhead{margin:0 0 18px;font-size:13px;color:var(--muted);}
 
-    .card{
+    .panel{
       background:var(--panel);
       border-radius:16px;
       border:1px solid var(--border);
       padding:16px 14px;
-      box-shadow:0 18px 40px rgba(0,0,0,.6);
       margin-bottom:16px;
     }
 
-    label{
-      display:block;
-      font-size:13px;
-      margin-bottom:10px;
+    .panel h2{margin:0 0 8px;font-size:16px;}
+    .panel p{margin:0 0 8px;font-size:13px;color:var(--muted);}
+
+    .grid-2{
+      display:grid;
+      grid-template-columns:2fr 3fr;
+      gap:14px;
     }
-    input[type="file"]{
-      margin-top:5px;
-      font-size:13px;
-      color:var(--muted);
+    @media(max-width:900px){
+      .grid-2{grid-template-columns:1fr;}
     }
 
+    input[type="file"]{
+      display:block;margin-top:8px;font-size:13px;color:var(--text);
+    }
     .btn{
       display:inline-block;
+      padding:8px 14px;
       border-radius:999px;
-      padding:7px 11px;
-      font-size:12px;
-      font-weight:600;
-      border:0;
+      border:1px solid rgba(255,255,255,.2);
+      font-size:13px;
       cursor:pointer;
+      background:rgba(255,255,255,.04);
+      color:var(--text);
       transition:.18s;
     }
+    .btn:hover{background:rgba(255,255,255,.1);transform:translateY(-1px);}
     .btn-primary{
+      border-color:transparent;
       background:var(--grad);
       color:#050713;
+      font-weight:600;
+      box-shadow:0 0 0 1px rgba(110,168,255,.4);
     }
-    .btn-ghost{
-      background:rgba(255,255,255,.06);
-      color:var(--text);
-      border:1px solid rgba(255,255,255,.18);
-    }
-    .btn:hover{
-      filter:brightness(1.05);
-      transform:translateY(-1px);
-    }
+    .btn-primary:hover{filter:brightness(1.05);}
 
-    table{
-      width:100%;
-      border-collapse:collapse;
-      font-size:12px;
-      margin-top:8px;
-    }
+    .msg{font-size:13px;margin-top:6px;}
+    .msg.error{color:#ff9c9c;}
+    .msg.ok{color:#8bffb0;}
+
+    table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;}
     th,td{
       border-bottom:1px solid rgba(255,255,255,.08);
       padding:4px 4px;
@@ -148,64 +130,83 @@
       text-transform:uppercase;
       letter-spacing:.05em;
       color:var(--muted);
+      background:rgba(255,255,255,.02);
     }
-    #previewTableWrapper{
-      max-height:260px;
-      overflow:auto;
-      margin-top:8px;
+    .badge{
+      display:inline-block;
+      padding:2px 6px;
+      border-radius:999px;
+      font-size:10px;
+      text-transform:uppercase;
+      letter-spacing:.06em;
     }
-    #statusMsg{
-      font-size:12px;
-      margin-top:8px;
-      min-height:16px;
-    }
+    .badge-valid{background:rgba(142,255,191,.12);color:#8effbf;}
+    .badge-invalid{background:rgba(255,177,177,.15);color:#ffb1b1;}
+    .badge-warn{background:rgba(255,221,157,.15);color:#ffdd9d;}
+    .muted{color:var(--muted);font-size:11px;}
+    .mono{font-family:monospace;font-size:11px;}
   </style>
 </head>
 <body>
 <header>
   <div class="brand">
     <span class="brand-title">BrandCrafters</span>
-    <span class="brand-sub">Leads & CSV Upload</span>
+    <span class="brand-sub">Leads · CSV Upload</span>
   </div>
-  <div class="header-right">
-    <a href="dashboard.html" class="small">← Back to Dashboard</a>
-    <span id="userEmail" class="user-email"></span>
+  <div class="nav">
+    <a href="dashboard.html">Admin Dashboard</a>
+    <a href="dashboard-leads-upload.html" class="primary">Leads & CSV</a>
+    <a href="contractor-portal.html" target="_blank">Contractor Portal</a>
+    <span class="user-email" id="userEmail"></span>
     <button id="logoutBtn" class="logout-btn">Log Out</button>
   </div>
 </header>
 
 <main>
-  <section style="margin-bottom:12px;">
-    <h1>Leads & CSV Upload</h1>
+  <section>
+    <h1>Upload Leads CSV</h1>
     <p class="subhead">
-      Upload CSV lead lists into <code>call_leads</code> so contractors can work them in the portal.
+      Drop in new leads from Google Maps, directories, or your team. We’ll auto-map columns,
+      auto-validate, and auto-set priority (A/B/C) based on website situation.
     </p>
   </section>
 
-  <section class="card">
-    <h2>1. Prepare your CSV</h2>
-    <p class="small">
-      Suggested columns: <code>business_name, phone, alt_phone, email, alt_email, city, state, website, social, priority, call_status, assigned_caller_email, notes</code>
-    </p>
-    <p class="small">
-      First row is headers. Each row becomes a record in <code>call_leads</code> as long as those columns exist in Supabase.
-    </p>
+  <section class="panel grid-2">
+    <div>
+      <h2>1. Choose CSV</h2>
+      <p>
+        Expected core fields:
+        <span class="mono">business_name, phone, city, state</span>.<br>
+        We’ll also accept <span class="mono">BusinessName, Phone, Email</span>, etc.
+      </p>
+      <input type="file" id="csvFile" accept=".csv" />
+      <div style="margin-top:10px;">
+        <button class="btn" id="previewBtn">Preview</button>
+        <button class="btn btn-primary" id="uploadBtn" disabled>Upload to Supabase</button>
+      </div>
+      <div id="uploadMsg" class="msg"></div>
+      <p class="muted" style="margin-top:8px;">
+        Auto-rules:
+        <br>• If <b>website</b> is empty ➜ priority <b>A</b>
+        <br>• If website looks like Facebook / Instagram / Google / booking-only ➜ priority <b>B</b>
+        <br>• If proper website present ➜ priority <b>C</b>
+        <br>• <b>call_status</b> defaults to <span class="mono">new</span> if missing
+      </p>
+    </div>
+    <div>
+      <h2>2. Status</h2>
+      <p class="muted">
+        We’ll show how many rows are valid vs invalid before upload.
+      </p>
+      <div id="previewStats" class="msg"></div>
+      <div id="headerMapInfo" class="muted"></div>
+    </div>
   </section>
 
-  <section class="card">
-    <h2>2. Upload & Insert</h2>
-    <form id="csvForm">
-      <label>CSV File
-        <input type="file" id="csvFile" accept=".csv" required />
-      </label>
-      <button type="submit" class="btn btn-primary" id="uploadBtn">Parse & Upload</button>
-      <button type="button" class="btn btn-ghost" id="previewBtn" style="margin-left:6px;">
-        Preview Only
-      </button>
-      <div id="statusMsg" class="small"></div>
-    </form>
-
-    <div id="previewTableWrapper" style="display:none;">
+  <section class="panel">
+    <h2>Preview (first 25 rows)</h2>
+    <div class="muted">Red badge = missing phone or business name (row will be skipped).</div>
+    <div style="overflow:auto;max-height:400px;margin-top:8px;">
       <table id="previewTable">
         <thead></thead>
         <tbody></tbody>
@@ -215,178 +216,324 @@
 </main>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <script>
+  // ====== Supabase Setup ======
   const SUPABASE_URL = "https://vekoulqehexqosgwacwa.supabase.co";
-  const SUPABASE_ANON_KEY =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiIsInZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
   const ADMIN_EMAIL = "srarnold216@gmail.com";
+  const LOGIN_PAGE_URL = "dashboard.html"; // dashboard doubles as login gate
 
   const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   const userEmailSpan = document.getElementById("userEmail");
-  const logoutBtn     = document.getElementById("logoutBtn");
+  const logoutBtn = document.getElementById("logoutBtn");
 
-  const csvForm       = document.getElementById("csvForm");
-  const csvFileInput  = document.getElementById("csvFile");
-  const uploadBtn     = document.getElementById("uploadBtn");
-  const previewBtn    = document.getElementById("previewBtn");
-  const statusMsg     = document.getElementById("statusMsg");
-  const previewWrapper= document.getElementById("previewTableWrapper");
-  const previewTable  = document.getElementById("previewTable");
-
-  let parsedRows = [];
-
-  function setStatus(text, type = "") {
-    statusMsg.textContent = text || "";
-    statusMsg.style.color = type === "error" ? "#ff9b9b" :
-                            type === "success" ? "#9bffbf" : "#b5b7d8";
+  async function guardAdmin() {
+    const { data } = await supabaseClient.auth.getUser();
+    if (!data || !data.user) {
+      window.location.href = LOGIN_PAGE_URL;
+      return null;
+    }
+    const email = data.user.email;
+    userEmailSpan.textContent = email;
+    if (email !== ADMIN_EMAIL) {
+      // not admin -> send to contractor portal
+      window.location.href = "contractor-portal.html";
+      return null;
+    }
+    return data.user;
   }
 
-  function parseCSV(text) {
-    const lines = text.split(/\r?\n/).filter(l => l.trim().length > 0);
-    if (!lines.length) return [];
-
-    const headers = lines[0].split(",").map(h => h.trim());
-    const rows    = [];
-
-    for (let i = 1; i < lines.length; i++) {
-      const line = lines[i];
-      const cols = line.split(",");
-      if (cols.length === 1 && cols[0].trim() === "") continue;
-
-      const obj = {};
-      headers.forEach((h, idx) => {
-        obj[h] = (cols[idx] || "").trim();
-      });
-      rows.push(obj);
-    }
-    return rows;
-  }
-
-  function renderPreview(rows) {
-    if (!rows.length) {
-      previewWrapper.style.display = "none";
-      return;
-    }
-    const headers = Object.keys(rows[0]);
-
-    const thead = previewTable.querySelector("thead");
-    const tbody = previewTable.querySelector("tbody");
-    thead.innerHTML = "";
-    tbody.innerHTML = "";
-
-    const trHead = document.createElement("tr");
-    headers.forEach(h => {
-      const th = document.createElement("th");
-      th.textContent = h;
-      trHead.appendChild(th);
-    });
-    thead.appendChild(trHead);
-
-    rows.slice(0, 20).forEach(r => {
-      const tr = document.createElement("tr");
-      headers.forEach(h => {
-        const td = document.createElement("td");
-        td.textContent = r[h] || "";
-        tr.appendChild(td);
-      });
-      tbody.appendChild(tr);
-    });
-
-    previewWrapper.style.display = "block";
-  }
-
-  previewBtn.addEventListener("click", async () => {
-    setStatus("");
-    const file = csvFileInput.files[0];
-    if (!file) {
-      setStatus("Select a CSV file first.", "error");
-      return;
-    }
-
-    const text = await file.text();
-    parsedRows = parseCSV(text);
-    if (!parsedRows.length) {
-      setStatus("No rows found in CSV.", "error");
-      previewWrapper.style.display = "none";
-      return;
-    }
-
-    renderPreview(parsedRows);
-    setStatus(`Previewing first ${Math.min(parsedRows.length, 20)} of ${parsedRows.length} rows.`, "success");
+  logoutBtn.addEventListener("click", async () => {
+    await supabaseClient.auth.signOut();
+    window.location.href = LOGIN_PAGE_URL;
   });
 
-  csvForm.addEventListener("submit", async (e) => {
-    e.preventDefault(); // no navigation → no 404
-    setStatus("");
+  (async () => {
+    await guardAdmin();
+  })();
 
-    const file = csvFileInput.files[0];
-    if (!file) {
-      setStatus("Select a CSV file first.", "error");
+
+  // ====== CSV Parsing / Mapping / Validation ======
+  const fileInput   = document.getElementById("csvFile");
+  const previewBtn  = document.getElementById("previewBtn");
+  const uploadBtn   = document.getElementById("uploadBtn");
+  const previewStats = document.getElementById("previewStats");
+  const headerMapInfo = document.getElementById("headerMapInfo");
+  const uploadMsg   = document.getElementById("uploadMsg");
+
+  const previewTableHead = document.querySelector("#previewTable thead");
+  const previewTableBody = document.querySelector("#previewTable tbody");
+
+  let parsedRows = [];     // raw rows from csv
+  let mappedRows = [];     // normalized objects ready for DB
+  let lastHeaderMap = {};  // for display
+
+  // alias map: normalized header (lowercase, no spaces/_) -> canonical column
+  const headerAliases = {
+    business_name: ["business_name","businessname","name","company","companyname"],
+    phone: ["phone","phone1","phonenumber","primaryphone"],
+    alt_phone: ["altphone","phone2","secondaryphone","alt_phone"],
+    email: ["email","emailaddress","primaryemail"],
+    alt_email: ["altemail","email2","secondaryemail","alt_email"],
+    city: ["city","town"],
+    state: ["state","st"],
+    website: ["website","site","url","websiteurl"],
+    social: ["social","facebook","fbpage","instagram","ig","sociallink"],
+    priority: ["priority","tier"],
+    call_status: ["call_status","status","leadstatus"],
+    assigned_caller_email: ["assigned_caller_email","caller","agent_email","assignedto"],
+    notes: ["notes","note","comments","comment","details"]
+  };
+
+  function normalizeHeader(h){
+    return h.toString().trim().toLowerCase().replace(/[\s_-]+/g,"");
+  }
+
+  function findCanonicalColumn(header){
+    const norm = normalizeHeader(header);
+    for (const [canonical, aliasList] of Object.entries(headerAliases)) {
+      if (aliasList.includes(norm)) return canonical;
+    }
+    // direct match (if CSV uses exact column name like 'business_name')
+    if (headerAliases[header]) return header;
+    return null;
+  }
+
+  function autoPriority(website){
+    if (!website || website.trim() === "") return "A";
+    const w = website.toLowerCase();
+    if (
+      w.includes("facebook.com") ||
+      w.includes("instagram.com") ||
+      w.includes("google.com") ||
+      w.includes("glossgenius") ||
+      w.includes("square.site") ||
+      w.includes("linktr.ee")
+    ) {
+      return "B";
+    }
+    return "C";
+  }
+
+  function buildPreview(){
+    previewTableHead.innerHTML = "";
+    previewTableBody.innerHTML = "";
+    previewStats.textContent = "";
+    headerMapInfo.textContent = "";
+    uploadMsg.textContent = "";
+    uploadMsg.className = "msg";
+
+    if (!parsedRows.length){
+      previewStats.textContent = "No rows parsed yet. Choose a CSV and click Preview.";
+      return;
+    }
+
+    // Mapped rows and header map display
+    mappedRows = [];
+    const mappedHeaderSet = new Set([
+      "business_name","phone","alt_phone","email","alt_email",
+      "city","state","website","social","priority",
+      "call_status","assigned_caller_email","notes"
+    ]);
+    lastHeaderMap = {};
+
+    // Determine mapping from csv headers
+    const csvHeaders = Object.keys(parsedRows[0] || {});
+    const canonicalForHeader = {};
+    csvHeaders.forEach(h => {
+      const canonical = findCanonicalColumn(h);
+      canonicalForHeader[h] = canonical;
+      if (canonical) {
+        lastHeaderMap[h] = canonical;
+      } else {
+        lastHeaderMap[h] = "(ignored)";
+      }
+    });
+
+    // Build mappedRows with defaults & auto-rules
+    let validCount = 0;
+    let invalidCount = 0;
+
+    parsedRows.forEach(row => {
+      const obj = {
+        business_name: "",
+        phone: "",
+        alt_phone: "",
+        email: "",
+        alt_email: "",
+        city: "",
+        state: "",
+        website: "",
+        social: "",
+        priority: "",
+        call_status: "",
+        assigned_caller_email: "",
+        notes: ""
+      };
+
+      // Copy mapped fields
+      for (const [rawHeader, value] of Object.entries(row)) {
+        const canonical = canonicalForHeader[rawHeader];
+        if (!canonical || !(canonical in obj)) continue;
+        obj[canonical] = (value ?? "").toString().trim();
+      }
+
+      // Auto rules
+      if (!obj.call_status) obj.call_status = "new";
+      if (!obj.priority) obj.priority = autoPriority(obj.website);
+      // If website empty but social looks like FB/IG/Google/etc, we still treat as partial web presence
+      if (!obj.website && obj.social) {
+        const pr = autoPriority(obj.social);
+        if (!obj.priority) obj.priority = pr;
+        // or keep priority A if you want to be more aggressive
+      }
+
+      const missingCore = !obj.business_name || !obj.phone;
+      if (missingCore) invalidCount++; else validCount++;
+
+      obj._invalid = missingCore;
+      mappedRows.push(obj);
+    });
+
+    // Preview stats
+    previewStats.textContent =
+      `Parsed ${parsedRows.length} rows · ` +
+      `${validCount} valid · ${invalidCount} invalid (missing business name or phone — will be skipped).`;
+    previewStats.className = "msg " + (invalidCount ? "error" : "ok");
+
+    // Header map info
+    const items = Object.entries(lastHeaderMap).map(([csvH, canon]) =>
+      `${csvH} → ${canon}`
+    );
+    headerMapInfo.textContent = "Header mapping: " + items.join(" · ");
+
+    // Build table (first 25 rows)
+    const displayRows = mappedRows.slice(0, 25);
+
+    const headTr = document.createElement("tr");
+    ["Status","Business","Phone","City/State","Website","Priority","Call Status","Notes"].forEach(h => {
+      const th = document.createElement("th");
+      th.textContent = h;
+      headTr.appendChild(th);
+    });
+    previewTableHead.appendChild(headTr);
+
+    displayRows.forEach(r => {
+      const tr = document.createElement("tr");
+
+      // Status
+      const tdStatus = document.createElement("td");
+      const badge = document.createElement("span");
+      badge.classList.add("badge");
+      if (r._invalid) {
+        badge.classList.add("badge-invalid");
+        badge.textContent = "Invalid";
+      } else {
+        badge.classList.add("badge-valid");
+        badge.textContent = "OK";
+      }
+      tdStatus.appendChild(badge);
+      tr.appendChild(tdStatus);
+
+      // Business
+      const tdBiz = document.createElement("td");
+      tdBiz.innerHTML = `<strong>${r.business_name || "(missing)"}</strong><br><span class="muted">${r.email || ""}</span>`;
+      tr.appendChild(tdBiz);
+
+      // Phone
+      const tdPhone = document.createElement("td");
+      tdPhone.textContent = r.phone || "(missing)";
+      tr.appendChild(tdPhone);
+
+      // City / State
+      const tdCity = document.createElement("td");
+      tdCity.textContent = [r.city, r.state].filter(Boolean).join(", ");
+      tr.appendChild(tdCity);
+
+      // Website
+      const tdWeb = document.createElement("td");
+      tdWeb.textContent = r.website || (r.social || "");
+      tr.appendChild(tdWeb);
+
+      // Priority
+      const tdPri = document.createElement("td");
+      tdPri.textContent = r.priority || "";
+      tr.appendChild(tdPri);
+
+      // Call status
+      const tdStat = document.createElement("td");
+      tdStat.textContent = r.call_status || "";
+      tr.appendChild(tdStat);
+
+      // Notes
+      const tdNotes = document.createElement("td");
+      tdNotes.textContent = r.notes || "";
+      tr.appendChild(tdNotes);
+
+      previewTableBody.appendChild(tr);
+    });
+
+    uploadBtn.disabled = !mappedRows.length;
+  }
+
+  previewBtn.addEventListener("click", () => {
+    const file = fileInput.files && fileInput.files[0];
+    if (!file){
+      previewStats.textContent = "Please choose a CSV file first.";
+      previewStats.className = "msg error";
+      return;
+    }
+
+    Papa.parse(file, {
+      header: true,
+      skipEmptyLines: true,
+      complete: results => {
+        parsedRows = results.data || [];
+        buildPreview();
+      },
+      error: err => {
+        previewStats.textContent = "Error parsing CSV: " + err.message;
+        previewStats.className = "msg error";
+      }
+    });
+  });
+
+  uploadBtn.addEventListener("click", async () => {
+    uploadMsg.textContent = "";
+    uploadMsg.className = "msg";
+
+    if (!mappedRows.length){
+      uploadMsg.textContent = "Nothing to upload. Click Preview first.";
+      uploadMsg.className = "msg error";
+      return;
+    }
+
+    const valid = mappedRows.filter(r => !r._invalid);
+    if (!valid.length){
+      uploadMsg.textContent = "All rows are invalid (missing business name or phone). Nothing uploaded.";
+      uploadMsg.className = "msg error";
       return;
     }
 
     uploadBtn.disabled = true;
-    previewBtn.disabled = true;
-    setStatus("Reading CSV…");
+    uploadMsg.textContent = "Uploading " + valid.length + " valid rows to Supabase…";
 
-    try {
-      const text = await file.text();
-      parsedRows = parseCSV(text);
-      if (!parsedRows.length) {
-        setStatus("No rows found in CSV.", "error");
-        uploadBtn.disabled = false;
-        previewBtn.disabled = false;
-        return;
-      }
+    const { data, error } = await supabaseClient
+      .from("call_leads")
+      .insert(valid.map(({_invalid, ...rest}) => rest));
 
-      renderPreview(parsedRows);
-      setStatus(`Parsed ${parsedRows.length} rows. Uploading to Supabase…`);
-
-      const chunkSize = 100;
-      for (let i = 0; i < parsedRows.length; i += chunkSize) {
-        const chunk = parsedRows.slice(i, i + chunkSize);
-        const { error } = await supabaseClient
-          .from("call_leads")
-          .insert(chunk);
-
-        if (error) {
-          console.error("Insert error:", error);
-          setStatus("Error inserting some rows: " + error.message, "error");
-          uploadBtn.disabled = false;
-          previewBtn.disabled = false;
-          return;
-        }
-      }
-
-      setStatus(`Upload complete. Inserted ${parsedRows.length} lead(s).`, "success");
-    } catch (err) {
-      console.error(err);
-      setStatus("Failed to read or upload CSV.", "error");
-    } finally {
-      uploadBtn.disabled = false;
-      previewBtn.disabled = false;
+    if (error){
+      console.error(error);
+      uploadMsg.textContent = "Error inserting rows: " + error.message;
+      uploadMsg.className = "msg error";
+    } else {
+      uploadMsg.textContent = `Uploaded ${valid.length} rows successfully. Invalid rows were skipped.`;
+      uploadMsg.className = "msg ok";
     }
+    uploadBtn.disabled = false;
   });
-
-  logoutBtn.addEventListener("click", async () => {
-    await supabaseClient.auth.signOut();
-    window.location.href = "dashboard.html";
-  });
-
-  (async () => {
-    const { data } = await supabaseClient.auth.getUser();
-    if (!data || !data.user) {
-      userEmailSpan.textContent = "";
-      return;
-    }
-    const email = (data.user.email || "").toLowerCase();
-    userEmailSpan.textContent = email;
-    if (email !== ADMIN_EMAIL.toLowerCase()) {
-      // optional: redirect contractors away
-      // window.location.href = "contractor-portal.html";
-    }
-  })();
 </script>
 </body>
 </html>
