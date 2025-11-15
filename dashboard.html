@@ -139,6 +139,90 @@
       border:1px solid rgba(255,255,255,.2);
       padding:2px 7px;font-size:11px;
     }
+
+    /* LOGIN VIEW */
+    .login-wrapper{
+      min-height:calc(100vh - 64px);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px 16px;
+    }
+    .login-panel{
+      max-width:380px;
+      width:100%;
+      background:var(--panel);
+      border-radius:18px;
+      border:1px solid var(--border);
+      padding:20px 18px;
+      box-shadow:0 18px 40px rgba(0,0,0,.7);
+    }
+    .login-panel h1{
+      font-size:20px;
+      margin:0 0 6px;
+    }
+    .login-panel p{
+      margin-top:0;
+      font-size:13px;
+      color:var(--muted);
+      margin-bottom:12px;
+    }
+    .grad{
+      background:var(--grad);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+    label{
+      display:block;
+      font-size:13px;
+      margin-bottom:10px;
+    }
+    input[type="email"],
+    input[type="password"]{
+      width:100%;
+      margin-top:5px;
+      padding:10px 11px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.16);
+      background:rgba(5,7,19,.9);
+      color:var(--text);
+      font-size:14px;
+    }
+    input::placeholder{
+      color:rgba(181,183,216,.8);
+    }
+    .btn{
+      display:inline-block;
+      border-radius:999px;
+      padding:7px 11px;
+      font-size:12px;
+      font-weight:600;
+      border:0;
+      cursor:pointer;
+      transition:.18s;
+    }
+    .btn-primary{
+      background:var(--grad);
+      color:#050713;
+      box-shadow:0 0 0 1px rgba(110,168,255,.4);
+      width:100%;
+      margin-top:10px;
+    }
+    .btn-primary:hover{
+      filter:brightness(1.05);
+      transform:translateY(-1px);
+    }
+    .login-msg{
+      font-size:12px;
+      min-height:16px;
+      margin-top:8px;
+    }
+    .login-msg.error{color:#ff9b9b;}
+    .login-msg.success{color:#9bffbf;}
+
+    /* default: show login, hide dashboard until JS decides */
+    #dashboardContent{display:none;}
   </style>
 </head>
 <body>
@@ -148,7 +232,7 @@
     <span class="brand-sub">Admin · Money & Projects</span>
   </div>
   <div class="nav">
-    <a href="dashboard.html" class="primary">Dashboard</a>
+    <a href="dashboard.html" class="primary">Dashboard / Login</a>
     <a href="dashboard-leads-upload.html">Leads & CSV</a>
     <a href="contractor-portal.html" target="_blank">Contractor Portal</a>
     <span class="user-email" id="userEmail"></span>
@@ -156,7 +240,27 @@
   </div>
 </header>
 
-<main>
+<!-- LOGIN STATE (shown when not logged in) -->
+<div id="loginWrapper" class="login-wrapper">
+  <div class="login-panel">
+    <h1><span class="grad">Sign in</span> to your dashboard</h1>
+    <p>Admin uses your email + password. Admin sees this page; contractors get bounced to their portal.</p>
+
+    <form id="loginForm">
+      <label>Email
+        <input type="email" id="loginEmail" required placeholder="you@example.com" />
+      </label>
+      <label>Password
+        <input type="password" id="loginPassword" required placeholder="••••••••" />
+      </label>
+      <button type="submit" class="btn btn-primary" id="loginBtn">Login</button>
+      <div id="loginMsg" class="login-msg"></div>
+    </form>
+  </div>
+</div>
+
+<!-- ADMIN DASHBOARD STATE (shown only when admin logged in) -->
+<main id="dashboardContent">
   <section>
     <h1>Overview</h1>
     <p class="subhead">
@@ -287,9 +391,9 @@
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script>
   const SUPABASE_URL = "https://vekoulqehexqosgwacwa.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiIsInZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
   const ADMIN_EMAIL = "srarnold216@gmail.com";
-  const LOGIN_PAGE_URL = "dashboard-login.html";
+  const CONTRACTOR_PORTAL_URL = "contractor-portal.html";
 
   const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -309,27 +413,13 @@
   const leadStatusStats   = document.getElementById("leadStatusStats");
   const topCallersTableBody = document.querySelector("#topCallersTable tbody");
 
-  async function guardAdmin() {
-    const { data } = await supabaseClient.auth.getUser();
-    if (!data || !data.user) {
-      window.location.href = LOGIN_PAGE_URL;
-      return null;
-    }
-    const email = data.user.email;
-    userEmailSpan.textContent = email;
-
-    if (email !== ADMIN_EMAIL) {
-      // Non admin goes to contractor portal
-      window.location.href = "contractor-portal.html";
-      return null;
-    }
-    return data.user;
-  }
-
-  logoutBtn.addEventListener("click", async () => {
-    await supabaseClient.auth.signOut();
-    window.location.href = LOGIN_PAGE_URL;
-  });
+  const loginWrapper     = document.getElementById("loginWrapper");
+  const dashboardContent = document.getElementById("dashboardContent");
+  const loginForm        = document.getElementById("loginForm");
+  const loginEmail       = document.getElementById("loginEmail");
+  const loginPassword    = document.getElementById("loginPassword");
+  const loginBtn         = document.getElementById("loginBtn");
+  const loginMsg         = document.getElementById("loginMsg");
 
   function formatMoney(n) {
     if (!n || isNaN(n)) return "$0.00";
@@ -342,6 +432,54 @@
   function endOfMonth(date) {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0);
   }
+
+  function showLogin() {
+    loginWrapper.style.display = "flex";
+    dashboardContent.style.display = "none";
+    userEmailSpan.textContent = "";
+  }
+
+  function showDashboard(email) {
+    loginWrapper.style.display = "none";
+    dashboardContent.style.display = "block";
+    userEmailSpan.textContent = email;
+  }
+
+  logoutBtn.addEventListener("click", async () => {
+    await supabaseClient.auth.signOut();
+    showLogin();
+  });
+
+  loginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    loginMsg.textContent = "Logging in…";
+    loginMsg.className = "login-msg";
+    loginBtn.disabled = true;
+
+    const email = loginEmail.value.trim().toLowerCase();
+    const password = loginPassword.value;
+
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
+      email,
+      password
+    });
+
+    if (error || !data || !data.user) {
+      loginMsg.textContent = "Login failed. Check email & password.";
+      loginMsg.className = "login-msg error";
+      loginBtn.disabled = false;
+      return;
+    }
+
+    // route based on email
+    if (email === ADMIN_EMAIL.toLowerCase()) {
+      loginMsg.textContent = "Login successful. Loading dashboard…";
+      loginMsg.className = "login-msg success";
+      await initAdmin();
+    } else {
+      window.location.href = CONTRACTOR_PORTAL_URL;
+    }
+  });
 
   async function loadDashboard() {
     const today = new Date();
@@ -390,7 +528,7 @@
       .slice(0, 6)
       .forEach(p => {
         const tr = document.createElement("tr");
-        const clientName = p.business_name || p.client_name || "(No name)";
+        const clientName = p.business_name || p.client_name || p.business || p.name || "(No name)";
         const status = (p.status || "new").toLowerCase();
 
         const tdClient = document.createElement("td");
@@ -520,10 +658,29 @@
     }
   }
 
-  (async () => {
-    const user = await guardAdmin();
-    if (!user) return;
+  async function initAdmin() {
+    const { data } = await supabaseClient.auth.getUser();
+    if (!data || !data.user) {
+      showLogin();
+      loginBtn.disabled = false;
+      return;
+    }
+    const email = (data.user.email || "").toLowerCase();
+
+    if (email !== ADMIN_EMAIL.toLowerCase()) {
+      // non-admin = contractor
+      window.location.href = CONTRACTOR_PORTAL_URL;
+      return;
+    }
+
+    showDashboard(email);
     await loadDashboard();
+    loginBtn.disabled = false;
+  }
+
+  // On first load, decide what to show
+  (async () => {
+    await initAdmin();
   })();
 </script>
 </body>
