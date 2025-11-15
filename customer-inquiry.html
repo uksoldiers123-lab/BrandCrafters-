@@ -20,6 +20,7 @@
       <a href="index.html" class="nav-link">Home</a>
       <a href="pricing.html" class="nav-link">Pricing</a>
       <a href="customer-inquiry.html" class="nav-link active">Customer Portal</a>
+      <a href="pricing.html#how-it-works" class="nav-link">How It Works</a>
     </nav>
 
     <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
@@ -47,14 +48,18 @@
   <div class="container">
     <h1 class="headline">Customer Portal</h1>
     <p class="subhead">
-      This page is for current BrandCrafters customers only.<br>
-      Use this form to request updates, add-ons, upgrades, maintenance changes, or to book a call.
+      This page is for current BrandCrafters clients only.<br>
+      Use it to request updates, add-ons, upgrades, maintenance changes, or to book a call.
+      Perfect for restaurants, food trucks, barbershops, salons, lawn care, HVAC, trucking,
+      contractors, churches, and other service brands we’ve already built sites for.
     </p>
   </div>
 </section>
 
 <section class="container inquiry-section">
   <form id="customerForm" class="form glass" autocomplete="on">
+    <h2>1. Who you are</h2>
+
     <label>Full Name
       <input name="name" required />
     </label>
@@ -67,16 +72,36 @@
       <input name="business" placeholder="Example: Jones Lawn Care / www.joneslawn.com" />
     </label>
 
-    <label>What do you need today?
+    <label>Industry / Type of Business
+      <select name="industry">
+        <option value="">Choose one (optional)</option>
+        <option>Restaurant / Food Truck</option>
+        <option>Barbershop / Salon / Beauty</option>
+        <option>Lawn Care / Landscaping</option>
+        <option>HVAC / Plumbing / Trades</option>
+        <option>Trucking / Logistics</option>
+        <option>Cleaning / Detailing</option>
+        <option>Medical / Dental / Health</option>
+        <option>Legal / Tax / Professional</option>
+        <option>Church / Nonprofit</option>
+        <option>Other</option>
+      </select>
+    </label>
+
+    <hr>
+
+    <h2>2. What you need today</h2>
+
+    <label>Request Type
       <select name="requestType" required>
         <option value="">Select one</option>
-        <option value="Site Update">Request a website update (per-call)</option>
+        <option value="Site Update">Website update (per-call)</option>
         <option value="Add Stripe Basic">Add Basic Stripe Setup</option>
         <option value="Add Stripe Full">Add Full Stripe Integration</option>
         <option value="Upgrade Package">Upgrade my website package</option>
         <option value="Add Maintenance">Add a maintenance plan</option>
         <option value="Cancel Maintenance">Cancel my maintenance plan</option>
-        <option value="Book Call">Book a call (phone/video)</option>
+        <option value="Book Call">Book a call (phone or video)</option>
         <option value="Upload Content">Send new content or images</option>
         <option value="Other">Other request</option>
       </select>
@@ -87,14 +112,31 @@
         placeholder="Tell us what you want changed, added, upgraded, or what the call should cover."></textarea>
     </label>
 
-    <!-- File upload is visual only unless you wire it to a backend -->
+    <label>Is this time-sensitive?
+      <select name="urgency">
+        <option value="">Select one</option>
+        <option>Normal</option>
+        <option>Need this done soon</option>
+        <option>Urgent (deadline coming up)</option>
+      </select>
+    </label>
+
+    <hr>
+
+    <h2>3. Files (optional)</h2>
+    <p class="form-note">
+      If you’re sending new photos, menus, service lists, logos, or documents, you can attach them here
+      or send them using your usual cloud links (Google Drive, Dropbox, etc.) in the description above.
+    </p>
+
+    <!-- Visual only unless wired to a backend / upload handler -->
     <label>Upload files (optional)
       <input type="file" name="uploads" multiple />
     </label>
 
     <p class="form-note">
-      For add-ons (Stripe, maintenance, upgrades), we’ll review your request and send a Stripe link or
-      invoice to complete payment before work begins.
+      For add-ons and upgrades, we’ll confirm everything and send a Stripe link or invoice
+      before work begins.
     </p>
 
     <button class="btn btn-primary" type="submit">Submit Request</button>
@@ -109,6 +151,16 @@
 </footer>
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Simple front-end confirmation for now (no backend yet)
+  const customerForm = document.getElementById('customerForm');
+  const customerMsg = document.getElementById('formMsg');
+
+  customerForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    customerMsg.textContent = "Thanks! Your request has been recorded. We’ll review it and follow up by email.";
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
 </script>
 </body>
-</html>
+  </html>
