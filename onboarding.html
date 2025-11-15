@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Onboarding — BrandCrafters</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <script defer src="script.js"></script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="logo" href="index.html">
+      <span class="logo-mark">BC</span><span>BrandCrafters</span>
+    </a>
+
+    <!-- Desktop Nav -->
+    <nav class="nav desktop-nav">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="pricing.html" class="nav-link">Pricing</a>
+      <a href="customer-inquiry.html" class="nav-link">Customer Portal</a>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <!-- Mobile Drawer (V8) -->
+  <nav class="mobile-drawer" aria-hidden="true">
+    <div class="drawer-header">
+      <a class="logo" href="index.html">
+        <span class="logo-mark">BC</span><span>BrandCrafters</span>
+      </a>
+      <button class="menu-close" aria-label="Close menu">✕</button>
+    </div>
+    <a class="drawer-link" href="index.html">Home</a>
+    <a class="drawer-link" href="pricing.html">Pricing</a>
+    <a class="drawer-link" href="customer-inquiry.html">Customer Portal</a>
+  </nav>
+
+  <div class="drawer-backdrop" aria-hidden="true"></div>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <h1 class="headline">Website Onboarding</h1>
+    <p class="subhead">
+      Thanks for your purchase. This form gives us everything we need to build your site
+      without a bunch of back-and-forth messages.
+    </p>
+  </div>
+</section>
+
+<section class="container inquiry-section">
+  <form id="onboardingForm" class="form glass" autocomplete="on">
+    <!-- CONTACT -->
+    <h2>1. Contact &amp; Business Info</h2>
+
+    <label>Full Name
+      <input name="name" required />
+    </label>
+
+    <label>Email (same one you used at checkout)
+      <input type="email" name="email" required />
+    </label>
+
+    <label>Business Name
+      <input name="business" placeholder="Example: Jones Lawn Care" required />
+    </label>
+
+    <label>Best Phone Number (optional)
+      <input name="phone" placeholder="(###) ###-####" />
+    </label>
+
+    <label>Current Website or Social Link (if any)
+      <input name="current_web" placeholder="Example: Instagram, Facebook, old site..." />
+    </label>
+
+    <hr>
+
+    <!-- PACKAGE -->
+    <h2>2. What did you purchase?</h2>
+
+    <label>Website Package
+      <select name="package" required>
+        <option value="">Select your package</option>
+        <option value="Starter Website">Starter Website ($700)</option>
+        <option value="Standard Business Site">Standard Business Site ($900)</option>
+        <option value="Professional Website">Professional Website ($1,300)</option>
+        <option value="Premium Website">Premium Website ($2,000)</option>
+      </select>
+    </label>
+
+    <label>Add-ons you selected on Stripe (if any)
+      <div style="margin-top:6px; display:grid; gap:4px;">
+        <label style="font-weight:400;">
+          <input type="checkbox" name="addons" value="Basic Stripe Setup" />
+          Basic Stripe Setup
+        </label>
+        <label style="font-weight:400;">
+          <input type="checkbox" name="addons" value="Full Stripe Integration" />
+          Full Stripe Integration
+        </label>
+        <label style="font-weight:400;">
+          <input type="checkbox" name="addons" value="Care Lite" />
+          Care Lite Maintenance
+        </label>
+        <label style="font-weight:400;">
+          <input type="checkbox" name="addons" value="Care Standard" />
+          Care Standard Maintenance
+        </label>
+        <label style="font-weight:400;">
+          <input type="checkbox" name="addons" value="Care Pro" />
+          Care Pro Maintenance
+        </label>
+        <label style="font-weight:400;">
+          <input type="checkbox" name="addons" value="None / Not Sure" />
+          I didn’t select add-ons / Not sure
+        </label>
+      </div>
+    </label>
+
+    <hr>
+
+    <!-- PAGES -->
+    <h2>3. Pages you want on your website</h2>
+
+    <p class="form-note">
+      Check the pages you need. We’ll match this to the package you purchased and tell you if
+      anything goes beyond your plan before we start.
+    </p>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:6px;margin-bottom:12px;">
+      <label style="font-weight:400;"><input type="checkbox" name="pages" value="Home" /> Home</label>
+      <label style="font-weight:400;"><input type="checkbox" name="pages" value="About" /> About</label>
+      <label style="font-weight:400;"><input type="checkbox" name="pages" value="Services" /> Services</label>
+      <label style="font-weight:400;"><input type="checkbox" name="pages" value="Menu/Pricing" /> Menu / Pricing</label>
+      <label style="font-weight:400;"><input type="checkbox" name="pages" value="Gallery" /> Gallery / Portfolio</label>
+      <label style="font-weight:400;"><input type="checkbox" name="pages" value="FAQ" /> FAQ</label>
+      <label style="font-weight:400;"><input type="checkbox" name="pages" value="Contact" /> Contact</label>
+      <label style="font-weight:400;"><input type="checkbox" name="pages" value="Blog/News" /> Blog / News</label>
+      <label style="font-weight:400;"><input type="checkbox" name="pages" value="Other" /> Other (describe below)</label>
+    </div>
+
+    <label>Page notes &amp; what each page should say
+      <textarea name="page_notes" rows="6"
+        placeholder="Example: Home: simple welcome + main services. About: my story. Services: list what I offer and prices. Contact: form + phone + address."></textarea>
+    </label>
+
+    <hr>
+
+    <!-- STYLE -->
+    <h2>4. Style &amp; Branding</h2>
+
+    <label>Colors you want us to use
+      <textarea name="colors" rows="3"
+        placeholder="Example: Dark green and white, gold accent. Or: I like black/white with a strong accent color."></textarea>
+    </label>
+
+    <label>Style &amp; vibe
+      <select name="style_vibe">
+        <option value="">Choose a general vibe</option>
+        <option value="Clean & modern">Clean &amp; modern</option>
+        <option value="Bold & loud">Bold &amp; loud</option>
+        <option value="Warm & friendly">Warm &amp; friendly</option>
+        <option value="Simple & minimal">Simple &amp; minimal</option>
+        <option value="Professional & corporate">Professional &amp; corporate</option>
+      </select>
+    </label>
+
+    <label>Websites you like (optional)
+      <textarea name="example_sites" rows="3"
+        placeholder="Paste links to 1–3 websites you like and tell us what you like about them."></textarea>
+    </label>
+
+    <label>Logo or graphics (optional)
+      <textarea name="logo_info" rows="3"
+        placeholder="Tell us if you have a logo already, or if you want us to do something simple for you. If you have a link to your logo file, paste it here."></textarea>
+    </label>
+
+    <hr>
+
+    <!-- DOMAIN & EMAIL -->
+    <h2>5. Domain &amp; Email</h2>
+
+    <label>Do you already own a domain?
+      <select name="has_domain" required>
+        <option value="">Select one</option>
+        <option value="Yes">Yes, I already own a domain</option>
+        <option value="No">No, I need help buying a domain</option>
+        <option value="Not sure">Not sure</option>
+      </select>
+    </label>
+
+    <label>If yes, what is your domain and where is it registered?
+      <textarea name="domain_details" rows="3"
+        placeholder="Example: mybusiness.com on GoDaddy. Or: not sure where it’s registered."></textarea>
+    </label>
+
+    <label>Business email needs
+      <textarea name="email_needs" rows="3"
+        placeholder="Example: I need info@mybusiness.com and support@mybusiness.com, or just forward to my Gmail."></textarea>
+    </label>
+
+    <hr>
+
+    <!-- STRIPE (IF APPLICABLE) -->
+    <h2>6. Stripe / Payments (if you added Stripe)</h2>
+
+    <p class="form-note">
+      If you selected Stripe setup on checkout, answer these so we know how to configure your buttons and links.
+      If you didn’t choose Stripe, you can skip this.
+    </p>
+
+    <label>Do you already have a Stripe account?
+      <select name="has_stripe">
+        <option value="">Select one</option>
+        <option value="Yes">Yes, I already have Stripe</option>
+        <option value="No">No, I need to set it up</option>
+        <option value="Not sure">Not sure</option>
+      </select>
+    </label>
+
+    <label>How will you use online payments?
+      <textarea name="stripe_usage" rows="3"
+        placeholder="Example: Take deposits, full payments for services, pay invoices, accept donations, etc."></textarea>
+    </label>
+
+    <label>What should your main button say?
+      <input name="primary_button_text" placeholder="Examples: Pay Now, Book Now, Pay Deposit, Donate, etc." />
+    </label>
+
+    <hr>
+
+    <!-- TIMING -->
+    <h2>7. Timing &amp; Extra Notes</h2>
+
+    <label>Ideal launch window
+      <select name="launch_window">
+        <option value="">Select one</option>
+        <option value="1-2 weeks">1–2 weeks</option>
+        <option value="2-3 weeks">2–3 weeks</option>
+        <option value="3-5 weeks">3–5 weeks</option>
+        <option value="Flexible / no rush">Flexible / no rush</option>
+      </select>
+    </label>
+
+    <label>Hard deadlines or events (if any)
+      <textarea name="deadlines" rows="2"
+        placeholder="Example: Grand opening date, event date, or a promo you want the site ready for."></textarea>
+    </label>
+
+    <label>Anything else we should know?
+      <textarea name="extra_notes" rows="4"
+        placeholder="Any special requests, concerns, or details we didn’t cover above."></textarea>
+    </label>
+
+    <button class="btn btn-primary" type="submit">Submit Onboarding Details</button>
+    <p id="formMsg" class="form-note">
+      After you submit, we’ll review everything and follow up by email if we have questions.
+    </p>
+  </form>
+</section>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>© <span id="year"></span> BrandCrafters — A division of Egyptian Hype LLC</div>
+  </div>
+</footer>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // TEMPORARY: prevent full reload so the form feels responsive
+  // We’ll replace this with Supabase or another backend later.
+  const form = document.getElementById('onboardingForm');
+  const msg = document.getElementById('formMsg');
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    msg.textContent = 'Thank you! Your details were captured. (We’ll wire this to Supabase next.)';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+</body>
+  </html>
