@@ -4,92 +4,60 @@
   <meta charset="utf-8" />
   <title>BrandCrafters — Admin Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <!-- BrandCrafters base styles -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
   <script defer src="script.js"></script>
-
   <style>
-    /* Admin dashboard-specific layout (doesn't override site header/footer) */
+    :root{
+      --bg:#050713;
+      --panel:rgba(255,255,255,.04);
+      --border:rgba(255,255,255,.08);
+      --text:#f5f5ff;
+      --muted:#b5b7d8;
+      --grad:linear-gradient(135deg,#6ea8ff,#b166ff);
+    }
+    *{box-sizing:border-box;}
     body{
-      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color:#f5f5ff;
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:
+        radial-gradient(1200px 600px at -10% -10%, #18122f 0, rgba(24,18,47,0) 60%),
+        var(--bg);
+      color:var(--text);
     }
-    .dash-main{
-      max-width:1100px;
-      margin:32px auto 80px;
-      padding:0 20px;
+    main{
+      max-width:1100px;margin:18px auto 60px;padding:0 16px;
     }
-    .dash-main h1{
-      margin:0 0 6px;
-      font-size:24px;
+    h1{margin:0 0 6px;font-size:22px;}
+    .subhead{margin:0 0 18px;font-size:13px;color:var(--muted);}
+    .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}
+    .grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
+    @media (max-width:900px){
+      .grid{grid-template-columns:1fr;}
+      .grid-2{grid-template-columns:1fr;}
     }
-    .dash-subhead{
-      margin:0 0 20px;
-      font-size:13px;
-      color:var(--muted);
-    }
-
-    .dash-grid-3{
-      display:grid;
-      grid-template-columns:repeat(3,minmax(0,1fr));
-      gap:16px;
-      margin-bottom:16px;
-    }
-    .dash-grid-2{
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:16px;
-      margin-top:16px;
-    }
-    @media(max-width:900px){
-      .dash-grid-3,
-      .dash-grid-2{
-        grid-template-columns:1fr;
-      }
-    }
-
-    .dash-card{
+    .card{
       background:var(--panel);
       border-radius:16px;
-      border:1px solid rgba(255,255,255,.10);
+      border:1px solid var(--border);
       padding:16px 14px;
     }
-    .dash-card h2{
-      margin:0 0 6px;
-      font-size:16px;
+    .card h2{margin:0 0 8px;font-size:16px;}
+    .card p{margin:0 0 6px;font-size:13px;}
+    .stat-label{
+      font-size:11px;text-transform:uppercase;
+      letter-spacing:.06em;color:var(--muted);
     }
-    .dash-card p{
-      margin:0 0 6px;
-      font-size:13px;
-      color:var(--muted);
-    }
-
-    .dash-stat-label{
+    .stat-value{font-size:20px;font-weight:700;margin-top:4px;}
+    .stat-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+    .pill{
+      display:inline-block;padding:2px 8px;border-radius:999px;
       font-size:11px;
-      text-transform:uppercase;
-      letter-spacing:.06em;
-      color:var(--muted);
     }
-    .dash-stat-value{
-      font-size:22px;
-      font-weight:700;
-      margin-top:4px;
-    }
-    .dash-stat-sub{
-      font-size:11px;
-      color:var(--muted);
-      margin-top:2px;
-    }
-
-    table{
-      width:100%;
-      border-collapse:collapse;
-      font-size:12px;
-      margin-top:8px;
-    }
+    .pill-green{background:rgba(155,255,191,.15);}
+    .pill-red{background:rgba(255,155,155,.15);}
+    .pill-blue{background:rgba(110,168,255,.15);}
+    table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;}
     th,td{
       border-bottom:1px solid rgba(255,255,255,.08);
       padding:5px 4px;
@@ -102,91 +70,48 @@
       letter-spacing:.05em;
       color:var(--muted);
     }
-    .small{
-      font-size:12px;
-      color:var(--muted);
-    }
-    .pill{
-      display:inline-block;
-      border-radius:999px;
-      padding:2px 7px;
-      font-size:11px;
-    }
-    .pill-green{background:rgba(155,255,191,.15);}
-    .pill-red{background:rgba(255,155,155,.15);}
-    .pill-blue{background:rgba(110,168,255,.15);}
-
-    .dash-lead-status{
-      font-size:13px;
-      color:var(--muted);
-    }
-
-    /* Header extra bits for email + logout */
+    .small{font-size:12px;color:var(--muted);}
     .header-user{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      font-size:11px;
-      color:var(--muted);
-      margin-left:12px;
+      display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted);margin-left:12px;
     }
     .btn-logout{
-      border-radius:999px;
-      padding:6px 10px;
-      border:1px solid rgba(255,255,255,.55);
-      background:rgba(255,255,255,.08);
-      font-size:11px;
-      cursor:pointer;
-      display:inline-flex;
-      align-items:center;
-      gap:4px;
+      border-radius:999px;padding:6px 10px;border:1px solid rgba(255,255,255,.55);
+      background:rgba(255,255,255,.08);font-size:11px;cursor:pointer;
+      display:inline-flex;align-items:center;gap:4px;
     }
-    .btn-logout:hover{
-      background:rgba(255,255,255,.16);
-      transform:translateY(-1px);
-    }
-    @media(max-width:940px){
-      .header-user{
-        display:none;
-      }
-    }
+    .btn-logout:hover{background:rgba(255,255,255,.16);transform:translateY(-1px);}
+    @media(max-width:940px){.header-user{display:none;}}
   </style>
 </head>
 <body>
 
-<!-- BrandCrafters site header with dashboard links (Version B) -->
 <header class="site-header">
   <div class="container header-inner">
     <a class="logo" href="index.html">
       <span class="logo-mark">BC</span><span>BrandCrafters</span>
     </a>
 
-    <!-- Desktop Nav -->
     <nav class="nav desktop-nav">
-      <!-- Public nav -->
       <a href="index.html" class="nav-link">Home</a>
       <a href="pricing.html" class="nav-link">Pricing</a>
       <a href="customer-inquiry.html" class="btn btn-outline">Customer Portal</a>
 
-      <!-- Dashboard-specific links -->
       <a href="dashboard.html" class="nav-link active">Admin Dashboard</a>
       <a href="dashboard-leads-upload.html" class="nav-link">Leads &amp; CSV</a>
+      <a href="dashboard-commissions.html" class="nav-link">Commission Rules</a>
       <a href="contractor-portal.html" class="nav-link">Contractor Portal</a>
 
-      <!-- User + logout -->
       <div class="header-user">
         <span id="userEmail"></span>
         <button id="logoutBtn" class="btn-logout">Log Out</button>
       </div>
     </nav>
 
-    <!-- Mobile: Hamburger -->
     <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
   </div>
 
-  <!-- Mobile Drawer (V8) -->
   <nav class="mobile-drawer" aria-hidden="true">
     <div class="drawer-header">
       <a class="logo" href="index.html">
@@ -195,87 +120,75 @@
       <button class="menu-close" aria-label="Close menu">✕</button>
     </div>
 
-    <!-- Public nav -->
     <a class="drawer-link" href="index.html">Home</a>
     <a class="drawer-link" href="pricing.html">Pricing</a>
     <a class="drawer-link" href="customer-inquiry.html">Customer Portal</a>
-
-    <!-- Dashboard-specific -->
     <a class="drawer-link" href="dashboard.html">Admin Dashboard</a>
     <a class="drawer-link" href="dashboard-leads-upload.html">Leads &amp; CSV</a>
+    <a class="drawer-link" href="dashboard-commissions.html">Commission Rules</a>
     <a class="drawer-link" href="contractor-portal.html">Contractor Portal</a>
   </nav>
   <div class="drawer-backdrop" aria-hidden="true"></div>
 </header>
 
-<main class="dash-main">
+<main>
   <section>
-    <h1>Admin Overview</h1>
-    <p class="dash-subhead">
-      Snapshot of project revenue, monthly maintenance, recurring bills, and lead performance.
+    <h1>Overview</h1>
+    <p class="subhead">
+      Snapshot of project money, monthly maintenance vs bills, and the lead pipeline &amp; commissions.
     </p>
   </section>
 
   <!-- MONEY SUMMARY -->
-  <section class="dash-grid-3">
-    <article class="dash-card">
-      <div class="dash-stat-label">Lifetime Project Revenue (one-time)</div>
-      <div class="dash-stat-value" id="lifetimeRevenue">$0.00</div>
-      <div class="dash-stat-sub">
-        Sum of <code>total_price</code> on completed onboarding submissions.
-      </div>
+  <section class="grid">
+    <article class="card">
+      <div class="stat-label">Lifetime Project Revenue (one-time)</div>
+      <div class="stat-value" id="lifetimeRevenue">$0.00</div>
+      <div class="stat-sub">Sum of total_price on onboarding submissions.</div>
     </article>
 
-    <article class="dash-card">
-      <div class="dash-stat-label">Active Monthly Income</div>
-      <div class="dash-stat-value" id="monthlyIncome">$0.00</div>
-      <div class="dash-stat-sub">
-        Sum of <code>monthly_fee</code> across all active projects.
-      </div>
+    <article class="card">
+      <div class="stat-label">Active Monthly Income</div>
+      <div class="stat-value" id="monthlyIncome">$0.00</div>
+      <div class="stat-sub">Sum of monthly_fee for active projects.</div>
     </article>
 
-    <article class="dash-card">
-      <div class="dash-stat-label">Active Monthly Bills (Tools &amp; Client Bills)</div>
-      <div class="dash-stat-value" id="monthlyBills">$0.00</div>
-      <div class="dash-stat-sub">
-        From <code>recurring_expenses</code> where frequency = "monthly" and is_active = true.
-      </div>
+    <article class="card">
+      <div class="stat-label">Active Monthly Bills</div>
+      <div class="stat-value" id="monthlyBills">$0.00</div>
+      <div class="stat-sub">Recurring_expenses with frequency = 'monthly' and is_active = true.</div>
     </article>
   </section>
 
   <!-- PROFITS & LEADS -->
-  <section class="dash-grid-3">
-    <article class="dash-card">
-      <div class="dash-stat-label">Est. Monthly Net</div>
-      <div class="dash-stat-value" id="monthlyNet">$0.00</div>
-      <div class="dash-stat-sub">
-        Maintenance income minus recurring expenses (rough check if BrandCrafters covers its own bills).
-      </div>
+  <section class="grid" style="margin-top:12px;">
+    <article class="card">
+      <div class="stat-label">Est. Monthly Net (Maintenance - Bills)</div>
+      <div class="stat-value" id="monthlyNet">$0.00</div>
+      <div class="stat-sub">Rough check if maintenance covers your tools & renewals.</div>
     </article>
 
-    <article class="dash-card">
-      <div class="dash-stat-label">Closed Won Leads · This Month</div>
-      <div class="dash-stat-value" id="closedWonMonth">0</div>
-      <div class="dash-stat-sub">
-        Leads in <code>call_leads</code> where status = "closed won" and last_contact_date is this month.
-      </div>
+    <article class="card">
+      <div class="stat-label">Closed Won Leads · This Month</div>
+      <div class="stat-value" id="closedWonMonth">0</div>
+      <div class="stat-sub">call_leads where status = 'closed won' and date is in this month.</div>
     </article>
 
-    <article class="dash-card">
-      <div class="dash-stat-label">Estimated Commissions · This Month</div>
-      <div class="dash-stat-value" id="commissionMonth">$0.00</div>
-      <div class="dash-stat-sub">
-        $100 per closed website sale (no commission on add-ons-only jobs).
+    <article class="card">
+      <div class="stat-label">Estimated Commissions · This Month</div>
+      <div class="stat-value" id="commissionMonth">$0.00</div>
+      <div class="stat-sub">
+        Uses commission_amount on each closed won lead (Starter / Business / E-Com).
       </div>
     </article>
   </section>
 
   <!-- PROJECTS & EXPENSES -->
-  <section class="dash-grid-2">
-    <article class="dash-card">
+  <section class="grid-2" style="margin-top:16px;">
+    <article class="card">
       <h2>Client Projects (Onboarding)</h2>
       <p class="small">
-        Last 6 onboarding submissions with total price, monthly fees, and status. Use your main dashboard views to drill in.
+        Last 6 onboarding submissions with totals and monthly fees.
       </p>
       <table id="projectsTable">
         <thead>
@@ -290,10 +203,10 @@
       </table>
     </article>
 
-    <article class="dash-card">
+    <article class="card">
       <h2>Upcoming Recurring Bills</h2>
       <p class="small">
-        Next 6 active recurring expenses sorted by next_due_date.
+        Next 6 active recurring_expenses sorted by next_due_date.
       </p>
       <table id="billsTable">
         <thead>
@@ -311,18 +224,18 @@
   </section>
 
   <!-- LEAD SNAPSHOT -->
-  <section class="dash-card" style="margin-top:16px;">
+  <section class="card" style="margin-top:16px;">
     <h2>Lead Pipeline Snapshot</h2>
     <p class="small">
-      Quick view of where your cold-call/web leads are, before you open the full Leads &amp; CSV dashboard.
+      Quick check before you go into Leads &amp; CSV or the Contractor Portal.
     </p>
-    <div class="dash-grid-2">
+    <div class="grid-2">
       <div>
-        <p class="dash-stat-label">Counts by Status</p>
-        <p class="dash-lead-status" id="leadStatusStats">Loading…</p>
+        <p class="stat-label">Counts by Status</p>
+        <p class="small" id="leadStatusStats">Loading…</p>
       </div>
       <div>
-        <p class="dash-stat-label">Top Callers (Closed Won)</p>
+        <p class="stat-label">Top Callers (Closed Won)</p>
         <table id="topCallersTable">
           <thead>
             <tr>
@@ -347,21 +260,17 @@
   </div>
 </footer>
 
-<!-- Year -->
 <script>
   const yearSpan = document.getElementById('year');
-  if (yearSpan) {
-    yearSpan.textContent = new Date().getFullYear();
-  }
+  if (yearSpan) yearSpan.textContent = new Date().getFullYear();
 </script>
 
-<!-- Supabase + Dashboard Logic -->
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script>
   const SUPABASE_URL = "https://vekoulqehexqosgwacwa.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiIsInZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
   const ADMIN_EMAIL = "srarnold216@gmail.com";
-  const LOGIN_PAGE_URL = "dashboard.html"; // you are using dashboard as the gate
+  const LOGIN_PAGE_URL = "dashboard.html";
 
   const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -382,19 +291,14 @@
   const topCallersTableBody = document.querySelector("#topCallersTable tbody");
 
   async function guardAdmin() {
-    const { data, error } = await supabaseClient.auth.getUser();
-    if (error) {
-      console.error("auth.getUser error:", error);
-    }
+    const { data } = await supabaseClient.auth.getUser();
     if (!data || !data.user) {
-      // not logged in -> you can optionally show a login state instead
+      window.location.href = LOGIN_PAGE_URL;
       return null;
     }
     const email = data.user.email;
     if (userEmailSpan) userEmailSpan.textContent = email || "";
-
     if (email !== ADMIN_EMAIL) {
-      // Non admin goes to contractor portal
       window.location.href = "contractor-portal.html";
       return null;
     }
@@ -420,6 +324,14 @@
     return new Date(date.getFullYear(), date.getMonth() + 1, 0);
   }
 
+  function defaultCommissionForPackage(pkg) {
+    const p = (pkg || "").toLowerCase();
+    if (p.includes("starter")) return 50;
+    if (p.includes("business")) return 75;
+    if (p.includes("e-commerce") || p.includes("ecommerce") || p.includes("store")) return 100;
+    return 100;
+  }
+
   async function loadDashboard() {
     const today = new Date();
     const monthStart = startOfMonth(today);
@@ -431,23 +343,16 @@
       supabaseClient.from("call_leads").select("*")
     ]);
 
-    if (onboardingRes.error) console.error("Onboarding error:", onboardingRes.error);
-    if (billsRes.error) console.error("Bills error:", billsRes.error);
-    if (leadsRes.error) console.error("Leads error:", leadsRes.error);
-
     const onboarding = onboardingRes.data || [];
     const bills      = billsRes.data || [];
     const leads      = leadsRes.data || [];
 
-    // MONEY SUMMARY
     let lifetimeRev = 0;
     let monthlyFeeTotal = 0;
-
     onboarding.forEach(p => {
       if (p.total_price) lifetimeRev += Number(p.total_price) || 0;
       if (p.monthly_fee) monthlyFeeTotal += Number(p.monthly_fee) || 0;
     });
-
     lifetimeRevenue.textContent = formatMoney(lifetimeRev);
     monthlyIncome.textContent   = formatMoney(monthlyFeeTotal);
 
@@ -460,7 +365,7 @@
     monthlyBills.textContent = formatMoney(monthlyBillsTotal);
     monthlyNet.textContent   = formatMoney(monthlyFeeTotal - monthlyBillsTotal);
 
-    // PROJECTS TABLE
+    // Projects
     projectsTableBody.innerHTML = "";
     onboarding
       .sort((a, b) => new Date(b.created_at || b.first_paid_at || 0) - new Date(a.created_at || a.first_paid_at || 0))
@@ -484,11 +389,7 @@
 
         const tdStatus = document.createElement("td");
         const pill = document.createElement("span");
-        pill.className = "pill " + (status === "completed"
-          ? "pill-green"
-          : status === "cancelled"
-          ? "pill-red"
-          : "pill-blue");
+        pill.className = "pill " + (status === "completed" ? "pill-green" : status === "cancelled" ? "pill-red" : "pill-blue");
         pill.textContent = status;
         tdStatus.appendChild(pill);
         tr.appendChild(tdStatus);
@@ -496,7 +397,7 @@
         projectsTableBody.appendChild(tr);
       });
 
-    // BILLS TABLE
+    // Bills
     billsTableBody.innerHTML = "";
     bills
       .filter(b => b.next_due_date)
@@ -524,23 +425,29 @@
         billsTableBody.appendChild(tr);
       });
 
-    billsNote.textContent = bills.length ? "" : "No recurring_expenses found yet. You can add them in Supabase.";
+    billsNote.textContent = bills.length ? "" : "No recurring_expenses found yet. Add them in Supabase.";
 
-    // LEADS SNAPSHOT
+    // Leads + commissions
     const statusCounts = {};
     let closedThisMonth = 0;
     let commissionThisMonth = 0;
     const callerStats = new Map();
 
     leads.forEach(ld => {
-      const status = (ld.call_status || "new").toLowerCase();
+      const rawStatus = (ld.call_status || "new").toLowerCase();
+      const status = rawStatus.replace("_"," ");
       statusCounts[status] = (statusCounts[status] || 0) + 1;
 
-      if (status === "closed won" && ld.last_contact_date) {
+      const isClosedWon = rawStatus === "closed won" || rawStatus === "closed_won";
+
+      if (isClosedWon && ld.last_contact_date) {
         const d = new Date(ld.last_contact_date);
         if (d >= monthStart && d <= monthEnd) {
           closedThisMonth += 1;
-          commissionThisMonth += 100;
+          const commission = ld.commission_amount != null
+            ? Number(ld.commission_amount) || 0
+            : defaultCommissionForPackage(ld.package_type);
+          commissionThisMonth += commission;
         }
       }
 
@@ -550,9 +457,12 @@
           callerStats.set(email, { closedWon:0, commission:0 });
         }
         const obj = callerStats.get(email);
-        if (status === "closed won") {
+        if (isClosedWon) {
           obj.closedWon += 1;
-          obj.commission += 100;
+          const commission = ld.commission_amount != null
+            ? Number(ld.commission_amount) || 0
+            : defaultCommissionForPackage(ld.package_type);
+          obj.commission += commission;
         }
       }
     });
@@ -607,4 +517,4 @@
   })();
 </script>
 </body>
-</html>
+  </html>
