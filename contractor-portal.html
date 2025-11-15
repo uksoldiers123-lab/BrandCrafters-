@@ -5,7 +5,6 @@
   <title>BrandCrafters — Contractor Portal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- BrandCrafters base styles -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
@@ -21,26 +20,12 @@
       margin:32px auto 80px;
       padding:0 20px;
     }
-    h1{
-      margin:0 0 6px;
-      font-size:24px;
-    }
-    .subhead{
-      margin:0 0 20px;
-      font-size:13px;
-      color:var(--muted);
-    }
-
+    h1{margin:0 0 6px;font-size:24px;}
+    .subhead{margin:0 0 20px;font-size:13px;color:var(--muted);}
     .grid-3{
-      display:grid;
-      grid-template-columns:repeat(3,minmax(0,1fr));
-      gap:12px;
-      margin-bottom:16px;
+      display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:16px;
     }
-    @media(max-width:900px){
-      .grid-3{grid-template-columns:1fr;}
-    }
-
+    @media(max-width:900px){.grid-3{grid-template-columns:1fr;}}
     .card{
       background:var(--panel);
       border-radius:16px;
@@ -59,14 +44,8 @@
       font-weight:700;
       margin-top:4px;
     }
-
     .toolbar{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      align-items:center;
-      margin-bottom:10px;
-      font-size:12px;
+      display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px;font-size:12px;
     }
     .toolbar select{
       padding:6px 8px;
@@ -76,12 +55,8 @@
       color:#f5f5ff;
       font-size:12px;
     }
-
     table{
-      width:100%;
-      border-collapse:collapse;
-      font-size:12px;
-      margin-top:8px;
+      width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;
     }
     th,td{
       border-bottom:1px solid rgba(255,255,255,.08);
@@ -89,168 +64,91 @@
       vertical-align:top;
     }
     th{
-      text-align:left;
-      font-size:11px;
-      text-transform:uppercase;
-      letter-spacing:.05em;
-      color:var(--muted);
-      background:rgba(255,255,255,.02);
-      position:sticky;
-      top:0;
-      z-index:1;
+      text-align:left;font-size:11px;text-transform:uppercase;
+      letter-spacing:.05em;color:var(--muted);
+      background:rgba(255,255,255,.02);position:sticky;top:0;z-index:1;
     }
-
     .badge{
-      display:inline-block;
-      padding:2px 6px;
-      border-radius:999px;
-      font-size:10px;
-      text-transform:uppercase;
-      letter-spacing:.05em;
+      display:inline-block;padding:2px 6px;border-radius:999px;
+      font-size:10px;text-transform:uppercase;letter-spacing:.05em;
     }
     .badge-priority-a{background:rgba(255,210,130,.18);color:#ffd282;}
     .badge-priority-b{background:rgba(130,190,255,.18);color:#a5c7ff;}
     .badge-priority-c{background:rgba(180,255,190,.14);color:#b9ffbf;}
-
     .badge-status-new{background:rgba(130,190,255,.18);color:#a5c7ff;}
     .badge-status-inprogress{background:rgba(255,210,130,.18);color:#ffd282;}
     .badge-status-closedwon{background:rgba(180,255,190,.18);color:#b9ffbf;}
     .badge-status-closedlost{background:rgba(255,150,150,.18);color:#ffb1b1;}
-
     .btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:4px;
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.2);
-      background:rgba(255,255,255,.04);
-      color:#f5f5ff;
-      font-size:11px;
-      cursor:pointer;
-      transition:.18s;
-      text-decoration:none;
+      display:inline-flex;align-items:center;justify-content:center;gap:4px;
+      padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.2);
+      background:rgba(255,255,255,.04);color:#f5f5ff;
+      font-size:11px;cursor:pointer;transition:.18s;text-decoration:none;
     }
-    .btn:hover{
-      background:rgba(255,255,255,.1);
-      transform:translateY(-1px);
-    }
+    .btn:hover{background:rgba(255,255,255,.1);transform:translateY(-1px);}
     .btn-primary{
-      border-color:transparent;
-      background:var(--grad);
-      color:#050713;
-      font-weight:600;
-      box-shadow:0 0 0 1px rgba(110,168,255,.4);
+      border-color:transparent;background:var(--grad);color:#050713;
+      font-weight:600;box-shadow:0 0 0 1px rgba(110,168,255,.4);
     }
-    .btn-small{
-      padding:4px 8px;
-      font-size:10px;
-    }
-
+    .btn-small{padding:4px 8px;font-size:10px;}
     .notes-input{
-      width:100%;
-      min-width:160px;
-      max-width:300px;
-      min-height:40px;
-      border-radius:10px;
+      width:100%;min-width:160px;max-width:300px;
+      min-height:40px;border-radius:10px;
       border:1px solid rgba(255,255,255,.16);
-      background:rgba(0,0,0,.18);
-      color:#f5f5ff;
-      font-size:11px;
-      padding:4px 6px;
-      resize:vertical;
-      font-family:inherit;
+      background:rgba(0,0,0,.18);color:#f5f5ff;
+      font-size:11px;padding:4px 6px;resize:vertical;font-family:inherit;
     }
-    .select-inline,
-    .date-inline{
-      width:100%;
-      max-width:120px;
-      padding:4px 6px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.16);
-      background:rgba(0,0,0,.18);
-      color:#f5f5ff;
-      font-size:11px;
+    .select-inline,.date-inline{
+      width:100%;max-width:120px;padding:4px 6px;
+      border-radius:999px;border:1px solid rgba(255,255,255,.16);
+      background:rgba(0,0,0,.18);color:#f5f5ff;font-size:11px;
     }
-
-    .status-msg{
-      margin-top:4px;
-      font-size:11px;
-      color:var(--muted);
-    }
-
-    /* Header extra bits for email + logout */
+    .status-msg{margin-top:4px;font-size:11px;color:var(--muted);}
     .header-user{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      font-size:11px;
-      color:var(--muted);
-      margin-left:12px;
+      display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted);margin-left:12px;
     }
     .btn-logout{
-      border-radius:999px;
-      padding:6px 10px;
-      border:1px solid rgba(255,255,255,.55);
-      background:rgba(255,255,255,.08);
-      font-size:11px;
-      cursor:pointer;
-      display:inline-flex;
-      align-items:center;
-      gap:4px;
+      border-radius:999px;padding:6px 10px;border:1px solid rgba(255,255,255,.55);
+      background:rgba(255,255,255,.08);font-size:11px;cursor:pointer;
+      display:inline-flex;align-items:center;gap:4px;
     }
-    .btn-logout:hover{
-      background:rgba(255,255,255,.16);
-      transform:translateY(-1px);
-    }
-    @media(max-width:940px){
-      .header-user{display:none;}
-    }
-
+    .btn-logout:hover{background:rgba(255,255,255,.16);transform:translateY(-1px);}
+    @media(max-width:940px){.header-user{display:none;}}
     .muted-link{
-      font-size:11px;
-      color:var(--muted);
-      text-decoration:underline;
-      text-decoration-style:dotted;
+      font-size:11px;color:var(--muted);
+      text-decoration:underline;text-decoration-style:dotted;
     }
   </style>
 </head>
 <body>
 
-<!-- BrandCrafters header with dashboard links (Version B) -->
 <header class="site-header">
   <div class="container header-inner">
     <a class="logo" href="index.html">
       <span class="logo-mark">BC</span><span>BrandCrafters</span>
     </a>
 
-    <!-- Desktop Nav -->
     <nav class="nav desktop-nav">
-      <!-- Public nav -->
       <a href="index.html" class="nav-link">Home</a>
       <a href="pricing.html" class="nav-link">Pricing</a>
       <a href="customer-inquiry.html" class="btn btn-outline">Customer Portal</a>
 
-      <!-- Dashboard-specific links -->
       <a href="dashboard.html" class="nav-link">Admin Dashboard</a>
       <a href="dashboard-leads-upload.html" class="nav-link">Leads &amp; CSV</a>
+      <a href="dashboard-commissions.html" class="nav-link">Commission Rules</a>
       <a href="contractor-portal.html" class="nav-link active">Contractor Portal</a>
 
-      <!-- User + logout -->
       <div class="header-user">
         <span id="userEmail"></span>
         <button id="logoutBtn" class="btn-logout">Log Out</button>
       </div>
     </nav>
 
-    <!-- Mobile: Hamburger -->
     <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
   </div>
 
-  <!-- Mobile Drawer -->
   <nav class="mobile-drawer" aria-hidden="true">
     <div class="drawer-header">
       <a class="logo" href="index.html">
@@ -258,15 +156,12 @@
       </a>
       <button class="menu-close" aria-label="Close menu">✕</button>
     </div>
-
-    <!-- Public nav -->
     <a class="drawer-link" href="index.html">Home</a>
     <a class="drawer-link" href="pricing.html">Pricing</a>
     <a class="drawer-link" href="customer-inquiry.html">Customer Portal</a>
-
-    <!-- Dashboard-specific -->
     <a class="drawer-link" href="dashboard.html">Admin Dashboard</a>
     <a class="drawer-link" href="dashboard-leads-upload.html">Leads &amp; CSV</a>
+    <a class="drawer-link" href="dashboard-commissions.html">Commission Rules</a>
     <a class="drawer-link" href="contractor-portal.html">Contractor Portal</a>
   </nav>
   <div class="drawer-backdrop" aria-hidden="true"></div>
@@ -276,8 +171,9 @@
   <section>
     <h1>Contractor Portal</h1>
     <p class="subhead">
-      Claim leads, update call statuses, and track your commissions.  
-      For scripts, pricing, and pre-made messages, see
+      Claim leads, update call statuses, and track your commissions for new website sales.<br>
+      Commission structure: <b>Starter $50 · Business $75 · E-Com $100 per new website sold</b>.<br>
+      For scripts and pricing notes, see
       <a href="contractor-webbook.html" class="muted-link" target="_blank">Scripts &amp; WebBook</a>.
     </p>
   </section>
@@ -294,7 +190,9 @@
     <article class="card">
       <div class="card-label">Closed Won · Est. Commission</div>
       <div class="card-value" id="summaryCommission">$0.00</div>
-      <div class="status-msg" id="summaryClosedWon">0 closed won · $100 per website sale</div>
+      <div class="status-msg" id="summaryClosedWon">
+        0 closed won · Starter $50 · Business $75 · E-Com $100 per sale.
+      </div>
     </article>
   </section>
 
@@ -303,19 +201,19 @@
       <span style="font-size:11px;color:var(--muted);">Filter:</span>
       <select id="filterScope">
         <option value="mine">My leads (assigned to me)</option>
-        <option value="unassigned">Unassigned leads only</option>
-        <option value="mine_unassigned">My + Unassigned (default)</option>
+        <option value="unassigned">Unassigned only</option>
+        <option value="mine_unassigned" selected>My + Unassigned (default)</option>
         <option value="all">All leads I can see</option>
       </select>
       <select id="filterStatus">
-        <option value="open">Open (new + in progress)</option>
+        <option value="open" selected>Open (new + in progress)</option>
         <option value="new">New only</option>
         <option value="in_progress">In progress only</option>
         <option value="closed">Closed (won + lost)</option>
         <option value="any">Any status</option>
       </select>
       <span style="flex:1 1 auto;"></span>
-      <span class="muted">Tip: Claim a lead first, then update status &amp; notes.</span>
+      <span class="status-msg">Claim a lead, then update status &amp; notes as you work it.</span>
     </div>
 
     <div style="overflow:auto;max-height:520px;">
@@ -348,15 +246,11 @@
   </div>
 </footer>
 
-<!-- Year -->
 <script>
   const yearSpan = document.getElementById('year');
-  if (yearSpan) {
-    yearSpan.textContent = new Date().getFullYear();
-  }
+  if (yearSpan) yearSpan.textContent = new Date().getFullYear();
 </script>
 
-<!-- Supabase + Contractor Logic -->
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script>
   const SUPABASE_URL = "https://vekoulqehexqosgwacwa.supabase.co";
@@ -381,12 +275,8 @@
   let allLeads = [];
 
   async function guardContractor(){
-    const { data, error } = await supabaseClient.auth.getUser();
-    if (error) {
-      console.error("auth.getUser error:", error);
-    }
+    const { data } = await supabaseClient.auth.getUser();
     if (!data || !data.user) {
-      // not logged in -> send to login gate (dashboard.html)
       window.location.href = LOGIN_PAGE_URL;
       return null;
     }
@@ -395,7 +285,6 @@
     if (userEmailSpan) userEmailSpan.textContent = email || "";
     if (summaryEmail) summaryEmail.textContent = email || "—";
 
-    // If this is admin, send to admin dashboard, not contractor portal
     if (email === ADMIN_EMAIL) {
       window.location.href = "dashboard.html";
       return null;
@@ -417,10 +306,10 @@
 
   function badgeForPriority(p){
     const pri = (p || "").toUpperCase();
-    if (pri === "A") return `<span class="badge badge-priority-a">A · Hot (No Site)</span>`;
+    if (pri === "A") return `<span class="badge badge-priority-a">A · No Site</span>`;
     if (pri === "B") return `<span class="badge badge-priority-b">B · Needs Upgrade</span>`;
     if (pri === "C") return `<span class="badge badge-priority-c">C · Warm</span>`;
-    return `<span class="badge">?</span>`;
+    return `<span class="badge">${pri || "?"}</span>`;
   }
 
   function badgeForStatus(s){
@@ -430,6 +319,14 @@
     if (st === "closed won" || st === "closed_won") return `<span class="badge badge-status-closedwon">Closed Won</span>`;
     if (st === "closed lost" || st === "closed_lost") return `<span class="badge badge-status-closedlost">Closed Lost</span>`;
     return `<span class="badge">${st}</span>`;
+  }
+
+  function defaultCommissionForPackage(pkg){
+    const p = (pkg || "").toLowerCase();
+    if (p.includes("starter")) return 50;
+    if (p.includes("business")) return 75;
+    if (p.includes("e-commerce") || p.includes("ecommerce") || p.includes("store")) return 100;
+    return 100;
   }
 
   function filterLeads(){
@@ -442,13 +339,10 @@
       const assigned = ld.assigned_caller_email;
       const st = (ld.call_status || "new").toLowerCase();
 
-      // scope
       if (scope === "mine" && assigned !== currentUserEmail) return false;
       if (scope === "unassigned" && assigned) return false;
       if (scope === "mine_unassigned" && !(assigned === currentUserEmail || !assigned)) return false;
-      // scope "all" -> no restriction
 
-      // status
       if (statusFilter === "open") {
         if (!(st === "new" || st === "in progress" || st === "in_progress")) return false;
       } else if (statusFilter === "new") {
@@ -461,7 +355,6 @@
       return true;
     });
 
-    // sort by priority A -> B -> C, then by created_at desc
     const priOrder = { "A":0, "B":1, "C":2 };
     rows.sort((a,b) => {
       const pa = priOrder[(a.priority || "").toUpperCase()] ?? 9;
@@ -492,8 +385,8 @@
     rows.forEach(ld => {
       const tr = document.createElement("tr");
 
-      const st = (ld.call_status || "new").toLowerCase();
-      const isClosedWon = (st === "closed won" || st === "closed_won");
+      const stRaw = (ld.call_status || "new").toLowerCase();
+      const isClosedWon = stRaw === "closed won" || stRaw === "closed_won";
       const assigned = ld.assigned_caller_email;
       const isMine = assigned === currentUserEmail;
 
@@ -515,15 +408,9 @@
       const tdWeb = document.createElement("td");
       const web = ld.website || "";
       const soc = ld.social || "";
-      if (web) {
-        tdWeb.innerHTML = `<div><a href="${web}" target="_blank">${web}</a></div>`;
-      }
-      if (soc) {
-        tdWeb.innerHTML += `<div class="status-msg"><a href="${soc}" target="_blank">${soc}</a></div>`;
-      }
-      if (!web && !soc) {
-        tdWeb.textContent = "—";
-      }
+      if (web) tdWeb.innerHTML = `<div><a href="${web}" target="_blank">${web}</a></div>`;
+      if (soc) tdWeb.innerHTML += `<div class="status-msg"><a href="${soc}" target="_blank">${soc}</a></div>`;
+      if (!web && !soc) tdWeb.textContent = "—";
       tr.appendChild(tdWeb);
 
       const tdPri = document.createElement("td");
@@ -543,7 +430,7 @@
       const notesId = `notes-${ld.id}`;
       const dateId  = `date-${ld.id}`;
       tdNotes.innerHTML = `
-        <textarea id="${notesId}" class="notes-input" placeholder="Call notes, promises, follow-up plan…">${ld.notes || ""}</textarea>
+        <textarea id="${notesId}" class="notes-input" placeholder="Call notes, follow-ups…">${ld.notes || ""}</textarea>
         <div style="margin-top:4px;">
           <label style="font-size:10px;color:var(--muted);display:block;">
             Last Contact
@@ -555,13 +442,13 @@
 
       const tdActions = document.createElement("td");
       const selectId = `status-${ld.id}`;
-      const canEdit = !assigned || isMine; // only unassigned or your own
+      const canEdit = !assigned || isMine;
       tdActions.innerHTML = `
         <select id="${selectId}" class="select-inline" ${canEdit ? "" : "disabled"}>
-          <option value="new" ${st === "new" ? "selected" : ""}>New</option>
-          <option value="in progress" ${st === "in progress" || st === "in_progress" ? "selected" : ""}>In Progress</option>
+          <option value="new" ${stRaw === "new" ? "selected" : ""}>New</option>
+          <option value="in progress" ${stRaw === "in progress" || stRaw === "in_progress" ? "selected" : ""}>In Progress</option>
           <option value="closed won" ${isClosedWon ? "selected" : ""}>Closed Won</option>
-          <option value="closed lost" ${st === "closed lost" || st === "closed_lost" ? "selected" : ""}>Closed Lost</option>
+          <option value="closed lost" ${stRaw === "closed lost" || stRaw === "closed_lost" ? "selected" : ""}>Closed Lost</option>
         </select>
         <div style="margin-top:4px;display:flex;flex-direction:column;gap:4px;">
           ${assigned ? "" : `<button class="btn btn-small btn-primary" data-action="claim" data-id="${ld.id}">Claim Lead</button>`}
@@ -579,10 +466,7 @@
   async function loadLeads(){
     tableStatusMsg.textContent = "Loading leads…";
 
-    const { data, error } = await supabaseClient
-      .from("call_leads")
-      .select("*");
-
+    const { data, error } = await supabaseClient.from("call_leads").select("*");
     if (error){
       console.error("call_leads error:", error);
       tableStatusMsg.textContent = "Error loading leads: " + error.message;
@@ -591,25 +475,31 @@
 
     allLeads = data || [];
 
-    const myOpen = allLeads.filter(ld => {
-      const st = (ld.call_status || "new").toLowerCase();
-      return ld.assigned_caller_email === currentUserEmail &&
-        (st === "new" || st === "in progress" || st === "in_progress");
-    }).length;
-
+    let myOpen = 0;
     let myClosedWon = 0;
+    let myCommission = 0;
+
     allLeads.forEach(ld => {
       const st = (ld.call_status || "new").toLowerCase();
-      if (ld.assigned_caller_email === currentUserEmail &&
-          (st === "closed won" || st === "closed_won")) {
+      const isClosedWon = st === "closed won" || st === "closed_won";
+      const isMine = ld.assigned_caller_email === currentUserEmail;
+
+      if (isMine && (st === "new" || st === "in progress" || st === "in_progress")) {
+        myOpen += 1;
+      }
+      if (isMine && isClosedWon) {
         myClosedWon += 1;
+        const commission = ld.commission_amount != null
+          ? Number(ld.commission_amount) || 0
+          : defaultCommissionForPackage(ld.package_type);
+        myCommission += commission;
       }
     });
-    const myCommission = myClosedWon * 100;
 
     summaryOpenLeads.textContent = myOpen;
     summaryCommission.textContent = formatMoney(myCommission);
-    summaryClosedWon.textContent = `${myClosedWon} closed won · $100 per website sale`;
+    summaryClosedWon.textContent =
+      `${myClosedWon} closed won · Starter $50 · Business $75 · E-Com $100 per sale.`;
 
     filterScopeSelect.value = "mine_unassigned";
     filterStatusSelect.value = "open";
@@ -665,11 +555,8 @@
     const action = btn.getAttribute("data-action");
     if (!id || !action) return;
 
-    if (action === "claim") {
-      await claimLead(id);
-    } else if (action === "save") {
-      await saveLead(id);
-    }
+    if (action === "claim") await claimLead(id);
+    else if (action === "save") await saveLead(id);
   });
 
   filterScopeSelect.addEventListener("change", filterLeads);
