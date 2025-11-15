@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Dashboard — BrandCrafters</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="logo" href="index.html">
+      <span class="logo-mark">BC</span><span>BrandCrafters</span>
+    </a>
+
+    <nav class="nav desktop-nav">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="pricing.html" class="nav-link">Pricing</a>
+      <a href="customer-inquiry.html" class="nav-link">Customer Portal</a>
+      <a href="dashboard.html" class="nav-link active">Admin</a>
+    </nav>
+
+    <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <nav class="mobile-drawer" aria-hidden="true">
+    <div class="drawer-header">
+      <a class="logo" href="index.html">
+        <span class="logo-mark">BC</span><span>BrandCrafters</span>
+      </a>
+      <button class="menu-close" aria-label="Close menu">✕</button>
+    </div>
+    <a class="drawer-link" href="index.html">Home</a>
+    <a class="drawer-link" href="pricing.html">Pricing</a>
+    <a class="drawer-link" href="customer-inquiry.html">Customer Portal</a>
+    <a class="drawer-link highlight" href="dashboard.html">Admin</a>
+  </nav>
+
+  <div class="drawer-backdrop" aria-hidden="true"></div>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <h1 class="headline">Admin Dashboard</h1>
+    <p class="subhead">
+      See all paid website orders and customer requests in one place.
+      This page is for your internal use only.
+    </p>
+  </div>
+</section>
+
+<section class="container">
+  <div class="card" style="margin-bottom:20px;">
+    <h2>Summary</h2>
+    <p class="subhead" id="summaryText">Loading...</p>
+  </div>
+
+  <div class="cta-row" style="justify-content:flex-start;gap:10px;margin-bottom:18px;">
+    <button class="btn btn-primary" id="tabOnboarding" type="button">New Website Orders</button>
+    <button class="btn btn-ghost" id="tabSupport" type="button">Support Requests</button>
+  </div>
+
+  <!-- Onboarding Table -->
+  <section id="onboardingSection">
+    <h2>New Website Orders (Onboarding)</h2>
+    <p class="form-note">Sorted by newest first. Each row = one paid project you need to build.</p>
+    <div class="glass" style="overflow-x:auto;padding:0;">
+      <table style="width:100%;border-collapse:collapse;font-size:14px;">
+        <thead>
+          <tr>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);text-align:left;">Created</th>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);text-align:left;">Name / Email</th>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);text-align:left;">Business</th>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);text-align:left;">Package</th>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);text-align:left;">Pages</th>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);text-align:left;">Add-ons</th>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);text-align:left;">Notes</th>
+          </tr>
+        </thead>
+        <tbody id="onboardingBody">
+          <tr><td style="padding:10px;" colspan="7">Loading…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Support Requests Table -->
+  <section id="supportSection" style="display:none;">
+    <h2>Customer Support Requests</h2>
+    <p class="form-note">Updates, add-ons, and other requests from existing clients.</p>
+    <div class="glass" style="overflow-x:auto;padding:0;">
+      <table style="width:100%;border-collapse:collapse;font-size:14px;">
+        <thead>
+          <tr>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);text-align:left;">Created</th>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);text-align:left;">Name / Email</th>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);text-align:left;">Business</th>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);text-align:left;">Type</th>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);text-align:left;">Urgency</th>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);text-align:left;">Details</th>
+          </tr>
+        </thead>
+        <tbody id="supportBody">
+          <tr><td style="padding:10px;" colspan="6">Loading…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</section>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>© <span id="year"></span> BrandCrafters — Internal Dashboard</div>
+  </div>
+</footer>
+
+<!-- Supabase + dashboard logic -->
+<script type="module">
+  import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+  const supabase = createClient(
+    "https://vekoulqehexqosgwacwa.supabase.co",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4"
+  );
+
+  const onboardingBody = document.getElementById("onboardingBody");
+  const supportBody = document.getElementById("supportBody");
+  const summaryText = document.getElementById("summaryText");
+  const onboardingSection = document.getElementById("onboardingSection");
+  const supportSection = document.getElementById("supportSection");
+  const tabOnboarding = document.getElementById("tabOnboarding");
+  const tabSupport = document.getElementById("tabSupport");
+
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  function formatDate(iso) {
+    if (!iso) return "";
+    const d = new Date(iso);
+    return d.toLocaleString();
+  }
+
+  function shorten(text, max = 120) {
+    if (!text) return "";
+    text = String(text);
+    return text.length > max ? text.slice(0, max) + "…" : text;
+  }
+
+  async function loadData() {
+    summaryText.textContent = "Loading orders and requests...";
+
+    const [onbRes, supRes] = await Promise.all([
+      supabase.from("onboarding_submissions").select("*").order("created_at", { ascending: false }),
+      supabase.from("support_requests").select("*").order("created_at", { ascending: false })
+    ]);
+
+    // Onboarding
+    onboardingBody.innerHTML = "";
+    if (onbRes.error) {
+      console.error(onbRes.error);
+      onboardingBody.innerHTML = `<tr><td style="padding:10px;color:#f99;" colspan="7">Error loading onboarding_submissions.</td></tr>`;
+    } else if (!onbRes.data || onbRes.data.length === 0) {
+      onboardingBody.innerHTML = `<tr><td style="padding:10px;" colspan="7">No website orders yet.</td></tr>`;
+    } else {
+      onbRes.data.forEach(row => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td style="padding:8px;vertical-align:top;">${formatDate(row.created_at)}</td>
+          <td style="padding:8px;vertical-align:top;">
+            <div><b>${row.name || ""}</b></div>
+            <div style="font-size:12px;opacity:.8;">${row.email || ""}</div>
+          </td>
+          <td style="padding:8px;vertical-align:top;">${shorten(row.business_name, 40)}</td>
+          <td style="padding:8px;vertical-align:top;">${row.package_name || ""}</td>
+          <td style="padding:8px;vertical-align:top;">${Array.isArray(row.pages) ? row.pages.join(", ") : ""}</td>
+          <td style="padding:8px;vertical-align:top;">${Array.isArray(row.addons) ? row.addons.join(", ") : ""}</td>
+          <td style="padding:8px;vertical-align:top;">${shorten(row.page_notes || row.extra_notes, 120)}</td>
+        `;
+        onboardingBody.appendChild(tr);
+      });
+    }
+
+    // Support
+    supportBody.innerHTML = "";
+    if (supRes.error) {
+      console.error(supRes.error);
+      supportBody.innerHTML = `<tr><td style="padding:10px;color:#f99;" colspan="6">Error loading support_requests.</td></tr>`;
+    } else if (!supRes.data || supRes.data.length === 0) {
+      supportBody.innerHTML = `<tr><td style="padding:10px;" colspan="6">No support requests yet.</td></tr>`;
+    } else {
+      supRes.data.forEach(row => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td style="padding:8px;vertical-align:top;">${formatDate(row.created_at)}</td>
+          <td style="padding:8px;vertical-align:top;">
+            <div><b>${row.name || ""}</b></div>
+            <div style="font-size:12px;opacity:.8;">${row.email || ""}</div>
+          </td>
+          <td style="padding:8px;vertical-align:top;">${shorten(row.business, 40)}</td>
+          <td style="padding:8px;vertical-align:top;">${row.request_type || ""}</td>
+          <td style="padding:8px;vertical-align:top;">${row.urgency || ""}</td>
+          <td style="padding:8px;vertical-align:top;">${shorten(row.details, 160)}</td>
+        `;
+        supportBody.appendChild(tr);
+      });
+    }
+
+    const onbCount = onbRes.data ? onbRes.data.length : 0;
+    const supCount = supRes.data ? supRes.data.length : 0;
+
+    summaryText.textContent =
+      `You currently have ${onbCount} website order(s) and ${supCount} support request(s) in the system.`;
+  }
+
+  // Tabs switch
+  function showOnboarding() {
+    onboardingSection.style.display = "";
+    supportSection.style.display = "none";
+    tabOnboarding.classList.add("btn-primary");
+    tabOnboarding.classList.remove("btn-ghost");
+    tabSupport.classList.add("btn-ghost");
+    tabSupport.classList.remove("btn-primary");
+  }
+
+  function showSupport() {
+    onboardingSection.style.display = "none";
+    supportSection.style.display = "";
+    tabSupport.classList.add("btn-primary");
+    tabSupport.classList.remove("btn-ghost");
+    tabOnboarding.classList.add("btn-ghost");
+    tabOnboarding.classList.remove("btn-primary");
+  }
+
+  tabOnboarding.addEventListener("click", showOnboarding);
+  tabSupport.addEventListener("click", showSupport);
+
+  // Default view
+  showOnboarding();
+  loadData();
+</script>
+
+</body>
+  </html>
