@@ -32,21 +32,43 @@
       padding:10px 18px;
       display:flex;align-items:center;justify-content:space-between;gap:12px;
     }
-    .brand{
-      display:flex;flex-direction:column;gap:2px;
+    .header-left{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
     }
-    .brand-title{
-      font-weight:700;letter-spacing:.08em;font-size:14px;text-transform:uppercase;
+    .logo{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:800;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-size:14px;
     }
-    .brand-sub{font-size:12px;color:var(--muted);}
+    .logo-mark{
+      display:inline-grid;
+      place-items:center;
+      width:32px;
+      height:32px;
+      border-radius:12px;
+      background:var(--grad);
+      color:#050713;
+      font-weight:800;
+      font-size:14px;
+    }
+    .brand-sub{
+      font-size:12px;
+      color:var(--muted);
+    }
     .nav{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
     .nav a{
       font-size:13px;padding:6px 10px;border-radius:999px;
       border:1px solid rgba(255,255,255,.22);
+      background:rgba(255,255,255,.04);
       text-decoration:none;
       color:var(--text);
       transition:.18s;
-      background:rgba(255,255,255,.04);
     }
     .nav a.primary{
       border-color:transparent;
@@ -103,6 +125,7 @@
       border-radius:16px;
       border:1px solid var(--border);
       padding:16px 14px;
+      margin-bottom:16px;
     }
     .card h2{margin:0 0 8px;font-size:16px;}
     .card p{margin:0 0 6px;font-size:13px;}
@@ -114,13 +137,6 @@
       font-size:20px;font-weight:700;margin-top:4px;
     }
     .stat-sub{font-size:11px;color:var(--muted);margin-top:2px;}
-    .pill{
-      display:inline-block;padding:2px 8px;border-radius:999px;
-      font-size:11px;
-    }
-    .pill-green{background:rgba(155,255,191,.15);}
-    .pill-red{background:rgba(255,155,155,.15);}
-    .pill-blue{background:rgba(110,168,255,.15);}
     table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;}
     th,td{
       border-bottom:1px solid rgba(255,255,255,.08);
@@ -135,13 +151,17 @@
       color:var(--muted);
     }
     .small{font-size:12px;color:var(--muted);}
-    .tag{
-      display:inline-block;border-radius:999px;
-      border:1px solid rgba(255,255,255,.2);
-      padding:2px 7px;font-size:11px;
+    .pill{
+      display:inline-block;
+      padding:2px 8px;
+      border-radius:999px;
+      font-size:11px;
+      background:rgba(110,168,255,.15);
     }
+    .pill.completed{background:rgba(111,255,193,.15);}
+    .pill.cancelled{background:rgba(255,164,164,.2);}
 
-    /* Login section */
+    /* Login */
     .login-wrap{
       display:flex;
       justify-content:center;
@@ -191,17 +211,25 @@
       font-size:12px;
       color:#ffb3b3;
     }
+    .center-msg{
+      text-align:center;
+      margin-top:20px;
+      font-size:13px;
+      color:var(--muted);
+    }
   </style>
 </head>
 <body>
 <header>
-  <div class="brand">
-    <span class="brand-title">BrandCrafters</span>
-    <span class="brand-sub">Admin · Money & Projects</span>
+  <div class="header-left">
+    <a class="logo" href="index.html">
+      <span class="logo-mark">BC</span><span>BrandCrafters</span>
+    </a>
+    <span class="brand-sub">Admin · Money &amp; Projects</span>
   </div>
   <div class="nav">
     <a href="dashboard.html" class="primary">Dashboard</a>
-    <a href="dashboard-leads-upload.html">Leads & CSV</a>
+    <a href="dashboard-leads-upload.html">Leads &amp; CSV</a>
     <a href="contractor-portal.html" target="_blank">Contractor Portal</a>
     <span class="user-email" id="userEmail"></span>
     <button id="logoutBtn" class="logout-btn" type="button">Log Out</button>
@@ -209,7 +237,6 @@
 </header>
 
 <main>
-
   <!-- LOGIN VIEW -->
   <section id="loginSection" class="login-wrap">
     <div class="card login-card">
@@ -226,15 +253,19 @@
         <button class="login-btn" type="submit">Sign In</button>
         <div id="loginError" class="login-error"></div>
       </form>
+
+      <p class="center-msg">
+        Contractors should use the <b>Contractor Portal</b> link in the header.
+      </p>
     </div>
   </section>
 
-  <!-- DASHBOARD VIEW -->
+  <!-- ADMIN DASHBOARD VIEW -->
   <section id="dashboardSection" style="display:none;">
     <section>
       <h1>Overview</h1>
       <p class="subhead">
-        Quick snapshot of one-time project money, monthly maintenance, upcoming bills, and lead pipeline.
+        Snapshot of one-time project money, monthly maintenance, upcoming bills, and lead pipeline.
       </p>
     </section>
 
@@ -243,22 +274,22 @@
       <article class="card">
         <div class="stat-label">Lifetime Project Revenue (one-time)</div>
         <div class="stat-value" id="lifetimeRevenue">$0.00</div>
-        <div class="stat-sub">Sum of total_price on completed onboarding submissions.</div>
+        <div class="stat-sub">Sum of total_price on onboarding submissions.</div>
       </article>
 
       <article class="card">
         <div class="stat-label">Active Monthly Income</div>
         <div class="stat-value" id="monthlyIncome">$0.00</div>
         <div class="stat-sub">
-          Sum of monthly_fee for all projects with monthly_fee &gt; 0.
+          Sum of monthly_fee for projects where monthly_fee &gt; 0.
         </div>
       </article>
 
       <article class="card">
-        <div class="stat-label">Active Monthly Bills (Tools &amp; Client Bills)</div>
+        <div class="stat-label">Active Monthly Bills</div>
         <div class="stat-value" id="monthlyBills">$0.00</div>
         <div class="stat-sub">
-          Recurring_expenses where frequency = 'monthly' and is_active = true.
+          Sum of recurring_expenses where frequency = 'monthly' and is_active = true.
         </div>
       </article>
     </section>
@@ -269,7 +300,7 @@
         <div class="stat-label">Est. Monthly Net (Maintenance - Bills)</div>
         <div class="stat-value" id="monthlyNet">$0.00</div>
         <div class="stat-sub">
-          Quick check if maintenance fees can cover recurring expenses.
+          Quick check if maintenance fees cover your recurring expenses.
         </div>
       </article>
 
@@ -277,7 +308,7 @@
         <div class="stat-label">Closed Won Leads · This Month</div>
         <div class="stat-value" id="closedWonMonth">0</div>
         <div class="stat-sub">
-          Leads in call_leads where status = 'closed won' and last_contact_date is in this month.
+          Leads in call_leads where call_status = 'closed won' this month.
         </div>
       </article>
 
@@ -285,7 +316,7 @@
         <div class="stat-label">Estimated Commissions · This Month</div>
         <div class="stat-value" id="commissionMonth">$0.00</div>
         <div class="stat-sub">
-          $100 per closed website sale (no commission on add-ons only).
+          Based on $100 per closed website sale by default.
         </div>
       </article>
     </section>
@@ -293,9 +324,9 @@
     <!-- PROJECTS & EXPENSES -->
     <section class="grid-2" style="margin-top:16px;">
       <article class="card">
-        <h2>Client Projects (Onboarding)</h2>
+        <h2>Client Projects</h2>
         <p class="small">
-          Last 6 onboarding submissions with totals and monthly fees. You’ll use the projects/dashboard pages to drill into each.
+          Last 6 onboarding submissions with totals and monthly fees.
         </p>
         <table id="projectsTable">
           <thead>
@@ -313,7 +344,7 @@
       <article class="card">
         <h2>Upcoming Recurring Bills</h2>
         <p class="small">
-          Next 6 active recurring_expenses sorted by next_due_date.
+          Next 6 active recurring_expenses by next_due_date.
         </p>
         <table id="billsTable">
           <thead>
@@ -334,7 +365,7 @@
     <section class="card" style="margin-top:16px;">
       <h2>Lead Pipeline Snapshot</h2>
       <p class="small">
-        Quick check before you go deeper into the full Leads &amp; CSV dashboard.
+        Quick check before diving into the Leads &amp; CSV page.
       </p>
       <div class="grid-2">
         <div>
@@ -362,7 +393,7 @@
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script>
   const SUPABASE_URL = "https://vekoulqehexqosgwacwa.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiIsInZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
   const ADMIN_EMAIL = "srarnold216@gmail.com";
 
   const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -433,12 +464,10 @@
     // MONEY SUMMARY
     let lifetimeRev = 0;
     let monthlyFeeTotal = 0;
-
     onboarding.forEach(p => {
       if (p.total_price) lifetimeRev += Number(p.total_price) || 0;
       if (p.monthly_fee) monthlyFeeTotal += Number(p.monthly_fee) || 0;
     });
-
     lifetimeRevenue.textContent = formatMoney(lifetimeRev);
     monthlyIncome.textContent   = formatMoney(monthlyFeeTotal);
 
@@ -474,10 +503,10 @@
         tr.appendChild(tdMonthly);
 
         const tdStatus = document.createElement("td");
-        const pill = document.createElement("span");
-        pill.className = "pill " + (status === "completed" ? "pill-green" : status === "cancelled" ? "pill-red" : "pill-blue");
-        pill.textContent = status;
-        tdStatus.appendChild(pill);
+        const span = document.createElement("span");
+        span.className = "pill " + (status === "completed" ? "completed" : status === "cancelled" ? "cancelled" : "");
+        span.textContent = status;
+        tdStatus.appendChild(span);
         tr.appendChild(tdStatus);
 
         projectsTableBody.appendChild(tr);
@@ -509,7 +538,7 @@
 
         billsTableBody.appendChild(tr);
       });
-    billsNote.textContent = bills.length ? "" : "No recurring_expenses found yet. You can add them in Supabase.";
+    billsNote.textContent = bills.length ? "" : "No recurring_expenses found yet.";
 
     // LEADS SNAPSHOT
     const statusCounts = {};
@@ -525,7 +554,7 @@
         const d = new Date(ld.last_contact_date);
         if (d >= monthStart && d <= monthEnd) {
           closedThisMonth += 1;
-          commissionThisMonth += 100; // Your base per closed website sale
+          commissionThisMonth += 100; // base
         }
       }
 
@@ -546,12 +575,9 @@
     commissionMonth.textContent = formatMoney(commissionThisMonth);
 
     const parts = [];
-    Object.entries(statusCounts).forEach(([s, count]) => {
-      parts.push(`${s}: ${count}`);
-    });
+    Object.entries(statusCounts).forEach(([s, count]) => parts.push(`${s}: ${count}`));
     leadStatusStats.textContent = parts.length ? parts.join(" · ") : "No leads yet.";
 
-    // Top callers
     topCallersTableBody.innerHTML = "";
     const sortedCallers = Array.from(callerStats.entries())
       .sort((a,b) => b[1].commission - a[1].commission)
@@ -568,6 +594,7 @@
     } else {
       sortedCallers.forEach(([email, stats]) => {
         const tr = document.createElement("tr");
+
         const tdEmail = document.createElement("td");
         tdEmail.textContent = email;
         tr.appendChild(tdEmail);
@@ -585,7 +612,7 @@
     }
   }
 
-  // Handle login form
+  // Login form
   loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     loginError.textContent = "";
@@ -593,10 +620,7 @@
     const email = loginForm.email.value.trim();
     const password = loginForm.password.value;
 
-    const { data, error } = await supabaseClient.auth.signInWithPassword({
-      email,
-      password,
-    });
+    const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
 
     if (error) {
       console.error("Login error:", error);
@@ -615,8 +639,9 @@
       showDashboard();
       loadDashboard();
     } else {
-      // Contractor / non-admin
-      window.location.href = "contractor-portal.html";
+      // Contractor – they should use contractor portal, but NO redirect loop
+      showLogin();
+      loginError.textContent = "This dashboard is admin-only. Use the Contractor Portal link in the header.";
     }
   });
 
@@ -626,26 +651,20 @@
     showLogin();
   });
 
-  // On load, decide login vs dashboard
+  // On load: check if already logged in
   (async () => {
     const { data, error } = await supabaseClient.auth.getUser();
     if (error || !data || !data.user) {
       showLogin();
       return;
     }
-
     const user = data.user;
-    if (!user.email) {
-      showLogin();
-      return;
-    }
-
     if (user.email === ADMIN_EMAIL) {
       userEmailSpan.textContent = user.email;
       showDashboard();
       loadDashboard();
     } else {
-      window.location.href = "contractor-portal.html";
+      showLogin();
     }
   })();
 </script>
