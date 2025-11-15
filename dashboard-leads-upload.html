@@ -4,82 +4,49 @@
   <meta charset="utf-8" />
   <title>BrandCrafters — Leads & CSV Upload</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
-  <style>
-    :root{
-      --bg:#050713;
-      --panel:rgba(255,255,255,.04);
-      --border:rgba(255,255,255,.08);
-      --text:#f5f5ff;
-      --muted:#b5b7d8;
-      --grad:linear-gradient(135deg,#6ea8ff,#b166ff);
-      --accent:#6ea8ff;
-    }
-    *{box-sizing:border-box;}
-    body{
-      margin:0;
-      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-      background:
-        radial-gradient(1200px 600px at -10% -10%, #18122f 0, rgba(24,18,47,0) 60%),
-        var(--bg);
-      color:var(--text);
-    }
-    a{text-decoration:none;color:var(--text);}
-    header{
-      position:sticky;top:0;z-index:40;
-      background:rgba(5,7,19,.95);
-      backdrop-filter:blur(16px);
-      border-bottom:1px solid rgba(255,255,255,.08);
-      padding:10px 18px;
-      display:flex;align-items:center;justify-content:space-between;gap:12px;
-    }
-    .brand{display:flex;flex-direction:column;gap:2px;}
-    .brand-title{font-weight:700;letter-spacing:.08em;font-size:14px;text-transform:uppercase;}
-    .brand-sub{font-size:12px;color:var(--muted);}
-    .nav{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
-    .nav a{
-      font-size:13px;padding:6px 10px;border-radius:999px;
-      border:1px solid rgba(255,255,255,.22);
-      text-decoration:none;color:var(--text);
-      transition:.18s;background:rgba(255,255,255,.02);
-    }
-    .nav a.primary{
-      border-color:transparent;
-      background:var(--grad);
-      color:#050713;
-      font-weight:600;
-      box-shadow:0 0 0 1px rgba(110,168,255,.4);
-    }
-    .nav a:hover{background:rgba(255,255,255,.08);transform:translateY(-1px);}
-    .nav a.primary:hover{filter:brightness(1.05);}
-    .user-email{font-size:12px;color:var(--muted);}
-    .logout-btn{
-      border-radius:999px;
-      padding:6px 12px;
-      border:1px solid rgba(255,255,255,.7);
-      background:rgba(255,255,255,.08);
-      color:var(--text);
-      font-size:12px;
-      cursor:pointer;
-      box-shadow:0 0 0 1px rgba(110,168,255,.4);
-      transition:.18s;
-    }
-    .logout-btn:hover{background:rgba(255,255,255,.16);transform:translateY(-1px);}
 
-    main{max-width:1100px;margin:18px auto 60px;padding:0 16px;}
-    h1{margin:0 0 4px;font-size:22px;}
-    .subhead{margin:0 0 18px;font-size:13px;color:var(--muted);}
+  <!-- BrandCrafters base styles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <script defer src="script.js"></script>
+
+  <style>
+    body{
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color:#f5f5ff;
+    }
+    main{
+      max-width:1100px;
+      margin:32px auto 80px;
+      padding:0 20px;
+    }
+    h1{
+      margin:0 0 6px;
+      font-size:24px;
+    }
+    .subhead{
+      margin:0 0 20px;
+      font-size:13px;
+      color:var(--muted);
+    }
 
     .panel{
       background:var(--panel);
       border-radius:16px;
-      border:1px solid var(--border);
+      border:1px solid rgba(255,255,255,.10);
       padding:16px 14px;
       margin-bottom:16px;
     }
-
-    .panel h2{margin:0 0 8px;font-size:16px;}
-    .panel p{margin:0 0 8px;font-size:13px;color:var(--muted);}
+    .panel h2{
+      margin:0 0 6px;
+      font-size:16px;
+    }
+    .panel p{
+      margin:0 0 8px;
+      font-size:13px;
+      color:var(--muted);
+    }
 
     .grid-2{
       display:grid;
@@ -87,12 +54,18 @@
       gap:14px;
     }
     @media(max-width:900px){
-      .grid-2{grid-template-columns:1fr;}
+      .grid-2{
+        grid-template-columns:1fr;
+      }
     }
 
     input[type="file"]{
-      display:block;margin-top:8px;font-size:13px;color:var(--text);
+      display:block;
+      margin-top:8px;
+      font-size:13px;
+      color:var(--text);
     }
+
     .btn{
       display:inline-block;
       padding:8px 14px;
@@ -104,7 +77,10 @@
       color:var(--text);
       transition:.18s;
     }
-    .btn:hover{background:rgba(255,255,255,.1);transform:translateY(-1px);}
+    .btn:hover{
+      background:rgba(255,255,255,.1);
+      transform:translateY(-1px);
+    }
     .btn-primary{
       border-color:transparent;
       background:var(--grad);
@@ -112,13 +88,31 @@
       font-weight:600;
       box-shadow:0 0 0 1px rgba(110,168,255,.4);
     }
-    .btn-primary:hover{filter:brightness(1.05);}
+    .btn-primary:hover{
+      filter:brightness(1.05);
+    }
 
-    .msg{font-size:13px;margin-top:6px;}
+    .msg{
+      font-size:13px;
+      margin-top:6px;
+    }
     .msg.error{color:#ff9c9c;}
     .msg.ok{color:#8bffb0;}
+    .muted{
+      color:var(--muted);
+      font-size:11px;
+    }
+    .mono{
+      font-family:monospace;
+      font-size:11px;
+    }
 
-    table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;}
+    table{
+      width:100%;
+      border-collapse:collapse;
+      font-size:12px;
+      margin-top:8px;
+    }
     th,td{
       border-bottom:1px solid rgba(255,255,255,.08);
       padding:4px 4px;
@@ -132,6 +126,7 @@
       color:var(--muted);
       background:rgba(255,255,255,.02);
     }
+
     .badge{
       display:inline-block;
       padding:2px 6px;
@@ -140,34 +135,106 @@
       text-transform:uppercase;
       letter-spacing:.06em;
     }
-    .badge-valid{background:rgba(142,255,191,.12);color:#8effbf;}
-    .badge-invalid{background:rgba(255,177,177,.15);color:#ffb1b1;}
-    .badge-warn{background:rgba(255,221,157,.15);color:#ffdd9d;}
-    .muted{color:var(--muted);font-size:11px;}
-    .mono{font-family:monospace;font-size:11px;}
+    .badge-valid{
+      background:rgba(142,255,191,.12);
+      color:#8effbf;
+    }
+    .badge-invalid{
+      background:rgba(255,177,177,.15);
+      color:#ffb1b1;
+    }
+
+    /* Header extra bits for email + logout */
+    .header-user{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-size:11px;
+      color:var(--muted);
+      margin-left:12px;
+    }
+    .btn-logout{
+      border-radius:999px;
+      padding:6px 10px;
+      border:1px solid rgba(255,255,255,.55);
+      background:rgba(255,255,255,.08);
+      font-size:11px;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+    }
+    .btn-logout:hover{
+      background:rgba(255,255,255,.16);
+      transform:translateY(-1px);
+    }
+    @media(max-width:940px){
+      .header-user{display:none;}
+    }
   </style>
 </head>
 <body>
-<header>
-  <div class="brand">
-    <span class="brand-title">BrandCrafters</span>
-    <span class="brand-sub">Leads · CSV Upload</span>
+
+<!-- BrandCrafters header with dashboard links (Version B) -->
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="logo" href="index.html">
+      <span class="logo-mark">BC</span><span>BrandCrafters</span>
+    </a>
+
+    <!-- Desktop Nav -->
+    <nav class="nav desktop-nav">
+      <!-- Public nav -->
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="pricing.html" class="nav-link">Pricing</a>
+      <a href="customer-inquiry.html" class="btn btn-outline">Customer Portal</a>
+
+      <!-- Dashboard-specific links -->
+      <a href="dashboard.html" class="nav-link">Admin Dashboard</a>
+      <a href="dashboard-leads-upload.html" class="nav-link active">Leads &amp; CSV</a>
+      <a href="contractor-portal.html" class="nav-link">Contractor Portal</a>
+
+      <!-- User + logout -->
+      <div class="header-user">
+        <span id="userEmail"></span>
+        <button id="logoutBtn" class="btn-logout">Log Out</button>
+      </div>
+    </nav>
+
+    <!-- Mobile: Hamburger -->
+    <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </div>
-  <div class="nav">
-    <a href="dashboard.html">Admin Dashboard</a>
-    <a href="dashboard-leads-upload.html" class="primary">Leads & CSV</a>
-    <a href="contractor-portal.html" target="_blank">Contractor Portal</a>
-    <span class="user-email" id="userEmail"></span>
-    <button id="logoutBtn" class="logout-btn">Log Out</button>
-  </div>
+
+  <!-- Mobile Drawer (V8) -->
+  <nav class="mobile-drawer" aria-hidden="true">
+    <div class="drawer-header">
+      <a class="logo" href="index.html">
+        <span class="logo-mark">BC</span><span>BrandCrafters</span>
+      </a>
+      <button class="menu-close" aria-label="Close menu">✕</button>
+    </div>
+
+    <!-- Public nav -->
+    <a class="drawer-link" href="index.html">Home</a>
+    <a class="drawer-link" href="pricing.html">Pricing</a>
+    <a class="drawer-link" href="customer-inquiry.html">Customer Portal</a>
+
+    <!-- Dashboard-specific -->
+    <a class="drawer-link" href="dashboard.html">Admin Dashboard</a>
+    <a class="drawer-link" href="dashboard-leads-upload.html">Leads &amp; CSV</a>
+    <a class="drawer-link" href="contractor-portal.html">Contractor Portal</a>
+  </nav>
+  <div class="drawer-backdrop" aria-hidden="true"></div>
 </header>
 
 <main>
   <section>
     <h1>Upload Leads CSV</h1>
     <p class="subhead">
-      Drop in new leads from Google Maps, directories, or your team. We’ll auto-map columns,
-      auto-validate, and auto-set priority (A/B/C) based on website situation.
+      Drop in new lead lists from Google Maps, directories, or spreadsheets. We’ll auto-map columns,
+      validate rows, and set lead priority (A/B/C) based on web presence.
     </p>
   </section>
 
@@ -175,9 +242,9 @@
     <div>
       <h2>1. Choose CSV</h2>
       <p>
-        Expected core fields:
+        Core fields we care about:
         <span class="mono">business_name, phone, city, state</span>.<br>
-        We’ll also accept <span class="mono">BusinessName, Phone, Email</span>, etc.
+        We also accept headers like <span class="mono">BusinessName, Company, Phone, Email</span> and auto-map them.
       </p>
       <input type="file" id="csvFile" accept=".csv" />
       <div style="margin-top:10px;">
@@ -188,15 +255,15 @@
       <p class="muted" style="margin-top:8px;">
         Auto-rules:
         <br>• If <b>website</b> is empty ➜ priority <b>A</b>
-        <br>• If website looks like Facebook / Instagram / Google / booking-only ➜ priority <b>B</b>
-        <br>• If proper website present ➜ priority <b>C</b>
+        <br>• If only social / Facebook / Google link ➜ priority <b>B</b>
+        <br>• If real website present ➜ priority <b>C</b>
         <br>• <b>call_status</b> defaults to <span class="mono">new</span> if missing
       </p>
     </div>
     <div>
       <h2>2. Status</h2>
       <p class="muted">
-        We’ll show how many rows are valid vs invalid before upload.
+        We’ll show valid vs invalid rows before upload. Invalid (missing business name or phone) will be skipped.
       </p>
       <div id="previewStats" class="msg"></div>
       <div id="headerMapInfo" class="muted"></div>
@@ -215,47 +282,62 @@
   </section>
 </main>
 
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      © <span id="year"></span> BrandCrafters — A division of Egyptian Hype LLC
+      <a href="dashboard.html" class="admin-link">Admin</a>
+    </div>
+  </div>
+</footer>
+
+<!-- Year -->
+<script>
+  const yearSpan = document.getElementById('year');
+  if (yearSpan) {
+    yearSpan.textContent = new Date().getFullYear();
+  }
+</script>
+
+<!-- Supabase + CSV logic -->
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <script>
-  // ====== Supabase Setup ======
   const SUPABASE_URL = "https://vekoulqehexqosgwacwa.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiIsInZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
   const ADMIN_EMAIL = "srarnold216@gmail.com";
-  const LOGIN_PAGE_URL = "dashboard.html"; // dashboard doubles as login gate
+  const LOGIN_PAGE_URL = "dashboard.html";
 
   const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  const userEmailSpan = document.getElementById("userEmail");
-  const logoutBtn = document.getElementById("logoutBtn");
+  const userEmailSpan   = document.getElementById("userEmail");
+  const logoutBtn       = document.getElementById("logoutBtn");
 
   async function guardAdmin() {
-    const { data } = await supabaseClient.auth.getUser();
+    const { data, error } = await supabaseClient.auth.getUser();
+    if (error) {
+      console.error("auth.getUser error:", error);
+    }
     if (!data || !data.user) {
-      window.location.href = LOGIN_PAGE_URL;
       return null;
     }
     const email = data.user.email;
-    userEmailSpan.textContent = email;
+    if (userEmailSpan) userEmailSpan.textContent = email || "";
+
     if (email !== ADMIN_EMAIL) {
-      // not admin -> send to contractor portal
       window.location.href = "contractor-portal.html";
       return null;
     }
     return data.user;
   }
 
-  logoutBtn.addEventListener("click", async () => {
-    await supabaseClient.auth.signOut();
-    window.location.href = LOGIN_PAGE_URL;
-  });
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", async () => {
+      await supabaseClient.auth.signOut();
+      window.location.href = LOGIN_PAGE_URL;
+    });
+  }
 
-  (async () => {
-    await guardAdmin();
-  })();
-
-
-  // ====== CSV Parsing / Mapping / Validation ======
   const fileInput   = document.getElementById("csvFile");
   const previewBtn  = document.getElementById("previewBtn");
   const uploadBtn   = document.getElementById("uploadBtn");
@@ -266,11 +348,10 @@
   const previewTableHead = document.querySelector("#previewTable thead");
   const previewTableBody = document.querySelector("#previewTable tbody");
 
-  let parsedRows = [];     // raw rows from csv
-  let mappedRows = [];     // normalized objects ready for DB
-  let lastHeaderMap = {};  // for display
+  let parsedRows = [];
+  let mappedRows = [];
+  let lastHeaderMap = {};
 
-  // alias map: normalized header (lowercase, no spaces/_) -> canonical column
   const headerAliases = {
     business_name: ["business_name","businessname","name","company","companyname"],
     phone: ["phone","phone1","phonenumber","primaryphone"],
@@ -296,7 +377,6 @@
     for (const [canonical, aliasList] of Object.entries(headerAliases)) {
       if (aliasList.includes(norm)) return canonical;
     }
-    // direct match (if CSV uses exact column name like 'business_name')
     if (headerAliases[header]) return header;
     return null;
   }
@@ -330,18 +410,12 @@
       return;
     }
 
-    // Mapped rows and header map display
     mappedRows = [];
-    const mappedHeaderSet = new Set([
-      "business_name","phone","alt_phone","email","alt_email",
-      "city","state","website","social","priority",
-      "call_status","assigned_caller_email","notes"
-    ]);
     lastHeaderMap = {};
 
-    // Determine mapping from csv headers
     const csvHeaders = Object.keys(parsedRows[0] || {});
     const canonicalForHeader = {};
+
     csvHeaders.forEach(h => {
       const canonical = findCanonicalColumn(h);
       canonicalForHeader[h] = canonical;
@@ -352,7 +426,6 @@
       }
     });
 
-    // Build mappedRows with defaults & auto-rules
     let validCount = 0;
     let invalidCount = 0;
 
@@ -373,21 +446,18 @@
         notes: ""
       };
 
-      // Copy mapped fields
       for (const [rawHeader, value] of Object.entries(row)) {
         const canonical = canonicalForHeader[rawHeader];
         if (!canonical || !(canonical in obj)) continue;
         obj[canonical] = (value ?? "").toString().trim();
       }
 
-      // Auto rules
       if (!obj.call_status) obj.call_status = "new";
       if (!obj.priority) obj.priority = autoPriority(obj.website);
-      // If website empty but social looks like FB/IG/Google/etc, we still treat as partial web presence
+
       if (!obj.website && obj.social) {
         const pr = autoPriority(obj.social);
         if (!obj.priority) obj.priority = pr;
-        // or keep priority A if you want to be more aggressive
       }
 
       const missingCore = !obj.business_name || !obj.phone;
@@ -397,23 +467,19 @@
       mappedRows.push(obj);
     });
 
-    // Preview stats
     previewStats.textContent =
       `Parsed ${parsedRows.length} rows · ` +
-      `${validCount} valid · ${invalidCount} invalid (missing business name or phone — will be skipped).`;
+      `${validCount} valid · ${invalidCount} invalid (missing business name or phone — skipped on upload).`;
     previewStats.className = "msg " + (invalidCount ? "error" : "ok");
 
-    // Header map info
     const items = Object.entries(lastHeaderMap).map(([csvH, canon]) =>
       `${csvH} → ${canon}`
     );
     headerMapInfo.textContent = "Header mapping: " + items.join(" · ");
 
-    // Build table (first 25 rows)
     const displayRows = mappedRows.slice(0, 25);
-
     const headTr = document.createElement("tr");
-    ["Status","Business","Phone","City/State","Website","Priority","Call Status","Notes"].forEach(h => {
+    ["Status","Business","Phone","City/State","Website/Social","Priority","Call Status","Notes"].forEach(h => {
       const th = document.createElement("th");
       th.textContent = h;
       headTr.appendChild(th);
@@ -423,7 +489,6 @@
     displayRows.forEach(r => {
       const tr = document.createElement("tr");
 
-      // Status
       const tdStatus = document.createElement("td");
       const badge = document.createElement("span");
       badge.classList.add("badge");
@@ -437,37 +502,30 @@
       tdStatus.appendChild(badge);
       tr.appendChild(tdStatus);
 
-      // Business
       const tdBiz = document.createElement("td");
       tdBiz.innerHTML = `<strong>${r.business_name || "(missing)"}</strong><br><span class="muted">${r.email || ""}</span>`;
       tr.appendChild(tdBiz);
 
-      // Phone
       const tdPhone = document.createElement("td");
       tdPhone.textContent = r.phone || "(missing)";
       tr.appendChild(tdPhone);
 
-      // City / State
       const tdCity = document.createElement("td");
       tdCity.textContent = [r.city, r.state].filter(Boolean).join(", ");
       tr.appendChild(tdCity);
 
-      // Website
       const tdWeb = document.createElement("td");
       tdWeb.textContent = r.website || (r.social || "");
       tr.appendChild(tdWeb);
 
-      // Priority
       const tdPri = document.createElement("td");
       tdPri.textContent = r.priority || "";
       tr.appendChild(tdPri);
 
-      // Call status
       const tdStat = document.createElement("td");
       tdStat.textContent = r.call_status || "";
       tr.appendChild(tdStat);
 
-      // Notes
       const tdNotes = document.createElement("td");
       tdNotes.textContent = r.notes || "";
       tr.appendChild(tdNotes);
@@ -520,20 +578,26 @@
     uploadBtn.disabled = true;
     uploadMsg.textContent = "Uploading " + valid.length + " valid rows to Supabase…";
 
+    const cleanRows = valid.map(({_invalid, ...rest}) => rest);
+
     const { data, error } = await supabaseClient
       .from("call_leads")
-      .insert(valid.map(({_invalid, ...rest}) => rest));
+      .insert(cleanRows);
 
     if (error){
       console.error(error);
       uploadMsg.textContent = "Error inserting rows: " + error.message;
       uploadMsg.className = "msg error";
     } else {
-      uploadMsg.textContent = `Uploaded ${valid.length} rows successfully. Invalid rows were skipped.`;
+      uploadMsg.textContent = `Uploaded ${cleanRows.length} rows successfully. Invalid rows were skipped.`;
       uploadMsg.className = "msg ok";
     }
     uploadBtn.disabled = false;
   });
+
+  (async () => {
+    await guardAdmin();
+  })();
 </script>
 </body>
 </html>
