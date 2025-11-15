@@ -1,46 +1,54 @@
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+// js/supportForm.js
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-// 🧠 PLACEHOLDERS — add your real credentials here once site is live
-const SUPABASE_URL = "https://YOUR_PROJECT_ID.supabase.co";
-const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+const supabase = createClient(
+  "https://vekoulqehexqosgwacwa.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4"
+);
 
-// Initialize Supabase client
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const form = document.getElementById("supportForm");
+const msg = document.getElementById("supportMsg");
 
-const form = document.getElementById("inquiryForm");
-const msg = document.getElementById("formMsg");
+if (form) {
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    msg.textContent = "Sending…";
 
-form?.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  msg.textContent = "Submitting…";
+    const fd = new FormData(form);
+    const name = fd.get("name")?.toString().trim() || "";
+    const email = fd.get("email")?.toString().trim() || "";
+    const business = fd.get("business")?.toString().trim() || "";
+    const siteUrl = fd.get("site_url")?.toString().trim() || "";
+    const requestType = fd.get("request_type")?.toString() || "";
+    const urgency = fd.get("urgency")?.toString() || "";
+    const detailsRaw = fd.get("details")?.toString().trim() || "";
 
-  // Convert multi-selects
-  const addons = Array.from(form.querySelector('[name="addons"]').selectedOptions).map(o => o.value).join(", ");
-  
-  const payload = {
-    name: form.name.value.trim(),
-    email: form.email.value.trim(),
-    company: form.company.value.trim(),
-    service: form.service.value,
-    dashboard: form.dashboard.value,
-    addons,
-    details: form.details.value.trim(),
-    created_at: new Date().toISOString()
-  };
+    const details = (siteUrl ? `Site: ${siteUrl}\n\n` : "") + detailsRaw;
 
-  try {
-    // Insert into Supabase table
-    const { error } = await supabase.from("inquiries").insert(payload);
-    if (error) throw error;
+    if (!name || !email) {
+      msg.textContent = "Name and email are required.";
+      return;
+    }
 
-    // ✅ OPTIONAL: Supabase Edge Function or Email Trigger
-    // - Create a function in Supabase called "notify_inquiry"
-    // - It can email the admin (you) and the customer automatically
+    const { error } = await supabase.from("support_requests").insert([
+      {
+        name,
+        email,
+        business,
+        request_type: requestType,
+        urgency,
+        details,
+        status: "new"
+      }
+    ]);
 
-    msg.textContent = "✅ Inquiry received! We'll reach out soon.";
+    if (error) {
+      console.error(error);
+      msg.textContent = "Something went wrong. Please try again.";
+      return;
+    }
+
+    msg.textContent = "Request received. We'll follow up by email.";
     form.reset();
-  } catch (err) {
-    console.error(err);
-    msg.textContent = "❌ Could not submit right now. Please try again later.";
-  }
-});
+  });
+}
