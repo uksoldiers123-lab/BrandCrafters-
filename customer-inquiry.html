@@ -129,7 +129,7 @@
       or send them using your usual cloud links (Google Drive, Dropbox, etc.) in the description above.
     </p>
 
-    <!-- Visual only unless wired to a backend / upload handler -->
+    <!-- Visual only for now; we store a note, not the file itself -->
     <label>Upload files (optional)
       <input type="file" name="uploads" multiple />
     </label>
@@ -149,18 +149,69 @@
     <div>© <span id="year"></span> BrandCrafters — A division of Egyptian Hype LLC</div>
   </div>
 </footer>
-<script>
+
+<!-- Supabase wiring for support_requests -->
+<script type="module">
+  import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+  const supabase = createClient(
+    "https://vekoulqehexqosgwacwa.supabase.co",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4"
+  );
+
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  // Simple front-end confirmation for now (no backend yet)
-  const customerForm = document.getElementById('customerForm');
-  const customerMsg = document.getElementById('formMsg');
+  const form = document.getElementById('customerForm');
+  const msg = document.getElementById('formMsg');
+  const submitBtn = form.querySelector("button[type='submit']");
 
-  customerForm.addEventListener('submit', function (e) {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    customerMsg.textContent = "Thanks! Your request has been recorded. We’ll review it and follow up by email.";
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    msg.textContent = "Submitting your request...";
+    submitBtn.disabled = true;
+
+    const fd = new FormData(form);
+
+    // we’re not actually uploading files to Supabase here, just marking if they attached anything
+    const fileInput = form.querySelector('input[name="uploads"]');
+    let uploadInfo = null;
+    if (fileInput && fileInput.files && fileInput.files.length > 0) {
+      const names = Array.from(fileInput.files).map(f => f.name);
+      uploadInfo = `Client attached files: ${names.join(', ')}`;
+    }
+
+    const payload = {
+      name: fd.get("name") || null,
+      email: fd.get("email") || null,
+      business: fd.get("business") || null,
+      industry: fd.get("industry") || null,
+      request_type: fd.get("requestType") || null,
+      details: fd.get("details") || null,
+      urgency: fd.get("urgency") || null,
+      upload_info: uploadInfo
+    };
+
+    try {
+      const { error } = await supabase
+        .from("support_requests")
+        .insert(payload);
+
+      if (error) {
+        console.error(error);
+        msg.textContent = "There was an error saving your request. Please try again or email us directly.";
+      } else {
+        msg.textContent = "Thank you! Your request has been submitted. We’ll follow up by email.";
+        form.reset();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    } catch (err) {
+      console.error(err);
+      msg.textContent = "Unexpected error. Please try again.";
+    } finally {
+      submitBtn.disabled = false;
+    }
   });
 </script>
+
 </body>
-  </html>
+</html>
