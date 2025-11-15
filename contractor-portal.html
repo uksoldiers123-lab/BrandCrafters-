@@ -12,7 +12,9 @@
       --border:rgba(255,255,255,.08);
       --text:#f5f5ff;
       --muted:#b5b7d8;
-      --grad:linear-gradient(135deg,#6ea8ff,#b166ff);
+      --primary:#6ea8ff;
+      --accent:#d16de1;
+      --grad:linear-gradient(135deg,#5b8cff,#b166ff 60%,#ff6ad6);
     }
     *{box-sizing:border-box;}
     body{
@@ -23,103 +25,130 @@
         var(--bg);
       color:var(--text);
     }
-    a{text-decoration:none;color:var(--text);}
-    header{
-      position:sticky;top:0;z-index:40;
+    a{text-decoration:none;color:inherit;}
+
+    .container{max-width:1100px;margin:0 auto;padding:0 20px;}
+
+    /* HEADER styled like index */
+    .site-header{
+      position:sticky;
+      top:0;
+      z-index:40;
       background:rgba(5,7,19,.95);
       backdrop-filter:blur(14px);
       border-bottom:1px solid rgba(255,255,255,.08);
-      padding:10px 18px;
-      display:flex;align-items:center;justify-content:space-between;gap:12px;
     }
-    .brand{
-      display:flex;flex-direction:column;gap:2px;
+    .header-inner{
+      height:64px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
     }
-    .brand-title{
-      font-weight:700;letter-spacing:.08em;font-size:14px;text-transform:uppercase;
+    .logo{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:800;
+      letter-spacing:.2px;
     }
-    .brand-sub{font-size:12px;color:var(--muted);}
-    .nav{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
-    .nav a{
-      font-size:13px;padding:6px 10px;border-radius:999px;
-      border:1px solid rgba(255,255,255,.22);
+    .logo-mark{
+      display:inline-grid;
+      place-items:center;
+      width:34px;
+      height:34px;
+      border-radius:12px;
+      background:var(--grad);
+      color:#050713;
+      font-weight:800;
+      font-size:18px;
+    }
+    .logo span:last-child{
+      font-size:15px;
+    }
+
+    .nav{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      font-size:13px;
+    }
+    .nav-link{
+      position:relative;
+      padding:8px 10px;
+      border-radius:999px;
       text-decoration:none;
       color:var(--text);
       transition:.18s;
     }
-    .nav a.primary{
-      border-color:transparent;
-      background:var(--grad);
-      color:#050713;
-      font-weight:600;
-      box-shadow:0 0 0 1px rgba(110,168,255,.4);
+    .nav-link:hover{
+      background:rgba(255,255,255,.06);
     }
-    .nav a:hover{
-      background:rgba(255,255,255,.08);
-      transform:translateY(-1px);
+    .nav-link.active{
+      background:rgba(255,255,255,.10);
+      box-shadow:0 0 0 1px rgba(255,255,255,.18);
     }
-    .nav a.primary:hover{
-      filter:brightness(1.05);
+    .nav-link.subtle{
+      color:var(--muted);
     }
-    .user-email{font-size:12px;color:var(--muted);}
-    .logout-btn{
+
+    .user-pill{
+      font-size:11px;
+      color:var(--muted);
+      max-width:190px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .btn-logout{
       border-radius:999px;
       padding:6px 12px;
-      border:1px solid rgba(255,255,255,.7);
-      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.6);
+      background:rgba(255,255,255,.05);
       color:var(--text);
-      font-size:12px;
+      font-size:11px;
       cursor:pointer;
-      box-shadow:0 0 0 1px rgba(110,168,255,.4);
       transition:.18s;
     }
-    .logout-btn:hover{
-      background:rgba(255,255,255,.16);
+    .btn-logout:hover{
+      background:rgba(255,255,255,.14);
       transform:translateY(-1px);
     }
 
+    /* MAIN LAYOUT */
     main{
-      max-width:1100px;
-      margin:18px auto 60px;
-      padding:0 16px;
+      padding:20px 0 60px;
     }
     h1{margin:0 0 6px;font-size:22px;}
+    h2{margin:0 0 8px;font-size:16px;}
     .subhead{margin:0 0 18px;font-size:13px;color:var(--muted);}
+    .small{font-size:12px;color:var(--muted);}
+
     .card{
       background:var(--panel);
       border-radius:16px;
       border:1px solid var(--border);
       padding:16px 14px;
+      box-shadow:0 18px 40px rgba(0,0,0,.6);
       margin-bottom:16px;
     }
-    h2{margin:0 0 8px;font-size:16px;}
-    h3{margin:10px 0 6px;font-size:14px;}
-    .small{font-size:12px;color:var(--muted);}
-    .badge{
-      display:inline-block;
-      font-size:11px;
-      padding:2px 8px;
-      border-radius:999px;
-      background:rgba(110,168,255,.2);
-      margin-left:6px;
-    }
-    .grid{
+
+    .grid-3{
       display:grid;
-      grid-template-columns:repeat(4,minmax(0,1fr));
-      gap:10px;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:12px;
     }
-    @media(max-width:900px){
-      .grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .grid-2{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px;
     }
-    @media(max-width:600px){
-      .grid{grid-template-columns:1fr;}
+    @media(max-width:880px){
+      .grid-3{grid-template-columns:1fr;}
+      .grid-2{grid-template-columns:1fr;}
+      .nav{gap:8px;}
     }
-    .stat-card{
-      background:rgba(5,7,19,.85);
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,.08);
-      padding:10px 12px;
-    }
+
     .stat-label{
       font-size:11px;
       text-transform:uppercase;
@@ -127,41 +156,25 @@
       color:var(--muted);
     }
     .stat-value{
-      font-size:18px;font-weight:700;margin-top:4px;
+      font-size:20px;
+      font-weight:700;
+      margin-top:4px;
     }
     .stat-sub{
-      font-size:11px;color:var(--muted);margin-top:2px;
+      font-size:11px;
+      color:var(--muted);
+      margin-top:2px;
     }
 
-    button{
-      border-radius:10px;
-      padding:7px 10px;
-      border:0;
-      font-weight:600;
-      cursor:pointer;
-      font-size:12px;
-      transition:.18s;
-    }
-    button:hover{
-      transform:translateY(-1px);
-      opacity:.97;
-    }
-    .btn-primary{
-      background:var(--grad);
-      color:#050713;
-      box-shadow:0 0 0 1px rgba(110,168,255,.4);
-    }
-    .btn-ghost{
-      background:rgba(255,255,255,.08);
-      border:1px solid rgba(255,255,255,.7);
-      color:#f5f5ff;
-      box-shadow:0 0 0 1px rgba(110,168,255,.4);
-    }
-    .btn-sm{
-      font-size:11px;
-      padding:5px 8px;
+    .pill{
+      display:inline-block;
+      padding:2px 8px;
       border-radius:999px;
+      font-size:11px;
     }
+    .pill-green{background:rgba(155,255,191,.18);}
+    .pill-yellow{background:rgba(255,218,155,.18);}
+    .pill-blue{background:rgba(110,168,255,.18);}
 
     table{
       width:100%;
@@ -171,7 +184,7 @@
     }
     th,td{
       border-bottom:1px solid rgba(255,255,255,.08);
-      padding:4px 5px;
+      padding:5px 4px;
       vertical-align:top;
     }
     th{
@@ -181,191 +194,265 @@
       letter-spacing:.05em;
       color:var(--muted);
     }
-    input[type="text"],select,textarea{
-      width:100%;
-      font-size:12px;
-      padding:6px 7px;
-      border-radius:8px;
-      border:1px solid rgba(255,255,255,.16);
-      background:rgba(16,15,30,.9);
-      color:var(--text);
-    }
-    textarea{resize:vertical;min-height:48px;}
 
-    .pill{
+    .btn{
       display:inline-block;
-      padding:2px 8px;
       border-radius:999px;
+      padding:6px 10px;
+      font-size:12px;
+      font-weight:600;
+      border:0;
+      cursor:pointer;
+      transition:.18s;
+    }
+    .btn-primary{
+      background:var(--grad);
+      color:#050713;
+    }
+    .btn-ghost{
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      border:1px solid rgba(255,255,255,.18);
+    }
+    .btn-small{
+      padding:4px 8px;
       font-size:11px;
     }
-    .pill-blue{background:rgba(110,168,255,.2);}
-    .pill-green{background:rgba(155,255,191,.2);}
-    .pill-red{background:rgba(255,155,155,.2);}
-    .pill-gold{background:rgba(255,210,130,.2);}
+    .btn:hover{
+      filter:brightness(1.05);
+      transform:translateY(-1px);
+    }
 
-    .filters-row{
+    /* TABS */
+    .tabs{
       display:flex;
-      flex-wrap:wrap;
       gap:8px;
-      margin:6px 0 8px;
+      margin-bottom:14px;
+      flex-wrap:wrap;
     }
-    .filters-row label{
-      font-size:12px;color:var(--muted);
-      display:flex;flex-direction:column;
-      gap:2px;
-    }
-    .filters-row select{
+    .tab-btn{
+      border-radius:999px;
+      padding:6px 12px;
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(255,255,255,.04);
       font-size:12px;
+      cursor:pointer;
+      transition:.18s;
+    }
+    .tab-btn.active{
+      background:var(--grad);
+      color:#050713;
+      border-color:transparent;
     }
 
-    .resources-grid{
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:12px;
+    #leadsSection,
+    #scriptsSection{display:none;}
+    #leadsSection.active,
+    #scriptsSection.active{display:block;}
+
+    .tag{
+      display:inline-block;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.2);
+      padding:2px 7px;
+      font-size:11px;
+      margin-right:4px;
+      margin-bottom:4px;
     }
-    @media(max-width:800px){
-      .resources-grid{grid-template-columns:1fr;}
+    textarea{
+      width:100%;
+      min-height:70px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(5,7,19,.9);
+      color:var(--text);
+      font-size:12px;
+      padding:8px 10px;
+      resize:vertical;
     }
-    ul{margin:6px 0 0 18px;padding:0;}
-    code{font-size:12px;background:rgba(0,0,0,.35);padding:2px 4px;border-radius:4px;}
+    select{
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(5,7,19,.9);
+      color:var(--text);
+      font-size:12px;
+      padding:4px 8px;
+    }
+    input[type="text"]{
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(5,7,19,.9);
+      color:var(--text);
+      font-size:12px;
+      padding:6px 10px;
+      width:100%;
+    }
+    .code-block{
+      background:rgba(0,0,0,.6);
+      border-radius:10px;
+      padding:10px;
+      font-size:12px;
+      line-height:1.5;
+      overflow-x:auto;
+      margin-top:6px;
+    }
   </style>
 </head>
 <body>
-<header>
-  <div class="brand">
-    <span class="brand-title">BrandCrafters</span>
-    <span class="brand-sub">Contractor Portal · Leads & Scripts</span>
-  </div>
-  <div class="nav">
-    <a href="contractor-portal.html" class="primary">Contractor Portal</a>
-    <a href="dashboard.html" target="_blank">Admin Dashboard</a>
-    <a href="dashboard-leads-upload.html" target="_blank">Leads & CSV (Admin)</a>
-    <span class="user-email" id="userEmail"></span>
-    <button id="logoutBtn" class="logout-btn">Log Out</button>
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="index.html" class="logo">
+      <span class="logo-mark">BC</span><span>BrandCrafters</span>
+    </a>
+
+    <nav class="nav">
+      <a href="index.html" class="nav-link subtle">Home</a>
+      <a href="pricing.html" class="nav-link subtle">Pricing</a>
+      <a href="contractor-portal.html" class="nav-link active">Contractor Portal</a>
+      <span id="userEmail" class="user-pill"></span>
+      <button id="logoutBtn" class="btn-logout">Log Out</button>
+    </nav>
   </div>
 </header>
 
-<main>
-  <section>
-    <h1>Your Leads & Tools</h1>
+<main class="container">
+  <section style="margin-top:18px;">
+    <h1>Contractor Portal</h1>
     <p class="subhead">
-      This page is for callers and contact contractors. Claim leads from the pool, work them, update status,
-      and use the scripts/templates below. Admin can see all of this from the dashboards.
+      Work your assigned leads, claim new ones, and use the scripts & pricing below. Close websites = get paid.
     </p>
   </section>
 
-  <!-- OVERVIEW -->
-  <section class="card">
-    <h2>Today’s Overview</h2>
-    <div class="grid" id="overviewGrid">
-      <!-- Filled by JS -->
-    </div>
+  <!-- TOP STATS -->
+  <section class="grid-3">
+    <article class="card">
+      <div class="stat-label">My Active Leads</div>
+      <div class="stat-value" id="myActiveLeads">0</div>
+      <div class="stat-sub">Assigned to you with status not closed.</div>
+    </article>
+    <article class="card">
+      <div class="stat-label">My Closed Won</div>
+      <div class="stat-value" id="myClosedWon">0</div>
+      <div class="stat-sub">Total leads you closed as paid website clients.</div>
+    </article>
+    <article class="card">
+      <div class="stat-label">Est. Commission</div>
+      <div class="stat-value" id="myCommission">$0.00</div>
+      <div class="stat-sub">$100 per closed website (non-add-on only).</div>
+    </article>
   </section>
 
-  <!-- LEAD POOL -->
+  <!-- TABS -->
   <section class="card">
-    <h2>Lead Pool (Unassigned)</h2>
-    <p class="small">
-      These are leads that nobody is actively working yet. Click <b>Take Lead</b> to claim it — once claimed,
-      other callers won’t see it in their list.
-    </p>
-
-    <div style="overflow-x:auto;">
-      <table id="poolTable">
-        <thead>
-          <tr>
-            <th>Priority</th>
-            <th>Business</th>
-            <th>Contact</th>
-            <th>City</th>
-            <th>Phone</th>
-            <th>Online Presence</th>
-            <th>Suggested Package</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-    <p class="small" id="poolNote"></p>
-  </section>
-
-  <!-- MY LEADS -->
-  <section class="card">
-    <h2>My Leads</h2>
-    <p class="small">
-      Only leads assigned to your email show here. Update status, notes, and follow-up dates so admin can track
-      productivity and pay commissions.
-    </p>
-
-    <div class="filters-row">
-      <label>Status
-        <select id="myStatusFilter">
-          <option value="">All</option>
-          <option>new</option>
-          <option>left vm</option>
-          <option>talked - follow up</option>
-          <option>not interested</option>
-          <option>closed won</option>
-        </select>
-      </label>
-      <label>Priority
-        <select id="myPriorityFilter">
-          <option value="">All</option>
-          <option>A</option>
-          <option>B</option>
-          <option>C</option>
-        </select>
-      </label>
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="leadsSection">Leads</button>
+      <button class="tab-btn" data-tab="scriptsSection">Scripts & Pricing</button>
     </div>
 
-    <div style="overflow-x:auto;">
-      <table id="myLeadsTable">
-        <thead>
-          <tr>
-            <th>Priority</th>
-            <th>Business</th>
-            <th>Status</th>
-            <th>Interest</th>
-            <th>Next Follow-Up</th>
-            <th>Notes / Channel</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+    <!-- LEADS TAB -->
+    <div id="leadsSection" class="active">
+      <div class="grid-2" style="margin-bottom:12px;">
+        <div>
+          <p class="small">
+            You’ll see:
+            <br>• Unassigned leads (you can claim them)
+            <br>• Leads already assigned to you
+          </p>
+        </div>
+        <div style="text-align:right;">
+          <label class="small">
+            Filter by status:
+            <select id="statusFilter">
+              <option value="all">All</option>
+              <option value="new">New</option>
+              <option value="working">Working</option>
+              <option value="no answer">No Answer</option>
+              <option value="not interested">Not Interested</option>
+              <option value="closed won">Closed Won</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <div style="max-height:420px;overflow:auto;">
+        <table id="leadsTable">
+          <thead>
+            <tr>
+              <th>Business</th>
+              <th>Contact</th>
+              <th>Status</th>
+              <th>Last Contact</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p class="small" id="leadsNote" style="margin-top:8px;"></p>
     </div>
-    <p class="small" id="myLeadsNote"></p>
-  </section>
 
-  <!-- RESOURCES -->
-  <section class="card">
-    <h2>Resources for Callers</h2>
-    <p class="small">
-      Pricing, phone scripts, emails, and DM templates. Admin can update the master copy in Supabase; your view
-      always pulls the latest saved text. If nothing has been set up yet, you’ll see the starter defaults.
-    </p>
+    <!-- SCRIPTS TAB -->
+    <div id="scriptsSection">
+      <div class="grid-2">
+        <article class="card" style="margin-bottom:0;">
+          <h2>Phone Script (Cold Call)</h2>
+          <p class="small">Use this to open, qualify, and pitch BrandCrafters websites.</p>
+          <div class="code-block">
+            <strong>Intro</strong><br>
+            “Hi, is this <em>[Business Name]</em>? Hey, my name is <em>[Your Name]</em>, I work with a small studio called BrandCrafters. We build simple, clean websites for local businesses like yours.”<br><br>
+            <strong>Problem</strong><br>
+            “I noticed you either don’t have a website that comes up clearly online or it’s hard to find info like hours, services, and contact details.”<br><br>
+            <strong>Offer</strong><br>
+            “We do <strong>done-for-you websites</strong> starting at <strong>$249</strong>, and most full business sites are <strong>$699</strong>. That includes your domain and setup — you don’t have to design anything.”<br><br>
+            <strong>Close</strong><br>
+            “If I sent you a quick summary with pricing and examples today, would you be open to looking that over? If you like it, we can lock in your spot and get your site started this week.”
+          </div>
+        </article>
 
-    <div class="resources-grid">
-      <div>
-        <h3>Pricing Cheat Sheet</h3>
-        <div id="pricingBox" class="small">Loading pricing…</div>
+        <article class="card" style="margin-bottom:0;">
+          <h2>Pricing Snapshot</h2>
+          <p class="small">Basic packages (website only). Add-ons are extra.</p>
+          <ul class="small" style="padding-left:16px;margin:0 0 8px;">
+            <li><strong>Starter Craft — $249</strong><br>1-page, simple info site. For very small businesses.</li>
+            <li><strong>Business Builder — $699</strong><br>3–5 pages. Our main package for most clients.</li>
+            <li><strong>E-Commerce — $1,199+</strong><br>Online store or booking. For product/service sales.</li>
+          </ul>
+          <p class="small">
+            <strong>Maintenance (optional, monthly):</strong><br>
+            • Lite / Standard / Pro (varies per client; admin sets final price).<br>
+            • Your commission is based on the <strong>website sale</strong>, not small add-ons.
+          </p>
+          <p class="small">
+            <strong>Commission:</strong> $100 per closed website when the invoice is paid.
+          </p>
+        </article>
       </div>
 
-      <div>
-        <h3>Phone Scripts</h3>
-        <div id="scriptsBox" class="small">Loading scripts…</div>
-      </div>
+      <article class="card">
+        <h2>Email & DM Templates</h2>
+        <p class="small">Copy/paste, then tweak for the business and what you talked about.</p>
 
-      <div>
-        <h3>Email Templates</h3>
-        <div id="emailsBox" class="small">Loading email templates…</div>
-      </div>
+        <h3 style="margin:8px 0 4px;font-size:14px;">Follow-up Email</h3>
+        <div class="code-block">
+          Subject: Quick website idea for {{business_name}}<br><br>
+          Hi {{owner_name}},<br><br>
+          Thanks for taking a minute to talk earlier. As promised, here’s a summary of what we can do for {{business_name}}:<br><br>
+          • A clean, mobile-friendly website so customers can quickly see what you do<br>
+          • Your hours, services, and contact info in one place<br>
+          • Domain + basic setup handled for you<br><br>
+          Our main package for businesses like yours is <strong>$699</strong> for a full 3–5 page site. If you’d like to move forward, just reply “READY” and I’ll send the payment link and next steps.<br><br>
+          Best,<br>
+          {{your_name}}<br>
+          BrandCrafters
+        </div>
 
-      <div>
-        <h3>Social DM Templates</h3>
-        <div id="dmsBox" class="small">Loading DM templates…</div>
-      </div>
+        <h3 style="margin:10px 0 4px;font-size:14px;">Social DM (Facebook / Instagram)</h3>
+        <div class="code-block">
+          Hey {{name}} 👋 I help local businesses build simple, clean websites so people can actually find their info online.<br><br>
+          We’re doing done-for-you sites starting at <strong>$249</strong> (most full sites are <strong>$699</strong>) and that includes the setup so you don’t have to design anything yourself.<br><br>
+          If I send a quick 1-page summary with pricing and examples, would you take a look?
+        </div>
+      </article>
     </div>
   </section>
 </main>
@@ -373,275 +460,194 @@
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script>
   const SUPABASE_URL = "https://vekoulqehexqosgwacwa.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
-  const LOGIN_PAGE_URL = "dashboard-login.html";
+  const SUPABASE_ANON_KEY =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
 
   const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  const userEmailSpan = document.getElementById("userEmail");
-  const logoutBtn = document.getElementById("logoutBtn");
+  const userEmailSpan   = document.getElementById("userEmail");
+  const logoutBtn       = document.getElementById("logoutBtn");
 
-  const overviewGrid = document.getElementById("overviewGrid");
+  const myActiveLeadsEl = document.getElementById("myActiveLeads");
+  const myClosedWonEl   = document.getElementById("myClosedWon");
+  const myCommissionEl  = document.getElementById("myCommission");
 
-  const poolTableBody = document.querySelector("#poolTable tbody");
-  const poolNote = document.getElementById("poolNote");
+  const leadsTableBody  = document.querySelector("#leadsTable tbody");
+  const leadsNote       = document.getElementById("leadsNote");
+  const statusFilter    = document.getElementById("statusFilter");
 
-  const myLeadsTableBody = document.querySelector("#myLeadsTable tbody");
-  const myLeadsNote = document.getElementById("myLeadsNote");
-  const myStatusFilter = document.getElementById("myStatusFilter");
-  const myPriorityFilter = document.getElementById("myPriorityFilter");
+  const tabButtons      = document.querySelectorAll(".tab-btn");
+  const leadsSection    = document.getElementById("leadsSection");
+  const scriptsSection  = document.getElementById("scriptsSection");
 
-  const pricingBox = document.getElementById("pricingBox");
-  const scriptsBox = document.getElementById("scriptsBox");
-  const emailsBox = document.getElementById("emailsBox");
-  const dmsBox = document.getElementById("dmsBox");
+  let currentUserEmail  = null;
+  let allLeads          = [];
 
-  let currentUser = null;
-  let allLeads = [];
-  let myLeads = [];
-  let poolLeads = [];
+  // Tabs
+  tabButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      tabButtons.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
 
-  logoutBtn.addEventListener("click", async () => {
-    await supabaseClient.auth.signOut();
-    window.location.href = LOGIN_PAGE_URL;
+      if (btn.dataset.tab === "leadsSection") {
+        leadsSection.classList.add("active");
+        scriptsSection.classList.remove("active");
+      } else {
+        scriptsSection.classList.add("active");
+        leadsSection.classList.remove("active");
+      }
+    });
   });
 
-  function formatDate(d) {
-    if (!d) return "";
-    const dd = new Date(d);
-    if (isNaN(dd.getTime())) return "";
-    return dd.toISOString().slice(0,10);
+  function formatMoney(n) {
+    if (!n || isNaN(n)) return "$0.00";
+    return "$" + Number(n).toFixed(2);
   }
 
-  function todayISO(){
-    return new Date().toISOString().slice(0,10);
+  function statusPill(status) {
+    const s = (status || "new").toLowerCase();
+    let cls = "pill-blue";
+    if (s === "closed won") cls = "pill-green";
+    if (s === "working" || s === "no answer") cls = "pill-yellow";
+    return `<span class="pill ${cls}">${s}</span>`;
   }
 
-  function buildOverview() {
-    const today = todayISO();
-    const todayFollowups = myLeads.filter(l => l.next_follow_up === today).length;
-    const myClosedWon = myLeads.filter(l => (l.call_status || "").toLowerCase() === "closed won").length;
-    const myActive = myLeads.filter(l => {
-      const s = (l.call_status || "").toLowerCase();
-      return s === "new" || s === "talked - follow up" || s === "left vm";
-    }).length;
+  function renderStats() {
+    if (!currentUserEmail) return;
+    let active = 0;
+    let closed = 0;
 
-    overviewGrid.innerHTML = "";
-
-    const cards = [
-      {
-        label:"Leads in Pool",
-        value:poolLeads.length,
-        sub:"Claim from this list to start working"
-      },
-      {
-        label:"My Active Leads",
-        value:myActive,
-        sub:"New / follow-up / left VM"
-      },
-      {
-        label:"My Closed Won (All Time)",
-        value:myClosedWon,
-        sub:"Used to estimate commissions"
-      },
-      {
-        label:"Follow-Ups Today",
-        value:todayFollowups,
-        sub:"Next follow-up date is today"
+    allLeads.forEach(ld => {
+      if (ld.assigned_caller_email && ld.assigned_caller_email.toLowerCase() === currentUserEmail) {
+        const st = (ld.call_status || "new").toLowerCase();
+        if (st === "closed won") closed++;
+        else if (st !== "not interested") active++;
       }
-    ];
-
-    cards.forEach(c=>{
-      const div=document.createElement("div");
-      div.className="stat-card";
-      div.innerHTML=`
-        <div class="stat-label">${c.label}</div>
-        <div class="stat-value">${c.value}</div>
-        <div class="stat-sub">${c.sub}</div>
-      `;
-      overviewGrid.appendChild(div);
     });
+
+    myActiveLeadsEl.textContent = active;
+    myClosedWonEl.textContent   = closed;
+    myCommissionEl.textContent  = formatMoney(closed * 100);
   }
 
-  function renderPool() {
-    poolTableBody.innerHTML = "";
-    if (!poolLeads.length) {
-      poolNote.textContent = "No unassigned leads right now. Check back after admin uploads more.";
-      return;
-    }
-    poolNote.textContent = "";
+  function renderLeads() {
+    if (!currentUserEmail) return;
+    const filter = statusFilter.value;
+    leadsTableBody.innerHTML = "";
 
-    poolLeads.slice(0,50).forEach(ld=>{
+    const rows = allLeads.filter(ld => {
+      const assigned = (ld.assigned_caller_email || "").toLowerCase();
+      const st       = (ld.call_status || "new").toLowerCase();
+
+      // Visible if unassigned OR assigned to me
+      if (assigned && assigned !== currentUserEmail) return false;
+
+      if (filter === "all") return true;
+      return st === filter;
+    });
+
+    if (!rows.length) {
+      leadsNote.textContent = "No leads match this filter yet.";
+    } else {
+      leadsNote.textContent = `${rows.length} lead(s) showing.`;
+    }
+
+    rows.forEach(ld => {
       const tr = document.createElement("tr");
 
-      const tdPr = document.createElement("td");
-      tdPr.textContent = ld.priority || "";
-      tr.appendChild(tdPr);
+      const business = ld.business_name || ld.business || "(No name)";
+      const city     = ld.city || "";
+      const state    = ld.state || "";
 
       const tdBiz = document.createElement("td");
-      tdBiz.innerHTML = `<strong>${ld.business_name || ""}</strong>`;
+      tdBiz.innerHTML = `<strong>${business}</strong><br><span class="small">${city} ${state}</span>`;
       tr.appendChild(tdBiz);
 
+      const contactParts = [];
+      if (ld.phone) contactParts.push(ld.phone);
+      if (ld.email) contactParts.push(ld.email);
+      if (ld.social) contactParts.push(ld.social);
       const tdContact = document.createElement("td");
-      tdContact.textContent = ld.contact_name || "";
+      tdContact.innerHTML = contactParts.join("<br>");
       tr.appendChild(tdContact);
 
-      const tdCity = document.createElement("td");
-      tdCity.textContent = (ld.city || "") + (ld.state ? ", " + ld.state : "");
-      tr.appendChild(tdCity);
-
-      const tdPhone = document.createElement("td");
-      tdPhone.textContent = ld.phone_primary || ld.phone_alt || "";
-      tr.appendChild(tdPhone);
-
-      const tdOnline = document.createElement("td");
-      tdOnline.textContent = ld.current_online_presence || "";
-      tr.appendChild(tdOnline);
-
-      const tdPkg = document.createElement("td");
-      tdPkg.textContent = ld.recommended_package || "";
-      tr.appendChild(tdPkg);
-
-      const tdBtn = document.createElement("td");
-      const btn = document.createElement("button");
-      btn.textContent = "Take Lead";
-      btn.className = "btn-primary btn-sm";
-      btn.addEventListener("click", () => claimLead(ld.id));
-      tdBtn.appendChild(btn);
-      tr.appendChild(tdBtn);
-
-      poolTableBody.appendChild(tr);
-    });
-  }
-
-  function renderMyLeads() {
-    myLeadsTableBody.innerHTML = "";
-
-    let filtered = [...myLeads];
-    const sVal = myStatusFilter.value.toLowerCase();
-    const pVal = myPriorityFilter.value.toUpperCase();
-
-    filtered = filtered.filter(ld=>{
-      const s = (ld.call_status || "").toLowerCase();
-      const p = (ld.priority || "").toUpperCase();
-      const sOk = !sVal || s === sVal;
-      const pOk = !pVal || p === pVal;
-      return sOk && pOk;
-    });
-
-    if (!filtered.length) {
-      myLeadsNote.textContent = "No leads assigned to you yet with this filter.";
-      return;
-    }
-    myLeadsNote.textContent = "";
-
-    filtered.slice(0,100).forEach(ld=>{
-      const tr = document.createElement("tr");
-
-      const tdPr = document.createElement("td");
-      tdPr.textContent = ld.priority || "";
-      tr.appendChild(tdPr);
-
-      const tdBiz = document.createElement("td");
-      tdBiz.innerHTML = `<strong>${ld.business_name || ""}</strong><br><span class="small">${ld.city || ""}${ld.state ? ", "+ld.state : ""}</span><br><span class="small">${ld.phone_primary || ""}</span>`;
-      tr.appendChild(tdBiz);
-
       const tdStatus = document.createElement("td");
-      const select = document.createElement("select");
-      ["","new","left vm","talked - follow up","not interested","closed won"].forEach(optVal=>{
-        const opt = document.createElement("option");
-        opt.value = optVal;
-        opt.textContent = optVal || "—";
-        if ((ld.call_status || "").toLowerCase() === optVal) opt.selected = true;
-        select.appendChild(opt);
-      });
-      tdStatus.appendChild(select);
+      tdStatus.innerHTML = statusPill(ld.call_status) +
+        (ld.assigned_caller_email ? `<br><span class="small">You</span>` : `<br><span class="small">Unassigned</span>`);
       tr.appendChild(tdStatus);
 
-      const tdInterest = document.createElement("td");
-      const interestInput = document.createElement("input");
-      interestInput.type = "text";
-      interestInput.placeholder = "1–5";
-      interestInput.value = ld.interest_level != null ? ld.interest_level : "";
-      tdInterest.appendChild(interestInput);
-      tr.appendChild(tdInterest);
+      const tdLast = document.createElement("td");
+      tdLast.innerHTML = `<span class="small">${ld.last_contact_date || "—"}</span>`;
+      tr.appendChild(tdLast);
 
-      const tdNext = document.createElement("td");
-      const nextInput = document.createElement("input");
-      nextInput.type = "text";
-      nextInput.placeholder = "YYYY-MM-DD";
-      nextInput.value = ld.next_follow_up || "";
-      tdNext.appendChild(nextInput);
-      tr.appendChild(tdNext);
+      const tdActions = document.createElement("td");
 
-      const tdNotes = document.createElement("td");
-      const notesArea = document.createElement("textarea");
-      notesArea.placeholder = "Notes + channel used (call / email / DM)";
-      notesArea.value = ld.notes || "";
-      tdNotes.appendChild(notesArea);
+      const assignedToMe = ld.assigned_caller_email &&
+        ld.assigned_caller_email.toLowerCase() === currentUserEmail;
 
-      const channelInput = document.createElement("input");
-      channelInput.type = "text";
-      channelInput.placeholder = "Follow-up channel (optional)";
-      channelInput.value = ld.followup_channel || "";
-      channelInput.style.marginTop = "4px";
-      tdNotes.appendChild(channelInput);
-      tr.appendChild(tdNotes);
+      if (!ld.assigned_caller_email) {
+        const btnClaim = document.createElement("button");
+        btnClaim.className = "btn btn-ghost btn-small";
+        btnClaim.textContent = "Claim";
+        btnClaim.addEventListener("click", () => claimLead(ld.id));
+        tdActions.appendChild(btnClaim);
+      }
 
-      const tdAction = document.createElement("td");
-      const saveBtn = document.createElement("button");
-      saveBtn.textContent = "Save";
-      saveBtn.className = "btn-ghost btn-sm";
-      saveBtn.addEventListener("click", () => {
-        saveLeadUpdate(ld.id, {
-          call_status: select.value || null,
-          interest_level: interestInput.value ? parseInt(interestInput.value, 10) : null,
-          next_follow_up: nextInput.value || null,
-          notes: notesArea.value || null,
-          followup_channel: channelInput.value || null
+      if (assignedToMe) {
+        const select = document.createElement("select");
+        ["new","working","no answer","not interested","closed won"].forEach(st => {
+          const opt = document.createElement("option");
+          opt.value = st;
+          opt.textContent = st;
+          if ((ld.call_status || "new").toLowerCase() === st) opt.selected = true;
+          select.appendChild(opt);
         });
-      });
-      tdAction.appendChild(saveBtn);
+        select.addEventListener("change", () => updateLead(ld.id, { call_status: select.value }));
 
-      const lastLine = document.createElement("div");
-      lastLine.className = "small";
-      lastLine.style.marginTop = "6px";
-      lastLine.textContent = "Last contact: " + (ld.last_contact_date || "—");
-      tdAction.appendChild(lastLine);
+        const btnNote = document.createElement("button");
+        btnNote.className = "btn btn-ghost btn-small";
+        btnNote.style.marginLeft = "4px";
+        btnNote.textContent = "Add Note";
+        btnNote.addEventListener("click", async () => {
+          const note = prompt("Add or update notes for this lead:", ld.notes || "");
+          if (note !== null) {
+            await updateLead(ld.id, { notes: note });
+          }
+        });
 
-      tr.appendChild(tdAction);
+        tdActions.appendChild(select);
+        tdActions.appendChild(btnNote);
+      }
 
-      myLeadsTableBody.appendChild(tr);
+      tr.appendChild(tdActions);
+      leadsTableBody.appendChild(tr);
     });
   }
 
   async function claimLead(id) {
-    if (!currentUser) return;
-    const email = currentUser.email;
+    if (!currentUserEmail) return;
     const { error } = await supabaseClient
       .from("call_leads")
-      .update({ assigned_caller_email: email })
-      .eq("id", id)
-      .is("assigned_caller_email", null); // only claim if still unassigned
+      .update({ assigned_caller_email: currentUserEmail })
+      .eq("id", id);
 
     if (error) {
-      alert("Error claiming lead: " + error.message);
+      alert("Error claiming lead.");
+      console.error(error);
       return;
     }
     await loadLeads();
   }
 
-  async function saveLeadUpdate(id, updates) {
-    // also update last_contact_date to today
-    updates.last_contact_date = todayISO();
-
+  async function updateLead(id, fields) {
     const { error } = await supabaseClient
       .from("call_leads")
-      .update(updates)
+      .update(fields)
       .eq("id", id);
 
     if (error) {
-      alert("Error saving lead update: " + error.message);
+      alert("Error updating lead.");
+      console.error(error);
       return;
     }
     await loadLeads();
@@ -651,156 +657,37 @@
     const { data, error } = await supabaseClient
       .from("call_leads")
       .select("*")
-      .order("priority", { ascending:true })
-      .order("created_at", { ascending:false });
+      .order("id", { ascending: true });
 
     if (error) {
-      console.error("Error loading leads:", error);
+      console.error(error);
+      leadsNote.textContent = "Error loading leads.";
       return;
     }
     allLeads = data || [];
-
-    const email = currentUser.email;
-
-    poolLeads = allLeads.filter(ld => !ld.assigned_caller_email);
-    myLeads   = allLeads.filter(ld => ld.assigned_caller_email === email);
-
-    renderPool();
-    renderMyLeads();
-    buildOverview();
+    renderStats();
+    renderLeads();
   }
 
-  async function loadResources() {
-    // Pricing
-    try {
-      const { data, error } = await supabaseClient
-        .from("pricing_packages")
-        .select("*")
-        .eq("is_active", true)
-        .order("sort_order", { ascending:true });
+  statusFilter.addEventListener("change", renderLeads);
 
-      if (error) throw error;
-
-      if (!data || !data.length) {
-        pricingBox.innerHTML = "No pricing rows in Supabase yet. Using starter idea: Starter $249, Business $699, E-Com $1,199 with optional monthly maintenance.";
-      } else {
-        const parts = data.map(p => `
-          <div style="margin-bottom:6px;">
-            <strong>${p.name}</strong> — $${(p.one_time_price || 0).toFixed(2)} one-time<br>
-            <span class="small">Best for: ${p.best_for || "-"}</span><br>
-            <span class="small">Maintenance: ${p.maintenance_name || "None"} ${
-              p.maintenance_price ? "($" + p.maintenance_price.toFixed(2) + "/mo)" : ""
-            }</span>
-          </div>
-        `);
-        pricingBox.innerHTML = parts.join("");
-      }
-    } catch (e) {
-      pricingBox.innerHTML = "Pricing table not configured yet. Admin can add rows in Supabase.";
-    }
-
-    // Call scripts
-    try {
-      const { data, error } = await supabaseClient
-        .from("call_scripts")
-        .select("*")
-        .eq("is_active", true)
-        .order("sort_order", { ascending:true });
-
-      if (error) throw error;
-
-      if (!data || !data.length) {
-        scriptsBox.innerHTML = `
-          <p>Starter cold call opener:</p>
-          <p>"Hi, is this {{business_name}}? My name is {{your_name}} with BrandCrafters. We help local businesses get simple websites so customers can find you, see your services, and call you in one tap..."</p>
-        `;
-      } else {
-        const parts = data.map(s => `
-          <div style="margin-bottom:8px;">
-            <strong>${s.label}</strong><br>
-            <span class="small">${s.scenario || ""}</span>
-            <pre style="white-space:pre-wrap;font-size:11px;margin-top:4px;">${s.body}</pre>
-          </div>
-        `);
-        scriptsBox.innerHTML = parts.join("");
-      }
-    } catch (e) {
-      scriptsBox.innerHTML = "Call scripts table not configured yet. Admin can add scripts in Supabase.";
-    }
-
-    // Emails
-    try {
-      const { data, error } = await supabaseClient
-        .from("email_templates")
-        .select("*")
-        .eq("is_active", true)
-        .order("sort_order", { ascending:true });
-
-      if (error) throw error;
-
-      if (!data || !data.length) {
-        emailsBox.innerHTML = `
-          <p>Basic intro subject: <code>Quick website question</code></p>
-          <p>Body: introduce yourself, mention they are hard to find online, offer a simple site starting around your base price, and ask permission to send options.</p>
-        `;
-      } else {
-        const parts = data.map(e => `
-          <div style="margin-bottom:8px;">
-            <strong>${e.name}</strong><br>
-            <span class="small">Subject: ${e.subject}</span>
-            <pre style="white-space:pre-wrap;font-size:11px;margin-top:4px;">${e.body}</pre>
-          </div>
-        `);
-        emailsBox.innerHTML = parts.join("");
-      }
-    } catch (e) {
-      emailsBox.innerHTML = "Email templates table not configured yet. Admin can add emails in Supabase.";
-    }
-
-    // DMs
-    try {
-      const { data, error } = await supabaseClient
-        .from("social_dm_templates")
-        .select("*")
-        .eq("is_active", true)
-        .order("sort_order", { ascending:true });
-
-      if (error) throw error;
-
-      if (!data || !data.length) {
-        dmsBox.innerHTML = `
-          <p>Generic DM:</p>
-          <p>"Hey {{first_name}}, I’m {{your_name}} with BrandCrafters. We help local businesses get a simple website so customers can find you easier on Google..."</p>
-        `;
-      } else {
-        const parts = data.map(dm => `
-          <div style="margin-bottom:8px;">
-            <strong>${dm.name}</strong> <span class="small">[${dm.platform}]</span>
-            <pre style="white-space:pre-wrap;font-size:11px;margin-top:4px;">${dm.body}</pre>
-          </div>
-        `);
-        dmsBox.innerHTML = parts.join("");
-      }
-    } catch (e) {
-      dmsBox.innerHTML = "DM templates table not configured yet. Admin can add DMs in Supabase.";
-    }
-  }
-
-  myStatusFilter.addEventListener("change", renderMyLeads);
-  myPriorityFilter.addEventListener("change", renderMyLeads);
+  logoutBtn.addEventListener("click", async () => {
+    await supabaseClient.auth.signOut();
+    window.location.href = "dashboard.html";
+  });
 
   (async () => {
     const { data } = await supabaseClient.auth.getUser();
     if (!data || !data.user) {
-      window.location.href = LOGIN_PAGE_URL;
+      // no session → send them to main login
+      window.location.href = "dashboard.html";
       return;
     }
-    currentUser = data.user;
-    userEmailSpan.textContent = currentUser.email;
+    currentUserEmail = (data.user.email || "").toLowerCase();
+    userEmailSpan.textContent = currentUserEmail;
 
     await loadLeads();
-    await loadResources();
   })();
 </script>
 </body>
-</html>
+                                                       </html>
