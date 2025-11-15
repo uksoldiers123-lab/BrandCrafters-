@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>BrandCrafters — Contractor Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body { font-family: Inter, system-ui, -apple-system, sans-serif; background:#050712; color:#f5f5ff; margin:0; }
+    header { padding:16px 20px; border-bottom:1px solid rgba(255,255,255,.08); display:flex; justify-content:space-between; align-items:center; background:rgba(5,7,19,.9); backdrop-filter:blur(10px); position:sticky; top:0; z-index:50; }
+    .logo { font-weight:700; letter-spacing:.08em; text-transform:uppercase; font-size:14px; }
+    .badge { font-size:12px; opacity:.7; }
+    main { padding:20px; max-width:1200px; margin:0 auto 60px; }
+    .card { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); border-radius:14px; padding:18px; margin-bottom:18px; }
+    h1, h2 { margin:0 0 10px; }
+    label { display:block; margin-bottom:8px; font-size:14px; }
+    input, select, textarea { width:100%; padding:8px 10px; border-radius:8px; border:1px solid rgba(255,255,255,.18); background:rgba(5,7,18,.9); color:#fff; font-size:14px; }
+    button { border-radius:10px; padding:7px 10px; border:0; font-weight:600; cursor:pointer; font-size:12px; }
+    .btn-ghost { background:transparent; border:1px solid rgba(255,255,255,.4); color:#fff; }
+    .btn-claim { background:linear-gradient(135deg,#6ea8ff,#b166ff); color:#050712; }
+    .row { display:flex; gap:12px; flex-wrap:wrap; }
+    .row > * { flex:1 1 220px; }
+    table { width:100%; border-collapse:collapse; font-size:13px; margin-top:10px; }
+    th, td { border-bottom:1px solid rgba(255,255,255,.08); padding:6px 4px; vertical-align:top; }
+    th { text-align:left; font-size:12px; text-transform:uppercase; letter-spacing:.04em; opacity:.7; }
+    .pill { display:inline-block; padding:2px 8px; border-radius:999px; font-size:11px; }
+    .pill-new { background:rgba(110,168,255,.15); }
+    .pill-hot { background:rgba(255,142,102,.18); }
+    .small { font-size:12px; opacity:.8; }
+    .status-select, .notes-input { width:100%; font-size:12px; }
+    .notes-input { min-height:40px; }
+    .top-bar { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px; flex-wrap:wrap; }
+    .error { color:#ff8c8c; font-size:13px; margin-top:6px; }
+    .success { color:#8fffba; font-size:13px; margin-top:6px; }
+    .hidden { display:none; }
+  </style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="logo">BrandCrafters</div>
+    <div class="badge">Contractor Call Portal</div>
+  </div>
+  <div id="userInfo" class="small"></div>
+  <button id="logoutBtn" class="btn-ghost hidden">Log Out</button>
+</header>
+
+<main>
+  <section id="infoCard" class="card">
+    <h2>Your Call Workboard</h2>
+    <p class="small" id="portalMsg">
+      You’ll see unclaimed leads in the pool below. Once you claim a lead, it moves into “My Leads” and no other caller can see it.
+    </p>
+  </section>
+
+  <!-- AVAILABLE POOL -->
+  <section id="availableCard" class="card hidden">
+    <div class="top-bar">
+      <h2>Available Leads (Pool)</h2>
+      <div class="small" id="availableCount"></div>
+    </div>
+    <div style="overflow-x:auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>Priority</th>
+            <th>Business / City</th>
+            <th>Phone</th>
+            <th>Online Presence</th>
+            <th>Claim</th>
+          </tr>
+        </thead>
+        <tbody id="availableBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- MY LEADS -->
+  <section id="leadsCard" class="card hidden">
+    <div class="top-bar">
+      <h2>My Leads</h2>
+      <div class="small" id="leadCount"></div>
+    </div>
+    <div class="row">
+      <div>
+        <label>Filter by Status
+          <select id="statusFilter">
+            <option value="">All</option>
+            <option>new</option>
+            <option>left vm</option>
+            <option>talked - follow up</option>
+            <option>not interested</option>
+            <option>closed won</option>
+          </select>
+        </label>
+      </div>
+      <div>
+        <label>Filter by Priority
+          <select id="priorityFilter">
+            <option value="">All</option>
+            <option>A</option>
+            <option>B</option>
+            <option>C</option>
+          </select>
+        </label>
+      </div>
+    </div>
+
+    <div style="overflow-x:auto; margin-top:10px;">
+      <table id="leadsTable">
+        <thead>
+          <tr>
+            <th>Priority</th>
+            <th>Business / Contact</th>
+            <th>Phone / Email</th>
+            <th>Status / Interest</th>
+            <th>Next Follow-Up</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div id="saveMsg" class="small"></div>
+  </section>
+</main>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = "https://YOUR-PROJECT.supabase.co";
+  const SUPABASE_ANON_KEY = "YOUR_ANON_KEY";
+  const LOGIN_PAGE_URL = "dashboard-login.html"; // your real login page
+
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const userInfo = document.getElementById("userInfo");
+  const logoutBtn = document.getElementById("logoutBtn");
+  const portalMsg = document.getElementById("portalMsg");
+
+  const availableCard = document.getElementById("availableCard");
+  const availableBody = document.getElementById("availableBody");
+  const availableCount = document.getElementById("availableCount");
+
+  const leadsCard = document.getElementById("leadsCard");
+  const leadsTableBody = document.querySelector("#leadsTable tbody");
+  const leadCount = document.getElementById("leadCount");
+  const statusFilter = document.getElementById("statusFilter");
+  const priorityFilter = document.getElementById("priorityFilter");
+  const saveMsg = document.getElementById("saveMsg");
+
+  let currentUser = null;
+  let allLeads = [];
+
+  async function init() {
+    const { data } = await supabaseClient.auth.getUser();
+    if (!data || !data.user) {
+      window.location.href = LOGIN_PAGE_URL;
+      return;
+    }
+    currentUser = data.user;
+    userInfo.textContent = currentUser.email;
+    logoutBtn.classList.remove("hidden");
+    await loadLeads();
+  }
+
+  logoutBtn.addEventListener("click", async () => {
+    await supabaseClient.auth.signOut();
+    window.location.href = LOGIN_PAGE_URL;
+  });
+
+  async function loadLeads() {
+    const { data, error } = await supabaseClient
+      .from("call_leads")
+      .select("*")
+      .order("created_at", { ascending: true });
+
+    if (error) {
+      portalMsg.textContent = "Error loading leads: " + error.message;
+      return;
+    }
+    allLeads = data || [];
+    renderAvailable();
+    renderMyLeads();
+  }
+
+  function renderAvailable() {
+    const available = allLeads.filter(ld => !ld.assigned_caller_email);
+    availableBody.innerHTML = "";
+    if (!available.length) {
+      availableCard.classList.add("hidden");
+      availableCount.textContent = "";
+      return;
+    }
+    availableCard.classList.remove("hidden");
+    availableCount.textContent = available.length + " leads in pool";
+
+    available.forEach(ld => {
+      const tr = document.createElement("tr");
+
+      const tdPr = document.createElement("td");
+      const pill = document.createElement("span");
+      pill.className = "pill " + ((ld.priority || "").toUpperCase() === "A" ? "pill-hot" : "pill-new");
+      pill.textContent = ld.priority || "";
+      tdPr.appendChild(pill);
+      tr.appendChild(tdPr);
+
+      const tdBiz = document.createElement("td");
+      tdBiz.innerHTML = `<strong>${ld.business_name || ""}</strong><br><span class="small">${ld.city || ""}, ${ld.state || ""}</span>`;
+      tr.appendChild(tdBiz);
+
+      const tdPhone = document.createElement("td");
+      tdPhone.innerHTML = `<span class="small">${ld.phone_primary || ""}</span>`;
+      tr.appendChild(tdPhone);
+
+      const tdOnline = document.createElement("td");
+      tdOnline.innerHTML = `<span class="small">${ld.current_online_presence || ""}</span>`;
+      tr.appendChild(tdOnline);
+
+      const tdClaim = document.createElement("td");
+      const btn = document.createElement("button");
+      btn.textContent = "Claim";
+      btn.className = "btn-claim";
+      btn.addEventListener("click", () => claimLead(ld.id));
+      tdClaim.appendChild(btn);
+      tr.appendChild(tdClaim);
+
+      availableBody.appendChild(tr);
+    });
+  }
+
+  function renderMyLeads() {
+    const email = currentUser.email;
+    const myLeadsRaw = allLeads.filter(ld => ld.assigned_caller_email === email);
+
+    if (!myLeadsRaw.length) {
+      leadsCard.classList.add("hidden");
+      leadCount.textContent = "No leads assigned yet.";
+      return;
+    }
+    leadsCard.classList.remove("hidden");
+
+    const statusVal = statusFilter.value.toLowerCase();
+    const priorityVal = priorityFilter.value.toUpperCase();
+    leadsTableBody.innerHTML = "";
+
+    const myLeads = myLeadsRaw.filter(ld => {
+      const s = (ld.call_status || "").toLowerCase();
+      const p = (ld.priority || "").toUpperCase();
+      const statusOk = !statusVal || s === statusVal;
+      const priorityOk = !priorityVal || p === priorityVal;
+      return statusOk && priorityOk;
+    });
+
+    leadCount.textContent = myLeads.length + " leads";
+
+    myLeads.forEach(ld => {
+      const tr = document.createElement("tr");
+
+      const tdPr = document.createElement("td");
+      const pill = document.createElement("span");
+      pill.className = "pill " + ((ld.priority || "").toUpperCase() === "A" ? "pill-hot" : "pill-new");
+      pill.textContent = ld.priority || "";
+      tdPr.appendChild(pill);
+      tr.appendChild(tdPr);
+
+      const tdBiz = document.createElement("td");
+      tdBiz.innerHTML = `<strong>${ld.business_name || ""}</strong><br><span class="small">${ld.contact_name || ""}</span>`;
+      tr.appendChild(tdBiz);
+
+      const tdContact = document.createElement("td");
+      tdContact.innerHTML = `
+        <div class="small">${ld.phone_primary || ""}</div>
+        <div class="small">${ld.email_primary || ""}</div>
+      `;
+      tr.appendChild(tdContact);
+
+      const tdStatus = document.createElement("td");
+      const statusSel = document.createElement("select");
+      statusSel.className = "status-select";
+      ["", "new", "left vm", "talked - follow up", "not interested", "closed won"].forEach(opt => {
+        const o = document.createElement("option");
+        o.value = opt;
+        o.textContent = opt || "—";
+        if ((ld.call_status || "").toLowerCase() === opt) o.selected = true;
+        statusSel.appendChild(o);
+      });
+      const interestInput = document.createElement("input");
+      interestInput.type = "number";
+      interestInput.min = 1;
+      interestInput.max = 5;
+      interestInput.value = ld.interest_level || "";
+      interestInput.placeholder = "1–5";
+      interestInput.style.marginTop = "4px";
+      tdStatus.appendChild(statusSel);
+      tdStatus.appendChild(interestInput);
+      tr.appendChild(tdStatus);
+
+      const tdFollow = document.createElement("td");
+      const followInput = document.createElement("input");
+      followInput.type = "date";
+      followInput.value = ld.next_follow_up || "";
+      tdFollow.appendChild(followInput);
+      tr.appendChild(tdFollow);
+
+      const tdNotes = document.createElement("td");
+      const notesArea = document.createElement("textarea");
+      notesArea.className = "notes-input";
+      notesArea.value = ld.notes || "";
+      tdNotes.appendChild(notesArea);
+      tr.appendChild(tdNotes);
+
+      [statusSel, interestInput, followInput, notesArea].forEach(el => {
+        el.addEventListener("change", () => saveLead(ld.id, {
+          call_status: statusSel.value || null,
+          interest_level: interestInput.value ? parseInt(interestInput.value, 10) : null,
+          next_follow_up: followInput.value || null,
+          notes: notesArea.value || null
+        }));
+      });
+
+      leadsTableBody.appendChild(tr);
+    });
+  }
+
+  async function claimLead(id) {
+    saveMsg.textContent = "Claiming lead...";
+    const { error } = await supabaseClient
+      .from("call_leads")
+      .update({
+        assigned_caller_email: currentUser.email,
+        call_status: "new"
+      })
+      .eq("id", id);
+
+    if (error) {
+      saveMsg.textContent = "Error claiming lead: " + error.message;
+    } else {
+      saveMsg.textContent = "Lead claimed.";
+      await loadLeads();
+      setTimeout(() => (saveMsg.textContent = ""), 1500);
+    }
+  }
+
+  async function saveLead(id, fields) {
+    saveMsg.textContent = "Saving...";
+    const { error } = await supabaseClient
+      .from("call_leads")
+      .update(fields)
+      .eq("id", id);
+
+    if (error) {
+      saveMsg.textContent = "Error saving: " + error.message;
+    } else {
+      saveMsg.textContent = "Saved.";
+      const idx = allLeads.findIndex(l => l.id === id);
+      if (idx !== -1) {
+        allLeads[idx] = { ...allLeads[idx], ...fields };
+      }
+      setTimeout(() => (saveMsg.textContent = ""), 1500);
+    }
+  }
+
+  statusFilter.addEventListener("change", renderMyLeads);
+  priorityFilter.addEventListener("change", renderMyLeads);
+
+  init();
+</script>
+</body>
+</html>
