@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>BrandCrafters — Commission Rules</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <script defer src="script.js"></script>
+
+  <style>
+    body{
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color:#f5f5ff;
+    }
+    main{
+      max-width:900px;
+      margin:32px auto 80px;
+      padding:0 20px;
+    }
+    h1{margin:0 0 6px;font-size:22px;}
+    .subhead{margin:0 0 18px;font-size:13px;color:var(--muted);}
+    .card{
+      background:var(--panel);
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.1);
+      padding:16px 18px;
+      margin-bottom:16px;
+      font-size:13px;
+    }
+    table{
+      width:100%;
+      border-collapse:collapse;
+      margin-top:8px;
+      font-size:13px;
+    }
+    th,td{
+      border-bottom:1px solid rgba(255,255,255,.08);
+      padding:6px 4px;
+      vertical-align:middle;
+    }
+    th{
+      text-align:left;
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+      color:var(--muted);
+    }
+    .input-money{
+      width:90px;
+      padding:6px 8px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(0,0,0,.2);
+      color:#f5f5ff;
+      font-size:13px;
+    }
+    .badge{
+      display:inline-block;
+      padding:2px 6px;
+      border-radius:999px;
+      font-size:10px;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      background:rgba(110,168,255,.16);
+      color:#b9d3ff;
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:4px;
+      padding:8px 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.25);
+      background:rgba(255,255,255,.04);
+      color:#f5f5ff;
+      font-size:12px;
+      cursor:pointer;
+      transition:.18s;
+      text-decoration:none;
+      margin-top:10px;
+    }
+    .btn:hover{
+      background:rgba(255,255,255,.12);
+      transform:translateY(-1px);
+    }
+    .btn-primary{
+      border-color:transparent;
+      background:var(--grad);
+      color:#050713;
+      font-weight:600;
+      box-shadow:0 0 0 1px rgba(110,168,255,.4);
+    }
+    .status-msg{
+      margin-top:6px;
+      font-size:12px;
+      color:var(--muted);
+    }
+    .header-user{
+      display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted);margin-left:12px;
+    }
+    .btn-logout{
+      border-radius:999px;padding:6px 10px;border:1px solid rgba(255,255,255,.55);
+      background:rgba(255,255,255,.08);font-size:11px;cursor:pointer;
+      display:inline-flex;align-items:center;gap:4px;
+    }
+    .btn-logout:hover{background:rgba(255,255,255,.16);transform:translateY(-1px);}
+    @media(max-width:940px){.header-user{display:none;}}
+  </style>
+</head>
+<body>
+
+<!-- Header matching site/menu style -->
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="logo" href="index.html">
+      <span class="logo-mark">BC</span><span>BrandCrafters</span>
+    </a>
+
+    <nav class="nav desktop-nav">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="pricing.html" class="nav-link">Pricing</a>
+      <a href="customer-inquiry.html" class="btn btn-outline">Customer Portal</a>
+
+      <a href="dashboard.html" class="nav-link">Admin Dashboard</a>
+      <a href="dashboard-leads-upload.html" class="nav-link">Leads &amp; CSV</a>
+      <a href="contractor-portal.html" class="nav-link">Contractor Portal</a>
+      <a href="dashboard-commissions.html" class="nav-link active">Commission Rules</a>
+
+      <div class="header-user">
+        <span id="userEmail"></span>
+        <button id="logoutBtn" class="btn-logout">Log Out</button>
+      </div>
+    </nav>
+
+    <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <nav class="mobile-drawer" aria-hidden="true">
+    <div class="drawer-header">
+      <a class="logo" href="index.html">
+        <span class="logo-mark">BC</span><span>BrandCrafters</span>
+      </a>
+      <button class="menu-close" aria-label="Close menu">✕</button>
+    </div>
+
+    <a class="drawer-link" href="index.html">Home</a>
+    <a class="drawer-link" href="pricing.html">Pricing</a>
+    <a class="drawer-link" href="customer-inquiry.html">Customer Portal</a>
+    <a class="drawer-link" href="dashboard.html">Admin Dashboard</a>
+    <a class="drawer-link" href="dashboard-leads-upload.html">Leads &amp; CSV</a>
+    <a class="drawer-link" href="contractor-portal.html">Contractor Portal</a>
+    <a class="drawer-link" href="dashboard-commissions.html">Commission Rules</a>
+  </nav>
+  <div class="drawer-backdrop" aria-hidden="true"></div>
+</header>
+
+<main>
+  <section>
+    <h1>Commission Rules</h1>
+    <p class="subhead">
+      Edit default commissions for each website package. These amounts are used when a lead is marked
+      as that package type, and they auto-fill <code>commission_amount</code> on <code>call_leads</code>.
+    </p>
+  </section>
+
+  <section class="card">
+    <span class="badge">Admin Only</span>
+    <p class="status-msg" style="margin-top:6px;">
+      Current rule: contractors only contact <b>new clients</b>, and earn commission
+      <b>only when a new website package is sold</b> (Starter, Business, or E-Commerce).
+      No commission is paid for add-ons or maintenance by themselves.
+    </p>
+
+    <table id="commissionTable">
+      <thead>
+        <tr>
+          <th>Package</th>
+          <th>Key</th>
+          <th>Default Commission ($)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Rows filled by JS -->
+      </tbody>
+    </table>
+
+    <button id="saveBtn" class="btn btn-primary">Save Changes</button>
+    <div id="statusMessage" class="status-msg"></div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      © <span id="year"></span> BrandCrafters — A division of Egyptian Hype LLC
+      <a href="dashboard.html" class="admin-link">Admin</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const yearSpan = document.getElementById('year');
+  if (yearSpan) yearSpan.textContent = new Date().getFullYear();
+</script>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = "https://vekoulqehexqosgwacwa.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiIsInZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
+  const ADMIN_EMAIL = "srarnold216@gmail.com";
+  const LOGIN_PAGE_URL = "dashboard.html";
+
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const userEmailSpan   = document.getElementById("userEmail");
+  const logoutBtn       = document.getElementById("logoutBtn");
+  const tableBody       = document.querySelector("#commissionTable tbody");
+  const saveBtn         = document.getElementById("saveBtn");
+  const statusMessage   = document.getElementById("statusMessage");
+
+  async function guardAdmin(){
+    const { data } = await supabaseClient.auth.getUser();
+    if (!data || !data.user) {
+      window.location.href = LOGIN_PAGE_URL;
+      return null;
+    }
+    const email = data.user.email;
+    if (userEmailSpan) userEmailSpan.textContent = email || "";
+    if (email !== ADMIN_EMAIL) {
+      window.location.href = "contractor-portal.html";
+      return null;
+    }
+    return data.user;
+  }
+
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", async () => {
+      await supabaseClient.auth.signOut();
+      window.location.href = LOGIN_PAGE_URL;
+    });
+  }
+
+  function renderRows(rows){
+    tableBody.innerHTML = "";
+    if (!rows || !rows.length){
+      const tr = document.createElement("tr");
+      const td = document.createElement("td");
+      td.colSpan = 3;
+      td.textContent = "No package_commissions rows found.";
+      td.style.fontSize = "12px";
+      td.style.color = "var(--muted)";
+      tr.appendChild(td);
+      tableBody.appendChild(tr);
+      return;
+    }
+
+    rows.forEach(row => {
+      const tr = document.createElement("tr");
+
+      const tdLabel = document.createElement("td");
+      tdLabel.textContent = row.label || "";
+      tr.appendChild(tdLabel);
+
+      const tdKey = document.createElement("td");
+      tdKey.textContent = row.package_key || "";
+      tr.appendChild(tdKey);
+
+      const tdComm = document.createElement("td");
+      const input = document.createElement("input");
+      input.type = "number";
+      input.min = "0";
+      input.step = "1";
+      input.value = row.default_commission != null ? Number(row.default_commission) : 0;
+      input.className = "input-money";
+      input.dataset.packageKey = row.package_key;
+      tdComm.appendChild(input);
+      tr.appendChild(tdComm);
+
+      tableBody.appendChild(tr);
+    });
+  }
+
+  async function loadCommissions(){
+    statusMessage.textContent = "Loading current commission settings…";
+    const { data, error } = await supabaseClient
+      .from("package_commissions")
+      .select("*")
+      .order("package_key", { ascending: true });
+
+    if (error){
+      console.error("package_commissions error:", error);
+      statusMessage.textContent = "Error loading commissions: " + error.message;
+      return;
+    }
+
+    renderRows(data || []);
+    statusMessage.textContent = "Loaded.";
+  }
+
+  async function saveCommissions(){
+    const inputs = tableBody.querySelectorAll(".input-money");
+    if (!inputs.length){
+      statusMessage.textContent = "No rows to save.";
+      return;
+    }
+
+    statusMessage.textContent = "Saving…";
+
+    const updates = [];
+    inputs.forEach(input => {
+      const pkgKey = input.dataset.packageKey;
+      let val = Number(input.value);
+      if (isNaN(val) || val < 0) val = 0;
+      updates.push({ package_key: pkgKey, default_commission: val });
+    });
+
+    // Save one by one (simple + safe)
+    for (const u of updates){
+      const { error } = await supabaseClient
+        .from("package_commissions")
+        .update({ default_commission: u.default_commission })
+        .eq("package_key", u.package_key);
+
+      if (error){
+        console.error("update commission error:", error);
+        statusMessage.textContent = "Error updating " + u.package_key + ": " + error.message;
+        return;
+      }
+    }
+
+    statusMessage.textContent = "Saved successfully.";
+  }
+
+  if (saveBtn){
+    saveBtn.addEventListener("click", saveCommissions);
+  }
+
+  (async () => {
+    const user = await guardAdmin();
+    if (!user) return;
+    await loadCommissions();
+  })();
+</script>
+</body>
+                                           </html>
