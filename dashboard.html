@@ -59,6 +59,7 @@
       opacity:.85;
     }
   </style>
+  <script defer src="script.js"></script>
 </head>
 <body>
 
@@ -208,7 +209,7 @@
     <!-- Bills & Recurring Expenses -->
     <section id="expensesSection" style="margin-top:32px;margin-bottom:40px;">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
-        <h2 style="margin:0;">Bills & Recurring Expenses</h2>
+        <h2 style="margin:0;">Bills &amp; Recurring Expenses</h2>
         <button id="addExpenseBtn" class="btn btn-primary" type="button">Add Expense</button>
       </div>
       <p class="form-note">
@@ -498,7 +499,7 @@
       const clientAmountInput = prompt("Client amount (what you charge them per cycle):", amountInput) || amountInput;
       client_amount = Number(clientAmountInput);
 
-      client_notes = prompt("Client billing notes (e.g. 'invoice yearly'):", "") || null;
+      client_notes = prompt("Client billing notes (e.g. 'Client billed yearly at $30'):", "") || null;
 
       const projectIdInput = prompt("Link to project ID (UUID from onboarding_submissions.id) or leave blank:", "") || "";
       client_project_id = projectIdInput.trim() || null;
