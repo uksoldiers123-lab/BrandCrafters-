@@ -5,7 +5,6 @@
   <title>BrandCrafters — Leads Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
   <style>
     body {
       margin: 0;
@@ -54,12 +53,21 @@
       text-decoration: none;
       color: #f5f5ff;
       opacity: .9;
+      transition: .18s;
     }
     .dash-nav a.primary {
       border-color: transparent;
       background: linear-gradient(135deg,#6ea8ff,#b166ff);
       color: #050713;
       font-weight: 600;
+      box-shadow:0 0 0 1px rgba(110,168,255,.4);
+    }
+    .dash-nav a:hover {
+      background: rgba(255,255,255,.08);
+      transform: translateY(-1px);
+    }
+    .dash-nav a.primary:hover {
+      filter: brightness(1.05);
     }
     .user-email {
       font-size: 12px;
@@ -67,12 +75,18 @@
     }
     .logout-btn {
       border-radius: 999px;
-      padding: 6px 10px;
-      border: 1px solid rgba(255,255,255,.3);
-      background: transparent;
+      padding: 6px 12px;
+      border: 1px solid rgba(255,255,255,.7);
+      background: rgba(255,255,255,.08);
       color: #f5f5ff;
       font-size: 12px;
       cursor: pointer;
+      box-shadow:0 0 0 1px rgba(110,168,255,.4);
+      transition:.18s;
+    }
+    .logout-btn:hover {
+      background: rgba(255,255,255,.16);
+      transform: translateY(-1px);
     }
 
     main {
@@ -108,16 +122,23 @@
       font-weight: 600;
       cursor: pointer;
       font-size: 12px;
+      transition:.18s;
+    }
+    button:hover {
+      transform: translateY(-1px);
+      opacity:.97;
     }
     .btn-primary {
       background: linear-gradient(135deg,#6ea8ff,#b166ff);
       color: #050713;
       margin-right: 8px;
+      box-shadow:0 0 0 1px rgba(110,168,255,.4);
     }
     .btn-ghost {
-      background: transparent;
-      border: 1px solid rgba(255,255,255,.4);
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.7);
       color: #f5f5ff;
+      box-shadow:0 0 0 1px rgba(110,168,255,.4);
     }
     .small { font-size: 12px; opacity:.85; }
     .badge {
@@ -189,7 +210,6 @@
     <div class="dash-tagline">Admin · Leads Dashboard</div>
   </div>
   <nav class="dash-nav">
-    <!-- Update hrefs to match your real pages -->
     <a href="dashboard.html">Main Dashboard</a>
     <a href="contractor-portal.html" target="_blank">Contractor Portal</a>
     <a href="dashboard-leads-upload.html" class="primary">Leads & CSV</a>
@@ -238,7 +258,7 @@
   <section class="card">
     <h2>Productivity by Caller</h2>
     <p class="small">
-      Per-caller breakdown — how many leads they’re touching and how much money they’ve closed.
+      Per-caller breakdown — how many leads they’re touching, how much money they’ve closed, and estimated commission.
     </p>
     <div style="overflow-x:auto;">
       <table>
@@ -251,6 +271,7 @@
             <th>Follow-Up</th>
             <th>Closed Won</th>
             <th>Closed Won Revenue</th>
+            <th>Commission Est.</th>
             <th>Last Activity</th>
           </tr>
         </thead>
@@ -263,7 +284,7 @@
   <section class="card">
     <h2>Upload Call Leads CSV</h2>
     <p class="small">
-      Export your <b>Call_List</b> from Excel/Google Sheets as CSV. Expected headers:<br>
+      Export your <b>Call_Leads</b> from Excel/Google Sheets as CSV. Expected headers:<br>
       <code>Priority, Date_Added, Business_Name, Contact_Name, Phone_Primary, Phone_Alt, Email_Primary, Email_Alt, Social_1, Social_2, City, State, Current_Online_Presence, Recommended_Package, Est_Budget, Decision_Maker_YN, Interest_Level_1_5, Last_Contact_Date, Next_Follow_Up, Call_Status, Notes, Assigned_Caller, Sold_Package, Final_Price, AddOns_Sold, FollowUp_Channel</code>
     </p>
 
@@ -352,9 +373,8 @@
 <script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
 <script>
   const SUPABASE_URL = "https://vekoulqehexqosgwacwa.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiIsInZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
   const LOGIN_PAGE_URL = "dashboard-login.html";
-  const CONTRACTOR_PORTAL_URL = "contractor-portal.html";
   const ADMIN_EMAIL = "srarnold216@gmail.com";
 
   const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -393,7 +413,7 @@
     userEmailSpan.textContent = email;
 
     if (email !== ADMIN_EMAIL) {
-      window.location.href = CONTRACTOR_PORTAL_URL;
+      window.location.href = "contractor-portal.html";
       return;
     }
 
@@ -529,10 +549,9 @@
   function renderCallerStats() {
     callerStatsBody.innerHTML = "";
 
-    // Group leads by assigned_caller_email (ignore unassigned)
     const map = new Map();
     allLeads.forEach(ld => {
-      if (!ld.assigned_caller_email) return; // only show callers with assigned leads
+      if (!ld.assigned_caller_email) return;
       const email = ld.assigned_caller_email;
       if (!map.has(email)) {
         map.set(email, {
@@ -543,6 +562,7 @@
           follow: 0,
           won: 0,
           revenue: 0,
+          commission: 0,
           lastActivity: null
         });
       }
@@ -553,7 +573,10 @@
       const s = (ld.call_status || "").toLowerCase();
       if (s === "new") bucket.new += 1;
       if (s === "talked - follow up") bucket.follow += 1;
-      if (s === "closed won") bucket.won += 1;
+      if (s === "closed won") {
+        bucket.won += 1;
+        bucket.commission += 100; // $100 per closed website sale
+      }
 
       if (s === "closed won" && ld.final_price) {
         bucket.revenue += Number(ld.final_price) || 0;
@@ -573,15 +596,14 @@
     });
 
     const rows = Array.from(map.values()).sort((a, b) => {
-      // sort by revenue desc then by won desc
-      if (b.revenue !== a.revenue) return b.revenue - a.revenue;
+      if (b.commission !== a.commission) return b.commission - a.commission;
       return b.won - a.won;
     });
 
     if (!rows.length) {
       const tr = document.createElement("tr");
       const td = document.createElement("td");
-      td.colSpan = 8;
+      td.colSpan = 9;
       td.textContent = "No callers with assigned leads yet.";
       td.className = "small";
       tr.appendChild(td);
@@ -619,6 +641,10 @@
       const tdRev = document.createElement("td");
       tdRev.textContent = "$" + r.revenue.toFixed(2);
       tr.appendChild(tdRev);
+
+      const tdComm = document.createElement("td");
+      tdComm.textContent = "$" + r.commission.toFixed(2);
+      tr.appendChild(tdComm);
 
       const tdLast = document.createElement("td");
       tdLast.textContent = r.lastActivity
@@ -841,9 +867,7 @@
 
   callerFilter.addEventListener("change", () => {
     renderOverview();
-    // overview filters don't change per-caller card (that uses allLeads)
   });
-
   overviewStatusFilter.addEventListener("change", () => {
     renderOverview();
   });
@@ -855,4 +879,4 @@
   guardAdminAndLoad();
 </script>
 </body>
-  </html>
+                                    </html>
