@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>BrandCrafters — Scripts & WebBook</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <script defer src="script.js"></script>
+
+  <style>
+    body{
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color:#f5f5ff;
+    }
+    main{
+      max-width:1100px;
+      margin:32px auto 80px;
+      padding:0 20px;
+    }
+    h1{margin:0 0 6px;font-size:24px;}
+    .subhead{margin:0 0 20px;font-size:13px;color:var(--muted);}
+    .section{
+      background:var(--panel);
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.1);
+      padding:16px 18px;
+      margin-bottom:16px;
+    }
+    .section h2{margin:0 0 8px;font-size:18px;}
+    .section h3{margin:12px 0 4px;font-size:14px;}
+    .section p{margin:4px 0;font-size:13px;color:var(--muted);}
+    .tagline{font-size:12px;color:var(--muted);margin-bottom:8px;}
+    .badge{
+      display:inline-block;padding:2px 6px;border-radius:999px;
+      font-size:10px;text-transform:uppercase;letter-spacing:.06em;
+      background:rgba(110,168,255,.16);color:#b9d3ff;
+    }
+    pre{
+      margin:6px 0 10px;
+      padding:10px 12px;
+      border-radius:10px;
+      background:rgba(5,7,19,.9);
+      border:1px solid rgba(255,255,255,.08);
+      font-size:12px;
+      white-space:pre-wrap;
+      word-wrap:break-word;
+    }
+    .grid-2{
+      display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;
+    }
+    @media(max-width:900px){.grid-2{grid-template-columns:1fr;}}
+    ul{
+      margin:4px 0 6px 18px;
+      padding:0;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .header-user{
+      display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted);margin-left:12px;
+    }
+    .btn-logout{
+      border-radius:999px;padding:6px 10px;border:1px solid rgba(255,255,255,.55);
+      background:rgba(255,255,255,.08);font-size:11px;cursor:pointer;
+      display:inline-flex;align-items:center;gap:4px;
+    }
+    .btn-logout:hover{background:rgba(255,255,255,.16);transform:translateY(-1px);}
+    @media(max-width:940px){.header-user{display:none;}}
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="logo" href="index.html">
+      <span class="logo-mark">BC</span><span>BrandCrafters</span>
+    </a>
+
+    <nav class="nav desktop-nav">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="pricing.html" class="nav-link">Pricing</a>
+      <a href="customer-inquiry.html" class="btn btn-outline">Customer Portal</a>
+
+      <a href="dashboard.html" class="nav-link">Admin Dashboard</a>
+      <a href="dashboard-leads-upload.html" class="nav-link">Leads &amp; CSV</a>
+      <a href="dashboard-commissions.html" class="nav-link">Commission Rules</a>
+      <a href="contractor-portal.html" class="nav-link">Contractor Portal</a>
+
+      <div class="header-user">
+        <span id="userEmail"></span>
+        <button id="logoutBtn" class="btn-logout">Log Out</button>
+      </div>
+    </nav>
+
+    <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <nav class="mobile-drawer" aria-hidden="true">
+    <div class="drawer-header">
+      <a class="logo" href="index.html">
+        <span class="logo-mark">BC</span><span>BrandCrafters</span>
+      </a>
+      <button class="menu-close" aria-label="Close menu">✕</button>
+    </div>
+
+    <a class="drawer-link" href="index.html">Home</a>
+    <a class="drawer-link" href="pricing.html">Pricing</a>
+    <a class="drawer-link" href="customer-inquiry.html">Customer Portal</a>
+    <a class="drawer-link" href="dashboard.html">Admin Dashboard</a>
+    <a class="drawer-link" href="dashboard-leads-upload.html">Leads &amp; CSV</a>
+    <a class="drawer-link" href="dashboard-commissions.html">Commission Rules</a>
+    <a class="drawer-link" href="contractor-portal.html">Contractor Portal</a>
+  </nav>
+  <div class="drawer-backdrop" aria-hidden="true"></div>
+</header>
+
+<main>
+  <section>
+    <h1>Scripts &amp; WebBook</h1>
+    <p class="subhead">
+      Use this as your cheat sheet when you call, email, or DM new businesses about getting a website built by BrandCrafters.
+    </p>
+  </section>
+
+  <section class="section">
+    <h2>How Commissions Work</h2>
+    <p class="tagline">
+      <span class="badge">Important</span> You only contact <b>new clients</b> and get paid for <b>new website package sales</b>.
+    </p>
+    <ul>
+      <li><b>Starter Craft (1-page)</b> — Commission: <b>$50</b></li>
+      <li><b>Business Builder (3–5 pages)</b> — Commission: <b>$75</b></li>
+      <li><b>E-Commerce Store</b> — Commission: <b>$100</b></li>
+    </ul>
+    <p>
+      No commission is paid on small add-ons or maintenance by themselves — those only happen later with existing clients.  
+      Your focus is simple: <b>book a new website sale, get paid on that package.</b>
+    </p>
+    <p>
+      Commissions are tracked in our system when a lead is marked <b>Closed Won</b> and the package is selected.
+    </p>
+  </section>
+
+  <section class="section">
+    <h2>Pricing · Quick Reference</h2>
+    <div class="grid-2">
+      <div>
+        <h3>Core Website Packages</h3>
+        <ul>
+          <li><b>Starter Craft — $249</b><br>
+            1-page site (Home • About • Contact), basic logo, domain + SSL, mobile-ready.
+          </li>
+          <li><b>Business Builder — $699</b><br>
+            3–5 page business website with services, photos, and contact.
+          </li>
+          <li><b>E-Commerce Store — $1,199</b><br>
+            Online shop or booking site with checkout.
+          </li>
+        </ul>
+        <p><b>Best fits (examples):</b></p>
+        <ul>
+          <li>Starter: solo barbers, lawn care, side hustle services.</li>
+          <li>Business: restaurants, HVAC, trucking, salons, local shops.</li>
+          <li>E-Com: boutiques, online stores, heavy booking businesses.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Add-Ons (For Later)</h3>
+        <ul>
+          <li>Maintenance Plans (monthly)</li>
+          <li>Payment Link Setup</li>
+          <li>Business Email / Email Forwarding</li>
+          <li>SEO Setup</li>
+          <li>Social Media Kit</li>
+        </ul>
+        <p>
+          These are useful to mention but they are <b>not required</b> to close a website sale.
+          Your job is to get them comfortable saying “yes” to a package (Starter / Business / E-Com).
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Phone Call Scripts</h2>
+    <p class="tagline">
+      Adjust for the type of business (restaurant, lawn care, trucking, salon, etc.). Don’t read these word-for-word; use them as a guide.
+    </p>
+
+    <h3>1. Cold Call — No Website (Priority A)</h3>
+    <pre>Hi, is this {{BusinessName}}?
+
+Hey {{OwnerName}}, my name is {{YourName}}. I’m calling with BrandCrafters — we build simple, done-for-you business websites.
+
+I was looking up {{BusinessName}} and I noticed you don’t really have a full website yet — people mainly see a listing or social page. 
+Most of the businesses we help were in the same spot: they depend on calls and word of mouth, but they don’t have a site that actually shows what they do.
+
+Quick question:
+<b>If someone searches your business tonight, are you happy with what they see?</b>
+
+[Let them respond]
+
+The reason I’m calling is we offer:
+• A basic starter site at <b>$249</b>  
+• A full 3–5 page business site at <b>$699</b>  
+
+We handle the domain, setup, and design — you just approve it.
+
+Would you be open to a quick follow-up where I text or email you a simple breakdown and a couple examples, then you can decide if it’s worth it?</pre>
+
+    <h3>2. Cold Call — Weak Site / Only Facebook (Priority B)</h3>
+    <pre>Hi, is this {{BusinessName}}?
+
+Hey {{OwnerName}}, this is {{YourName}} with BrandCrafters. 
+I found you on {{Facebook/Google/etc.}} and I like what you’re doing — but I noticed your main online presence is {{a basic page / an older site / just Facebook}}.
+
+Right now, when people look you up, they mainly see {{what you have now}}.
+Most businesses we help were in the same spot — they look smaller or less trustworthy online than they really are in real life.
+
+We build modern sites starting at <b>$249</b>, and our most popular package is a 3–5 page business site at <b>$699</b> that looks good on phones, lists your services, and makes it easy to contact you.
+
+If I send you a quick breakdown with examples by text or email, will you at least look at it and tell me what you think?</pre>
+
+    <h3>3. Closing / Next Step</h3>
+    <pre>Awesome. The next step is simple:
+
+1. I’ll send you a short breakdown of our packages (Starter, Business, or E-Com).
+2. You pick what fits best.
+3. We handle the setup and design — you just approve and send your info/photos.
+
+What’s the best email and cell number to send that to?</pre>
+  </section>
+
+  <section class="section">
+    <h2>Email Templates</h2>
+    <p class="tagline">Use after a call or when you have a good email address for the owner.</p>
+
+    <h3>1. Follow-Up After Phone Call</h3>
+    <pre>Subject: Website options for {{BusinessName}}
+
+Hi {{OwnerName}},
+
+Thanks for taking a minute to talk today.
+
+As promised, here’s a quick breakdown of what BrandCrafters can do for {{BusinessName}}:
+
+• Starter Craft – $249  
+  1-page site (Home • About • Contact), basic logo, domain + SSL, mobile-friendly.
+
+• Business Builder – $699  
+  3–5 page site (great for {{their type — restaurant / lawn care / trucking / salon}}) with your services, photos, and a clean contact section.
+
+• E-Commerce Store – $1,199  
+  Full store setup for online orders, bookings, or memberships.
+
+We handle the domain, setup, and design. You just approve and send content.
+
+If you’d like, we can start with a simple site that makes you easy to find and contact, then grow it over time.
+
+Would you like me to recommend a specific package for {{BusinessName}}?
+
+– {{YourName}}  
+BrandCrafters</pre>
+
+    <h3>2. Cold Email – No Prior Call</h3>
+    <pre>Subject: Quick website upgrade for {{BusinessName}}
+
+Hi {{OwnerName}},
+
+My name is {{YourName}}, I’m with BrandCrafters. 
+We build done-for-you websites for local businesses.
+
+I found {{BusinessName}} online and noticed you don’t really have a full website yet 
+(or it’s basically just a listing/Facebook page). That usually means people see less 
+of what you actually offer and you get fewer calls than you should.
+
+We offer:
+• Basic 1-page starter site – $249  
+• 3–5 page business site – $699  
+• Full store/booking site – $1,199  
+
+We handle the setup, domain, and design. You just approve.
+
+If I send you a couple examples and a simple link to get started, would you be open to taking a look?
+
+– {{YourName}}  
+BrandCrafters</pre>
+  </section>
+
+  <section class="section">
+    <h2>Social Media DMs</h2>
+    <p class="tagline">Short messages that move them to a call or email — don’t oversell inside the DM.</p>
+
+    <h3>1. DM – Business With Only Social Page</h3>
+    <pre>Hey {{OwnerName}}! I found {{BusinessName}} on {{platform}} — love what you’re doing.
+
+Quick thing I noticed: you don’t really have a full website yet, so people mainly see this page.
+
+I’m with BrandCrafters — we build simple business sites starting at $249 (and full 3–5 page sites at $699).
+We handle the setup, domain, and design for you.
+
+Would you like me to send over a simple breakdown with examples so you can see if it makes sense?</pre>
+
+    <h3>2. DM – After They Say Yes</h3>
+    <pre>Perfect. Here’s the short version:
+
+• Starter: 1-page site – $249  
+• Business: 3–5 page site – $699  
+• Store: full shop/booking – $1,199  
+
+We do all the setup and design. You just approve.
+
+If you share the best email, I’ll send you the full details and a link to get started.</pre>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      © <span id="year"></span> BrandCrafters — A division of Egyptian Hype LLC
+      <a href="dashboard.html" class="admin-link">Admin</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const yearSpan = document.getElementById('year');
+  if (yearSpan) yearSpan.textContent = new Date().getFullYear();
+</script>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = "https://vekoulqehexqosgwacwa.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiIsInZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
+  const LOGIN_PAGE_URL = "dashboard.html";
+
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const userEmailSpan = document.getElementById("userEmail");
+  const logoutBtn = document.getElementById("logoutBtn");
+
+  async function guardLoggedIn(){
+    const { data } = await supabaseClient.auth.getUser();
+    if (!data || !data.user) {
+      window.location.href = LOGIN_PAGE_URL;
+      return null;
+    }
+    const email = data.user.email;
+    if (userEmailSpan) userEmailSpan.textContent = email || "";
+    return data.user;
+  }
+
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", async () => {
+      await supabaseClient.auth.signOut();
+      window.location.href = LOGIN_PAGE_URL;
+    });
+  }
+
+  (async () => {
+    await guardLoggedIn();
+  })();
+</script>
+</body>
+</html>
