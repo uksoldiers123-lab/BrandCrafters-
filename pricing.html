@@ -7,41 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
   <script defer src="script.js"></script>
-
-  <!-- Small inline style just for highlight effect -->
-  <style>
-    .plan-selector-row {
-      margin: 18px 0 10px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .plan-selector-row label {
-      font-weight: 600;
-      font-size: 14px;
-    }
-    .plan-selector-row select {
-      min-width: 230px;
-      padding: 8px 10px;
-      border-radius: 10px;
-      border: 1px solid rgba(255,255,255,.18);
-      background: rgba(20,18,32,.8);
-      color: inherit;
-      font: inherit;
-    }
-    .plan.suggested {
-      box-shadow:
-        0 0 0 1px rgba(255,255,255,.25),
-        0 0 24px rgba(110,168,255,.4);
-      transform: translateY(-2px);
-    }
-    .plan .mini-icons {
-      font-size: 18px;
-      margin-bottom: 6px;
-    }
-  </style>
+  <script type="module" src="js/supabaseForm.js"></script>
 </head>
 <body>
 <header class="site-header">
@@ -54,8 +20,7 @@
     <nav class="nav desktop-nav">
       <a href="index.html" class="nav-link">Home</a>
       <a href="pricing.html" class="nav-link active">Pricing</a>
-      <a href="customer-inquiry.html" class="nav-link">Customer Portal</a>
-      <a href="#how-it-works" class="nav-link">How It Works</a>
+      <a href="customer-inquiry.html" class="btn btn-outline">Customer Portal</a>
     </nav>
 
     <!-- Mobile Menu -->
@@ -74,385 +39,196 @@
     </div>
     <a class="drawer-link" href="index.html">Home</a>
     <a class="drawer-link" href="pricing.html">Pricing</a>
-    <a class="drawer-link" href="customer-inquiry.html">Customer Portal</a>
-    <a class="drawer-link" href="#how-it-works">How It Works</a>
+    <a class="drawer-link highlight" href="customer-inquiry.html">Customer Portal</a>
   </nav>
   <div class="drawer-backdrop" aria-hidden="true"></div>
 </header>
 
 <section class="page-hero">
   <div class="container">
-    <h1 class="headline">Flat-rate websites for small businesses.</h1>
+    <h1 class="headline">Plans that grow with your business</h1>
     <p class="subhead">
-      Domain, SSL, and hosting included in every website package.<br>
-      Optional add-ons are selected on the Stripe checkout page.
+      Domains &amp; SSL included. Dashboards and add-ons available.<br>
+      <b>Hosting &amp; Care plans</b> cover infrastructure usage for dashboards.
     </p>
   </div>
 </section>
 
-<!-- WEBSITE PACKAGES -->
-<div class="container plans" id="packages">
-  <h2>Website Packages</h2>
-  <p class="subhead">
-    Every website includes domain setup, SSL, hosting, and basic email or forwarding.
-    Optional add-ons (Stripe setup &amp; maintenance plans) can be selected directly on the Stripe checkout page.
-  </p>
-
-  <!-- Business type selector -->
-  <div class="plan-selector-row">
-    <label for="businessType">
-      Not sure which plan fits you? Pick the option that sounds most like your business:
-    </label>
-    <select id="businessType">
-      <option value="">— Select your business type —</option>
-      <option value="starter">New side hustle / getting started</option>
-      <option value="standard">Local service (restaurant, barber, lawn care, HVAC, etc.)</option>
-      <option value="professional">Contractor / shop / office needing more depth</option>
-      <option value="premium">Multi-location or premium brand</option>
-    </select>
-  </div>
-
-  <div class="plan-grid">
-
-    <!-- STARTER -->
-    <div class="plan" data-package="starter">
-      <div class="badge">Start here</div>
-      <div class="mini-icons">🍔 ✂️ 🌿 🚚</div>
-      <h3>Starter Website</h3>
-      <div class="price">$700</div>
-      <ul class="features">
-        <li>1–2 page website (Home + Contact/About)</li>
-        <li>Domain + SSL included</li>
-        <li>Mobile-ready layout</li>
-        <li>Email forwarding or 1 basic mailbox</li>
-        <li>Timeline: <b>5–7 business days</b></li>
-      </ul>
-
-      <p class="fit-note">
-        <b>Best for:</b><br>
-        New small businesses, side hustles, food trucks, barbers, nail techs, stylists,
-        lawn care starters, tow truck drivers, mobile detailers, cleaners, personal trainers,
-        daycare providers, and anyone needing a clean online home.
-      </p>
-
-      <p class="fit-note">
-        <b>Add-ons available on checkout:</b><br>
-        • Basic Stripe Setup — $150<br>
-        • Full Stripe Integration — $250<br>
-        • Care Lite Maintenance — $39/mo
-      </p>
-
-      <p class="fit-note">
-        No maintenance plan selected = no monthly charges. Updates done per-call.
-      </p>
-
-      <div class="plan-actions">
-        <!-- TODO: replace # link with your real Stripe payment link -->
-        <a class="btn btn-primary btn-full" href="#STRIPE_WEBSITE_STARTER" target="_blank" rel="noopener">
-          Buy Starter Website
-        </a>
-      </div>
-    </div>
-
-    <!-- STANDARD -->
-    <div class="plan plan-popular" data-package="standard">
-      <div class="badge">Most popular</div>
-      <div class="mini-icons">🍽️ ✂️ 🧴 🧰</div>
-      <h3>Standard Business Site</h3>
-      <div class="price">$900</div>
-      <ul class="features">
-        <li><b>3–4 page</b> business website</li>
-        <li>Domain + SSL + hosting included</li>
-        <li>Professional design</li>
-        <li>Basic SEO (titles &amp; metadata)</li>
-        <li>Timeline: <b>7–14 business days</b></li>
-      </ul>
-
-      <p class="fit-note">
-        <b>Best for:</b><br>
-        Restaurants, food trucks, barbershops, salons, mobile mechanics,
-        HVAC companies, handymen, pressure washing, trucking companies,
-        churches, realtors, landscapers, and local service professionals.
-      </p>
-
-      <p class="fit-note">
-        <b>Add-ons on checkout:</b><br>
-        • Basic Stripe Setup — $150<br>
-        • Full Stripe Integration — $250<br>
-        • Care Lite or Care Standard — $39–$79/mo
-      </p>
-
-      <p class="fit-note">
-        No maintenance plan selected = you only pay when requesting changes.
-      </p>
-
-      <div class="plan-actions">
-        <!-- TODO: replace # link with your real Stripe payment link -->
-        <a class="btn btn-primary btn-full" href="#STRIPE_WEBSITE_STANDARD" target="_blank" rel="noopener">
-          Buy Standard Website
-        </a>
-      </div>
-    </div>
-
-    <!-- PROFESSIONAL -->
-    <div class="plan" data-package="professional">
-      <div class="badge">Grow &amp; scale</div>
-      <div class="mini-icons">🏗️ 🚛 🏥 ⚖️</div>
-      <h3>Professional Website</h3>
-      <div class="price">$1,300</div>
-      <ul class="features">
-        <li>Up to <b>5 custom pages</b></li>
-        <li>Brand-focused premium design</li>
-        <li>2–3 business emails included</li>
-        <li>Gallery, service lists, or project sections</li>
-        <li>Multiple forms (contact, intake, quote)</li>
-        <li>Timeline: <b>2–3 weeks</b></li>
-      </ul>
-
-      <p class="fit-note">
-        <b>Best for:</b><br>
-        Contractors, HVAC companies, electricians, trucking fleets, auto repair shops,
-        medical offices, law offices, tax services, fitness brands, and growing businesses
-        needing strong credibility and multiple pages.
-      </p>
-
-      <p class="fit-note">
-        <b>Add-ons on checkout:</b><br>
-        • Basic Stripe Setup — $150<br>
-        • Full Stripe Integration — $250<br>
-        • Care Standard or Care Pro — $79–$129/mo
-      </p>
-
-      <p class="fit-note">
-        No monthly plan selected = pay per-call when you need changes.
-      </p>
-
-      <div class="plan-actions">
-        <!-- TODO: replace # link with your real Stripe payment link -->
-        <a class="btn btn-primary btn-full" href="#STRIPE_WEBSITE_PROFESSIONAL" target="_blank" rel="noopener">
-          Buy Professional Website
-        </a>
-      </div>
-    </div>
-
-    <!-- PREMIUM -->
-    <div class="plan" data-package="premium">
-      <div class="badge">Serious build</div>
-      <div class="mini-icons">🏢 ⭐ 🏬 🧱</div>
-      <h3>Premium Website</h3>
-      <div class="price">$2,000</div>
-      <ul class="features">
-        <li><b>7+ custom pages</b></li>
-        <li>Highly polished premium design</li>
-        <li>3–5 business emails included</li>
-        <li>Advanced sections + booking/ordering options</li>
-        <li>SEO foundation + analytics</li>
-        <li>Timeline: <b>3–5 weeks</b></li>
-      </ul>
-
-      <p class="fit-note">
-        <b>Best for:</b><br>
-        High-end brands, multi-location businesses (restaurants, salons),
-        real estate companies, contractors with many services,
-        trucking fleets, medical practices, and companies needing
-        a premium professional online presence.
-      </p>
-
-      <p class="fit-note">
-        <b>Add-ons on checkout:</b><br>
-        • Basic Stripe Setup — $150<br>
-        • Full Stripe — $250<br>
-        • Care Pro — $129/mo
-      </p>
-
-      <p class="fit-note">
-        Skip maintenance = no monthly cost. Updates billed per-call when needed.
-      </p>
-
-      <div class="plan-actions">
-        <!-- TODO: replace # link with your real Stripe payment link -->
-        <a class="btn btn-primary btn-full" href="#STRIPE_WEBSITE_PREMIUM" target="_blank" rel="noopener">
-          Buy Premium Website
-        </a>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<!-- ADD-ONS INFO -->
-<section class="container" id="addons">
-  <h2>Add-Ons &amp; Maintenance</h2>
-  <p class="subhead">
-    These appear as selectable options on your Stripe checkout page.
-  </p>
-
-  <div class="plan-grid care">
-    <div class="plan">
-      <h3>Stripe Add-Ons</h3>
-      <ul class="features">
-        <li><b>Basic Stripe Setup — $150</b><br>1 main payment link + “Pay Now” button</li>
-        <li><b>Full Stripe Integration — $250</b><br>Up to 3 pay links + booking/pay invoice buttons</li>
-      </ul>
-    </div>
-
-    <div class="plan">
-      <h3>Care Lite</h3>
-      <div class="price">$39<span>/mo</span></div>
-      <ul class="features">
-        <li>Hosting &amp; monitoring</li>
-        <li>1 small monthly update</li>
-        <li>Recommended for Starter sites</li>
-      </ul>
-    </div>
-
-    <div class="plan">
-      <h3>Care Standard</h3>
-      <div class="price">$79<span>/mo</span></div>
-      <ul class="features">
-        <li>Security + backups</li>
-        <li>Up to 2 updates monthly</li>
-        <li>Standard &amp; Professional sites</li>
-      </ul>
-    </div>
-
-    <div class="plan">
-      <h3>Care Pro</h3>
-      <div class="price">$129<span>/mo</span></div>
-      <ul class="features">
-        <li>Priority service</li>
-        <li>Up to 4 updates monthly</li>
-        <li>Ideal for Premium sites</li>
-      </ul>
-    </div>
-  </div>
-
-  <h3>Per-Call Updates</h3>
-  <p class="subhead">
-    If you don’t choose a maintenance plan:
-  </p>
-
+<!-- Descriptive plans -->
+<div class="container plans">
   <div class="plan-grid">
     <div class="plan">
-      <h3>Per-Call Update</h3>
-      <div class="price">$120<span>/update</span></div>
+      <div class="badge">Launch fast</div>
+      <h3>Starter Craft</h3>
+      <div class="price">$249</div>
       <ul class="features">
-        <li>Up to ~60 mins of changes</li>
-        <li>Larger updates quoted separately</li>
+        <li>1-page site (Home • About • Contact)</li>
+        <li>Basic logo (1 concept + 1 revision)</li>
+        <li><b>Domain + SSL included</b></li>
+        <li>Mobile optimization &amp; basic SEO</li>
+        <li>Delivery: <b>5–7 business days</b></li>
       </ul>
       <p class="fit-note">
-        This is the default if you skip maintenance — no monthly subscription.
+        Best for: solopreneurs, lawn care, local services, food trucks, small boutiques.
       </p>
-    </div>
-  </div>
-</section>
-
-<!-- COMPARISON -->
-<section class="container" id="compare">
-  <h2>How BrandCrafters compares.</h2>
-  <p class="subhead">A clear comparison to other web options.</p>
-
-  <div class="plan-grid">
-    <div class="plan">
-      <h3>DIY Builders</h3>
-      <ul class="features">
-        <li>$200–$300/yr hosting</li>
-        <li>You build everything</li>
-        <li>No business email included</li>
-      </ul>
-    </div>
-
-    <div class="plan">
-      <h3>Freelancers</h3>
-      <ul class="features">
-        <li>Hidden upsells common</li>
-        <li>No domain/email included</li>
-      </ul>
-    </div>
-
-    <div class="plan">
-      <h3>Local Designers</h3>
-      <ul class="features">
-        <li>$700–$2,000+ for basics</li>
-        <li>Pages/emails billed separately</li>
-      </ul>
     </div>
 
     <div class="plan plan-popular">
-      <h3>BrandCrafters</h3>
+      <div class="badge">Most popular</div>
+      <h3>Business Builder</h3>
+      <div class="price">$699</div>
       <ul class="features">
-        <li>Flat transparent pricing</li>
-        <li>Domain + SSL included</li>
-        <li>Maintenance optional</li>
-        <li>Designed for real small businesses</li>
+        <li><b>3–5 page</b> responsive website</li>
+        <li>Premium logo (3 concepts + 3 revisions)</li>
+        <li>Brand kit (colors, fonts, export files)</li>
+        <li><b>Domain + SSL included</b></li>
+        <li>Basic analytics &amp; SEO</li>
+        <li>Delivery: <b>2–3 weeks</b></li>
+      </ul>
+      <p class="fit-note">
+        Best for: restaurants, barbers, salons, HVAC, professional services, growing brands.
+      </p>
+    </div>
+
+    <div class="plan">
+      <div class="badge">Sell online</div>
+      <h3>E-Commerce Store</h3>
+      <div class="price">$1,199</div>
+      <ul class="features">
+        <li>6–10 page store (Shop • Cart • Checkout)</li>
+        <li>Secure payment integration (Stripe-ready)</li>
+        <li>Basic product admin + analytics</li>
+        <li><b>Domain + SSL included</b></li>
+        <li>SEO foundation</li>
+        <li>Delivery: <b>3–5 weeks</b></li>
+      </ul>
+      <p class="fit-note">
+        Best for: online shops, booking sites, memberships, digital products, service bundles.
+      </p>
+    </div>
+  </div>
+
+  <div class="notice">
+    <b>BrandPort Dashboards:</b> Lite $199 • Pro $299 • Full $399 (Admin/User portals, analytics, files).<br>
+    Payment Link Setup: <b>$50 per link</b> — adds <b>+1 week</b> for verification &amp; testing.
+  </div>
+
+  <h2 id="dashboards">Hosting &amp; Care (covers infrastructure)</h2>
+  <div class="plan-grid care">
+    <div class="plan">
+      <h3>Lite</h3>
+      <div class="price">$29<span>/mo</span></div>
+      <ul class="features">
+        <li>Static/basic sites</li>
+        <li>Uptime checks &amp; monthly backup</li>
+        <li>30 minutes of edits</li>
+      </ul>
+    </div>
+    <div class="plan">
+      <h3>Standard</h3>
+      <div class="price">$59<span>/mo</span></div>
+      <ul class="features">
+        <li>3–5 page sites</li>
+        <li>Security &amp; library updates</li>
+        <li>1 hour of edits</li>
+      </ul>
+    </div>
+    <div class="plan">
+      <h3>Pro</h3>
+      <div class="price">$99<span>/mo</span></div>
+      <ul class="features">
+        <li><b>Dashboards</b> (includes infrastructure usage)</li>
+        <li>Weekly backups, priority fixes</li>
+        <li>2 hours of edits</li>
+      </ul>
+    </div>
+    <div class="plan">
+      <h3>Commerce</h3>
+      <div class="price">$149<span>/mo</span></div>
+      <ul class="features">
+        <li>Stores + dashboards</li>
+        <li>Webhook/checkout monitoring</li>
+        <li>2 hours of edits</li>
       </ul>
     </div>
   </div>
-</section>
 
-<!-- HOW IT WORKS -->
-<section class="container" id="how-it-works">
-  <h2>How the process works.</h2>
+  <h2>Add-Ons</h2>
+  <ul class="addons">
+    <li><b>Payment Link Setup</b> — $50 per link (+1 week)</li>
+    <li><b>Email Forwarding</b> — $25</li>
+    <li><b>Business Email</b> — $75–$150 per mailbox</li>
+    <li><b>SEO Setup</b> — $125–$200</li>
+    <li><b>Social Media Kit</b> — $75–$150</li>
+    <li><b>Maintenance Plan</b> — Lite / Standard / Pro / Commerce</li>
+  </ul>
+</div>
 
-  <div class="grid-4">
-    <article class="card">
-      <h3>1. Pick a package</h3>
-      <p>Choose the plan that matches your business type and goals.</p>
-    </article>
+<!-- Inquiry Form on Pricing -->
+<section id="inquiry" class="container inquiry-section">
+  <h2>Start Your Plan</h2>
+  <p class="subhead">Tell us what you need. We’ll reply with your setup plan and invoice.</p>
 
-    <article class="card">
-      <h3>2. Pay on Stripe</h3>
-      <p>Add-ons are selected on the checkout page. No hidden fees.</p>
-    </article>
+  <form id="inquiryForm" class="form glass" autocomplete="on">
+    <label>Full Name
+      <input name="name" required />
+    </label>
+    <label>Email
+      <input type="email" name="email" required />
+    </label>
+    <label>Company (optional)
+      <input name="company" />
+    </label>
 
-    <article class="card">
-      <h3>3. Complete onboarding</h3>
-      <p>Tell us your pages, photos, style, and business details.</p>
-    </article>
+    <label>Selected Service
+      <select name="service" required>
+        <option value="Starter Craft">Starter Craft ($249)</option>
+        <option value="Business Builder">Business Builder ($699)</option>
+        <option value="E-Commerce Store">E-Commerce Store ($1,199)</option>
+        <option value="Dashboard Only">BrandPort Dashboard Only</option>
+      </select>
+    </label>
 
-    <article class="card">
-      <h3>4. Build &amp; launch</h3>
-      <p>We design, revise, optimize, and launch your site.</p>
-    </article>
-  </div>
+    <label>Dashboard Add-On
+      <select name="dashboard">
+        <option value="None">None</option>
+        <option value="Lite">Lite ($199)</option>
+        <option value="Pro">Pro ($299)</option>
+        <option value="Full">Full ($399)</option>
+      </select>
+    </label>
 
-  <div class="cta-row">
-    <a class="btn btn-ghost" href="customer-inquiry.html">
-      Already a customer? Use the Portal →
-    </a>
-  </div>
+    <label>Interested Add-Ons
+      <select name="addons" multiple size="6">
+        <option>Payment Link Setup (+$50/link — adds +1 week)</option>
+        <option>Email Forwarding (+$25)</option>
+        <option>Business Email (+$75–$150)</option>
+        <option>SEO Setup (+$125–$200)</option>
+        <option>Social Media Kit (+$75–$150)</option>
+        <option>Maintenance Plan (Lite/Standard/Pro/Commerce)</option>
+      </select>
+    </label>
+
+    <label>Project Details
+      <textarea name="details" rows="6" placeholder="Goals, pages, examples, deadline…"></textarea>
+    </label>
+
+    <button class="btn btn-primary" type="submit">Submit Inquiry</button>
+    <p id="formMsg" class="form-note"></p>
+  </form>
 </section>
 
 <footer class="site-footer">
   <div class="container footer-inner">
-    <div>© <span id="year"></span> BrandCrafters — A division of Egyptian Hype LLC</div>
+    <div>
+      © <span id="year"></span> BrandCrafters — A division of Egyptian Hype LLC
+      <a href="dashboard.html" class="admin-link">Admin</a>
+    </div>
   </div>
 </footer>
+
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
-
-  // Auto-highlight suggested plan based on business type
-  const businessTypeSelect = document.getElementById('businessType');
-  const planCards = document.querySelectorAll('.plan-grid .plan');
-
-  if (businessTypeSelect) {
-    businessTypeSelect.addEventListener('change', () => {
-      const value = businessTypeSelect.value;
-      planCards.forEach(card => card.classList.remove('suggested'));
-
-      if (!value) return;
-      const match = document.querySelector(`.plan-grid .plan[data-package="${value}"]`);
-      if (match) match.classList.add('suggested');
-      const rect = match?.getBoundingClientRect();
-      if (rect) {
-        window.scrollTo({
-          top: window.scrollY + rect.top - 80,
-          behavior: 'smooth'
-        });
-      }
-    });
-  }
 </script>
-
 </body>
 </html>
