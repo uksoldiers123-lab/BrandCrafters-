@@ -6,447 +6,801 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
-    body { font-family: Inter, system-ui, -apple-system, sans-serif; background:#050712; color:#f5f5ff; margin:0; }
-    header { padding:16px 20px; border-bottom:1px solid rgba(255,255,255,.08); display:flex; justify-content:space-between; align-items:center; background:rgba(5,7,19,.9); backdrop-filter:blur(10px); position:sticky; top:0; z-index:50; }
-    .logo { font-weight:700; letter-spacing:.08em; text-transform:uppercase; font-size:14px; }
-    .badge { font-size:12px; opacity:.7; }
-    main { padding:20px; max-width:1200px; margin:0 auto 60px; }
-    .card { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); border-radius:14px; padding:18px; margin-bottom:18px; }
-    h1, h2 { margin:0 0 10px; }
-    h3 { margin:10px 0 6px; font-size:15px; }
-    label { display:block; margin-bottom:8px; font-size:14px; }
-    input, select, textarea { width:100%; padding:8px 10px; border-radius:8px; border:1px solid rgba(255,255,255,.18); background:rgba(5,7,18,.9); color:#fff; font-size:14px; }
-    button { border-radius:10px; padding:7px 10px; border:0; font-weight:600; cursor:pointer; font-size:12px; }
-    .btn-ghost { background:transparent; border:1px solid rgba(255,255,255,.4); color:#fff; }
-    .btn-claim { background:linear-gradient(135deg,#6ea8ff,#b166ff); color:#050712; }
-    .row { display:flex; gap:12px; flex-wrap:wrap; }
-    .row > * { flex:1 1 220px; }
-    table { width:100%; border-collapse:collapse; font-size:13px; margin-top:10px; }
-    th, td { border-bottom:1px solid rgba(255,255,255,.08); padding:6px 4px; vertical-align:top; }
-    th { text-align:left; font-size:12px; text-transform:uppercase; letter-spacing:.04em; opacity:.7; }
-    .pill { display:inline-block; padding:2px 8px; border-radius:999px; font-size:11px; }
-    .pill-new { background:rgba(110,168,255,.15); }
-    .pill-hot { background:rgba(255,142,102,.18); }
-    .small { font-size:12px; opacity:.8; }
-    .status-select, .notes-input { width:100%; font-size:12px; }
-    .notes-input { min-height:40px; }
-    .top-bar { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px; flex-wrap:wrap; }
-    .error { color:#ff8c8c; font-size:13px; margin-top:6px; }
-    .success { color:#8fffba; font-size:13px; margin-top:6px; }
-    .hidden { display:none; }
-    details { margin-top:8px; }
-    details summary { cursor:pointer; font-size:13px; opacity:.9; }
-    pre { white-space:pre-wrap; font-family:inherit; font-size:12px; background:rgba(0,0,0,.3); padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,.12); }
-    ul { padding-left:18px; margin:6px 0; }
+    :root{
+      --bg:#050713;
+      --panel:rgba(255,255,255,.04);
+      --border:rgba(255,255,255,.08);
+      --text:#f5f5ff;
+      --muted:#b5b7d8;
+      --grad:linear-gradient(135deg,#6ea8ff,#b166ff);
+    }
+    *{box-sizing:border-box;}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:
+        radial-gradient(1200px 600px at -10% -10%, #18122f 0, rgba(24,18,47,0) 60%),
+        var(--bg);
+      color:var(--text);
+    }
+    a{text-decoration:none;color:var(--text);}
+    header{
+      position:sticky;top:0;z-index:40;
+      background:rgba(5,7,19,.95);
+      backdrop-filter:blur(14px);
+      border-bottom:1px solid rgba(255,255,255,.08);
+      padding:10px 18px;
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+    }
+    .brand{
+      display:flex;flex-direction:column;gap:2px;
+    }
+    .brand-title{
+      font-weight:700;letter-spacing:.08em;font-size:14px;text-transform:uppercase;
+    }
+    .brand-sub{font-size:12px;color:var(--muted);}
+    .nav{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+    .nav a{
+      font-size:13px;padding:6px 10px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.22);
+      text-decoration:none;
+      color:var(--text);
+      transition:.18s;
+    }
+    .nav a.primary{
+      border-color:transparent;
+      background:var(--grad);
+      color:#050713;
+      font-weight:600;
+      box-shadow:0 0 0 1px rgba(110,168,255,.4);
+    }
+    .nav a:hover{
+      background:rgba(255,255,255,.08);
+      transform:translateY(-1px);
+    }
+    .nav a.primary:hover{
+      filter:brightness(1.05);
+    }
+    .user-email{font-size:12px;color:var(--muted);}
+    .logout-btn{
+      border-radius:999px;
+      padding:6px 12px;
+      border:1px solid rgba(255,255,255,.7);
+      background:rgba(255,255,255,.08);
+      color:var(--text);
+      font-size:12px;
+      cursor:pointer;
+      box-shadow:0 0 0 1px rgba(110,168,255,.4);
+      transition:.18s;
+    }
+    .logout-btn:hover{
+      background:rgba(255,255,255,.16);
+      transform:translateY(-1px);
+    }
+
+    main{
+      max-width:1100px;
+      margin:18px auto 60px;
+      padding:0 16px;
+    }
+    h1{margin:0 0 6px;font-size:22px;}
+    .subhead{margin:0 0 18px;font-size:13px;color:var(--muted);}
+    .card{
+      background:var(--panel);
+      border-radius:16px;
+      border:1px solid var(--border);
+      padding:16px 14px;
+      margin-bottom:16px;
+    }
+    h2{margin:0 0 8px;font-size:16px;}
+    h3{margin:10px 0 6px;font-size:14px;}
+    .small{font-size:12px;color:var(--muted);}
+    .badge{
+      display:inline-block;
+      font-size:11px;
+      padding:2px 8px;
+      border-radius:999px;
+      background:rgba(110,168,255,.2);
+      margin-left:6px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:10px;
+    }
+    @media(max-width:900px){
+      .grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+    }
+    @media(max-width:600px){
+      .grid{grid-template-columns:1fr;}
+    }
+    .stat-card{
+      background:rgba(5,7,19,.85);
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.08);
+      padding:10px 12px;
+    }
+    .stat-label{
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      color:var(--muted);
+    }
+    .stat-value{
+      font-size:18px;font-weight:700;margin-top:4px;
+    }
+    .stat-sub{
+      font-size:11px;color:var(--muted);margin-top:2px;
+    }
+
+    button{
+      border-radius:10px;
+      padding:7px 10px;
+      border:0;
+      font-weight:600;
+      cursor:pointer;
+      font-size:12px;
+      transition:.18s;
+    }
+    button:hover{
+      transform:translateY(-1px);
+      opacity:.97;
+    }
+    .btn-primary{
+      background:var(--grad);
+      color:#050713;
+      box-shadow:0 0 0 1px rgba(110,168,255,.4);
+    }
+    .btn-ghost{
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.7);
+      color:#f5f5ff;
+      box-shadow:0 0 0 1px rgba(110,168,255,.4);
+    }
+    .btn-sm{
+      font-size:11px;
+      padding:5px 8px;
+      border-radius:999px;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      font-size:12px;
+      margin-top:8px;
+    }
+    th,td{
+      border-bottom:1px solid rgba(255,255,255,.08);
+      padding:4px 5px;
+      vertical-align:top;
+    }
+    th{
+      text-align:left;
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+      color:var(--muted);
+    }
+    input[type="text"],select,textarea{
+      width:100%;
+      font-size:12px;
+      padding:6px 7px;
+      border-radius:8px;
+      border:1px solid rgba(255,255,255,.16);
+      background:rgba(16,15,30,.9);
+      color:var(--text);
+    }
+    textarea{resize:vertical;min-height:48px;}
+
+    .pill{
+      display:inline-block;
+      padding:2px 8px;
+      border-radius:999px;
+      font-size:11px;
+    }
+    .pill-blue{background:rgba(110,168,255,.2);}
+    .pill-green{background:rgba(155,255,191,.2);}
+    .pill-red{background:rgba(255,155,155,.2);}
+    .pill-gold{background:rgba(255,210,130,.2);}
+
+    .filters-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin:6px 0 8px;
+    }
+    .filters-row label{
+      font-size:12px;color:var(--muted);
+      display:flex;flex-direction:column;
+      gap:2px;
+    }
+    .filters-row select{
+      font-size:12px;
+    }
+
+    .resources-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px;
+    }
+    @media(max-width:800px){
+      .resources-grid{grid-template-columns:1fr;}
+    }
+    ul{margin:6px 0 0 18px;padding:0;}
+    code{font-size:12px;background:rgba(0,0,0,.35);padding:2px 4px;border-radius:4px;}
   </style>
 </head>
 <body>
 <header>
-  <div>
-    <div class="logo">BrandCrafters</div>
-    <div class="badge">Contractor Call Portal</div>
+  <div class="brand">
+    <span class="brand-title">BrandCrafters</span>
+    <span class="brand-sub">Contractor Portal · Leads & Scripts</span>
   </div>
-  <div id="userInfo" class="small"></div>
-  <button id="logoutBtn" class="btn-ghost hidden">Log Out</button>
+  <div class="nav">
+    <a href="contractor-portal.html" class="primary">Contractor Portal</a>
+    <a href="dashboard.html" target="_blank">Admin Dashboard</a>
+    <a href="dashboard-leads-upload.html" target="_blank">Leads & CSV (Admin)</a>
+    <span class="user-email" id="userEmail"></span>
+    <button id="logoutBtn" class="logout-btn">Log Out</button>
+  </div>
 </header>
 
 <main>
-  <section id="infoCard" class="card">
-    <h2>Your Call Workboard</h2>
-    <p class="small" id="portalMsg">
-      You’ll see unclaimed leads in the pool below. Once you claim a lead, it moves into “My Leads” and no other caller can see it.
+  <section>
+    <h1>Your Leads & Tools</h1>
+    <p class="subhead">
+      This page is for callers and contact contractors. Claim leads from the pool, work them, update status,
+      and use the scripts/templates below. Admin can see all of this from the dashboards.
     </p>
   </section>
 
-  <!-- AVAILABLE POOL -->
-  <section id="availableCard" class="card hidden">
-    <div class="top-bar">
-      <h2>Available Leads (Pool)</h2>
-      <div class="small" id="availableCount"></div>
-    </div>
-    <div style="overflow-x:auto;">
-      <table>
-        <thead>
-          <tr>
-            <th>Priority</th>
-            <th>Business / City</th>
-            <th>Phone</th>
-            <th>Online Presence</th>
-            <th>Claim</th>
-          </tr>
-        </thead>
-        <tbody id="availableBody"></tbody>
-      </table>
+  <!-- OVERVIEW -->
+  <section class="card">
+    <h2>Today’s Overview</h2>
+    <div class="grid" id="overviewGrid">
+      <!-- Filled by JS -->
     </div>
   </section>
 
-  <!-- MY LEADS -->
-  <section id="leadsCard" class="card hidden">
-    <div class="top-bar">
-      <h2>My Leads</h2>
-      <div class="small" id="leadCount"></div>
-    </div>
-    <div class="row">
-      <div>
-        <label>Filter by Status
-          <select id="statusFilter">
-            <option value="">All</option>
-            <option>new</option>
-            <option>left vm</option>
-            <option>talked - follow up</option>
-            <option>not interested</option>
-            <option>closed won</option>
-          </select>
-        </label>
-      </div>
-      <div>
-        <label>Filter by Priority
-          <select id="priorityFilter">
-            <option value="">All</option>
-            <option>A</option>
-            <option>B</option>
-            <option>C</option>
-          </select>
-        </label>
-      </div>
-    </div>
+  <!-- LEAD POOL -->
+  <section class="card">
+    <h2>Lead Pool (Unassigned)</h2>
+    <p class="small">
+      These are leads that nobody is actively working yet. Click <b>Take Lead</b> to claim it — once claimed,
+      other callers won’t see it in their list.
+    </p>
 
-    <div style="overflow-x:auto; margin-top:10px;">
-      <table id="leadsTable">
+    <div style="overflow-x:auto;">
+      <table id="poolTable">
         <thead>
           <tr>
             <th>Priority</th>
-            <th>Business / Contact</th>
-            <th>Phone / Email</th>
-            <th>Status / Interest</th>
-            <th>Next Follow-Up</th>
-            <th>Notes</th>
+            <th>Business</th>
+            <th>Contact</th>
+            <th>City</th>
+            <th>Phone</th>
+            <th>Online Presence</th>
+            <th>Suggested Package</th>
+            <th></th>
           </tr>
         </thead>
         <tbody></tbody>
       </table>
     </div>
-    <div id="saveMsg" class="small"></div>
+    <p class="small" id="poolNote"></p>
   </section>
 
-  <!-- RESOURCES FOR CALLERS -->
+  <!-- MY LEADS -->
+  <section class="card">
+    <h2>My Leads</h2>
+    <p class="small">
+      Only leads assigned to your email show here. Update status, notes, and follow-up dates so admin can track
+      productivity and pay commissions.
+    </p>
+
+    <div class="filters-row">
+      <label>Status
+        <select id="myStatusFilter">
+          <option value="">All</option>
+          <option>new</option>
+          <option>left vm</option>
+          <option>talked - follow up</option>
+          <option>not interested</option>
+          <option>closed won</option>
+        </select>
+      </label>
+      <label>Priority
+        <select id="myPriorityFilter">
+          <option value="">All</option>
+          <option>A</option>
+          <option>B</option>
+          <option>C</option>
+        </select>
+      </label>
+    </div>
+
+    <div style="overflow-x:auto;">
+      <table id="myLeadsTable">
+        <thead>
+          <tr>
+            <th>Priority</th>
+            <th>Business</th>
+            <th>Status</th>
+            <th>Interest</th>
+            <th>Next Follow-Up</th>
+            <th>Notes / Channel</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <p class="small" id="myLeadsNote"></p>
+  </section>
+
+  <!-- RESOURCES -->
   <section class="card">
     <h2>Resources for Callers</h2>
     <p class="small">
-      Use this section as your cheat sheet while you call or DM. These match the workbook the admin uses.
+      Pricing, phone scripts, emails, and DM templates. Admin can update the master copy in Supabase; your view
+      always pulls the latest saved text. If nothing has been set up yet, you’ll see the starter defaults.
     </p>
 
-    <h3>🔥 Quick Pricing Cheat Sheet</h3>
-    <ul class="small">
-      <li><b>Starter Craft – $249</b> · 1-page site (Home / About / Contact). Best for: small services, lawn care, barbers, solo hustles.</li>
-      <li><b>Business Builder – $699</b> · 3–5 pages. Best for: restaurants, barbershops, HVAC, local clinics, cleaning, etc.</li>
-      <li><b>E-Commerce Store – $1,199</b> · 6–10 pages with cart + checkout. Best for: shops, boutiques, food trucks taking orders online.</li>
-      <li><b>Dashboards (BrandPort)</b> · $199–$399 one-time depending on Lite / Pro / Full.</li>
-      <li><b>Add-Ons</b>: Payment Link Setup $50/link, Business Email $75–$150/mailbox, etc.</li>
-    </ul>
+    <div class="resources-grid">
+      <div>
+        <h3>Pricing Cheat Sheet</h3>
+        <div id="pricingBox" class="small">Loading pricing…</div>
+      </div>
 
-    <p class="small"><b>Commission:</b> Standard is <b>$100 per closed website sale</b> (package sale). Small add-ons alone do <b>not</b> pay commission.</p>
+      <div>
+        <h3>Phone Scripts</h3>
+        <div id="scriptsBox" class="small">Loading scripts…</div>
+      </div>
 
-    <details>
-      <summary><b>📞 Phone Script — Cold Call (No Website)</b></summary>
-      <pre>
-Hi, is this {{business_name}}? My name is {{your_name}}, I work with BrandCrafters here in Georgia.
+      <div>
+        <h3>Email Templates</h3>
+        <div id="emailsBox" class="small">Loading email templates…</div>
+      </div>
 
-We’ve been looking at local businesses that are hard to find online — and right now, when people search for {{business_type}} in {{city}}, I’m not seeing a website for you.
-
-We build simple, affordable sites that make it easy for customers to find you, call you, and see what you offer. Most of our local clients are up and running for a flat one-time price starting around $249.
-
-Quick question: do you already have someone handling your online presence, or would you be open to seeing what a basic website would look like for your business?
-      </pre>
-    </details>
-
-    <details>
-      <summary><b>📧 Email — Intro Template</b></summary>
-      <pre>
-Subject: Quick website question for {{business_name}}
-
-Hi {{first_name}},
-
-My name is {{your_name}} with BrandCrafters. We build simple, affordable websites for local businesses in Georgia.
-
-When people search for {{business_type}} in {{city}}, it’s hard to find an official website for {{business_name}}. We specialize in basic sites that:
-- Make it easy for customers to find you on Google
-- Show your services, hours, and photos
-- Let people call or message you in one click
-
-Most of our clients launch with a flat one-time price starting at $249 (domain included), and we only add monthly maintenance if you want ongoing updates.
-
-If I send over a one-page summary of options and a couple of examples, would you be open to taking a look?
-
-Best,
-{{your_name}}
-BrandCrafters
-      </pre>
-    </details>
-
-    <details>
-      <summary><b>💬 Social DM Template</b></summary>
-      <pre>
-Hey {{first_name}}, I’m {{your_name}} with BrandCrafters.
-
-I help local businesses in {{city}} get a simple website so customers can find you and see what you offer. Right now it looks like {{business_name}} doesn’t have an official site, so people mainly find you through social or word-of-mouth.
-
-We build clean, mobile-ready sites starting at $249 (domain included) and most jobs are done in 1–2 weeks.
-
-Would you be open to seeing a couple of examples and a quick price breakdown?
-      </pre>
-    </details>
-
-    <details>
-      <summary><b>✅ Closing Line — When They’re Interested</b></summary>
-      <pre>
-Perfect. The next step is simple: we’ll send you a link where you can pick a package and answer a few questions about your business. Once that’s done, we build the site and show you a preview before it goes live.
-
-What’s the best email and cell number for your business, so I can send that over today?
-      </pre>
-    </details>
+      <div>
+        <h3>Social DM Templates</h3>
+        <div id="dmsBox" class="small">Loading DM templates…</div>
+      </div>
+    </div>
   </section>
 </main>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script>
   const SUPABASE_URL = "https://vekoulqehexqosgwacwa.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiIsInZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
   const LOGIN_PAGE_URL = "dashboard-login.html";
 
   const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  const userInfo = document.getElementById("userInfo");
+  const userEmailSpan = document.getElementById("userEmail");
   const logoutBtn = document.getElementById("logoutBtn");
-  const portalMsg = document.getElementById("portalMsg");
 
-  const availableCard = document.getElementById("availableCard");
-  const availableBody = document.getElementById("availableBody");
-  const availableCount = document.getElementById("availableCount");
+  const overviewGrid = document.getElementById("overviewGrid");
 
-  const leadsCard = document.getElementById("leadsCard");
-  const leadsTableBody = document.querySelector("#leadsTable tbody");
-  const leadCount = document.getElementById("leadCount");
-  const statusFilter = document.getElementById("statusFilter");
-  const priorityFilter = document.getElementById("priorityFilter");
-  const saveMsg = document.getElementById("saveMsg");
+  const poolTableBody = document.querySelector("#poolTable tbody");
+  const poolNote = document.getElementById("poolNote");
+
+  const myLeadsTableBody = document.querySelector("#myLeadsTable tbody");
+  const myLeadsNote = document.getElementById("myLeadsNote");
+  const myStatusFilter = document.getElementById("myStatusFilter");
+  const myPriorityFilter = document.getElementById("myPriorityFilter");
+
+  const pricingBox = document.getElementById("pricingBox");
+  const scriptsBox = document.getElementById("scriptsBox");
+  const emailsBox = document.getElementById("emailsBox");
+  const dmsBox = document.getElementById("dmsBox");
 
   let currentUser = null;
   let allLeads = [];
-
-  async function init() {
-    const { data } = await supabaseClient.auth.getUser();
-    if (!data || !data.user) {
-      window.location.href = LOGIN_PAGE_URL;
-      return;
-    }
-    currentUser = data.user;
-    userInfo.textContent = currentUser.email;
-    logoutBtn.classList.remove("hidden");
-    await loadLeads();
-  }
+  let myLeads = [];
+  let poolLeads = [];
 
   logoutBtn.addEventListener("click", async () => {
     await supabaseClient.auth.signOut();
     window.location.href = LOGIN_PAGE_URL;
   });
 
-  async function loadLeads() {
-    const { data, error } = await supabaseClient
-      .from("call_leads")
-      .select("*")
-      .order("created_at", { ascending: true });
-
-    if (error) {
-      portalMsg.textContent = "Error loading leads: " + error.message;
-      return;
-    }
-    allLeads = data || [];
-    renderAvailable();
-    renderMyLeads();
+  function formatDate(d) {
+    if (!d) return "";
+    const dd = new Date(d);
+    if (isNaN(dd.getTime())) return "";
+    return dd.toISOString().slice(0,10);
   }
 
-  function renderAvailable() {
-    const available = allLeads.filter(ld => !ld.assigned_caller_email);
-    availableBody.innerHTML = "";
-    if (!available.length) {
-      availableCard.classList.add("hidden");
-      availableCount.textContent = "";
+  function todayISO(){
+    return new Date().toISOString().slice(0,10);
+  }
+
+  function buildOverview() {
+    const today = todayISO();
+    const todayFollowups = myLeads.filter(l => l.next_follow_up === today).length;
+    const myClosedWon = myLeads.filter(l => (l.call_status || "").toLowerCase() === "closed won").length;
+    const myActive = myLeads.filter(l => {
+      const s = (l.call_status || "").toLowerCase();
+      return s === "new" || s === "talked - follow up" || s === "left vm";
+    }).length;
+
+    overviewGrid.innerHTML = "";
+
+    const cards = [
+      {
+        label:"Leads in Pool",
+        value:poolLeads.length,
+        sub:"Claim from this list to start working"
+      },
+      {
+        label:"My Active Leads",
+        value:myActive,
+        sub:"New / follow-up / left VM"
+      },
+      {
+        label:"My Closed Won (All Time)",
+        value:myClosedWon,
+        sub:"Used to estimate commissions"
+      },
+      {
+        label:"Follow-Ups Today",
+        value:todayFollowups,
+        sub:"Next follow-up date is today"
+      }
+    ];
+
+    cards.forEach(c=>{
+      const div=document.createElement("div");
+      div.className="stat-card";
+      div.innerHTML=`
+        <div class="stat-label">${c.label}</div>
+        <div class="stat-value">${c.value}</div>
+        <div class="stat-sub">${c.sub}</div>
+      `;
+      overviewGrid.appendChild(div);
+    });
+  }
+
+  function renderPool() {
+    poolTableBody.innerHTML = "";
+    if (!poolLeads.length) {
+      poolNote.textContent = "No unassigned leads right now. Check back after admin uploads more.";
       return;
     }
-    availableCard.classList.remove("hidden");
-    availableCount.textContent = available.length + " leads in pool";
+    poolNote.textContent = "";
 
-    available.forEach(ld => {
+    poolLeads.slice(0,50).forEach(ld=>{
       const tr = document.createElement("tr");
 
       const tdPr = document.createElement("td");
-      const pill = document.createElement("span");
-      pill.className = "pill " + ((ld.priority || "").toUpperCase() === "A" ? "pill-hot" : "pill-new");
-      pill.textContent = ld.priority || "";
-      tdPr.appendChild(pill);
+      tdPr.textContent = ld.priority || "";
       tr.appendChild(tdPr);
 
       const tdBiz = document.createElement("td");
-      tdBiz.innerHTML = `<strong>${ld.business_name || ""}</strong><br><span class="small">${ld.city || ""}, ${ld.state || ""}</span>`;
+      tdBiz.innerHTML = `<strong>${ld.business_name || ""}</strong>`;
       tr.appendChild(tdBiz);
 
+      const tdContact = document.createElement("td");
+      tdContact.textContent = ld.contact_name || "";
+      tr.appendChild(tdContact);
+
+      const tdCity = document.createElement("td");
+      tdCity.textContent = (ld.city || "") + (ld.state ? ", " + ld.state : "");
+      tr.appendChild(tdCity);
+
       const tdPhone = document.createElement("td");
-      tdPhone.innerHTML = `<span class="small">${ld.phone_primary || ""}</span>`;
+      tdPhone.textContent = ld.phone_primary || ld.phone_alt || "";
       tr.appendChild(tdPhone);
 
       const tdOnline = document.createElement("td");
-      tdOnline.innerHTML = `<span class="small">${ld.current_online_presence || ""}</span>`;
+      tdOnline.textContent = ld.current_online_presence || "";
       tr.appendChild(tdOnline);
 
-      const tdClaim = document.createElement("td");
-      const btn = document.createElement("button");
-      btn.textContent = "Claim";
-      btn.className = "btn-claim";
-      btn.addEventListener("click", () => claimLead(ld.id));
-      tdClaim.appendChild(btn);
-      tr.appendChild(tdClaim);
+      const tdPkg = document.createElement("td");
+      tdPkg.textContent = ld.recommended_package || "";
+      tr.appendChild(tdPkg);
 
-      availableBody.appendChild(tr);
+      const tdBtn = document.createElement("td");
+      const btn = document.createElement("button");
+      btn.textContent = "Take Lead";
+      btn.className = "btn-primary btn-sm";
+      btn.addEventListener("click", () => claimLead(ld.id));
+      tdBtn.appendChild(btn);
+      tr.appendChild(tdBtn);
+
+      poolTableBody.appendChild(tr);
     });
   }
 
   function renderMyLeads() {
-    const email = currentUser.email;
-    const myLeadsRaw = allLeads.filter(ld => ld.assigned_caller_email === email);
+    myLeadsTableBody.innerHTML = "";
 
-    if (!myLeadsRaw.length) {
-      leadsCard.classList.add("hidden");
-      leadCount.textContent = "No leads assigned yet.";
-      return;
-    }
-    leadsCard.classList.remove("hidden");
+    let filtered = [...myLeads];
+    const sVal = myStatusFilter.value.toLowerCase();
+    const pVal = myPriorityFilter.value.toUpperCase();
 
-    const statusVal = statusFilter.value.toLowerCase();
-    const priorityVal = priorityFilter.value.toUpperCase();
-    leadsTableBody.innerHTML = "";
-
-    const myLeads = myLeadsRaw.filter(ld => {
+    filtered = filtered.filter(ld=>{
       const s = (ld.call_status || "").toLowerCase();
       const p = (ld.priority || "").toUpperCase();
-      const statusOk = !statusVal || s === statusVal;
-      const priorityOk = !priorityVal || p === priorityVal;
-      return statusOk && priorityOk;
+      const sOk = !sVal || s === sVal;
+      const pOk = !pVal || p === pVal;
+      return sOk && pOk;
     });
 
-    leadCount.textContent = myLeads.length + " leads";
+    if (!filtered.length) {
+      myLeadsNote.textContent = "No leads assigned to you yet with this filter.";
+      return;
+    }
+    myLeadsNote.textContent = "";
 
-    myLeads.forEach(ld => {
+    filtered.slice(0,100).forEach(ld=>{
       const tr = document.createElement("tr");
 
       const tdPr = document.createElement("td");
-      const pill = document.createElement("span");
-      pill.className = "pill " + ((ld.priority || "").toUpperCase() === "A" ? "pill-hot" : "pill-new");
-      pill.textContent = ld.priority || "";
-      tdPr.appendChild(pill);
+      tdPr.textContent = ld.priority || "";
       tr.appendChild(tdPr);
 
       const tdBiz = document.createElement("td");
-      tdBiz.innerHTML = `<strong>${ld.business_name || ""}</strong><br><span class="small">${ld.contact_name || ""}</span>`;
+      tdBiz.innerHTML = `<strong>${ld.business_name || ""}</strong><br><span class="small">${ld.city || ""}${ld.state ? ", "+ld.state : ""}</span><br><span class="small">${ld.phone_primary || ""}</span>`;
       tr.appendChild(tdBiz);
 
-      const tdContact = document.createElement("td");
-      tdContact.innerHTML = `
-        <div class="small">${ld.phone_primary || ""}</div>
-        <div class="small">${ld.email_primary || ""}</div>
-      `;
-      tr.appendChild(tdContact);
-
       const tdStatus = document.createElement("td");
-      const statusSel = document.createElement("select");
-      statusSel.className = "status-select";
-      ["", "new", "left vm", "talked - follow up", "not interested", "closed won"].forEach(opt => {
-        const o = document.createElement("option");
-        o.value = opt;
-        o.textContent = opt || "—";
-        if ((ld.call_status || "").toLowerCase() === opt) o.selected = true;
-        statusSel.appendChild(o);
+      const select = document.createElement("select");
+      ["","new","left vm","talked - follow up","not interested","closed won"].forEach(optVal=>{
+        const opt = document.createElement("option");
+        opt.value = optVal;
+        opt.textContent = optVal || "—";
+        if ((ld.call_status || "").toLowerCase() === optVal) opt.selected = true;
+        select.appendChild(opt);
       });
-      const interestInput = document.createElement("input");
-      interestInput.type = "number";
-      interestInput.min = 1;
-      interestInput.max = 5;
-      interestInput.value = ld.interest_level || "";
-      interestInput.placeholder = "1–5";
-      interestInput.style.marginTop = "4px";
-      tdStatus.appendChild(statusSel);
-      tdStatus.appendChild(interestInput);
+      tdStatus.appendChild(select);
       tr.appendChild(tdStatus);
 
-      const tdFollow = document.createElement("td");
-      const followInput = document.createElement("input");
-      followInput.type = "date";
-      followInput.value = ld.next_follow_up || "";
-      tdFollow.appendChild(followInput);
-      tr.appendChild(tdFollow);
+      const tdInterest = document.createElement("td");
+      const interestInput = document.createElement("input");
+      interestInput.type = "text";
+      interestInput.placeholder = "1–5";
+      interestInput.value = ld.interest_level != null ? ld.interest_level : "";
+      tdInterest.appendChild(interestInput);
+      tr.appendChild(tdInterest);
+
+      const tdNext = document.createElement("td");
+      const nextInput = document.createElement("input");
+      nextInput.type = "text";
+      nextInput.placeholder = "YYYY-MM-DD";
+      nextInput.value = ld.next_follow_up || "";
+      tdNext.appendChild(nextInput);
+      tr.appendChild(tdNext);
 
       const tdNotes = document.createElement("td");
       const notesArea = document.createElement("textarea");
-      notesArea.className = "notes-input";
+      notesArea.placeholder = "Notes + channel used (call / email / DM)";
       notesArea.value = ld.notes || "";
       tdNotes.appendChild(notesArea);
+
+      const channelInput = document.createElement("input");
+      channelInput.type = "text";
+      channelInput.placeholder = "Follow-up channel (optional)";
+      channelInput.value = ld.followup_channel || "";
+      channelInput.style.marginTop = "4px";
+      tdNotes.appendChild(channelInput);
       tr.appendChild(tdNotes);
 
-      [statusSel, interestInput, followInput, notesArea].forEach(el => {
-        el.addEventListener("change", () => saveLead(ld.id, {
-          call_status: statusSel.value || null,
+      const tdAction = document.createElement("td");
+      const saveBtn = document.createElement("button");
+      saveBtn.textContent = "Save";
+      saveBtn.className = "btn-ghost btn-sm";
+      saveBtn.addEventListener("click", () => {
+        saveLeadUpdate(ld.id, {
+          call_status: select.value || null,
           interest_level: interestInput.value ? parseInt(interestInput.value, 10) : null,
-          next_follow_up: followInput.value || null,
-          notes: notesArea.value || null
-        }));
+          next_follow_up: nextInput.value || null,
+          notes: notesArea.value || null,
+          followup_channel: channelInput.value || null
+        });
       });
+      tdAction.appendChild(saveBtn);
 
-      leadsTableBody.appendChild(tr);
+      const lastLine = document.createElement("div");
+      lastLine.className = "small";
+      lastLine.style.marginTop = "6px";
+      lastLine.textContent = "Last contact: " + (ld.last_contact_date || "—");
+      tdAction.appendChild(lastLine);
+
+      tr.appendChild(tdAction);
+
+      myLeadsTableBody.appendChild(tr);
     });
   }
 
   async function claimLead(id) {
-    saveMsg.textContent = "Claiming lead...";
+    if (!currentUser) return;
+    const email = currentUser.email;
     const { error } = await supabaseClient
       .from("call_leads")
-      .update({
-        assigned_caller_email: currentUser.email,
-        call_status: "new"
-      })
-      .eq("id", id);
+      .update({ assigned_caller_email: email })
+      .eq("id", id)
+      .is("assigned_caller_email", null); // only claim if still unassigned
 
     if (error) {
-      saveMsg.textContent = "Error claiming lead: " + error.message;
-    } else {
-      saveMsg.textContent = "Lead claimed.";
-      await loadLeads();
-      setTimeout(() => (saveMsg.textContent = ""), 1500);
+      alert("Error claiming lead: " + error.message);
+      return;
     }
+    await loadLeads();
   }
 
-  async function saveLead(id, fields) {
-    saveMsg.textContent = "Saving...";
+  async function saveLeadUpdate(id, updates) {
+    // also update last_contact_date to today
+    updates.last_contact_date = todayISO();
+
     const { error } = await supabaseClient
       .from("call_leads")
-      .update(fields)
+      .update(updates)
       .eq("id", id);
 
     if (error) {
-      saveMsg.textContent = "Error saving: " + error.message;
-    } else {
-      saveMsg.textContent = "Saved.";
-      const idx = allLeads.findIndex(l => l.id === id);
-      if (idx !== -1) {
-        allLeads[idx] = { ...allLeads[idx], ...fields };
+      alert("Error saving lead update: " + error.message);
+      return;
+    }
+    await loadLeads();
+  }
+
+  async function loadLeads() {
+    const { data, error } = await supabaseClient
+      .from("call_leads")
+      .select("*")
+      .order("priority", { ascending:true })
+      .order("created_at", { ascending:false });
+
+    if (error) {
+      console.error("Error loading leads:", error);
+      return;
+    }
+    allLeads = data || [];
+
+    const email = currentUser.email;
+
+    poolLeads = allLeads.filter(ld => !ld.assigned_caller_email);
+    myLeads   = allLeads.filter(ld => ld.assigned_caller_email === email);
+
+    renderPool();
+    renderMyLeads();
+    buildOverview();
+  }
+
+  async function loadResources() {
+    // Pricing
+    try {
+      const { data, error } = await supabaseClient
+        .from("pricing_packages")
+        .select("*")
+        .eq("is_active", true)
+        .order("sort_order", { ascending:true });
+
+      if (error) throw error;
+
+      if (!data || !data.length) {
+        pricingBox.innerHTML = "No pricing rows in Supabase yet. Using starter idea: Starter $249, Business $699, E-Com $1,199 with optional monthly maintenance.";
+      } else {
+        const parts = data.map(p => `
+          <div style="margin-bottom:6px;">
+            <strong>${p.name}</strong> — $${(p.one_time_price || 0).toFixed(2)} one-time<br>
+            <span class="small">Best for: ${p.best_for || "-"}</span><br>
+            <span class="small">Maintenance: ${p.maintenance_name || "None"} ${
+              p.maintenance_price ? "($" + p.maintenance_price.toFixed(2) + "/mo)" : ""
+            }</span>
+          </div>
+        `);
+        pricingBox.innerHTML = parts.join("");
       }
-      setTimeout(() => (saveMsg.textContent = ""), 1500);
+    } catch (e) {
+      pricingBox.innerHTML = "Pricing table not configured yet. Admin can add rows in Supabase.";
+    }
+
+    // Call scripts
+    try {
+      const { data, error } = await supabaseClient
+        .from("call_scripts")
+        .select("*")
+        .eq("is_active", true)
+        .order("sort_order", { ascending:true });
+
+      if (error) throw error;
+
+      if (!data || !data.length) {
+        scriptsBox.innerHTML = `
+          <p>Starter cold call opener:</p>
+          <p>"Hi, is this {{business_name}}? My name is {{your_name}} with BrandCrafters. We help local businesses get simple websites so customers can find you, see your services, and call you in one tap..."</p>
+        `;
+      } else {
+        const parts = data.map(s => `
+          <div style="margin-bottom:8px;">
+            <strong>${s.label}</strong><br>
+            <span class="small">${s.scenario || ""}</span>
+            <pre style="white-space:pre-wrap;font-size:11px;margin-top:4px;">${s.body}</pre>
+          </div>
+        `);
+        scriptsBox.innerHTML = parts.join("");
+      }
+    } catch (e) {
+      scriptsBox.innerHTML = "Call scripts table not configured yet. Admin can add scripts in Supabase.";
+    }
+
+    // Emails
+    try {
+      const { data, error } = await supabaseClient
+        .from("email_templates")
+        .select("*")
+        .eq("is_active", true)
+        .order("sort_order", { ascending:true });
+
+      if (error) throw error;
+
+      if (!data || !data.length) {
+        emailsBox.innerHTML = `
+          <p>Basic intro subject: <code>Quick website question</code></p>
+          <p>Body: introduce yourself, mention they are hard to find online, offer a simple site starting around your base price, and ask permission to send options.</p>
+        `;
+      } else {
+        const parts = data.map(e => `
+          <div style="margin-bottom:8px;">
+            <strong>${e.name}</strong><br>
+            <span class="small">Subject: ${e.subject}</span>
+            <pre style="white-space:pre-wrap;font-size:11px;margin-top:4px;">${e.body}</pre>
+          </div>
+        `);
+        emailsBox.innerHTML = parts.join("");
+      }
+    } catch (e) {
+      emailsBox.innerHTML = "Email templates table not configured yet. Admin can add emails in Supabase.";
+    }
+
+    // DMs
+    try {
+      const { data, error } = await supabaseClient
+        .from("social_dm_templates")
+        .select("*")
+        .eq("is_active", true)
+        .order("sort_order", { ascending:true });
+
+      if (error) throw error;
+
+      if (!data || !data.length) {
+        dmsBox.innerHTML = `
+          <p>Generic DM:</p>
+          <p>"Hey {{first_name}}, I’m {{your_name}} with BrandCrafters. We help local businesses get a simple website so customers can find you easier on Google..."</p>
+        `;
+      } else {
+        const parts = data.map(dm => `
+          <div style="margin-bottom:8px;">
+            <strong>${dm.name}</strong> <span class="small">[${dm.platform}]</span>
+            <pre style="white-space:pre-wrap;font-size:11px;margin-top:4px;">${dm.body}</pre>
+          </div>
+        `);
+        dmsBox.innerHTML = parts.join("");
+      }
+    } catch (e) {
+      dmsBox.innerHTML = "DM templates table not configured yet. Admin can add DMs in Supabase.";
     }
   }
 
-  statusFilter.addEventListener("change", renderMyLeads);
-  priorityFilter.addEventListener("change", renderMyLeads);
+  myStatusFilter.addEventListener("change", renderMyLeads);
+  myPriorityFilter.addEventListener("change", renderMyLeads);
 
-  init();
+  (async () => {
+    const { data } = await supabaseClient.auth.getUser();
+    if (!data || !data.user) {
+      window.location.href = LOGIN_PAGE_URL;
+      return;
+    }
+    currentUser = data.user;
+    userEmailSpan.textContent = currentUser.email;
+
+    await loadLeads();
+    await loadResources();
+  })();
 </script>
 </body>
 </html>
