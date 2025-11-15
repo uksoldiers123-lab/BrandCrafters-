@@ -4,177 +4,78 @@
   <meta charset="utf-8" />
   <title>BrandCrafters — Contractor Portal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <!-- BrandCrafters base styles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <script defer src="script.js"></script>
+
   <style>
-    :root{
-      --bg:#050713;
-      --panel:rgba(255,255,255,.04);
-      --border:rgba(255,255,255,.08);
-      --text:#f5f5ff;
-      --muted:#b5b7d8;
-      --primary:#6ea8ff;
-      --accent:#d16de1;
-      --grad:linear-gradient(135deg,#5b8cff,#b166ff 60%,#ff6ad6);
-    }
-    *{box-sizing:border-box;}
     body{
-      margin:0;
-      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-      background:
-        radial-gradient(1200px 600px at -10% -10%, #18122f 0, rgba(24,18,47,0) 60%),
-        var(--bg);
-      color:var(--text);
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color:#f5f5ff;
     }
-    a{text-decoration:none;color:inherit;}
-
-    .container{max-width:1100px;margin:0 auto;padding:0 20px;}
-
-    /* HEADER styled like index */
-    .site-header{
-      position:sticky;
-      top:0;
-      z-index:40;
-      background:rgba(5,7,19,.95);
-      backdrop-filter:blur(14px);
-      border-bottom:1px solid rgba(255,255,255,.08);
-    }
-    .header-inner{
-      height:64px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:16px;
-    }
-    .logo{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      font-weight:800;
-      letter-spacing:.2px;
-    }
-    .logo-mark{
-      display:inline-grid;
-      place-items:center;
-      width:34px;
-      height:34px;
-      border-radius:12px;
-      background:var(--grad);
-      color:#050713;
-      font-weight:800;
-      font-size:18px;
-    }
-    .logo span:last-child{
-      font-size:15px;
-    }
-
-    .nav{
-      display:flex;
-      align-items:center;
-      gap:14px;
-      font-size:13px;
-    }
-    .nav-link{
-      position:relative;
-      padding:8px 10px;
-      border-radius:999px;
-      text-decoration:none;
-      color:var(--text);
-      transition:.18s;
-    }
-    .nav-link:hover{
-      background:rgba(255,255,255,.06);
-    }
-    .nav-link.active{
-      background:rgba(255,255,255,.10);
-      box-shadow:0 0 0 1px rgba(255,255,255,.18);
-    }
-    .nav-link.subtle{
-      color:var(--muted);
-    }
-
-    .user-pill{
-      font-size:11px;
-      color:var(--muted);
-      max-width:190px;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-    .btn-logout{
-      border-radius:999px;
-      padding:6px 12px;
-      border:1px solid rgba(255,255,255,.6);
-      background:rgba(255,255,255,.05);
-      color:var(--text);
-      font-size:11px;
-      cursor:pointer;
-      transition:.18s;
-    }
-    .btn-logout:hover{
-      background:rgba(255,255,255,.14);
-      transform:translateY(-1px);
-    }
-
-    /* MAIN LAYOUT */
     main{
-      padding:20px 0 60px;
+      max-width:1100px;
+      margin:32px auto 80px;
+      padding:0 20px;
     }
-    h1{margin:0 0 6px;font-size:22px;}
-    h2{margin:0 0 8px;font-size:16px;}
-    .subhead{margin:0 0 18px;font-size:13px;color:var(--muted);}
-    .small{font-size:12px;color:var(--muted);}
-
-    .card{
-      background:var(--panel);
-      border-radius:16px;
-      border:1px solid var(--border);
-      padding:16px 14px;
-      box-shadow:0 18px 40px rgba(0,0,0,.6);
-      margin-bottom:16px;
+    h1{
+      margin:0 0 6px;
+      font-size:24px;
+    }
+    .subhead{
+      margin:0 0 20px;
+      font-size:13px;
+      color:var(--muted);
     }
 
     .grid-3{
       display:grid;
       grid-template-columns:repeat(3,minmax(0,1fr));
       gap:12px;
+      margin-bottom:16px;
     }
-    .grid-2{
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:12px;
-    }
-    @media(max-width:880px){
+    @media(max-width:900px){
       .grid-3{grid-template-columns:1fr;}
-      .grid-2{grid-template-columns:1fr;}
-      .nav{gap:8px;}
     }
 
-    .stat-label{
+    .card{
+      background:var(--panel);
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.1);
+      padding:12px 14px;
+      font-size:13px;
+    }
+    .card-label{
       font-size:11px;
       text-transform:uppercase;
       letter-spacing:.06em;
       color:var(--muted);
     }
-    .stat-value{
-      font-size:20px;
+    .card-value{
+      font-size:18px;
       font-weight:700;
       margin-top:4px;
     }
-    .stat-sub{
-      font-size:11px;
-      color:var(--muted);
-      margin-top:2px;
-    }
 
-    .pill{
-      display:inline-block;
-      padding:2px 8px;
-      border-radius:999px;
-      font-size:11px;
+    .toolbar{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      align-items:center;
+      margin-bottom:10px;
+      font-size:12px;
     }
-    .pill-green{background:rgba(155,255,191,.18);}
-    .pill-yellow{background:rgba(255,218,155,.18);}
-    .pill-blue{background:rgba(110,168,255,.18);}
+    .toolbar select{
+      padding:6px 8px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.16);
+      background:rgba(255,255,255,.04);
+      color:#f5f5ff;
+      font-size:12px;
+    }
 
     table{
       width:100%;
@@ -184,7 +85,7 @@
     }
     th,td{
       border-bottom:1px solid rgba(255,255,255,.08);
-      padding:5px 4px;
+      padding:4px 4px;
       vertical-align:top;
     }
     th{
@@ -193,501 +94,592 @@
       text-transform:uppercase;
       letter-spacing:.05em;
       color:var(--muted);
+      background:rgba(255,255,255,.02);
+      position:sticky;
+      top:0;
+      z-index:1;
     }
 
-    .btn{
+    .badge{
       display:inline-block;
+      padding:2px 6px;
       border-radius:999px;
+      font-size:10px;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+    }
+    .badge-priority-a{background:rgba(255,210,130,.18);color:#ffd282;}
+    .badge-priority-b{background:rgba(130,190,255,.18);color:#a5c7ff;}
+    .badge-priority-c{background:rgba(180,255,190,.14);color:#b9ffbf;}
+
+    .badge-status-new{background:rgba(130,190,255,.18);color:#a5c7ff;}
+    .badge-status-inprogress{background:rgba(255,210,130,.18);color:#ffd282;}
+    .badge-status-closedwon{background:rgba(180,255,190,.18);color:#b9ffbf;}
+    .badge-status-closedlost{background:rgba(255,150,150,.18);color:#ffb1b1;}
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:4px;
       padding:6px 10px;
-      font-size:12px;
-      font-weight:600;
-      border:0;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.2);
+      background:rgba(255,255,255,.04);
+      color:#f5f5ff;
+      font-size:11px;
       cursor:pointer;
       transition:.18s;
+      text-decoration:none;
+    }
+    .btn:hover{
+      background:rgba(255,255,255,.1);
+      transform:translateY(-1px);
     }
     .btn-primary{
+      border-color:transparent;
       background:var(--grad);
       color:#050713;
-    }
-    .btn-ghost{
-      background:rgba(255,255,255,.06);
-      color:var(--text);
-      border:1px solid rgba(255,255,255,.18);
+      font-weight:600;
+      box-shadow:0 0 0 1px rgba(110,168,255,.4);
     }
     .btn-small{
       padding:4px 8px;
+      font-size:10px;
+    }
+
+    .notes-input{
+      width:100%;
+      min-width:160px;
+      max-width:300px;
+      min-height:40px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,.16);
+      background:rgba(0,0,0,.18);
+      color:#f5f5ff;
+      font-size:11px;
+      padding:4px 6px;
+      resize:vertical;
+      font-family:inherit;
+    }
+    .select-inline,
+    .date-inline{
+      width:100%;
+      max-width:120px;
+      padding:4px 6px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.16);
+      background:rgba(0,0,0,.18);
+      color:#f5f5ff;
       font-size:11px;
     }
-    .btn:hover{
-      filter:brightness(1.05);
+
+    .status-msg{
+      margin-top:4px;
+      font-size:11px;
+      color:var(--muted);
+    }
+
+    /* Header extra bits for email + logout */
+    .header-user{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-size:11px;
+      color:var(--muted);
+      margin-left:12px;
+    }
+    .btn-logout{
+      border-radius:999px;
+      padding:6px 10px;
+      border:1px solid rgba(255,255,255,.55);
+      background:rgba(255,255,255,.08);
+      font-size:11px;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+    }
+    .btn-logout:hover{
+      background:rgba(255,255,255,.16);
       transform:translateY(-1px);
     }
-
-    /* TABS */
-    .tabs{
-      display:flex;
-      gap:8px;
-      margin-bottom:14px;
-      flex-wrap:wrap;
-    }
-    .tab-btn{
-      border-radius:999px;
-      padding:6px 12px;
-      border:1px solid rgba(255,255,255,.18);
-      background:rgba(255,255,255,.04);
-      font-size:12px;
-      cursor:pointer;
-      transition:.18s;
-    }
-    .tab-btn.active{
-      background:var(--grad);
-      color:#050713;
-      border-color:transparent;
+    @media(max-width:940px){
+      .header-user{display:none;}
     }
 
-    #leadsSection,
-    #scriptsSection{display:none;}
-    #leadsSection.active,
-    #scriptsSection.active{display:block;}
-
-    .tag{
-      display:inline-block;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.2);
-      padding:2px 7px;
+    .muted-link{
       font-size:11px;
-      margin-right:4px;
-      margin-bottom:4px;
-    }
-    textarea{
-      width:100%;
-      min-height:70px;
-      border-radius:10px;
-      border:1px solid rgba(255,255,255,.18);
-      background:rgba(5,7,19,.9);
-      color:var(--text);
-      font-size:12px;
-      padding:8px 10px;
-      resize:vertical;
-    }
-    select{
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.18);
-      background:rgba(5,7,19,.9);
-      color:var(--text);
-      font-size:12px;
-      padding:4px 8px;
-    }
-    input[type="text"]{
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.18);
-      background:rgba(5,7,19,.9);
-      color:var(--text);
-      font-size:12px;
-      padding:6px 10px;
-      width:100%;
-    }
-    .code-block{
-      background:rgba(0,0,0,.6);
-      border-radius:10px;
-      padding:10px;
-      font-size:12px;
-      line-height:1.5;
-      overflow-x:auto;
-      margin-top:6px;
+      color:var(--muted);
+      text-decoration:underline;
+      text-decoration-style:dotted;
     }
   </style>
 </head>
 <body>
+
+<!-- BrandCrafters header with dashboard links (Version B) -->
 <header class="site-header">
   <div class="container header-inner">
-    <a href="index.html" class="logo">
+    <a class="logo" href="index.html">
       <span class="logo-mark">BC</span><span>BrandCrafters</span>
     </a>
 
-    <nav class="nav">
-      <a href="index.html" class="nav-link subtle">Home</a>
-      <a href="pricing.html" class="nav-link subtle">Pricing</a>
+    <!-- Desktop Nav -->
+    <nav class="nav desktop-nav">
+      <!-- Public nav -->
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="pricing.html" class="nav-link">Pricing</a>
+      <a href="customer-inquiry.html" class="btn btn-outline">Customer Portal</a>
+
+      <!-- Dashboard-specific links -->
+      <a href="dashboard.html" class="nav-link">Admin Dashboard</a>
+      <a href="dashboard-leads-upload.html" class="nav-link">Leads &amp; CSV</a>
       <a href="contractor-portal.html" class="nav-link active">Contractor Portal</a>
-      <span id="userEmail" class="user-pill"></span>
-      <button id="logoutBtn" class="btn-logout">Log Out</button>
+
+      <!-- User + logout -->
+      <div class="header-user">
+        <span id="userEmail"></span>
+        <button id="logoutBtn" class="btn-logout">Log Out</button>
+      </div>
     </nav>
+
+    <!-- Mobile: Hamburger -->
+    <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </div>
+
+  <!-- Mobile Drawer -->
+  <nav class="mobile-drawer" aria-hidden="true">
+    <div class="drawer-header">
+      <a class="logo" href="index.html">
+        <span class="logo-mark">BC</span><span>BrandCrafters</span>
+      </a>
+      <button class="menu-close" aria-label="Close menu">✕</button>
+    </div>
+
+    <!-- Public nav -->
+    <a class="drawer-link" href="index.html">Home</a>
+    <a class="drawer-link" href="pricing.html">Pricing</a>
+    <a class="drawer-link" href="customer-inquiry.html">Customer Portal</a>
+
+    <!-- Dashboard-specific -->
+    <a class="drawer-link" href="dashboard.html">Admin Dashboard</a>
+    <a class="drawer-link" href="dashboard-leads-upload.html">Leads &amp; CSV</a>
+    <a class="drawer-link" href="contractor-portal.html">Contractor Portal</a>
+  </nav>
+  <div class="drawer-backdrop" aria-hidden="true"></div>
 </header>
 
-<main class="container">
-  <section style="margin-top:18px;">
+<main>
+  <section>
     <h1>Contractor Portal</h1>
     <p class="subhead">
-      Work your assigned leads, claim new ones, and use the scripts & pricing below. Close websites = get paid.
+      Claim leads, update call statuses, and track your commissions.  
+      For scripts, pricing, and pre-made messages, see
+      <a href="contractor-webbook.html" class="muted-link" target="_blank">Scripts &amp; WebBook</a>.
     </p>
   </section>
 
-  <!-- TOP STATS -->
   <section class="grid-3">
     <article class="card">
-      <div class="stat-label">My Active Leads</div>
-      <div class="stat-value" id="myActiveLeads">0</div>
-      <div class="stat-sub">Assigned to you with status not closed.</div>
+      <div class="card-label">Your Email</div>
+      <div class="card-value" id="summaryEmail">—</div>
     </article>
     <article class="card">
-      <div class="stat-label">My Closed Won</div>
-      <div class="stat-value" id="myClosedWon">0</div>
-      <div class="stat-sub">Total leads you closed as paid website clients.</div>
+      <div class="card-label">Open Leads (Assigned to You)</div>
+      <div class="card-value" id="summaryOpenLeads">0</div>
     </article>
     <article class="card">
-      <div class="stat-label">Est. Commission</div>
-      <div class="stat-value" id="myCommission">$0.00</div>
-      <div class="stat-sub">$100 per closed website (non-add-on only).</div>
+      <div class="card-label">Closed Won · Est. Commission</div>
+      <div class="card-value" id="summaryCommission">$0.00</div>
+      <div class="status-msg" id="summaryClosedWon">0 closed won · $100 per website sale</div>
     </article>
   </section>
 
-  <!-- TABS -->
   <section class="card">
-    <div class="tabs">
-      <button class="tab-btn active" data-tab="leadsSection">Leads</button>
-      <button class="tab-btn" data-tab="scriptsSection">Scripts & Pricing</button>
+    <div class="toolbar">
+      <span style="font-size:11px;color:var(--muted);">Filter:</span>
+      <select id="filterScope">
+        <option value="mine">My leads (assigned to me)</option>
+        <option value="unassigned">Unassigned leads only</option>
+        <option value="mine_unassigned">My + Unassigned (default)</option>
+        <option value="all">All leads I can see</option>
+      </select>
+      <select id="filterStatus">
+        <option value="open">Open (new + in progress)</option>
+        <option value="new">New only</option>
+        <option value="in_progress">In progress only</option>
+        <option value="closed">Closed (won + lost)</option>
+        <option value="any">Any status</option>
+      </select>
+      <span style="flex:1 1 auto;"></span>
+      <span class="muted">Tip: Claim a lead first, then update status &amp; notes.</span>
     </div>
 
-    <!-- LEADS TAB -->
-    <div id="leadsSection" class="active">
-      <div class="grid-2" style="margin-bottom:12px;">
-        <div>
-          <p class="small">
-            You’ll see:
-            <br>• Unassigned leads (you can claim them)
-            <br>• Leads already assigned to you
-          </p>
-        </div>
-        <div style="text-align:right;">
-          <label class="small">
-            Filter by status:
-            <select id="statusFilter">
-              <option value="all">All</option>
-              <option value="new">New</option>
-              <option value="working">Working</option>
-              <option value="no answer">No Answer</option>
-              <option value="not interested">Not Interested</option>
-              <option value="closed won">Closed Won</option>
-            </select>
-          </label>
-        </div>
-      </div>
-
-      <div style="max-height:420px;overflow:auto;">
-        <table id="leadsTable">
-          <thead>
-            <tr>
-              <th>Business</th>
-              <th>Contact</th>
-              <th>Status</th>
-              <th>Last Contact</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-      <p class="small" id="leadsNote" style="margin-top:8px;"></p>
+    <div style="overflow:auto;max-height:520px;">
+      <table id="leadsTable">
+        <thead>
+          <tr>
+            <th>Lead</th>
+            <th>Contact</th>
+            <th>Location</th>
+            <th>Web / Social</th>
+            <th>Priority</th>
+            <th>Status</th>
+            <th>Notes / Last Contact</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
     </div>
-
-    <!-- SCRIPTS TAB -->
-    <div id="scriptsSection">
-      <div class="grid-2">
-        <article class="card" style="margin-bottom:0;">
-          <h2>Phone Script (Cold Call)</h2>
-          <p class="small">Use this to open, qualify, and pitch BrandCrafters websites.</p>
-          <div class="code-block">
-            <strong>Intro</strong><br>
-            “Hi, is this <em>[Business Name]</em>? Hey, my name is <em>[Your Name]</em>, I work with a small studio called BrandCrafters. We build simple, clean websites for local businesses like yours.”<br><br>
-            <strong>Problem</strong><br>
-            “I noticed you either don’t have a website that comes up clearly online or it’s hard to find info like hours, services, and contact details.”<br><br>
-            <strong>Offer</strong><br>
-            “We do <strong>done-for-you websites</strong> starting at <strong>$249</strong>, and most full business sites are <strong>$699</strong>. That includes your domain and setup — you don’t have to design anything.”<br><br>
-            <strong>Close</strong><br>
-            “If I sent you a quick summary with pricing and examples today, would you be open to looking that over? If you like it, we can lock in your spot and get your site started this week.”
-          </div>
-        </article>
-
-        <article class="card" style="margin-bottom:0;">
-          <h2>Pricing Snapshot</h2>
-          <p class="small">Basic packages (website only). Add-ons are extra.</p>
-          <ul class="small" style="padding-left:16px;margin:0 0 8px;">
-            <li><strong>Starter Craft — $249</strong><br>1-page, simple info site. For very small businesses.</li>
-            <li><strong>Business Builder — $699</strong><br>3–5 pages. Our main package for most clients.</li>
-            <li><strong>E-Commerce — $1,199+</strong><br>Online store or booking. For product/service sales.</li>
-          </ul>
-          <p class="small">
-            <strong>Maintenance (optional, monthly):</strong><br>
-            • Lite / Standard / Pro (varies per client; admin sets final price).<br>
-            • Your commission is based on the <strong>website sale</strong>, not small add-ons.
-          </p>
-          <p class="small">
-            <strong>Commission:</strong> $100 per closed website when the invoice is paid.
-          </p>
-        </article>
-      </div>
-
-      <article class="card">
-        <h2>Email & DM Templates</h2>
-        <p class="small">Copy/paste, then tweak for the business and what you talked about.</p>
-
-        <h3 style="margin:8px 0 4px;font-size:14px;">Follow-up Email</h3>
-        <div class="code-block">
-          Subject: Quick website idea for {{business_name}}<br><br>
-          Hi {{owner_name}},<br><br>
-          Thanks for taking a minute to talk earlier. As promised, here’s a summary of what we can do for {{business_name}}:<br><br>
-          • A clean, mobile-friendly website so customers can quickly see what you do<br>
-          • Your hours, services, and contact info in one place<br>
-          • Domain + basic setup handled for you<br><br>
-          Our main package for businesses like yours is <strong>$699</strong> for a full 3–5 page site. If you’d like to move forward, just reply “READY” and I’ll send the payment link and next steps.<br><br>
-          Best,<br>
-          {{your_name}}<br>
-          BrandCrafters
-        </div>
-
-        <h3 style="margin:10px 0 4px;font-size:14px;">Social DM (Facebook / Instagram)</h3>
-        <div class="code-block">
-          Hey {{name}} 👋 I help local businesses build simple, clean websites so people can actually find their info online.<br><br>
-          We’re doing done-for-you sites starting at <strong>$249</strong> (most full sites are <strong>$699</strong>) and that includes the setup so you don’t have to design anything yourself.<br><br>
-          If I send a quick 1-page summary with pricing and examples, would you take a look?
-        </div>
-      </article>
-    </div>
+    <div class="status-msg" id="tableStatusMsg"></div>
   </section>
 </main>
 
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      © <span id="year"></span> BrandCrafters — A division of Egyptian Hype LLC
+      <a href="dashboard.html" class="admin-link">Admin</a>
+    </div>
+  </div>
+</footer>
+
+<!-- Year -->
+<script>
+  const yearSpan = document.getElementById('year');
+  if (yearSpan) {
+    yearSpan.textContent = new Date().getFullYear();
+  }
+</script>
+
+<!-- Supabase + Contractor Logic -->
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script>
   const SUPABASE_URL = "https://vekoulqehexqosgwacwa.supabase.co";
-  const SUPABASE_ANON_KEY =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiIsInZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
+  const ADMIN_EMAIL = "srarnold216@gmail.com";
+  const LOGIN_PAGE_URL = "dashboard.html";
 
   const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  const userEmailSpan   = document.getElementById("userEmail");
-  const logoutBtn       = document.getElementById("logoutBtn");
+  const userEmailSpan      = document.getElementById("userEmail");
+  const logoutBtn          = document.getElementById("logoutBtn");
+  const summaryEmail       = document.getElementById("summaryEmail");
+  const summaryOpenLeads   = document.getElementById("summaryOpenLeads");
+  const summaryCommission  = document.getElementById("summaryCommission");
+  const summaryClosedWon   = document.getElementById("summaryClosedWon");
+  const filterScopeSelect  = document.getElementById("filterScope");
+  const filterStatusSelect = document.getElementById("filterStatus");
+  const leadsTableBody     = document.querySelector("#leadsTable tbody");
+  const tableStatusMsg     = document.getElementById("tableStatusMsg");
 
-  const myActiveLeadsEl = document.getElementById("myActiveLeads");
-  const myClosedWonEl   = document.getElementById("myClosedWon");
-  const myCommissionEl  = document.getElementById("myCommission");
+  let currentUserEmail = null;
+  let allLeads = [];
 
-  const leadsTableBody  = document.querySelector("#leadsTable tbody");
-  const leadsNote       = document.getElementById("leadsNote");
-  const statusFilter    = document.getElementById("statusFilter");
+  async function guardContractor(){
+    const { data, error } = await supabaseClient.auth.getUser();
+    if (error) {
+      console.error("auth.getUser error:", error);
+    }
+    if (!data || !data.user) {
+      // not logged in -> send to login gate (dashboard.html)
+      window.location.href = LOGIN_PAGE_URL;
+      return null;
+    }
+    const email = data.user.email;
+    currentUserEmail = email;
+    if (userEmailSpan) userEmailSpan.textContent = email || "";
+    if (summaryEmail) summaryEmail.textContent = email || "—";
 
-  const tabButtons      = document.querySelectorAll(".tab-btn");
-  const leadsSection    = document.getElementById("leadsSection");
-  const scriptsSection  = document.getElementById("scriptsSection");
+    // If this is admin, send to admin dashboard, not contractor portal
+    if (email === ADMIN_EMAIL) {
+      window.location.href = "dashboard.html";
+      return null;
+    }
+    return data.user;
+  }
 
-  let currentUserEmail  = null;
-  let allLeads          = [];
-
-  // Tabs
-  tabButtons.forEach(btn => {
-    btn.addEventListener("click", () => {
-      tabButtons.forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-
-      if (btn.dataset.tab === "leadsSection") {
-        leadsSection.classList.add("active");
-        scriptsSection.classList.remove("active");
-      } else {
-        scriptsSection.classList.add("active");
-        leadsSection.classList.remove("active");
-      }
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", async () => {
+      await supabaseClient.auth.signOut();
+      window.location.href = LOGIN_PAGE_URL;
     });
-  });
+  }
 
-  function formatMoney(n) {
+  function formatMoney(n){
     if (!n || isNaN(n)) return "$0.00";
     return "$" + Number(n).toFixed(2);
   }
 
-  function statusPill(status) {
-    const s = (status || "new").toLowerCase();
-    let cls = "pill-blue";
-    if (s === "closed won") cls = "pill-green";
-    if (s === "working" || s === "no answer") cls = "pill-yellow";
-    return `<span class="pill ${cls}">${s}</span>`;
+  function badgeForPriority(p){
+    const pri = (p || "").toUpperCase();
+    if (pri === "A") return `<span class="badge badge-priority-a">A · Hot (No Site)</span>`;
+    if (pri === "B") return `<span class="badge badge-priority-b">B · Needs Upgrade</span>`;
+    if (pri === "C") return `<span class="badge badge-priority-c">C · Warm</span>`;
+    return `<span class="badge">?</span>`;
   }
 
-  function renderStats() {
-    if (!currentUserEmail) return;
-    let active = 0;
-    let closed = 0;
+  function badgeForStatus(s){
+    const st = (s || "new").toLowerCase();
+    if (st === "new") return `<span class="badge badge-status-new">New</span>`;
+    if (st === "in progress" || st === "in_progress") return `<span class="badge badge-status-inprogress">In Progress</span>`;
+    if (st === "closed won" || st === "closed_won") return `<span class="badge badge-status-closedwon">Closed Won</span>`;
+    if (st === "closed lost" || st === "closed_lost") return `<span class="badge badge-status-closedlost">Closed Lost</span>`;
+    return `<span class="badge">${st}</span>`;
+  }
 
-    allLeads.forEach(ld => {
-      if (ld.assigned_caller_email && ld.assigned_caller_email.toLowerCase() === currentUserEmail) {
-        const st = (ld.call_status || "new").toLowerCase();
-        if (st === "closed won") closed++;
-        else if (st !== "not interested") active++;
+  function filterLeads(){
+    const scope = filterScopeSelect.value;
+    const statusFilter = filterStatusSelect.value;
+
+    let rows = allLeads.slice();
+
+    rows = rows.filter(ld => {
+      const assigned = ld.assigned_caller_email;
+      const st = (ld.call_status || "new").toLowerCase();
+
+      // scope
+      if (scope === "mine" && assigned !== currentUserEmail) return false;
+      if (scope === "unassigned" && assigned) return false;
+      if (scope === "mine_unassigned" && !(assigned === currentUserEmail || !assigned)) return false;
+      // scope "all" -> no restriction
+
+      // status
+      if (statusFilter === "open") {
+        if (!(st === "new" || st === "in progress" || st === "in_progress")) return false;
+      } else if (statusFilter === "new") {
+        if (st !== "new") return false;
+      } else if (statusFilter === "in_progress") {
+        if (!(st === "in progress" || st === "in_progress")) return false;
+      } else if (statusFilter === "closed") {
+        if (!(st === "closed won" || st === "closed_won" || st === "closed lost" || st === "closed_lost")) return false;
       }
+      return true;
     });
 
-    myActiveLeadsEl.textContent = active;
-    myClosedWonEl.textContent   = closed;
-    myCommissionEl.textContent  = formatMoney(closed * 100);
+    // sort by priority A -> B -> C, then by created_at desc
+    const priOrder = { "A":0, "B":1, "C":2 };
+    rows.sort((a,b) => {
+      const pa = priOrder[(a.priority || "").toUpperCase()] ?? 9;
+      const pb = priOrder[(b.priority || "").toUpperCase()] ?? 9;
+      if (pa !== pb) return pa - pb;
+      const da = new Date(a.created_at || 0);
+      const db = new Date(b.created_at || 0);
+      return db - da;
+    });
+
+    renderLeads(rows);
   }
 
-  function renderLeads() {
-    if (!currentUserEmail) return;
-    const filter = statusFilter.value;
+  function renderLeads(rows){
     leadsTableBody.innerHTML = "";
-
-    const rows = allLeads.filter(ld => {
-      const assigned = (ld.assigned_caller_email || "").toLowerCase();
-      const st       = (ld.call_status || "new").toLowerCase();
-
-      // Visible if unassigned OR assigned to me
-      if (assigned && assigned !== currentUserEmail) return false;
-
-      if (filter === "all") return true;
-      return st === filter;
-    });
-
-    if (!rows.length) {
-      leadsNote.textContent = "No leads match this filter yet.";
-    } else {
-      leadsNote.textContent = `${rows.length} lead(s) showing.`;
+    if (!rows.length){
+      const tr = document.createElement("tr");
+      const td = document.createElement("td");
+      td.colSpan = 8;
+      td.className = "status-msg";
+      td.textContent = "No leads match this filter.";
+      tr.appendChild(td);
+      leadsTableBody.appendChild(tr);
+      tableStatusMsg.textContent = "";
+      return;
     }
 
     rows.forEach(ld => {
       const tr = document.createElement("tr");
 
-      const business = ld.business_name || ld.business || "(No name)";
-      const city     = ld.city || "";
-      const state    = ld.state || "";
+      const st = (ld.call_status || "new").toLowerCase();
+      const isClosedWon = (st === "closed won" || st === "closed_won");
+      const assigned = ld.assigned_caller_email;
+      const isMine = assigned === currentUserEmail;
 
-      const tdBiz = document.createElement("td");
-      tdBiz.innerHTML = `<strong>${business}</strong><br><span class="small">${city} ${state}</span>`;
-      tr.appendChild(tdBiz);
+      const tdLead = document.createElement("td");
+      tdLead.innerHTML = `<strong>${ld.business_name || "(no name)"}</strong><br><span class="status-msg">${ld.notes || ""}</span>`;
+      tr.appendChild(tdLead);
 
-      const contactParts = [];
-      if (ld.phone) contactParts.push(ld.phone);
-      if (ld.email) contactParts.push(ld.email);
-      if (ld.social) contactParts.push(ld.social);
       const tdContact = document.createElement("td");
-      tdContact.innerHTML = contactParts.join("<br>");
+      tdContact.innerHTML = `
+        <div>${ld.phone || ""}</div>
+        <div class="status-msg">${ld.email || ""}</div>
+      `;
       tr.appendChild(tdContact);
 
+      const tdLoc = document.createElement("td");
+      tdLoc.textContent = [ld.city, ld.state].filter(Boolean).join(", ");
+      tr.appendChild(tdLoc);
+
+      const tdWeb = document.createElement("td");
+      const web = ld.website || "";
+      const soc = ld.social || "";
+      if (web) {
+        tdWeb.innerHTML = `<div><a href="${web}" target="_blank">${web}</a></div>`;
+      }
+      if (soc) {
+        tdWeb.innerHTML += `<div class="status-msg"><a href="${soc}" target="_blank">${soc}</a></div>`;
+      }
+      if (!web && !soc) {
+        tdWeb.textContent = "—";
+      }
+      tr.appendChild(tdWeb);
+
+      const tdPri = document.createElement("td");
+      tdPri.innerHTML = badgeForPriority(ld.priority);
+      tr.appendChild(tdPri);
+
       const tdStatus = document.createElement("td");
-      tdStatus.innerHTML = statusPill(ld.call_status) +
-        (ld.assigned_caller_email ? `<br><span class="small">You</span>` : `<br><span class="small">Unassigned</span>`);
+      tdStatus.innerHTML = `
+        ${badgeForStatus(ld.call_status)}
+        <div class="status-msg">
+          Assigned: ${assigned ? assigned : "Unassigned"}
+        </div>
+      `;
       tr.appendChild(tdStatus);
 
-      const tdLast = document.createElement("td");
-      tdLast.innerHTML = `<span class="small">${ld.last_contact_date || "—"}</span>`;
-      tr.appendChild(tdLast);
+      const tdNotes = document.createElement("td");
+      const notesId = `notes-${ld.id}`;
+      const dateId  = `date-${ld.id}`;
+      tdNotes.innerHTML = `
+        <textarea id="${notesId}" class="notes-input" placeholder="Call notes, promises, follow-up plan…">${ld.notes || ""}</textarea>
+        <div style="margin-top:4px;">
+          <label style="font-size:10px;color:var(--muted);display:block;">
+            Last Contact
+            <input type="date" id="${dateId}" class="date-inline" value="${ld.last_contact_date || ""}">
+          </label>
+        </div>
+      `;
+      tr.appendChild(tdNotes);
 
       const tdActions = document.createElement("td");
-
-      const assignedToMe = ld.assigned_caller_email &&
-        ld.assigned_caller_email.toLowerCase() === currentUserEmail;
-
-      if (!ld.assigned_caller_email) {
-        const btnClaim = document.createElement("button");
-        btnClaim.className = "btn btn-ghost btn-small";
-        btnClaim.textContent = "Claim";
-        btnClaim.addEventListener("click", () => claimLead(ld.id));
-        tdActions.appendChild(btnClaim);
-      }
-
-      if (assignedToMe) {
-        const select = document.createElement("select");
-        ["new","working","no answer","not interested","closed won"].forEach(st => {
-          const opt = document.createElement("option");
-          opt.value = st;
-          opt.textContent = st;
-          if ((ld.call_status || "new").toLowerCase() === st) opt.selected = true;
-          select.appendChild(opt);
-        });
-        select.addEventListener("change", () => updateLead(ld.id, { call_status: select.value }));
-
-        const btnNote = document.createElement("button");
-        btnNote.className = "btn btn-ghost btn-small";
-        btnNote.style.marginLeft = "4px";
-        btnNote.textContent = "Add Note";
-        btnNote.addEventListener("click", async () => {
-          const note = prompt("Add or update notes for this lead:", ld.notes || "");
-          if (note !== null) {
-            await updateLead(ld.id, { notes: note });
-          }
-        });
-
-        tdActions.appendChild(select);
-        tdActions.appendChild(btnNote);
-      }
-
+      const selectId = `status-${ld.id}`;
+      const canEdit = !assigned || isMine; // only unassigned or your own
+      tdActions.innerHTML = `
+        <select id="${selectId}" class="select-inline" ${canEdit ? "" : "disabled"}>
+          <option value="new" ${st === "new" ? "selected" : ""}>New</option>
+          <option value="in progress" ${st === "in progress" || st === "in_progress" ? "selected" : ""}>In Progress</option>
+          <option value="closed won" ${isClosedWon ? "selected" : ""}>Closed Won</option>
+          <option value="closed lost" ${st === "closed lost" || st === "closed_lost" ? "selected" : ""}>Closed Lost</option>
+        </select>
+        <div style="margin-top:4px;display:flex;flex-direction:column;gap:4px;">
+          ${assigned ? "" : `<button class="btn btn-small btn-primary" data-action="claim" data-id="${ld.id}">Claim Lead</button>`}
+          ${canEdit ? `<button class="btn btn-small" data-action="save" data-id="${ld.id}">Save</button>` : `<span class="status-msg">Read-only (assigned to ${assigned})</span>`}
+        </div>
+      `;
       tr.appendChild(tdActions);
+
       leadsTableBody.appendChild(tr);
     });
+
+    tableStatusMsg.textContent = `${rows.length} lead(s) shown.`;
   }
 
-  async function claimLead(id) {
+  async function loadLeads(){
+    tableStatusMsg.textContent = "Loading leads…";
+
+    const { data, error } = await supabaseClient
+      .from("call_leads")
+      .select("*");
+
+    if (error){
+      console.error("call_leads error:", error);
+      tableStatusMsg.textContent = "Error loading leads: " + error.message;
+      return;
+    }
+
+    allLeads = data || [];
+
+    const myOpen = allLeads.filter(ld => {
+      const st = (ld.call_status || "new").toLowerCase();
+      return ld.assigned_caller_email === currentUserEmail &&
+        (st === "new" || st === "in progress" || st === "in_progress");
+    }).length;
+
+    let myClosedWon = 0;
+    allLeads.forEach(ld => {
+      const st = (ld.call_status || "new").toLowerCase();
+      if (ld.assigned_caller_email === currentUserEmail &&
+          (st === "closed won" || st === "closed_won")) {
+        myClosedWon += 1;
+      }
+    });
+    const myCommission = myClosedWon * 100;
+
+    summaryOpenLeads.textContent = myOpen;
+    summaryCommission.textContent = formatMoney(myCommission);
+    summaryClosedWon.textContent = `${myClosedWon} closed won · $100 per website sale`;
+
+    filterScopeSelect.value = "mine_unassigned";
+    filterStatusSelect.value = "open";
+    filterLeads();
+  }
+
+  async function claimLead(id){
     if (!currentUserEmail) return;
     const { error } = await supabaseClient
       .from("call_leads")
-      .update({ assigned_caller_email: currentUserEmail })
+      .update({ assigned_caller_email: currentUserEmail, call_status: "in progress" })
       .eq("id", id);
 
-    if (error) {
-      alert("Error claiming lead.");
-      console.error(error);
+    if (error){
+      console.error("claim lead error:", error);
+      alert("Error claiming lead: " + error.message);
       return;
     }
     await loadLeads();
   }
 
-  async function updateLead(id, fields) {
+  async function saveLead(id){
+    const notesEl = document.getElementById(`notes-${id}`);
+    const dateEl  = document.getElementById(`date-${id}`);
+    const statusEl = document.getElementById(`status-${id}`);
+    if (!notesEl || !dateEl || !statusEl) return;
+
+    const notes = notesEl.value || "";
+    const lastContact = dateEl.value || null;
+    const statusVal = statusEl.value || "new";
+
     const { error } = await supabaseClient
       .from("call_leads")
-      .update(fields)
+      .update({
+        notes,
+        last_contact_date: lastContact,
+        call_status: statusVal
+      })
       .eq("id", id);
 
-    if (error) {
-      alert("Error updating lead.");
-      console.error(error);
+    if (error){
+      console.error("save lead error:", error);
+      alert("Error saving lead: " + error.message);
       return;
     }
     await loadLeads();
   }
 
-  async function loadLeads() {
-    const { data, error } = await supabaseClient
-      .from("call_leads")
-      .select("*")
-      .order("id", { ascending: true });
+  leadsTableBody.addEventListener("click", async (e) => {
+    const btn = e.target.closest("button[data-action]");
+    if (!btn) return;
+    const id = btn.getAttribute("data-id");
+    const action = btn.getAttribute("data-action");
+    if (!id || !action) return;
 
-    if (error) {
-      console.error(error);
-      leadsNote.textContent = "Error loading leads.";
-      return;
+    if (action === "claim") {
+      await claimLead(id);
+    } else if (action === "save") {
+      await saveLead(id);
     }
-    allLeads = data || [];
-    renderStats();
-    renderLeads();
-  }
-
-  statusFilter.addEventListener("change", renderLeads);
-
-  logoutBtn.addEventListener("click", async () => {
-    await supabaseClient.auth.signOut();
-    window.location.href = "dashboard.html";
   });
 
-  (async () => {
-    const { data } = await supabaseClient.auth.getUser();
-    if (!data || !data.user) {
-      // no session → send them to main login
-      window.location.href = "dashboard.html";
-      return;
-    }
-    currentUserEmail = (data.user.email || "").toLowerCase();
-    userEmailSpan.textContent = currentUserEmail;
+  filterScopeSelect.addEventListener("change", filterLeads);
+  filterStatusSelect.addEventListener("change", filterLeads);
 
+  (async () => {
+    const user = await guardContractor();
+    if (!user) return;
     await loadLeads();
   })();
 </script>
 </body>
-                                                       </html>
+</html>
