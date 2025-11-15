@@ -23,54 +23,54 @@
         var(--bg);
       color:var(--text);
     }
-    a{text-decoration:none;color:var(--text);}
+    a{text-decoration:none;color:inherit;}
+
+    /* HEADER */
     header{
       position:sticky;top:0;z-index:40;
-      background:rgba(5,7,19,.95);
-      backdrop-filter:blur(16px);
+      background:rgba(5,7,19,.96);
+      backdrop-filter:blur(14px);
       border-bottom:1px solid rgba(255,255,255,.08);
       padding:10px 18px;
-      display:flex;align-items:center;justify-content:space-between;gap:12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
     }
     .brand{
       display:flex;flex-direction:column;gap:2px;
     }
     .brand-title{
-      font-weight:700;letter-spacing:.08em;font-size:14px;text-transform:uppercase;
+      font-weight:700;
+      letter-spacing:.08em;
+      font-size:14px;
+      text-transform:uppercase;
     }
-    .brand-sub{font-size:12px;color:var(--muted);}
-    .nav{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
-    .nav a{
-      font-size:13px;padding:6px 10px;border-radius:999px;
-      border:1px solid rgba(255,255,255,.22);
-      text-decoration:none;
-      color:var(--text);
-      transition:.18s;
+    .brand-sub{
+      font-size:12px;
+      color:var(--muted);
     }
-    .nav a.primary{
-      border-color:transparent;
-      background:var(--grad);
-      color:#050713;
-      font-weight:600;
-      box-shadow:0 0 0 1px rgba(110,168,255,.4);
+    .header-right{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size:12px;
+      color:var(--muted);
     }
-    .nav a:hover{
-      background:rgba(255,255,255,.08);
-      transform:translateY(-1px);
+    .user-email{
+      max-width:200px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
     }
-    .nav a.primary:hover{
-      filter:brightness(1.05);
-    }
-    .user-email{font-size:12px;color:var(--muted);}
     .logout-btn{
       border-radius:999px;
       padding:6px 12px;
       border:1px solid rgba(255,255,255,.7);
-      background:rgba(255,255,255,.08);
+      background:rgba(255,255,255,.06);
       color:var(--text);
       font-size:12px;
       cursor:pointer;
-      box-shadow:0 0 0 1px rgba(110,168,255,.4);
       transition:.18s;
     }
     .logout-btn:hover{
@@ -78,49 +78,74 @@
       transform:translateY(-1px);
     }
 
+    /* LAYOUT */
     main{
-      max-width:1100px;margin:18px auto 60px;
+      max-width:1100px;
+      margin:18px auto 60px;
       padding:0 16px;
     }
     h1{margin:0 0 6px;font-size:22px;}
+    h2{margin:0 0 8px;font-size:16px;}
     .subhead{margin:0 0 18px;font-size:13px;color:var(--muted);}
+
     .grid{
       display:grid;
       grid-template-columns:repeat(3,minmax(0,1fr));
       gap:12px;
     }
     .grid-2{
-      display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
       gap:12px;
     }
     @media (max-width:900px){
       .grid{grid-template-columns:1fr;}
       .grid-2{grid-template-columns:1fr;}
     }
+
     .card{
       background:var(--panel);
       border-radius:16px;
       border:1px solid var(--border);
       padding:16px 14px;
+      box-shadow:0 18px 40px rgba(0,0,0,.6);
     }
-    .card h2{margin:0 0 8px;font-size:16px;}
     .card p{margin:0 0 6px;font-size:13px;}
+    .small{font-size:12px;color:var(--muted);}
+
     .stat-label{
-      font-size:11px;text-transform:uppercase;
-      letter-spacing:.06em;color:var(--muted);
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      color:var(--muted);
     }
     .stat-value{
-      font-size:20px;font-weight:700;margin-top:4px;
+      font-size:20px;
+      font-weight:700;
+      margin-top:4px;
     }
-    .stat-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+    .stat-sub{
+      font-size:11px;
+      color:var(--muted);
+      margin-top:2px;
+    }
+
     .pill{
-      display:inline-block;padding:2px 8px;border-radius:999px;
+      display:inline-block;
+      padding:2px 8px;
+      border-radius:999px;
       font-size:11px;
     }
     .pill-green{background:rgba(155,255,191,.15);}
     .pill-red{background:rgba(255,155,155,.15);}
     .pill-blue{background:rgba(110,168,255,.15);}
-    table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;}
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      font-size:12px;
+      margin-top:8px;
+    }
     th,td{
       border-bottom:1px solid rgba(255,255,255,.08);
       padding:5px 4px;
@@ -133,11 +158,25 @@
       letter-spacing:.05em;
       color:var(--muted);
     }
-    .small{font-size:12px;color:var(--muted);}
-    .tag{
-      display:inline-block;border-radius:999px;
-      border:1px solid rgba(255,255,255,.2);
-      padding:2px 7px;font-size:11px;
+
+    .btn{
+      display:inline-block;
+      border-radius:999px;
+      padding:7px 11px;
+      font-size:12px;
+      font-weight:600;
+      border:0;
+      cursor:pointer;
+      transition:.18s;
+    }
+    .btn-ghost{
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      border:1px solid rgba(255,255,255,.18);
+    }
+    .btn-ghost:hover{
+      filter:brightness(1.05);
+      transform:translateY(-1px);
     }
 
     /* LOGIN VIEW */
@@ -149,7 +188,7 @@
       padding:24px 16px;
     }
     .login-panel{
-      max-width:380px;
+      max-width:360px;
       width:100%;
       background:var(--panel);
       border-radius:18px;
@@ -192,27 +231,6 @@
     input::placeholder{
       color:rgba(181,183,216,.8);
     }
-    .btn{
-      display:inline-block;
-      border-radius:999px;
-      padding:7px 11px;
-      font-size:12px;
-      font-weight:600;
-      border:0;
-      cursor:pointer;
-      transition:.18s;
-    }
-    .btn-primary{
-      background:var(--grad);
-      color:#050713;
-      box-shadow:0 0 0 1px rgba(110,168,255,.4);
-      width:100%;
-      margin-top:10px;
-    }
-    .btn-primary:hover{
-      filter:brightness(1.05);
-      transform:translateY(-1px);
-    }
     .login-msg{
       font-size:12px;
       min-height:16px;
@@ -231,20 +249,17 @@
     <span class="brand-title">BrandCrafters</span>
     <span class="brand-sub">Admin · Money & Projects</span>
   </div>
-  <div class="nav">
-    <a href="dashboard.html" class="primary">Dashboard / Login</a>
-    <a href="dashboard-leads-upload.html">Leads & CSV</a>
-    <a href="contractor-portal.html" target="_blank">Contractor Portal</a>
-    <span class="user-email" id="userEmail"></span>
+  <div class="header-right">
+    <span id="userEmail" class="user-email"></span>
     <button id="logoutBtn" class="logout-btn">Log Out</button>
   </div>
 </header>
 
-<!-- LOGIN STATE (shown when not logged in) -->
+<!-- LOGIN STATE -->
 <div id="loginWrapper" class="login-wrapper">
   <div class="login-panel">
     <h1><span class="grad">Sign in</span> to your dashboard</h1>
-    <p>Admin uses your email + password. Admin sees this page; contractors get bounced to their portal.</p>
+    <p>Use your Supabase email and password. Admin (you) sees this dashboard. Contractors are redirected to their portal.</p>
 
     <form id="loginForm">
       <label>Email
@@ -253,19 +268,35 @@
       <label>Password
         <input type="password" id="loginPassword" required placeholder="••••••••" />
       </label>
-      <button type="submit" class="btn btn-primary" id="loginBtn">Login</button>
+      <button type="submit" class="btn btn-ghost" id="loginBtn" style="width:100%;">Login</button>
       <div id="loginMsg" class="login-msg"></div>
     </form>
   </div>
 </div>
 
-<!-- ADMIN DASHBOARD STATE (shown only when admin logged in) -->
+<!-- ADMIN DASHBOARD -->
 <main id="dashboardContent">
-  <section>
+  <section style="margin-bottom:12px;">
     <h1>Overview</h1>
     <p class="subhead">
-      Quick snapshot of one-time project money, monthly maintenance, upcoming bills, and lead pipeline.
+      One-time project money, monthly maintenance, upcoming bills, and lead pipeline.
     </p>
+  </section>
+
+  <!-- ADMIN MENU -->
+  <section class="card" style="margin-bottom:16px;">
+    <h2>Admin Menu</h2>
+    <p class="small">
+      Quick links to other admin pages.
+    </p>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;">
+      <button class="btn btn-ghost" onclick="window.location.href='dashboard-leads-upload.html'">
+        Leads & CSV Upload
+      </button>
+      <button class="btn btn-ghost" onclick="window.location.href='contractor-portal.html'">
+        Contractor Portal
+      </button>
+    </div>
   </section>
 
   <!-- MONEY SUMMARY -->
@@ -299,7 +330,7 @@
       <div class="stat-label">Est. Monthly Net (Maintenance - Bills)</div>
       <div class="stat-value" id="monthlyNet">$0.00</div>
       <div class="stat-sub">
-        Quick check if maintenance fees can cover recurring expenses.
+        Quick check if maintenance fees cover recurring expenses.
       </div>
     </article>
 
@@ -307,7 +338,7 @@
       <div class="stat-label">Closed Won Leads · This Month</div>
       <div class="stat-value" id="closedWonMonth">0</div>
       <div class="stat-sub">
-        Leads in call_leads where status = 'closed won' and last_contact_date is in this month.
+        From call_leads with status = 'closed won' this month.
       </div>
     </article>
 
@@ -325,7 +356,7 @@
     <article class="card">
       <h2>Client Projects (Onboarding)</h2>
       <p class="small">
-        Last 6 onboarding submissions with totals and monthly fees. You’ll use the dashboard page to drill into each.
+        Last 6 onboarding submissions with totals and monthly fees.
       </p>
       <table id="projectsTable">
         <thead>
@@ -364,7 +395,7 @@
   <section class="card" style="margin-top:16px;">
     <h2>Lead Pipeline Snapshot</h2>
     <p class="small">
-      Quick check before you go deeper into the full Leads & CSV dashboard.
+      Quick check before going into the full Leads & CSV dashboard.
     </p>
     <div class="grid-2">
       <div>
@@ -391,7 +422,9 @@
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script>
   const SUPABASE_URL = "https://vekoulqehexqosgwacwa.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
+  const SUPABASE_ANON_KEY =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
+
   const ADMIN_EMAIL = "srarnold216@gmail.com";
   const CONTRACTOR_PORTAL_URL = "contractor-portal.html";
 
@@ -407,11 +440,11 @@
   const closedWonMonth  = document.getElementById("closedWonMonth");
   const commissionMonth = document.getElementById("commissionMonth");
 
-  const projectsTableBody = document.querySelector("#projectsTable tbody");
-  const billsTableBody    = document.querySelector("#billsTable tbody");
-  const billsNote         = document.getElementById("billsNote");
-  const leadStatusStats   = document.getElementById("leadStatusStats");
-  const topCallersTableBody = document.querySelector("#topCallersTable tbody");
+  const projectsTableBody    = document.querySelector("#projectsTable tbody");
+  const billsTableBody       = document.querySelector("#billsTable tbody");
+  const billsNote            = document.getElementById("billsNote");
+  const leadStatusStats      = document.getElementById("leadStatusStats");
+  const topCallersTableBody  = document.querySelector("#topCallersTable tbody");
 
   const loginWrapper     = document.getElementById("loginWrapper");
   const dashboardContent = document.getElementById("dashboardContent");
@@ -422,7 +455,7 @@
   const loginMsg         = document.getElementById("loginMsg");
 
   function formatMoney(n) {
-    if (!n || isNaN(n)) return "$0.00";
+    if (n === null || n === undefined || isNaN(n)) return "$0.00";
     return "$" + Number(n).toFixed(2);
   }
 
@@ -471,7 +504,6 @@
       return;
     }
 
-    // route based on email
     if (email === ADMIN_EMAIL.toLowerCase()) {
       loginMsg.textContent = "Login successful. Loading dashboard…";
       loginMsg.className = "login-msg success";
@@ -484,7 +516,7 @@
   async function loadDashboard() {
     const today = new Date();
     const monthStart = startOfMonth(today);
-    const monthEnd = endOfMonth(today);
+    const monthEnd   = endOfMonth(today);
 
     const [onboardingRes, billsRes, leadsRes] = await Promise.all([
       supabaseClient.from("onboarding_submissions").select("*"),
@@ -493,19 +525,19 @@
     ]);
 
     if (onboardingRes.error) console.error("Onboarding error:", onboardingRes.error);
-    if (billsRes.error) console.error("Bills error:", billsRes.error);
-    if (leadsRes.error) console.error("Leads error:", leadsRes.error);
+    if (billsRes.error)      console.error("Bills error:", billsRes.error);
+    if (leadsRes.error)      console.error("Leads error:", leadsRes.error);
 
     const onboarding = onboardingRes.data || [];
     const bills      = billsRes.data || [];
     const leads      = leadsRes.data || [];
 
     // MONEY SUMMARY
-    let lifetimeRev = 0;
-    let monthlyFeeTotal = 0;
+    let lifetimeRev      = 0;
+    let monthlyFeeTotal  = 0;
 
     onboarding.forEach(p => {
-      if (p.total_price) lifetimeRev += Number(p.total_price) || 0;
+      if (p.total_price) lifetimeRev     += Number(p.total_price) || 0;
       if (p.monthly_fee) monthlyFeeTotal += Number(p.monthly_fee) || 0;
     });
 
@@ -514,7 +546,7 @@
 
     let monthlyBillsTotal = 0;
     bills.forEach(b => {
-      if (b.frequency === "monthly" && b.amount) {
+      if ((b.frequency || "").toLowerCase() === "monthly" && b.amount) {
         monthlyBillsTotal += Number(b.amount) || 0;
       }
     });
@@ -527,9 +559,10 @@
       .sort((a, b) => new Date(b.created_at || b.first_paid_at || 0) - new Date(a.created_at || a.first_paid_at || 0))
       .slice(0, 6)
       .forEach(p => {
-        const tr = document.createElement("tr");
-        const clientName = p.business_name || p.client_name || p.business || p.name || "(No name)";
-        const status = (p.status || "new").toLowerCase();
+        const tr         = document.createElement("tr");
+        const clientName =
+          p.business_name || p.client_name || p.business || p.name || "(No name)";
+        const status     = (p.status || "new").toLowerCase();
 
         const tdClient = document.createElement("td");
         tdClient.innerHTML = `<strong>${clientName}</strong><br><span class="small">${p.currency || "USD"}</span>`;
@@ -544,7 +577,7 @@
         tr.appendChild(tdMonthly);
 
         const tdStatus = document.createElement("td");
-        const pill = document.createElement("span");
+        const pill     = document.createElement("span");
         pill.className = "pill " + (status === "completed" ? "pill-green" : status === "cancelled" ? "pill-red" : "pill-blue");
         pill.textContent = status;
         tdStatus.appendChild(pill);
@@ -561,6 +594,7 @@
       .slice(0,6)
       .forEach(b => {
         const tr = document.createElement("tr");
+
         const tdName = document.createElement("td");
         tdName.innerHTML = `<strong>${b.name}</strong><br><span class="small">${b.category || ""}</span>`;
         tr.appendChild(tdName);
@@ -579,28 +613,26 @@
 
         billsTableBody.appendChild(tr);
       });
-    billsNote.textContent = bills.length ? "" : "No recurring_expenses found yet. You can add them in Supabase.";
+    billsNote.textContent = bills.length ? "" : "No recurring_expenses yet. Add them in Supabase.";
 
     // LEADS SNAPSHOT
-    const statusCounts = {};
-    let closedThisMonth = 0;
-    let commissionThisMonth = 0;
-    const callerStats = new Map();
+    const statusCounts        = {};
+    let closedThisMonth       = 0;
+    let commissionThisMonth   = 0;
+    const callerStats         = new Map();
 
     leads.forEach(ld => {
       const status = (ld.call_status || "new").toLowerCase();
       statusCounts[status] = (statusCounts[status] || 0) + 1;
 
-      // This month closed won?
       if (status === "closed won" && ld.last_contact_date) {
         const d = new Date(ld.last_contact_date);
         if (d >= monthStart && d <= monthEnd) {
-          closedThisMonth += 1;
-          commissionThisMonth += 100; // $100 per closed website sale
+          closedThisMonth     += 1;
+          commissionThisMonth += 100;
         }
       }
 
-      // Per caller
       if (ld.assigned_caller_email) {
         const email = ld.assigned_caller_email;
         if (!callerStats.has(email)) {
@@ -617,14 +649,12 @@
     closedWonMonth.textContent  = closedThisMonth;
     commissionMonth.textContent = formatMoney(commissionThisMonth);
 
-    // Status text
     const parts = [];
     Object.entries(statusCounts).forEach(([s, count]) => {
       parts.push(`${s}: ${count}`);
     });
     leadStatusStats.textContent = parts.length ? parts.join(" · ") : "No leads yet.";
 
-    // Top callers
     topCallersTableBody.innerHTML = "";
     const sortedCallers = Array.from(callerStats.entries())
       .sort((a,b) => b[1].commission - a[1].commission)
@@ -640,7 +670,7 @@
       topCallersTableBody.appendChild(tr);
     } else {
       sortedCallers.forEach(([email, stats]) => {
-        const tr = document.createElement("tr");
+        const tr      = document.createElement("tr");
         const tdEmail = document.createElement("td");
         tdEmail.textContent = email;
         tr.appendChild(tdEmail);
@@ -668,7 +698,6 @@
     const email = (data.user.email || "").toLowerCase();
 
     if (email !== ADMIN_EMAIL.toLowerCase()) {
-      // non-admin = contractor
       window.location.href = CONTRACTOR_PORTAL_URL;
       return;
     }
@@ -678,10 +707,9 @@
     loginBtn.disabled = false;
   }
 
-  // On first load, decide what to show
   (async () => {
     await initAdmin();
   })();
 </script>
 </body>
-</html>
+  </html>
