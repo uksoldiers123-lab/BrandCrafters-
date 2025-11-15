@@ -147,6 +147,7 @@
       </p>
 
       <div class="plan-actions">
+        <!-- TODO: replace # link with your real Stripe payment link -->
         <a class="btn btn-primary btn-full" href="#STRIPE_WEBSITE_STARTER" target="_blank" rel="noopener">
           Buy Starter Website
         </a>
@@ -186,6 +187,7 @@
       </p>
 
       <div class="plan-actions">
+        <!-- TODO: replace # link with your real Stripe payment link -->
         <a class="btn btn-primary btn-full" href="#STRIPE_WEBSITE_STANDARD" target="_blank" rel="noopener">
           Buy Standard Website
         </a>
@@ -226,6 +228,7 @@
       </p>
 
       <div class="plan-actions">
+        <!-- TODO: replace # link with your real Stripe payment link -->
         <a class="btn btn-primary btn-full" href="#STRIPE_WEBSITE_PROFESSIONAL" target="_blank" rel="noopener">
           Buy Professional Website
         </a>
@@ -267,6 +270,7 @@
       </p>
 
       <div class="plan-actions">
+        <!-- TODO: replace # link with your real Stripe payment link -->
         <a class="btn btn-primary btn-full" href="#STRIPE_WEBSITE_PREMIUM" target="_blank" rel="noopener">
           Buy Premium Website
         </a>
@@ -439,7 +443,6 @@
       if (!value) return;
       const match = document.querySelector(`.plan-grid .plan[data-package="${value}"]`);
       if (match) match.classList.add('suggested');
-      // Smooth scroll down to plans if on mobile
       const rect = match?.getBoundingClientRect();
       if (rect) {
         window.scrollTo({
