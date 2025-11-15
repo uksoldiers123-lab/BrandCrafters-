@@ -4,569 +4,393 @@
   <meta charset="utf-8" />
   <title>BrandCrafters — Contractor Portal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
-  <script defer src="script.js"></script>
-
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
+    :root{
+      --bg:#050713;
+      --panel:rgba(255,255,255,.04);
+      --border:rgba(255,255,255,.08);
+      --text:#f5f5ff;
+      --muted:#b5b7d8;
+      --grad:linear-gradient(135deg,#6ea8ff,#b166ff);
+    }
+    *{box-sizing:border-box;}
     body{
-      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color:#f5f5ff;
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:
+        radial-gradient(1200px 600px at -10% -10%, #18122f 0, rgba(24,18,47,0) 60%),
+        var(--bg);
+      color:var(--text);
     }
+    a{text-decoration:none;color:var(--text);}
+    header{
+      position:sticky;top:0;z-index:40;
+      background:rgba(5,7,19,.95);
+      backdrop-filter:blur(16px);
+      border-bottom:1px solid rgba(255,255,255,.08);
+      padding:10px 18px;
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+    }
+    .header-left{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+    }
+    .logo{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:800;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-size:14px;
+    }
+    .logo-mark{
+      display:inline-grid;
+      place-items:center;
+      width:32px;
+      height:32px;
+      border-radius:12px;
+      background:var(--grad);
+      color:#050713;
+      font-weight:800;
+      font-size:14px;
+    }
+    .brand-sub{
+      font-size:12px;
+      color:var(--muted);
+    }
+    .nav{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+    .nav a{
+      font-size:13px;padding:6px 10px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.22);
+      background:rgba(255,255,255,.04);
+      text-decoration:none;
+      color:var(--text);
+      transition:.18s;
+    }
+    .nav a.primary{
+      border-color:transparent;
+      background:var(--grad);
+      color:#050713;
+      font-weight:600;
+      box-shadow:0 0 0 1px rgba(110,168,255,.4);
+    }
+    .nav a:hover{
+      background:rgba(255,255,255,.10);
+      transform:translateY(-1px);
+    }
+    .nav a.primary:hover{
+      filter:brightness(1.05);
+    }
+    .user-email{font-size:12px;color:var(--muted);}
+    .logout-btn{
+      border-radius:999px;
+      padding:6px 12px;
+      border:1px solid rgba(255,255,255,.5);
+      background:rgba(255,255,255,.08);
+      color:var(--text);
+      font-size:12px;
+      cursor:pointer;
+      box-shadow:0 0 0 1px rgba(110,168,255,.3);
+      transition:.18s;
+    }
+    .logout-btn:hover{
+      background:rgba(255,255,255,.16);
+      transform:translateY(-1px);
+    }
+
     main{
-      max-width:1100px;
-      margin:32px auto 80px;
-      padding:0 20px;
+      max-width:1100px;margin:18px auto 60px;
+      padding:0 16px;
     }
-    h1{margin:0 0 6px;font-size:24px;}
-    .subhead{margin:0 0 20px;font-size:13px;color:var(--muted);}
-    .grid-3{
-      display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:16px;
-    }
-    @media(max-width:900px){.grid-3{grid-template-columns:1fr;}}
+    h1{margin:0 0 6px;font-size:22px;}
+    .subhead{margin:0 0 18px;font-size:13px;color:var(--muted);}
     .card{
       background:var(--panel);
       border-radius:16px;
-      border:1px solid rgba(255,255,255,.1);
-      padding:12px 14px;
-      font-size:13px;
+      border:1px solid var(--border);
+      padding:16px 14px;
+      margin-bottom:16px;
     }
-    .card-label{
-      font-size:11px;
-      text-transform:uppercase;
-      letter-spacing:.06em;
-      color:var(--muted);
-    }
-    .card-value{
-      font-size:18px;
-      font-weight:700;
-      margin-top:4px;
-    }
-    .toolbar{
-      display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px;font-size:12px;
-    }
-    .toolbar select{
-      padding:6px 8px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.16);
-      background:rgba(255,255,255,.04);
-      color:#f5f5ff;
-      font-size:12px;
-    }
-    table{
-      width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;
-    }
+    .card h2{margin:0 0 8px;font-size:16px;}
+    .card p{margin:0 0 6px;font-size:13px;}
+    .small{font-size:12px;color:var(--muted);}
+    table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;}
     th,td{
       border-bottom:1px solid rgba(255,255,255,.08);
-      padding:4px 4px;
+      padding:5px 4px;
       vertical-align:top;
     }
     th{
-      text-align:left;font-size:11px;text-transform:uppercase;
-      letter-spacing:.05em;color:var(--muted);
-      background:rgba(255,255,255,.02);position:sticky;top:0;z-index:1;
+      text-align:left;
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+      color:var(--muted);
     }
-    .badge{
-      display:inline-block;padding:2px 6px;border-radius:999px;
-      font-size:10px;text-transform:uppercase;letter-spacing:.05em;
+    .status-pill{
+      display:inline-block;
+      padding:2px 8px;
+      border-radius:999px;
+      font-size:11px;
+      background:rgba(110,168,255,.15);
     }
-    .badge-priority-a{background:rgba(255,210,130,.18);color:#ffd282;}
-    .badge-priority-b{background:rgba(130,190,255,.18);color:#a5c7ff;}
-    .badge-priority-c{background:rgba(180,255,190,.14);color:#b9ffbf;}
-    .badge-status-new{background:rgba(130,190,255,.18);color:#a5c7ff;}
-    .badge-status-inprogress{background:rgba(255,210,130,.18);color:#ffd282;}
-    .badge-status-closedwon{background:rgba(180,255,190,.18);color:#b9ffbf;}
-    .badge-status-closedlost{background:rgba(255,150,150,.18);color:#ffb1b1;}
+    .status-pill.new{background:rgba(111,255,193,.15);}
+    .status-pill.working{background:rgba(255,230,150,.2);}
+    .status-pill.closedwon{background:rgba(174,255,174,.2);}
+    .status-pill.closedlost{background:rgba(255,164,164,.2);}
     .btn{
-      display:inline-flex;align-items:center;justify-content:center;gap:4px;
-      padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.2);
-      background:rgba(255,255,255,.04);color:#f5f5ff;
-      font-size:11px;cursor:pointer;transition:.18s;text-decoration:none;
+      display:inline-block;
+      margin-top:4px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:none;
+      cursor:pointer;
+      font-size:11px;
+      font-weight:600;
+      background:var(--grad);
+      color:#050713;
+      box-shadow:0 0 0 1px rgba(110,168,255,.4);
     }
-    .btn:hover{background:rgba(255,255,255,.1);transform:translateY(-1px);}
-    .btn-primary{
-      border-color:transparent;background:var(--grad);color:#050713;
-      font-weight:600;box-shadow:0 0 0 1px rgba(110,168,255,.4);
+    .btn:hover{
+      filter:brightness(1.05);
+      transform:translateY(-1px);
     }
-    .btn-small{padding:4px 8px;font-size:10px;}
-    .notes-input{
-      width:100%;min-width:160px;max-width:300px;
-      min-height:40px;border-radius:10px;
-      border:1px solid rgba(255,255,255,.16);
-      background:rgba(0,0,0,.18);color:#f5f5ff;
-      font-size:11px;padding:4px 6px;resize:vertical;font-family:inherit;
+    .center-msg{
+      text-align:center;
+      margin-top:40px;
+      color:var(--muted);
+      font-size:13px;
     }
-    .select-inline,.date-inline{
-      width:100%;max-width:120px;padding:4px 6px;
-      border-radius:999px;border:1px solid rgba(255,255,255,.16);
-      background:rgba(0,0,0,.18);color:#f5f5ff;font-size:11px;
-    }
-    .status-msg{margin-top:4px;font-size:11px;color:var(--muted);}
-    .header-user{
-      display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted);margin-left:12px;
-    }
-    .btn-logout{
-      border-radius:999px;padding:6px 10px;border:1px solid rgba(255,255,255,.55);
-      background:rgba(255,255,255,.08);font-size:11px;cursor:pointer;
-      display:inline-flex;align-items:center;gap:4px;
-    }
-    .btn-logout:hover{background:rgba(255,255,255,.16);transform:translateY(-1px);}
-    @media(max-width:940px){.header-user{display:none;}}
-    .muted-link{
-      font-size:11px;color:var(--muted);
-      text-decoration:underline;text-decoration-style:dotted;
-    }
+    .hidden{display:none;}
   </style>
 </head>
 <body>
-
-<header class="site-header">
-  <div class="container header-inner">
+<header>
+  <div class="header-left">
     <a class="logo" href="index.html">
       <span class="logo-mark">BC</span><span>BrandCrafters</span>
     </a>
-
-    <nav class="nav desktop-nav">
-      <a href="index.html" class="nav-link">Home</a>
-      <a href="pricing.html" class="nav-link">Pricing</a>
-      <a href="customer-inquiry.html" class="btn btn-outline">Customer Portal</a>
-
-      <a href="dashboard.html" class="nav-link">Admin Dashboard</a>
-      <a href="dashboard-leads-upload.html" class="nav-link">Leads &amp; CSV</a>
-      <a href="dashboard-commissions.html" class="nav-link">Commission Rules</a>
-      <a href="contractor-portal.html" class="nav-link active">Contractor Portal</a>
-
-      <div class="header-user">
-        <span id="userEmail"></span>
-        <button id="logoutBtn" class="btn-logout">Log Out</button>
-      </div>
-    </nav>
-
-    <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
+    <span class="brand-sub">Contractor Portal</span>
   </div>
-
-  <nav class="mobile-drawer" aria-hidden="true">
-    <div class="drawer-header">
-      <a class="logo" href="index.html">
-        <span class="logo-mark">BC</span><span>BrandCrafters</span>
-      </a>
-      <button class="menu-close" aria-label="Close menu">✕</button>
-    </div>
-    <a class="drawer-link" href="index.html">Home</a>
-    <a class="drawer-link" href="pricing.html">Pricing</a>
-    <a class="drawer-link" href="customer-inquiry.html">Customer Portal</a>
-    <a class="drawer-link" href="dashboard.html">Admin Dashboard</a>
-    <a class="drawer-link" href="dashboard-leads-upload.html">Leads &amp; CSV</a>
-    <a class="drawer-link" href="dashboard-commissions.html">Commission Rules</a>
-    <a class="drawer-link" href="contractor-portal.html">Contractor Portal</a>
-  </nav>
-  <div class="drawer-backdrop" aria-hidden="true"></div>
+  <div class="nav">
+    <a href="dashboard.html">Admin Dashboard</a>
+    <a href="dashboard-leads-upload.html">Leads &amp; CSV</a>
+    <a href="contractor-portal.html" class="primary">Contractor Portal</a>
+    <span class="user-email" id="userEmail"></span>
+    <button id="logoutBtn" class="logout-btn" type="button">Log Out</button>
+  </div>
 </header>
 
 <main>
-  <section>
-    <h1>Contractor Portal</h1>
+  <section id="accessMessage" class="center-msg"></section>
+
+  <section id="portalContent" class="hidden">
+    <h1>Your Leads</h1>
     <p class="subhead">
-      Claim leads, update call statuses, and track your commissions for new website sales.<br>
-      Commission structure: <b>Starter $50 · Business $75 · E-Com $100 per new website sold</b>.<br>
-      For scripts and pricing notes, see
-      <a href="contractor-webbook.html" class="muted-link" target="_blank">Scripts &amp; WebBook</a>.
+      Assigned leads + unclaimed leads. When you click “Start Working”, that lead locks to you.
     </p>
-  </section>
 
-  <section class="grid-3">
     <article class="card">
-      <div class="card-label">Your Email</div>
-      <div class="card-value" id="summaryEmail">—</div>
-    </article>
-    <article class="card">
-      <div class="card-label">Open Leads (Assigned to You)</div>
-      <div class="card-value" id="summaryOpenLeads">0</div>
-    </article>
-    <article class="card">
-      <div class="card-label">Closed Won · Est. Commission</div>
-      <div class="card-value" id="summaryCommission">$0.00</div>
-      <div class="status-msg" id="summaryClosedWon">
-        0 closed won · Starter $50 · Business $75 · E-Com $100 per sale.
-      </div>
-    </article>
-  </section>
-
-  <section class="card">
-    <div class="toolbar">
-      <span style="font-size:11px;color:var(--muted);">Filter:</span>
-      <select id="filterScope">
-        <option value="mine">My leads (assigned to me)</option>
-        <option value="unassigned">Unassigned only</option>
-        <option value="mine_unassigned" selected>My + Unassigned (default)</option>
-        <option value="all">All leads I can see</option>
-      </select>
-      <select id="filterStatus">
-        <option value="open" selected>Open (new + in progress)</option>
-        <option value="new">New only</option>
-        <option value="in_progress">In progress only</option>
-        <option value="closed">Closed (won + lost)</option>
-        <option value="any">Any status</option>
-      </select>
-      <span style="flex:1 1 auto;"></span>
-      <span class="status-msg">Claim a lead, then update status &amp; notes as you work it.</span>
-    </div>
-
-    <div style="overflow:auto;max-height:520px;">
-      <table id="leadsTable">
+      <h2>Assigned to You</h2>
+      <p class="small">Leads already assigned to your email.</p>
+      <table id="assignedTable">
         <thead>
           <tr>
-            <th>Lead</th>
-            <th>Contact</th>
-            <th>Location</th>
-            <th>Web / Social</th>
+            <th>Business</th>
+            <th>Phone</th>
             <th>Priority</th>
             <th>Status</th>
-            <th>Notes / Last Contact</th>
-            <th>Actions</th>
+            <th>Last Contact</th>
           </tr>
         </thead>
         <tbody></tbody>
       </table>
-    </div>
-    <div class="status-msg" id="tableStatusMsg"></div>
+    </article>
+
+    <article class="card">
+      <h2>Unclaimed Leads</h2>
+      <p class="small">
+        These are shared leads. First caller to click “Start Working” claims it.
+      </p>
+      <table id="unclaimedTable">
+        <thead>
+          <tr>
+            <th>Business</th>
+            <th>Phone</th>
+            <th>Priority</th>
+            <th>City</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </article>
   </section>
 </main>
-
-<footer class="site-footer">
-  <div class="container footer-inner">
-    <div>
-      © <span id="year"></span> BrandCrafters — A division of Egyptian Hype LLC
-      <a href="dashboard.html" class="admin-link">Admin</a>
-    </div>
-  </div>
-</footer>
-
-<script>
-  const yearSpan = document.getElementById('year');
-  if (yearSpan) yearSpan.textContent = new Date().getFullYear();
-</script>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script>
   const SUPABASE_URL = "https://vekoulqehexqosgwacwa.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiIsInZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
-  const ADMIN_EMAIL = "srarnold216@gmail.com";
-  const LOGIN_PAGE_URL = "dashboard.html";
-
   const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  const userEmailSpan      = document.getElementById("userEmail");
-  const logoutBtn          = document.getElementById("logoutBtn");
-  const summaryEmail       = document.getElementById("summaryEmail");
-  const summaryOpenLeads   = document.getElementById("summaryOpenLeads");
-  const summaryCommission  = document.getElementById("summaryCommission");
-  const summaryClosedWon   = document.getElementById("summaryClosedWon");
-  const filterScopeSelect  = document.getElementById("filterScope");
-  const filterStatusSelect = document.getElementById("filterStatus");
-  const leadsTableBody     = document.querySelector("#leadsTable tbody");
-  const tableStatusMsg     = document.getElementById("tableStatusMsg");
+  const userEmailSpan    = document.getElementById("userEmail");
+  const logoutBtn        = document.getElementById("logoutBtn");
+  const accessMessage    = document.getElementById("accessMessage");
+  const portalContent    = document.getElementById("portalContent");
 
-  let currentUserEmail = null;
-  let allLeads = [];
+  const assignedTableBody  = document.querySelector("#assignedTable tbody");
+  const unclaimedTableBody = document.querySelector("#unclaimedTable tbody");
 
-  async function guardContractor(){
-    const { data } = await supabaseClient.auth.getUser();
+  function showMsg(text) {
+    accessMessage.textContent = text;
+  }
+  function showPortal() {
+    portalContent.classList.remove("hidden");
+  }
+
+  function statusClass(status) {
+    const s = (status || "").toLowerCase();
+    if (s === "new") return "status-pill new";
+    if (s === "working") return "status-pill working";
+    if (s === "closed won") return "status-pill closedwon";
+    if (s === "closed lost") return "status-pill closedlost";
+    return "status-pill";
+  }
+
+  async function initPortal() {
+    const { data, error } = await supabaseClient.auth.getUser();
+    if (error) {
+      console.error("Auth error:", error);
+      showMsg("Error checking login. Ask admin to log you in from the Admin Dashboard.");
+      return;
+    }
     if (!data || !data.user) {
-      window.location.href = LOGIN_PAGE_URL;
-      return null;
-    }
-    const email = data.user.email;
-    currentUserEmail = email;
-    if (userEmailSpan) userEmailSpan.textContent = email || "";
-    if (summaryEmail) summaryEmail.textContent = email || "—";
-
-    if (email === ADMIN_EMAIL) {
-      window.location.href = "dashboard.html";
-      return null;
-    }
-    return data.user;
-  }
-
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", async () => {
-      await supabaseClient.auth.signOut();
-      window.location.href = LOGIN_PAGE_URL;
-    });
-  }
-
-  function formatMoney(n){
-    if (!n || isNaN(n)) return "$0.00";
-    return "$" + Number(n).toFixed(2);
-  }
-
-  function badgeForPriority(p){
-    const pri = (p || "").toUpperCase();
-    if (pri === "A") return `<span class="badge badge-priority-a">A · No Site</span>`;
-    if (pri === "B") return `<span class="badge badge-priority-b">B · Needs Upgrade</span>`;
-    if (pri === "C") return `<span class="badge badge-priority-c">C · Warm</span>`;
-    return `<span class="badge">${pri || "?"}</span>`;
-  }
-
-  function badgeForStatus(s){
-    const st = (s || "new").toLowerCase();
-    if (st === "new") return `<span class="badge badge-status-new">New</span>`;
-    if (st === "in progress" || st === "in_progress") return `<span class="badge badge-status-inprogress">In Progress</span>`;
-    if (st === "closed won" || st === "closed_won") return `<span class="badge badge-status-closedwon">Closed Won</span>`;
-    if (st === "closed lost" || st === "closed_lost") return `<span class="badge badge-status-closedlost">Closed Lost</span>`;
-    return `<span class="badge">${st}</span>`;
-  }
-
-  function defaultCommissionForPackage(pkg){
-    const p = (pkg || "").toLowerCase();
-    if (p.includes("starter")) return 50;
-    if (p.includes("business")) return 75;
-    if (p.includes("e-commerce") || p.includes("ecommerce") || p.includes("store")) return 100;
-    return 100;
-  }
-
-  function filterLeads(){
-    const scope = filterScopeSelect.value;
-    const statusFilter = filterStatusSelect.value;
-
-    let rows = allLeads.slice();
-
-    rows = rows.filter(ld => {
-      const assigned = ld.assigned_caller_email;
-      const st = (ld.call_status || "new").toLowerCase();
-
-      if (scope === "mine" && assigned !== currentUserEmail) return false;
-      if (scope === "unassigned" && assigned) return false;
-      if (scope === "mine_unassigned" && !(assigned === currentUserEmail || !assigned)) return false;
-
-      if (statusFilter === "open") {
-        if (!(st === "new" || st === "in progress" || st === "in_progress")) return false;
-      } else if (statusFilter === "new") {
-        if (st !== "new") return false;
-      } else if (statusFilter === "in_progress") {
-        if (!(st === "in progress" || st === "in_progress")) return false;
-      } else if (statusFilter === "closed") {
-        if (!(st === "closed won" || st === "closed_won" || st === "closed lost" || st === "closed_lost")) return false;
-      }
-      return true;
-    });
-
-    const priOrder = { "A":0, "B":1, "C":2 };
-    rows.sort((a,b) => {
-      const pa = priOrder[(a.priority || "").toUpperCase()] ?? 9;
-      const pb = priOrder[(b.priority || "").toUpperCase()] ?? 9;
-      if (pa !== pb) return pa - pb;
-      const da = new Date(a.created_at || 0);
-      const db = new Date(b.created_at || 0);
-      return db - da;
-    });
-
-    renderLeads(rows);
-  }
-
-  function renderLeads(rows){
-    leadsTableBody.innerHTML = "";
-    if (!rows.length){
-      const tr = document.createElement("tr");
-      const td = document.createElement("td");
-      td.colSpan = 8;
-      td.className = "status-msg";
-      td.textContent = "No leads match this filter.";
-      tr.appendChild(td);
-      leadsTableBody.appendChild(tr);
-      tableStatusMsg.textContent = "";
+      showMsg("Not signed in. Ask admin to log you in from the Admin Dashboard first.");
       return;
     }
 
-    rows.forEach(ld => {
+    const email = data.user.email;
+    userEmailSpan.textContent = email || "";
+    showMsg("Signed in as " + (email || "unknown") + ".");
+
+    showPortal();
+    loadLeads(email);
+  }
+
+  logoutBtn.addEventListener("click", async () => {
+    await supabaseClient.auth.signOut();
+    userEmailSpan.textContent = "";
+    portalContent.classList.add("hidden");
+    showMsg("Logged out. Ask admin to log you in again when ready to work.");
+  });
+
+  async function loadLeads(email) {
+    const [assignedRes, unclaimedRes] = await Promise.all([
+      supabaseClient
+        .from("call_leads")
+        .select("*")
+        .eq("assigned_caller_email", email),
+      supabaseClient
+        .from("call_leads")
+        .select("*")
+        .is("assigned_caller_email", null)
+    ]);
+
+    if (assignedRes.error) console.error("Assigned error:", assignedRes.error);
+    if (unclaimedRes.error) console.error("Unclaimed error:", unclaimedRes.error);
+
+    const assigned = assignedRes.data || [];
+    const unclaimed = unclaimedRes.data || [];
+
+    // Assigned table
+    assignedTableBody.innerHTML = "";
+    assigned.forEach(ld => {
       const tr = document.createElement("tr");
 
-      const stRaw = (ld.call_status || "new").toLowerCase();
-      const isClosedWon = stRaw === "closed won" || stRaw === "closed_won";
-      const assigned = ld.assigned_caller_email;
-      const isMine = assigned === currentUserEmail;
+      const tdBiz = document.createElement("td");
+      tdBiz.innerHTML = `<strong>${ld.business_name || "(No name)"}</strong><br><span class="small">${ld.email || ""}</span>`;
+      tr.appendChild(tdBiz);
 
-      const tdLead = document.createElement("td");
-      tdLead.innerHTML = `<strong>${ld.business_name || "(no name)"}</strong><br><span class="status-msg">${ld.notes || ""}</span>`;
-      tr.appendChild(tdLead);
+      const tdPhone = document.createElement("td");
+      tdPhone.textContent = ld.phone || "";
+      tr.appendChild(tdPhone);
 
-      const tdContact = document.createElement("td");
-      tdContact.innerHTML = `
-        <div>${ld.phone || ""}</div>
-        <div class="status-msg">${ld.email || ""}</div>
-      `;
-      tr.appendChild(tdContact);
-
-      const tdLoc = document.createElement("td");
-      tdLoc.textContent = [ld.city, ld.state].filter(Boolean).join(", ");
-      tr.appendChild(tdLoc);
-
-      const tdWeb = document.createElement("td");
-      const web = ld.website || "";
-      const soc = ld.social || "";
-      if (web) tdWeb.innerHTML = `<div><a href="${web}" target="_blank">${web}</a></div>`;
-      if (soc) tdWeb.innerHTML += `<div class="status-msg"><a href="${soc}" target="_blank">${soc}</a></div>`;
-      if (!web && !soc) tdWeb.textContent = "—";
-      tr.appendChild(tdWeb);
-
-      const tdPri = document.createElement("td");
-      tdPri.innerHTML = badgeForPriority(ld.priority);
-      tr.appendChild(tdPri);
+      const tdPriority = document.createElement("td");
+      tdPriority.textContent = (ld.priority || "").toUpperCase();
+      tr.appendChild(tdPriority);
 
       const tdStatus = document.createElement("td");
-      tdStatus.innerHTML = `
-        ${badgeForStatus(ld.call_status)}
-        <div class="status-msg">
-          Assigned: ${assigned ? assigned : "Unassigned"}
-        </div>
-      `;
+      const spanS = document.createElement("span");
+      spanS.className = statusClass(ld.call_status);
+      spanS.textContent = (ld.call_status || "new");
+      tdStatus.appendChild(spanS);
       tr.appendChild(tdStatus);
 
-      const tdNotes = document.createElement("td");
-      const notesId = `notes-${ld.id}`;
-      const dateId  = `date-${ld.id}`;
-      tdNotes.innerHTML = `
-        <textarea id="${notesId}" class="notes-input" placeholder="Call notes, follow-ups…">${ld.notes || ""}</textarea>
-        <div style="margin-top:4px;">
-          <label style="font-size:10px;color:var(--muted);display:block;">
-            Last Contact
-            <input type="date" id="${dateId}" class="date-inline" value="${ld.last_contact_date || ""}">
-          </label>
-        </div>
-      `;
-      tr.appendChild(tdNotes);
+      const tdLast = document.createElement("td");
+      tdLast.textContent = ld.last_contact_date || "";
+      tr.appendChild(tdLast);
 
-      const tdActions = document.createElement("td");
-      const selectId = `status-${ld.id}`;
-      const canEdit = !assigned || isMine;
-      tdActions.innerHTML = `
-        <select id="${selectId}" class="select-inline" ${canEdit ? "" : "disabled"}>
-          <option value="new" ${stRaw === "new" ? "selected" : ""}>New</option>
-          <option value="in progress" ${stRaw === "in progress" || stRaw === "in_progress" ? "selected" : ""}>In Progress</option>
-          <option value="closed won" ${isClosedWon ? "selected" : ""}>Closed Won</option>
-          <option value="closed lost" ${stRaw === "closed lost" || stRaw === "closed_lost" ? "selected" : ""}>Closed Lost</option>
-        </select>
-        <div style="margin-top:4px;display:flex;flex-direction:column;gap:4px;">
-          ${assigned ? "" : `<button class="btn btn-small btn-primary" data-action="claim" data-id="${ld.id}">Claim Lead</button>`}
-          ${canEdit ? `<button class="btn btn-small" data-action="save" data-id="${ld.id}">Save</button>` : `<span class="status-msg">Read-only (assigned to ${assigned})</span>`}
-        </div>
-      `;
-      tr.appendChild(tdActions);
-
-      leadsTableBody.appendChild(tr);
+      assignedTableBody.appendChild(tr);
     });
 
-    tableStatusMsg.textContent = `${rows.length} lead(s) shown.`;
-  }
+    // Unclaimed table
+    unclaimedTableBody.innerHTML = "";
+    unclaimed.forEach(ld => {
+      const tr = document.createElement("tr");
 
-  async function loadLeads(){
-    tableStatusMsg.textContent = "Loading leads…";
+      const tdBiz = document.createElement("td");
+      tdBiz.innerHTML = `<strong>${ld.business_name || "(No name)"}</strong><br><span class="small">${ld.email || ""}</span>`;
+      tr.appendChild(tdBiz);
 
-    const { data, error } = await supabaseClient.from("call_leads").select("*");
-    if (error){
-      console.error("call_leads error:", error);
-      tableStatusMsg.textContent = "Error loading leads: " + error.message;
-      return;
-    }
+      const tdPhone = document.createElement("td");
+      tdPhone.textContent = ld.phone || "";
+      tr.appendChild(tdPhone);
 
-    allLeads = data || [];
+      const tdPriority = document.createElement("td");
+      tdPriority.textContent = (ld.priority || "").toUpperCase();
+      tr.appendChild(tdPriority);
 
-    let myOpen = 0;
-    let myClosedWon = 0;
-    let myCommission = 0;
+      const tdCity = document.createElement("td");
+      tdCity.textContent = ld.city || "";
+      tr.appendChild(tdCity);
 
-    allLeads.forEach(ld => {
-      const st = (ld.call_status || "new").toLowerCase();
-      const isClosedWon = st === "closed won" || st === "closed_won";
-      const isMine = ld.assigned_caller_email === currentUserEmail;
+      const tdAction = document.createElement("td");
+      const btn = document.createElement("button");
+      btn.className = "btn";
+      btn.textContent = "Start Working";
+      btn.addEventListener("click", () => claimLead(ld.id, email));
+      tdAction.appendChild(btn);
+      tr.appendChild(tdAction);
 
-      if (isMine && (st === "new" || st === "in progress" || st === "in_progress")) {
-        myOpen += 1;
-      }
-      if (isMine && isClosedWon) {
-        myClosedWon += 1;
-        const commission = ld.commission_amount != null
-          ? Number(ld.commission_amount) || 0
-          : defaultCommissionForPackage(ld.package_type);
-        myCommission += commission;
-      }
+      unclaimedTableBody.appendChild(tr);
     });
-
-    summaryOpenLeads.textContent = myOpen;
-    summaryCommission.textContent = formatMoney(myCommission);
-    summaryClosedWon.textContent =
-      `${myClosedWon} closed won · Starter $50 · Business $75 · E-Com $100 per sale.`;
-
-    filterScopeSelect.value = "mine_unassigned";
-    filterStatusSelect.value = "open";
-    filterLeads();
   }
 
-  async function claimLead(id){
-    if (!currentUserEmail) return;
-    const { error } = await supabaseClient
-      .from("call_leads")
-      .update({ assigned_caller_email: currentUserEmail, call_status: "in progress" })
-      .eq("id", id);
-
-    if (error){
-      console.error("claim lead error:", error);
-      alert("Error claiming lead: " + error.message);
-      return;
-    }
-    await loadLeads();
-  }
-
-  async function saveLead(id){
-    const notesEl = document.getElementById(`notes-${id}`);
-    const dateEl  = document.getElementById(`date-${id}`);
-    const statusEl = document.getElementById(`status-${id}`);
-    if (!notesEl || !dateEl || !statusEl) return;
-
-    const notes = notesEl.value || "";
-    const lastContact = dateEl.value || null;
-    const statusVal = statusEl.value || "new";
-
+  async function claimLead(id, email) {
     const { error } = await supabaseClient
       .from("call_leads")
       .update({
-        notes,
-        last_contact_date: lastContact,
-        call_status: statusVal
+        assigned_caller_email: email,
+        call_status: "working",
+        last_contact_date: new Date().toISOString().slice(0,10)
       })
-      .eq("id", id);
+      .eq("id", id)
+      .is("assigned_caller_email", null);
 
-    if (error){
-      console.error("save lead error:", error);
-      alert("Error saving lead: " + error.message);
+    if (error) {
+      console.error("claimLead error:", error);
+      alert("Could not claim lead. It might have been taken by another caller.");
       return;
     }
-    await loadLeads();
+
+    loadLeads(email);
   }
 
-  leadsTableBody.addEventListener("click", async (e) => {
-    const btn = e.target.closest("button[data-action]");
-    if (!btn) return;
-    const id = btn.getAttribute("data-id");
-    const action = btn.getAttribute("data-action");
-    if (!id || !action) return;
-
-    if (action === "claim") await claimLead(id);
-    else if (action === "save") await saveLead(id);
-  });
-
-  filterScopeSelect.addEventListener("change", filterLeads);
-  filterStatusSelect.addEventListener("change", filterLeads);
-
-  (async () => {
-    const user = await guardContractor();
-    if (!user) return;
-    await loadLeads();
-  })();
+  initPortal();
 </script>
 </body>
 </html>
