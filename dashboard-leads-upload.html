@@ -2,11 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>BrandCrafters — Admin Dashboard</title>
+  <title>BrandCrafters — Leads & CSV</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
-  <script defer src="script.js"></script>
   <style>
     :root{
       --bg:#050713;
@@ -25,38 +23,107 @@
         var(--bg);
       color:var(--text);
     }
+    a{text-decoration:none;color:var(--text);}
+    header{
+      position:sticky;top:0;z-index:40;
+      background:rgba(5,7,19,.95);
+      backdrop-filter:blur(16px);
+      border-bottom:1px solid rgba(255,255,255,.08);
+      padding:10px 18px;
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+    }
+    .brand{
+      display:flex;flex-direction:column;gap:2px;
+    }
+    .brand-title{
+      font-weight:700;letter-spacing:.08em;font-size:14px;text-transform:uppercase;
+    }
+    .brand-sub{font-size:12px;color:var(--muted);}
+    .nav{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+    .nav a{
+      font-size:13px;padding:6px 10px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.22);
+      background:rgba(255,255,255,.04);
+      text-decoration:none;
+      color:var(--text);
+      transition:.18s;
+    }
+    .nav a.primary{
+      border-color:transparent;
+      background:var(--grad);
+      color:#050713;
+      font-weight:600;
+      box-shadow:0 0 0 1px rgba(110,168,255,.4);
+    }
+    .nav a:hover{
+      background:rgba(255,255,255,.10);
+      transform:translateY(-1px);
+    }
+    .nav a.primary:hover{
+      filter:brightness(1.05);
+    }
+    .user-email{font-size:12px;color:var(--muted);}
+    .logout-btn{
+      border-radius:999px;
+      padding:6px 12px;
+      border:1px solid rgba(255,255,255,.5);
+      background:rgba(255,255,255,.08);
+      color:var(--text);
+      font-size:12px;
+      cursor:pointer;
+      box-shadow:0 0 0 1px rgba(110,168,255,.3);
+      transition:.18s;
+    }
+    .logout-btn:hover{
+      background:rgba(255,255,255,.16);
+      transform:translateY(-1px);
+    }
+
     main{
-      max-width:1100px;margin:18px auto 60px;padding:0 16px;
+      max-width:1100px;margin:18px auto 60px;
+      padding:0 16px;
     }
     h1{margin:0 0 6px;font-size:22px;}
     .subhead{margin:0 0 18px;font-size:13px;color:var(--muted);}
-    .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}
-    .grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
-    @media (max-width:900px){
-      .grid{grid-template-columns:1fr;}
-      .grid-2{grid-template-columns:1fr;}
-    }
+
     .card{
       background:var(--panel);
       border-radius:16px;
       border:1px solid var(--border);
       padding:16px 14px;
+      margin-bottom:16px;
     }
     .card h2{margin:0 0 8px;font-size:16px;}
     .card p{margin:0 0 6px;font-size:13px;}
-    .stat-label{
-      font-size:11px;text-transform:uppercase;
-      letter-spacing:.06em;color:var(--muted);
+    .small{font-size:12px;color:var(--muted);}
+
+    input[type="file"]{
+      margin-top:8px;
+      padding:8px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,.2);
+      background:rgba(8,10,24,.9);
+      color:var(--text);
+      font-size:13px;
+      max-width:100%;
     }
-    .stat-value{font-size:20px;font-weight:700;margin-top:4px;}
-    .stat-sub{font-size:11px;color:var(--muted);margin-top:2px;}
-    .pill{
-      display:inline-block;padding:2px 8px;border-radius:999px;
-      font-size:11px;
+    .btn{
+      display:inline-block;
+      margin-top:10px;
+      padding:8px 14px;
+      border-radius:999px;
+      border:none;
+      cursor:pointer;
+      font-size:13px;
+      font-weight:600;
+      background:var(--grad);
+      color:#050713;
+      box-shadow:0 0 0 1px rgba(110,168,255,.4);
     }
-    .pill-green{background:rgba(155,255,191,.15);}
-    .pill-red{background:rgba(255,155,155,.15);}
-    .pill-blue{background:rgba(110,168,255,.15);}
+    .btn:hover{
+      filter:brightness(1.05);
+      transform:translateY(-1px);
+    }
     table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;}
     th,td{
       border-bottom:1px solid rgba(255,255,255,.08);
@@ -70,451 +137,280 @@
       letter-spacing:.05em;
       color:var(--muted);
     }
-    .small{font-size:12px;color:var(--muted);}
-    .header-user{
-      display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted);margin-left:12px;
+    .pill{
+      display:inline-block;
+      padding:2px 8px;
+      border-radius:999px;
+      font-size:11px;
+      background:rgba(110,168,255,.15);
     }
-    .btn-logout{
-      border-radius:999px;padding:6px 10px;border:1px solid rgba(255,255,255,.55);
-      background:rgba(255,255,255,.08);font-size:11px;cursor:pointer;
-      display:inline-flex;align-items:center;gap:4px;
+    .status-badge{
+      display:inline-block;
+      font-size:11px;
+      padding:2px 8px;
+      border-radius:999px;
+      background:rgba(110,168,255,.15);
     }
-    .btn-logout:hover{background:rgba(255,255,255,.16);transform:translateY(-1px);}
-    @media(max-width:940px){.header-user{display:none;}}
+    .status-badge.a{background:rgba(111,255,193,.15);}
+    .status-badge.b{background:rgba(255,230,150,.15);}
+    .status-badge.c{background:rgba(255,164,164,.15);}
+
+    .notice{
+      margin-top:8px;
+      padding:8px 10px;
+      border-radius:10px;
+      background:rgba(255,255,255,.05);
+      font-size:12px;
+      color:var(--muted);
+    }
+    .error{
+      color:#ffb3b3;
+      font-size:12px;
+      margin-top:6px;
+    }
+    .hidden{display:none;}
+    .center-msg{
+      text-align:center;
+      margin-top:40px;
+      color:var(--muted);
+      font-size:13px;
+    }
   </style>
 </head>
 <body>
-
-<header class="site-header">
-  <div class="container header-inner">
-    <a class="logo" href="index.html">
-      <span class="logo-mark">BC</span><span>BrandCrafters</span>
-    </a>
-
-    <nav class="nav desktop-nav">
-      <a href="index.html" class="nav-link">Home</a>
-      <a href="pricing.html" class="nav-link">Pricing</a>
-      <a href="customer-inquiry.html" class="btn btn-outline">Customer Portal</a>
-
-      <a href="dashboard.html" class="nav-link active">Admin Dashboard</a>
-      <a href="dashboard-leads-upload.html" class="nav-link">Leads &amp; CSV</a>
-      <a href="dashboard-commissions.html" class="nav-link">Commission Rules</a>
-      <a href="contractor-portal.html" class="nav-link">Contractor Portal</a>
-
-      <div class="header-user">
-        <span id="userEmail"></span>
-        <button id="logoutBtn" class="btn-logout">Log Out</button>
-      </div>
-    </nav>
-
-    <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
+<header>
+  <div class="brand">
+    <span class="brand-title">BrandCrafters</span>
+    <span class="brand-sub">Admin · Leads & CSV</span>
   </div>
-
-  <nav class="mobile-drawer" aria-hidden="true">
-    <div class="drawer-header">
-      <a class="logo" href="index.html">
-        <span class="logo-mark">BC</span><span>BrandCrafters</span>
-      </a>
-      <button class="menu-close" aria-label="Close menu">✕</button>
-    </div>
-
-    <a class="drawer-link" href="index.html">Home</a>
-    <a class="drawer-link" href="pricing.html">Pricing</a>
-    <a class="drawer-link" href="customer-inquiry.html">Customer Portal</a>
-    <a class="drawer-link" href="dashboard.html">Admin Dashboard</a>
-    <a class="drawer-link" href="dashboard-leads-upload.html">Leads &amp; CSV</a>
-    <a class="drawer-link" href="dashboard-commissions.html">Commission Rules</a>
-    <a class="drawer-link" href="contractor-portal.html">Contractor Portal</a>
-  </nav>
-  <div class="drawer-backdrop" aria-hidden="true"></div>
+  <div class="nav">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="dashboard-leads-upload.html" class="primary">Leads & CSV</a>
+    <a href="contractor-portal.html" target="_blank">Contractor Portal</a>
+    <span class="user-email" id="userEmail"></span>
+    <button id="logoutBtn" class="logout-btn" type="button">Log Out</button>
+  </div>
 </header>
 
 <main>
-  <section>
-    <h1>Overview</h1>
+  <section id="accessMessage" class="center-msg hidden"></section>
+
+  <section id="leadsContent" class="hidden">
+    <h1>Leads & CSV Upload</h1>
     <p class="subhead">
-      Snapshot of project money, monthly maintenance vs bills, and the lead pipeline &amp; commissions.
+      Upload CSVs, see top leads, and keep contractors fed. This page is admin-only, but contractors can view leads from their portal.
     </p>
-  </section>
-
-  <!-- MONEY SUMMARY -->
-  <section class="grid">
-    <article class="card">
-      <div class="stat-label">Lifetime Project Revenue (one-time)</div>
-      <div class="stat-value" id="lifetimeRevenue">$0.00</div>
-      <div class="stat-sub">Sum of total_price on onboarding submissions.</div>
-    </article>
 
     <article class="card">
-      <div class="stat-label">Active Monthly Income</div>
-      <div class="stat-value" id="monthlyIncome">$0.00</div>
-      <div class="stat-sub">Sum of monthly_fee for active projects.</div>
-    </article>
-
-    <article class="card">
-      <div class="stat-label">Active Monthly Bills</div>
-      <div class="stat-value" id="monthlyBills">$0.00</div>
-      <div class="stat-sub">Recurring_expenses with frequency = 'monthly' and is_active = true.</div>
-    </article>
-  </section>
-
-  <!-- PROFITS & LEADS -->
-  <section class="grid" style="margin-top:12px;">
-    <article class="card">
-      <div class="stat-label">Est. Monthly Net (Maintenance - Bills)</div>
-      <div class="stat-value" id="monthlyNet">$0.00</div>
-      <div class="stat-sub">Rough check if maintenance covers your tools & renewals.</div>
-    </article>
-
-    <article class="card">
-      <div class="stat-label">Closed Won Leads · This Month</div>
-      <div class="stat-value" id="closedWonMonth">0</div>
-      <div class="stat-sub">call_leads where status = 'closed won' and date is in this month.</div>
-    </article>
-
-    <article class="card">
-      <div class="stat-label">Estimated Commissions · This Month</div>
-      <div class="stat-value" id="commissionMonth">$0.00</div>
-      <div class="stat-sub">
-        Uses commission_amount on each closed won lead (Starter / Business / E-Com).
+      <h2>Upload / Replace Leads CSV</h2>
+      <p class="small">
+        Upload a CSV with columns like <b>BusinessName, Phone, Email, AltEmail, Website, Social, City, State, Priority, CallStatus, Notes</b>.
+        New leads will be inserted; matching existing ones (same BusinessName + Phone) can be updated.
+      </p>
+      <input type="file" id="csvFile" accept=".csv" />
+      <button class="btn" id="uploadBtn" type="button">Upload Leads</button>
+      <div id="uploadStatus" class="small"></div>
+      <div id="uploadError" class="error"></div>
+      <div class="notice">
+        Contractors will see these leads in their portal. Once a caller marks a lead as "working", it becomes visible only to them.
       </div>
     </article>
-  </section>
 
-  <!-- PROJECTS & EXPENSES -->
-  <section class="grid-2" style="margin-top:16px;">
     <article class="card">
-      <h2>Client Projects (Onboarding)</h2>
+      <h2>Lead Snapshot (Latest 20)</h2>
       <p class="small">
-        Last 6 onboarding submissions with totals and monthly fees.
+        Quick log of your current list. Edit status & details from Supabase or your contractor portal.
       </p>
-      <table id="projectsTable">
+      <table id="leadsTable">
         <thead>
           <tr>
-            <th>Client</th>
-            <th>Total Price</th>
-            <th>Monthly Fee</th>
+            <th>Business</th>
+            <th>Phone</th>
+            <th>Priority</th>
             <th>Status</th>
+            <th>City</th>
           </tr>
         </thead>
         <tbody></tbody>
       </table>
     </article>
-
-    <article class="card">
-      <h2>Upcoming Recurring Bills</h2>
-      <p class="small">
-        Next 6 active recurring_expenses sorted by next_due_date.
-      </p>
-      <table id="billsTable">
-        <thead>
-          <tr>
-            <th>Bill</th>
-            <th>Due</th>
-            <th>Vendor</th>
-            <th>Amount</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-      <p class="small" id="billsNote"></p>
-    </article>
-  </section>
-
-  <!-- LEAD SNAPSHOT -->
-  <section class="card" style="margin-top:16px;">
-    <h2>Lead Pipeline Snapshot</h2>
-    <p class="small">
-      Quick check before you go into Leads &amp; CSV or the Contractor Portal.
-    </p>
-    <div class="grid-2">
-      <div>
-        <p class="stat-label">Counts by Status</p>
-        <p class="small" id="leadStatusStats">Loading…</p>
-      </div>
-      <div>
-        <p class="stat-label">Top Callers (Closed Won)</p>
-        <table id="topCallersTable">
-          <thead>
-            <tr>
-              <th>Caller</th>
-              <th>Closed Won</th>
-              <th>Est. Commission</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </div>
   </section>
 </main>
-
-<footer class="site-footer">
-  <div class="container footer-inner">
-    <div>
-      © <span id="year"></span> BrandCrafters — A division of Egyptian Hype LLC
-      <a href="dashboard.html" class="admin-link">Admin</a>
-    </div>
-  </div>
-</footer>
-
-<script>
-  const yearSpan = document.getElementById('year');
-  if (yearSpan) yearSpan.textContent = new Date().getFullYear();
-</script>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script>
   const SUPABASE_URL = "https://vekoulqehexqosgwacwa.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiIsInZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
   const ADMIN_EMAIL = "srarnold216@gmail.com";
-  const LOGIN_PAGE_URL = "dashboard.html";
 
   const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   const userEmailSpan   = document.getElementById("userEmail");
   const logoutBtn       = document.getElementById("logoutBtn");
+  const accessMessage   = document.getElementById("accessMessage");
+  const leadsContent    = document.getElementById("leadsContent");
 
-  const lifetimeRevenue = document.getElementById("lifetimeRevenue");
-  const monthlyIncome   = document.getElementById("monthlyIncome");
-  const monthlyBills    = document.getElementById("monthlyBills");
-  const monthlyNet      = document.getElementById("monthlyNet");
-  const closedWonMonth  = document.getElementById("closedWonMonth");
-  const commissionMonth = document.getElementById("commissionMonth");
+  const csvFileInput    = document.getElementById("csvFile");
+  const uploadBtn       = document.getElementById("uploadBtn");
+  const uploadStatus    = document.getElementById("uploadStatus");
+  const uploadError     = document.getElementById("uploadError");
+  const leadsTableBody  = document.querySelector("#leadsTable tbody");
 
-  const projectsTableBody = document.querySelector("#projectsTable tbody");
-  const billsTableBody    = document.querySelector("#billsTable tbody");
-  const billsNote         = document.getElementById("billsNote");
-  const leadStatusStats   = document.getElementById("leadStatusStats");
-  const topCallersTableBody = document.querySelector("#topCallersTable tbody");
+  function showMsg(text) {
+    accessMessage.textContent = text;
+    accessMessage.classList.remove("hidden");
+  }
+  function hideMsg() {
+    accessMessage.classList.add("hidden");
+    accessMessage.textContent = "";
+  }
 
-  async function guardAdmin() {
-    const { data } = await supabaseClient.auth.getUser();
+  async function initPage() {
+    const { data, error } = await supabaseClient.auth.getUser();
+    if (error) {
+      console.error("Auth error:", error);
+      showMsg("Error checking login. Try refreshing or log in again via the main dashboard.");
+      leadsContent.classList.add("hidden");
+      return;
+    }
     if (!data || !data.user) {
-      window.location.href = LOGIN_PAGE_URL;
-      return null;
+      showMsg("Not signed in. Go to the Admin Dashboard and log in first, then come back here.");
+      leadsContent.classList.add("hidden");
+      return;
     }
+
     const email = data.user.email;
-    if (userEmailSpan) userEmailSpan.textContent = email || "";
+    userEmailSpan.textContent = email || "";
+
     if (email !== ADMIN_EMAIL) {
-      window.location.href = "contractor-portal.html";
-      return null;
+      showMsg("This page is for admin only. Contractors can work leads from the Contractor Portal.");
+      leadsContent.classList.add("hidden");
+      return;
     }
-    return data.user;
+
+    // Admin access allowed
+    hideMsg();
+    leadsContent.classList.remove("hidden");
+    loadLeads();
   }
 
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", async () => {
-      await supabaseClient.auth.signOut();
-      window.location.href = LOGIN_PAGE_URL;
-    });
-  }
+  logoutBtn.addEventListener("click", async () => {
+    await supabaseClient.auth.signOut();
+    userEmailSpan.textContent = "";
+    showMsg("Logged out. Go to the Admin Dashboard to sign in again.");
+    leadsContent.classList.add("hidden");
+  });
 
-  function formatMoney(n) {
-    if (!n || isNaN(n)) return "$0.00";
-    return "$" + Number(n).toFixed(2);
-  }
+  async function loadLeads() {
+    const { data, error } = await supabaseClient
+      .from("call_leads")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(20);
 
-  function startOfMonth(date) {
-    return new Date(date.getFullYear(), date.getMonth(), 1);
-  }
-  function endOfMonth(date) {
-    return new Date(date.getFullYear(), date.getMonth() + 1, 0);
-  }
+    if (error) {
+      console.error("loadLeads error:", error);
+      return;
+    }
 
-  function defaultCommissionForPackage(pkg) {
-    const p = (pkg || "").toLowerCase();
-    if (p.includes("starter")) return 50;
-    if (p.includes("business")) return 75;
-    if (p.includes("e-commerce") || p.includes("ecommerce") || p.includes("store")) return 100;
-    return 100;
-  }
-
-  async function loadDashboard() {
-    const today = new Date();
-    const monthStart = startOfMonth(today);
-    const monthEnd = endOfMonth(today);
-
-    const [onboardingRes, billsRes, leadsRes] = await Promise.all([
-      supabaseClient.from("onboarding_submissions").select("*"),
-      supabaseClient.from("recurring_expenses").select("*").eq("is_active", true),
-      supabaseClient.from("call_leads").select("*")
-    ]);
-
-    const onboarding = onboardingRes.data || [];
-    const bills      = billsRes.data || [];
-    const leads      = leadsRes.data || [];
-
-    let lifetimeRev = 0;
-    let monthlyFeeTotal = 0;
-    onboarding.forEach(p => {
-      if (p.total_price) lifetimeRev += Number(p.total_price) || 0;
-      if (p.monthly_fee) monthlyFeeTotal += Number(p.monthly_fee) || 0;
-    });
-    lifetimeRevenue.textContent = formatMoney(lifetimeRev);
-    monthlyIncome.textContent   = formatMoney(monthlyFeeTotal);
-
-    let monthlyBillsTotal = 0;
-    bills.forEach(b => {
-      if (b.frequency === "monthly" && b.amount) {
-        monthlyBillsTotal += Number(b.amount) || 0;
-      }
-    });
-    monthlyBills.textContent = formatMoney(monthlyBillsTotal);
-    monthlyNet.textContent   = formatMoney(monthlyFeeTotal - monthlyBillsTotal);
-
-    // Projects
-    projectsTableBody.innerHTML = "";
-    onboarding
-      .sort((a, b) => new Date(b.created_at || b.first_paid_at || 0) - new Date(a.created_at || a.first_paid_at || 0))
-      .slice(0, 6)
-      .forEach(p => {
-        const tr = document.createElement("tr");
-        const clientName = p.business_name || p.client_name || "(No name)";
-        const status = (p.status || "new").toLowerCase();
-
-        const tdClient = document.createElement("td");
-        tdClient.innerHTML = `<strong>${clientName}</strong><br><span class="small">${p.currency || "USD"}</span>`;
-        tr.appendChild(tdClient);
-
-        const tdTotal = document.createElement("td");
-        tdTotal.textContent = p.total_price ? formatMoney(p.total_price) : "—";
-        tr.appendChild(tdTotal);
-
-        const tdMonthly = document.createElement("td");
-        tdMonthly.textContent = p.monthly_fee ? formatMoney(p.monthly_fee) : "—";
-        tr.appendChild(tdMonthly);
-
-        const tdStatus = document.createElement("td");
-        const pill = document.createElement("span");
-        pill.className = "pill " + (status === "completed" ? "pill-green" : status === "cancelled" ? "pill-red" : "pill-blue");
-        pill.textContent = status;
-        tdStatus.appendChild(pill);
-        tr.appendChild(tdStatus);
-
-        projectsTableBody.appendChild(tr);
-      });
-
-    // Bills
-    billsTableBody.innerHTML = "";
-    bills
-      .filter(b => b.next_due_date)
-      .sort((a,b) => new Date(a.next_due_date) - new Date(b.next_due_date))
-      .slice(0,6)
-      .forEach(b => {
-        const tr = document.createElement("tr");
-
-        const tdName = document.createElement("td");
-        tdName.innerHTML = `<strong>${b.name}</strong><br><span class="small">${b.category || ""}</span>`;
-        tr.appendChild(tdName);
-
-        const tdDue = document.createElement("td");
-        tdDue.textContent = b.next_due_date || "";
-        tr.appendChild(tdDue);
-
-        const tdVendor = document.createElement("td");
-        tdVendor.textContent = b.vendor || "";
-        tr.appendChild(tdVendor);
-
-        const tdAmt = document.createElement("td");
-        tdAmt.textContent = formatMoney(b.amount);
-        tr.appendChild(tdAmt);
-
-        billsTableBody.appendChild(tr);
-      });
-
-    billsNote.textContent = bills.length ? "" : "No recurring_expenses found yet. Add them in Supabase.";
-
-    // Leads + commissions
-    const statusCounts = {};
-    let closedThisMonth = 0;
-    let commissionThisMonth = 0;
-    const callerStats = new Map();
-
-    leads.forEach(ld => {
-      const rawStatus = (ld.call_status || "new").toLowerCase();
-      const status = rawStatus.replace("_"," ");
-      statusCounts[status] = (statusCounts[status] || 0) + 1;
-
-      const isClosedWon = rawStatus === "closed won" || rawStatus === "closed_won";
-
-      if (isClosedWon && ld.last_contact_date) {
-        const d = new Date(ld.last_contact_date);
-        if (d >= monthStart && d <= monthEnd) {
-          closedThisMonth += 1;
-          const commission = ld.commission_amount != null
-            ? Number(ld.commission_amount) || 0
-            : defaultCommissionForPackage(ld.package_type);
-          commissionThisMonth += commission;
-        }
-      }
-
-      if (ld.assigned_caller_email) {
-        const email = ld.assigned_caller_email;
-        if (!callerStats.has(email)) {
-          callerStats.set(email, { closedWon:0, commission:0 });
-        }
-        const obj = callerStats.get(email);
-        if (isClosedWon) {
-          obj.closedWon += 1;
-          const commission = ld.commission_amount != null
-            ? Number(ld.commission_amount) || 0
-            : defaultCommissionForPackage(ld.package_type);
-          obj.commission += commission;
-        }
-      }
-    });
-
-    closedWonMonth.textContent  = closedThisMonth;
-    commissionMonth.textContent = formatMoney(commissionThisMonth);
-
-    const parts = [];
-    Object.entries(statusCounts).forEach(([s, count]) => {
-      parts.push(`${s}: ${count}`);
-    });
-    leadStatusStats.textContent = parts.length ? parts.join(" · ") : "No leads yet.";
-
-    topCallersTableBody.innerHTML = "";
-    const sortedCallers = Array.from(callerStats.entries())
-      .sort((a,b) => b[1].commission - a[1].commission)
-      .slice(0,5);
-
-    if (!sortedCallers.length) {
+    leadsTableBody.innerHTML = "";
+    (data || []).forEach(ld => {
       const tr = document.createElement("tr");
-      const td = document.createElement("td");
-      td.colSpan = 3;
-      td.className = "small";
-      td.textContent = "No closed-won leads yet.";
-      tr.appendChild(td);
-      topCallersTableBody.appendChild(tr);
-    } else {
-      sortedCallers.forEach(([email, stats]) => {
-        const tr = document.createElement("tr");
+      const priority = (ld.priority || "").toString().toUpperCase();
+      const status = (ld.call_status || "new").toLowerCase();
 
-        const tdEmail = document.createElement("td");
-        tdEmail.textContent = email;
-        tr.appendChild(tdEmail);
+      const tdBiz = document.createElement("td");
+      tdBiz.innerHTML = `<strong>${ld.business_name || ld.BusinessName || "(No name)"}</strong><br><span class="small">${ld.email || ""}</span>`;
+      tr.appendChild(tdBiz);
 
-        const tdClosed = document.createElement("td");
-        tdClosed.textContent = stats.closedWon;
-        tr.appendChild(tdClosed);
+      const tdPhone = document.createElement("td");
+      tdPhone.textContent = ld.phone || ld.Phone || "";
+      tr.appendChild(tdPhone);
 
-        const tdComm = document.createElement("td");
-        tdComm.textContent = formatMoney(stats.commission);
-        tr.appendChild(tdComm);
+      const tdPriority = document.createElement("td");
+      const spanP = document.createElement("span");
+      spanP.className = "status-badge " + (priority === "A" ? "a" : priority === "B" ? "b" : "c");
+      spanP.textContent = priority || "-";
+      tdPriority.appendChild(spanP);
+      tr.appendChild(tdPriority);
 
-        topCallersTableBody.appendChild(tr);
-      });
-    }
+      const tdStatus = document.createElement("td");
+      tdStatus.textContent = status;
+      tr.appendChild(tdStatus);
+
+      const tdCity = document.createElement("td");
+      tdCity.textContent = ld.city || ld.City || "";
+      tr.appendChild(tdCity);
+
+      leadsTableBody.appendChild(tr);
+    });
   }
 
-  (async () => {
-    const user = await guardAdmin();
-    if (!user) return;
-    await loadDashboard();
-  })();
+  // Very simple CSV parser (no redirects; safe)
+  function parseCsv(text) {
+    const lines = text.split(/\r?\n/).filter(l => l.trim().length);
+    if (!lines.length) return [];
+    const headers = lines[0].split(",").map(h => h.trim());
+    const rows = [];
+
+    for (let i = 1; i < lines.length; i++) {
+      const cols = lines[i].split(",");
+      const row = {};
+      headers.forEach((h, idx) => {
+        row[h] = (cols[idx] || "").trim();
+      });
+      rows.push(row);
+    }
+    return rows;
+  }
+
+  uploadBtn.addEventListener("click", async () => {
+    uploadError.textContent = "";
+    uploadStatus.textContent = "";
+
+    const file = csvFileInput.files[0];
+    if (!file) {
+      uploadError.textContent = "Choose a CSV file first.";
+      return;
+    }
+
+    const text = await file.text();
+    const rows = parseCsv(text);
+    if (!rows.length) {
+      uploadError.textContent = "No rows found in CSV.";
+      return;
+    }
+
+    uploadStatus.textContent = "Uploading " + rows.length + " leads…";
+
+    // Map CSV fields to table columns
+    const mapped = rows.map(r => ({
+      business_name: r.BusinessName || null,
+      phone: r.Phone || null,
+      email: r.Email || null,
+      alt_email: r.AltEmail || null,
+      website: r.Website || null,
+      social: r.Social || null,
+      city: r.City || null,
+      state: r.State || null,
+      priority: (r.Priority || "A").toUpperCase(),
+      call_status: (r.CallStatus || "new").toLowerCase(),
+      notes: r.Notes || null
+    }));
+
+    const { error } = await supabaseClient.from("call_leads").insert(mapped);
+    if (error) {
+      console.error("Insert error:", error);
+      uploadError.textContent = "Error inserting some rows: " + error.message;
+      uploadStatus.textContent = "";
+      return;
+    }
+
+    uploadStatus.textContent = "Leads uploaded successfully.";
+    loadLeads();
+  });
+
+  initPage();
 </script>
 </body>
-  </html>
+      </html>
