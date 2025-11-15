@@ -2,120 +2,65 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>BrandCrafters — Leads & CSV Upload</title>
+  <title>BrandCrafters — Admin Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <!-- BrandCrafters base styles -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
   <script defer src="script.js"></script>
-
   <style>
+    :root{
+      --bg:#050713;
+      --panel:rgba(255,255,255,.04);
+      --border:rgba(255,255,255,.08);
+      --text:#f5f5ff;
+      --muted:#b5b7d8;
+      --grad:linear-gradient(135deg,#6ea8ff,#b166ff);
+    }
+    *{box-sizing:border-box;}
     body{
-      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color:#f5f5ff;
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:
+        radial-gradient(1200px 600px at -10% -10%, #18122f 0, rgba(24,18,47,0) 60%),
+        var(--bg);
+      color:var(--text);
     }
     main{
-      max-width:1100px;
-      margin:32px auto 80px;
-      padding:0 20px;
+      max-width:1100px;margin:18px auto 60px;padding:0 16px;
     }
-    h1{
-      margin:0 0 6px;
-      font-size:24px;
+    h1{margin:0 0 6px;font-size:22px;}
+    .subhead{margin:0 0 18px;font-size:13px;color:var(--muted);}
+    .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}
+    .grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
+    @media (max-width:900px){
+      .grid{grid-template-columns:1fr;}
+      .grid-2{grid-template-columns:1fr;}
     }
-    .subhead{
-      margin:0 0 20px;
-      font-size:13px;
-      color:var(--muted);
-    }
-
-    .panel{
+    .card{
       background:var(--panel);
       border-radius:16px;
-      border:1px solid rgba(255,255,255,.10);
+      border:1px solid var(--border);
       padding:16px 14px;
-      margin-bottom:16px;
     }
-    .panel h2{
-      margin:0 0 6px;
-      font-size:16px;
+    .card h2{margin:0 0 8px;font-size:16px;}
+    .card p{margin:0 0 6px;font-size:13px;}
+    .stat-label{
+      font-size:11px;text-transform:uppercase;
+      letter-spacing:.06em;color:var(--muted);
     }
-    .panel p{
-      margin:0 0 8px;
-      font-size:13px;
-      color:var(--muted);
-    }
-
-    .grid-2{
-      display:grid;
-      grid-template-columns:2fr 3fr;
-      gap:14px;
-    }
-    @media(max-width:900px){
-      .grid-2{
-        grid-template-columns:1fr;
-      }
-    }
-
-    input[type="file"]{
-      display:block;
-      margin-top:8px;
-      font-size:13px;
-      color:var(--text);
-    }
-
-    .btn{
-      display:inline-block;
-      padding:8px 14px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.2);
-      font-size:13px;
-      cursor:pointer;
-      background:rgba(255,255,255,.04);
-      color:var(--text);
-      transition:.18s;
-    }
-    .btn:hover{
-      background:rgba(255,255,255,.1);
-      transform:translateY(-1px);
-    }
-    .btn-primary{
-      border-color:transparent;
-      background:var(--grad);
-      color:#050713;
-      font-weight:600;
-      box-shadow:0 0 0 1px rgba(110,168,255,.4);
-    }
-    .btn-primary:hover{
-      filter:brightness(1.05);
-    }
-
-    .msg{
-      font-size:13px;
-      margin-top:6px;
-    }
-    .msg.error{color:#ff9c9c;}
-    .msg.ok{color:#8bffb0;}
-    .muted{
-      color:var(--muted);
+    .stat-value{font-size:20px;font-weight:700;margin-top:4px;}
+    .stat-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+    .pill{
+      display:inline-block;padding:2px 8px;border-radius:999px;
       font-size:11px;
     }
-    .mono{
-      font-family:monospace;
-      font-size:11px;
-    }
-
-    table{
-      width:100%;
-      border-collapse:collapse;
-      font-size:12px;
-      margin-top:8px;
-    }
+    .pill-green{background:rgba(155,255,191,.15);}
+    .pill-red{background:rgba(255,155,155,.15);}
+    .pill-blue{background:rgba(110,168,255,.15);}
+    table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;}
     th,td{
       border-bottom:1px solid rgba(255,255,255,.08);
-      padding:4px 4px;
+      padding:5px 4px;
       vertical-align:top;
     }
     th{
@@ -124,90 +69,49 @@
       text-transform:uppercase;
       letter-spacing:.05em;
       color:var(--muted);
-      background:rgba(255,255,255,.02);
     }
-
-    .badge{
-      display:inline-block;
-      padding:2px 6px;
-      border-radius:999px;
-      font-size:10px;
-      text-transform:uppercase;
-      letter-spacing:.06em;
-    }
-    .badge-valid{
-      background:rgba(142,255,191,.12);
-      color:#8effbf;
-    }
-    .badge-invalid{
-      background:rgba(255,177,177,.15);
-      color:#ffb1b1;
-    }
-
-    /* Header extra bits for email + logout */
+    .small{font-size:12px;color:var(--muted);}
     .header-user{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      font-size:11px;
-      color:var(--muted);
-      margin-left:12px;
+      display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted);margin-left:12px;
     }
     .btn-logout{
-      border-radius:999px;
-      padding:6px 10px;
-      border:1px solid rgba(255,255,255,.55);
-      background:rgba(255,255,255,.08);
-      font-size:11px;
-      cursor:pointer;
-      display:inline-flex;
-      align-items:center;
-      gap:4px;
+      border-radius:999px;padding:6px 10px;border:1px solid rgba(255,255,255,.55);
+      background:rgba(255,255,255,.08);font-size:11px;cursor:pointer;
+      display:inline-flex;align-items:center;gap:4px;
     }
-    .btn-logout:hover{
-      background:rgba(255,255,255,.16);
-      transform:translateY(-1px);
-    }
-    @media(max-width:940px){
-      .header-user{display:none;}
-    }
+    .btn-logout:hover{background:rgba(255,255,255,.16);transform:translateY(-1px);}
+    @media(max-width:940px){.header-user{display:none;}}
   </style>
 </head>
 <body>
 
-<!-- BrandCrafters header with dashboard links (Version B) -->
 <header class="site-header">
   <div class="container header-inner">
     <a class="logo" href="index.html">
       <span class="logo-mark">BC</span><span>BrandCrafters</span>
     </a>
 
-    <!-- Desktop Nav -->
     <nav class="nav desktop-nav">
-      <!-- Public nav -->
       <a href="index.html" class="nav-link">Home</a>
       <a href="pricing.html" class="nav-link">Pricing</a>
       <a href="customer-inquiry.html" class="btn btn-outline">Customer Portal</a>
 
-      <!-- Dashboard-specific links -->
-      <a href="dashboard.html" class="nav-link">Admin Dashboard</a>
-      <a href="dashboard-leads-upload.html" class="nav-link active">Leads &amp; CSV</a>
+      <a href="dashboard.html" class="nav-link active">Admin Dashboard</a>
+      <a href="dashboard-leads-upload.html" class="nav-link">Leads &amp; CSV</a>
+      <a href="dashboard-commissions.html" class="nav-link">Commission Rules</a>
       <a href="contractor-portal.html" class="nav-link">Contractor Portal</a>
 
-      <!-- User + logout -->
       <div class="header-user">
         <span id="userEmail"></span>
         <button id="logoutBtn" class="btn-logout">Log Out</button>
       </div>
     </nav>
 
-    <!-- Mobile: Hamburger -->
     <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
   </div>
 
-  <!-- Mobile Drawer (V8) -->
   <nav class="mobile-drawer" aria-hidden="true">
     <div class="drawer-header">
       <a class="logo" href="index.html">
@@ -216,14 +120,12 @@
       <button class="menu-close" aria-label="Close menu">✕</button>
     </div>
 
-    <!-- Public nav -->
     <a class="drawer-link" href="index.html">Home</a>
     <a class="drawer-link" href="pricing.html">Pricing</a>
     <a class="drawer-link" href="customer-inquiry.html">Customer Portal</a>
-
-    <!-- Dashboard-specific -->
     <a class="drawer-link" href="dashboard.html">Admin Dashboard</a>
     <a class="drawer-link" href="dashboard-leads-upload.html">Leads &amp; CSV</a>
+    <a class="drawer-link" href="dashboard-commissions.html">Commission Rules</a>
     <a class="drawer-link" href="contractor-portal.html">Contractor Portal</a>
   </nav>
   <div class="drawer-backdrop" aria-hidden="true"></div>
@@ -231,53 +133,120 @@
 
 <main>
   <section>
-    <h1>Upload Leads CSV</h1>
+    <h1>Overview</h1>
     <p class="subhead">
-      Drop in new lead lists from Google Maps, directories, or spreadsheets. We’ll auto-map columns,
-      validate rows, and set lead priority (A/B/C) based on web presence.
+      Snapshot of project money, monthly maintenance vs bills, and the lead pipeline &amp; commissions.
     </p>
   </section>
 
-  <section class="panel grid-2">
-    <div>
-      <h2>1. Choose CSV</h2>
-      <p>
-        Core fields we care about:
-        <span class="mono">business_name, phone, city, state</span>.<br>
-        We also accept headers like <span class="mono">BusinessName, Company, Phone, Email</span> and auto-map them.
-      </p>
-      <input type="file" id="csvFile" accept=".csv" />
-      <div style="margin-top:10px;">
-        <button class="btn" id="previewBtn">Preview</button>
-        <button class="btn btn-primary" id="uploadBtn" disabled>Upload to Supabase</button>
-      </div>
-      <div id="uploadMsg" class="msg"></div>
-      <p class="muted" style="margin-top:8px;">
-        Auto-rules:
-        <br>• If <b>website</b> is empty ➜ priority <b>A</b>
-        <br>• If only social / Facebook / Google link ➜ priority <b>B</b>
-        <br>• If real website present ➜ priority <b>C</b>
-        <br>• <b>call_status</b> defaults to <span class="mono">new</span> if missing
-      </p>
-    </div>
-    <div>
-      <h2>2. Status</h2>
-      <p class="muted">
-        We’ll show valid vs invalid rows before upload. Invalid (missing business name or phone) will be skipped.
-      </p>
-      <div id="previewStats" class="msg"></div>
-      <div id="headerMapInfo" class="muted"></div>
-    </div>
+  <!-- MONEY SUMMARY -->
+  <section class="grid">
+    <article class="card">
+      <div class="stat-label">Lifetime Project Revenue (one-time)</div>
+      <div class="stat-value" id="lifetimeRevenue">$0.00</div>
+      <div class="stat-sub">Sum of total_price on onboarding submissions.</div>
+    </article>
+
+    <article class="card">
+      <div class="stat-label">Active Monthly Income</div>
+      <div class="stat-value" id="monthlyIncome">$0.00</div>
+      <div class="stat-sub">Sum of monthly_fee for active projects.</div>
+    </article>
+
+    <article class="card">
+      <div class="stat-label">Active Monthly Bills</div>
+      <div class="stat-value" id="monthlyBills">$0.00</div>
+      <div class="stat-sub">Recurring_expenses with frequency = 'monthly' and is_active = true.</div>
+    </article>
   </section>
 
-  <section class="panel">
-    <h2>Preview (first 25 rows)</h2>
-    <div class="muted">Red badge = missing phone or business name (row will be skipped).</div>
-    <div style="overflow:auto;max-height:400px;margin-top:8px;">
-      <table id="previewTable">
-        <thead></thead>
+  <!-- PROFITS & LEADS -->
+  <section class="grid" style="margin-top:12px;">
+    <article class="card">
+      <div class="stat-label">Est. Monthly Net (Maintenance - Bills)</div>
+      <div class="stat-value" id="monthlyNet">$0.00</div>
+      <div class="stat-sub">Rough check if maintenance covers your tools & renewals.</div>
+    </article>
+
+    <article class="card">
+      <div class="stat-label">Closed Won Leads · This Month</div>
+      <div class="stat-value" id="closedWonMonth">0</div>
+      <div class="stat-sub">call_leads where status = 'closed won' and date is in this month.</div>
+    </article>
+
+    <article class="card">
+      <div class="stat-label">Estimated Commissions · This Month</div>
+      <div class="stat-value" id="commissionMonth">$0.00</div>
+      <div class="stat-sub">
+        Uses commission_amount on each closed won lead (Starter / Business / E-Com).
+      </div>
+    </article>
+  </section>
+
+  <!-- PROJECTS & EXPENSES -->
+  <section class="grid-2" style="margin-top:16px;">
+    <article class="card">
+      <h2>Client Projects (Onboarding)</h2>
+      <p class="small">
+        Last 6 onboarding submissions with totals and monthly fees.
+      </p>
+      <table id="projectsTable">
+        <thead>
+          <tr>
+            <th>Client</th>
+            <th>Total Price</th>
+            <th>Monthly Fee</th>
+            <th>Status</th>
+          </tr>
+        </thead>
         <tbody></tbody>
       </table>
+    </article>
+
+    <article class="card">
+      <h2>Upcoming Recurring Bills</h2>
+      <p class="small">
+        Next 6 active recurring_expenses sorted by next_due_date.
+      </p>
+      <table id="billsTable">
+        <thead>
+          <tr>
+            <th>Bill</th>
+            <th>Due</th>
+            <th>Vendor</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <p class="small" id="billsNote"></p>
+    </article>
+  </section>
+
+  <!-- LEAD SNAPSHOT -->
+  <section class="card" style="margin-top:16px;">
+    <h2>Lead Pipeline Snapshot</h2>
+    <p class="small">
+      Quick check before you go into Leads &amp; CSV or the Contractor Portal.
+    </p>
+    <div class="grid-2">
+      <div>
+        <p class="stat-label">Counts by Status</p>
+        <p class="small" id="leadStatusStats">Loading…</p>
+      </div>
+      <div>
+        <p class="stat-label">Top Callers (Closed Won)</p>
+        <table id="topCallersTable">
+          <thead>
+            <tr>
+              <th>Caller</th>
+              <th>Closed Won</th>
+              <th>Est. Commission</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
     </div>
   </section>
 </main>
@@ -291,17 +260,12 @@
   </div>
 </footer>
 
-<!-- Year -->
 <script>
   const yearSpan = document.getElementById('year');
-  if (yearSpan) {
-    yearSpan.textContent = new Date().getFullYear();
-  }
+  if (yearSpan) yearSpan.textContent = new Date().getFullYear();
 </script>
 
-<!-- Supabase + CSV logic -->
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <script>
   const SUPABASE_URL = "https://vekoulqehexqosgwacwa.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiIsInZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
@@ -313,17 +277,27 @@
   const userEmailSpan   = document.getElementById("userEmail");
   const logoutBtn       = document.getElementById("logoutBtn");
 
+  const lifetimeRevenue = document.getElementById("lifetimeRevenue");
+  const monthlyIncome   = document.getElementById("monthlyIncome");
+  const monthlyBills    = document.getElementById("monthlyBills");
+  const monthlyNet      = document.getElementById("monthlyNet");
+  const closedWonMonth  = document.getElementById("closedWonMonth");
+  const commissionMonth = document.getElementById("commissionMonth");
+
+  const projectsTableBody = document.querySelector("#projectsTable tbody");
+  const billsTableBody    = document.querySelector("#billsTable tbody");
+  const billsNote         = document.getElementById("billsNote");
+  const leadStatusStats   = document.getElementById("leadStatusStats");
+  const topCallersTableBody = document.querySelector("#topCallersTable tbody");
+
   async function guardAdmin() {
-    const { data, error } = await supabaseClient.auth.getUser();
-    if (error) {
-      console.error("auth.getUser error:", error);
-    }
+    const { data } = await supabaseClient.auth.getUser();
     if (!data || !data.user) {
+      window.location.href = LOGIN_PAGE_URL;
       return null;
     }
     const email = data.user.email;
     if (userEmailSpan) userEmailSpan.textContent = email || "";
-
     if (email !== ADMIN_EMAIL) {
       window.location.href = "contractor-portal.html";
       return null;
@@ -338,266 +312,209 @@
     });
   }
 
-  const fileInput   = document.getElementById("csvFile");
-  const previewBtn  = document.getElementById("previewBtn");
-  const uploadBtn   = document.getElementById("uploadBtn");
-  const previewStats = document.getElementById("previewStats");
-  const headerMapInfo = document.getElementById("headerMapInfo");
-  const uploadMsg   = document.getElementById("uploadMsg");
-
-  const previewTableHead = document.querySelector("#previewTable thead");
-  const previewTableBody = document.querySelector("#previewTable tbody");
-
-  let parsedRows = [];
-  let mappedRows = [];
-  let lastHeaderMap = {};
-
-  const headerAliases = {
-    business_name: ["business_name","businessname","name","company","companyname"],
-    phone: ["phone","phone1","phonenumber","primaryphone"],
-    alt_phone: ["altphone","phone2","secondaryphone","alt_phone"],
-    email: ["email","emailaddress","primaryemail"],
-    alt_email: ["altemail","email2","secondaryemail","alt_email"],
-    city: ["city","town"],
-    state: ["state","st"],
-    website: ["website","site","url","websiteurl"],
-    social: ["social","facebook","fbpage","instagram","ig","sociallink"],
-    priority: ["priority","tier"],
-    call_status: ["call_status","status","leadstatus"],
-    assigned_caller_email: ["assigned_caller_email","caller","agent_email","assignedto"],
-    notes: ["notes","note","comments","comment","details"]
-  };
-
-  function normalizeHeader(h){
-    return h.toString().trim().toLowerCase().replace(/[\s_-]+/g,"");
+  function formatMoney(n) {
+    if (!n || isNaN(n)) return "$0.00";
+    return "$" + Number(n).toFixed(2);
   }
 
-  function findCanonicalColumn(header){
-    const norm = normalizeHeader(header);
-    for (const [canonical, aliasList] of Object.entries(headerAliases)) {
-      if (aliasList.includes(norm)) return canonical;
-    }
-    if (headerAliases[header]) return header;
-    return null;
+  function startOfMonth(date) {
+    return new Date(date.getFullYear(), date.getMonth(), 1);
+  }
+  function endOfMonth(date) {
+    return new Date(date.getFullYear(), date.getMonth() + 1, 0);
   }
 
-  function autoPriority(website){
-    if (!website || website.trim() === "") return "A";
-    const w = website.toLowerCase();
-    if (
-      w.includes("facebook.com") ||
-      w.includes("instagram.com") ||
-      w.includes("google.com") ||
-      w.includes("glossgenius") ||
-      w.includes("square.site") ||
-      w.includes("linktr.ee")
-    ) {
-      return "B";
-    }
-    return "C";
+  function defaultCommissionForPackage(pkg) {
+    const p = (pkg || "").toLowerCase();
+    if (p.includes("starter")) return 50;
+    if (p.includes("business")) return 75;
+    if (p.includes("e-commerce") || p.includes("ecommerce") || p.includes("store")) return 100;
+    return 100;
   }
 
-  function buildPreview(){
-    previewTableHead.innerHTML = "";
-    previewTableBody.innerHTML = "";
-    previewStats.textContent = "";
-    headerMapInfo.textContent = "";
-    uploadMsg.textContent = "";
-    uploadMsg.className = "msg";
+  async function loadDashboard() {
+    const today = new Date();
+    const monthStart = startOfMonth(today);
+    const monthEnd = endOfMonth(today);
 
-    if (!parsedRows.length){
-      previewStats.textContent = "No rows parsed yet. Choose a CSV and click Preview.";
-      return;
-    }
+    const [onboardingRes, billsRes, leadsRes] = await Promise.all([
+      supabaseClient.from("onboarding_submissions").select("*"),
+      supabaseClient.from("recurring_expenses").select("*").eq("is_active", true),
+      supabaseClient.from("call_leads").select("*")
+    ]);
 
-    mappedRows = [];
-    lastHeaderMap = {};
+    const onboarding = onboardingRes.data || [];
+    const bills      = billsRes.data || [];
+    const leads      = leadsRes.data || [];
 
-    const csvHeaders = Object.keys(parsedRows[0] || {});
-    const canonicalForHeader = {};
+    let lifetimeRev = 0;
+    let monthlyFeeTotal = 0;
+    onboarding.forEach(p => {
+      if (p.total_price) lifetimeRev += Number(p.total_price) || 0;
+      if (p.monthly_fee) monthlyFeeTotal += Number(p.monthly_fee) || 0;
+    });
+    lifetimeRevenue.textContent = formatMoney(lifetimeRev);
+    monthlyIncome.textContent   = formatMoney(monthlyFeeTotal);
 
-    csvHeaders.forEach(h => {
-      const canonical = findCanonicalColumn(h);
-      canonicalForHeader[h] = canonical;
-      if (canonical) {
-        lastHeaderMap[h] = canonical;
-      } else {
-        lastHeaderMap[h] = "(ignored)";
+    let monthlyBillsTotal = 0;
+    bills.forEach(b => {
+      if (b.frequency === "monthly" && b.amount) {
+        monthlyBillsTotal += Number(b.amount) || 0;
+      }
+    });
+    monthlyBills.textContent = formatMoney(monthlyBillsTotal);
+    monthlyNet.textContent   = formatMoney(monthlyFeeTotal - monthlyBillsTotal);
+
+    // Projects
+    projectsTableBody.innerHTML = "";
+    onboarding
+      .sort((a, b) => new Date(b.created_at || b.first_paid_at || 0) - new Date(a.created_at || a.first_paid_at || 0))
+      .slice(0, 6)
+      .forEach(p => {
+        const tr = document.createElement("tr");
+        const clientName = p.business_name || p.client_name || "(No name)";
+        const status = (p.status || "new").toLowerCase();
+
+        const tdClient = document.createElement("td");
+        tdClient.innerHTML = `<strong>${clientName}</strong><br><span class="small">${p.currency || "USD"}</span>`;
+        tr.appendChild(tdClient);
+
+        const tdTotal = document.createElement("td");
+        tdTotal.textContent = p.total_price ? formatMoney(p.total_price) : "—";
+        tr.appendChild(tdTotal);
+
+        const tdMonthly = document.createElement("td");
+        tdMonthly.textContent = p.monthly_fee ? formatMoney(p.monthly_fee) : "—";
+        tr.appendChild(tdMonthly);
+
+        const tdStatus = document.createElement("td");
+        const pill = document.createElement("span");
+        pill.className = "pill " + (status === "completed" ? "pill-green" : status === "cancelled" ? "pill-red" : "pill-blue");
+        pill.textContent = status;
+        tdStatus.appendChild(pill);
+        tr.appendChild(tdStatus);
+
+        projectsTableBody.appendChild(tr);
+      });
+
+    // Bills
+    billsTableBody.innerHTML = "";
+    bills
+      .filter(b => b.next_due_date)
+      .sort((a,b) => new Date(a.next_due_date) - new Date(b.next_due_date))
+      .slice(0,6)
+      .forEach(b => {
+        const tr = document.createElement("tr");
+
+        const tdName = document.createElement("td");
+        tdName.innerHTML = `<strong>${b.name}</strong><br><span class="small">${b.category || ""}</span>`;
+        tr.appendChild(tdName);
+
+        const tdDue = document.createElement("td");
+        tdDue.textContent = b.next_due_date || "";
+        tr.appendChild(tdDue);
+
+        const tdVendor = document.createElement("td");
+        tdVendor.textContent = b.vendor || "";
+        tr.appendChild(tdVendor);
+
+        const tdAmt = document.createElement("td");
+        tdAmt.textContent = formatMoney(b.amount);
+        tr.appendChild(tdAmt);
+
+        billsTableBody.appendChild(tr);
+      });
+
+    billsNote.textContent = bills.length ? "" : "No recurring_expenses found yet. Add them in Supabase.";
+
+    // Leads + commissions
+    const statusCounts = {};
+    let closedThisMonth = 0;
+    let commissionThisMonth = 0;
+    const callerStats = new Map();
+
+    leads.forEach(ld => {
+      const rawStatus = (ld.call_status || "new").toLowerCase();
+      const status = rawStatus.replace("_"," ");
+      statusCounts[status] = (statusCounts[status] || 0) + 1;
+
+      const isClosedWon = rawStatus === "closed won" || rawStatus === "closed_won";
+
+      if (isClosedWon && ld.last_contact_date) {
+        const d = new Date(ld.last_contact_date);
+        if (d >= monthStart && d <= monthEnd) {
+          closedThisMonth += 1;
+          const commission = ld.commission_amount != null
+            ? Number(ld.commission_amount) || 0
+            : defaultCommissionForPackage(ld.package_type);
+          commissionThisMonth += commission;
+        }
+      }
+
+      if (ld.assigned_caller_email) {
+        const email = ld.assigned_caller_email;
+        if (!callerStats.has(email)) {
+          callerStats.set(email, { closedWon:0, commission:0 });
+        }
+        const obj = callerStats.get(email);
+        if (isClosedWon) {
+          obj.closedWon += 1;
+          const commission = ld.commission_amount != null
+            ? Number(ld.commission_amount) || 0
+            : defaultCommissionForPackage(ld.package_type);
+          obj.commission += commission;
+        }
       }
     });
 
-    let validCount = 0;
-    let invalidCount = 0;
+    closedWonMonth.textContent  = closedThisMonth;
+    commissionMonth.textContent = formatMoney(commissionThisMonth);
 
-    parsedRows.forEach(row => {
-      const obj = {
-        business_name: "",
-        phone: "",
-        alt_phone: "",
-        email: "",
-        alt_email: "",
-        city: "",
-        state: "",
-        website: "",
-        social: "",
-        priority: "",
-        call_status: "",
-        assigned_caller_email: "",
-        notes: ""
-      };
-
-      for (const [rawHeader, value] of Object.entries(row)) {
-        const canonical = canonicalForHeader[rawHeader];
-        if (!canonical || !(canonical in obj)) continue;
-        obj[canonical] = (value ?? "").toString().trim();
-      }
-
-      if (!obj.call_status) obj.call_status = "new";
-      if (!obj.priority) obj.priority = autoPriority(obj.website);
-
-      if (!obj.website && obj.social) {
-        const pr = autoPriority(obj.social);
-        if (!obj.priority) obj.priority = pr;
-      }
-
-      const missingCore = !obj.business_name || !obj.phone;
-      if (missingCore) invalidCount++; else validCount++;
-
-      obj._invalid = missingCore;
-      mappedRows.push(obj);
+    const parts = [];
+    Object.entries(statusCounts).forEach(([s, count]) => {
+      parts.push(`${s}: ${count}`);
     });
+    leadStatusStats.textContent = parts.length ? parts.join(" · ") : "No leads yet.";
 
-    previewStats.textContent =
-      `Parsed ${parsedRows.length} rows · ` +
-      `${validCount} valid · ${invalidCount} invalid (missing business name or phone — skipped on upload).`;
-    previewStats.className = "msg " + (invalidCount ? "error" : "ok");
+    topCallersTableBody.innerHTML = "";
+    const sortedCallers = Array.from(callerStats.entries())
+      .sort((a,b) => b[1].commission - a[1].commission)
+      .slice(0,5);
 
-    const items = Object.entries(lastHeaderMap).map(([csvH, canon]) =>
-      `${csvH} → ${canon}`
-    );
-    headerMapInfo.textContent = "Header mapping: " + items.join(" · ");
-
-    const displayRows = mappedRows.slice(0, 25);
-    const headTr = document.createElement("tr");
-    ["Status","Business","Phone","City/State","Website/Social","Priority","Call Status","Notes"].forEach(h => {
-      const th = document.createElement("th");
-      th.textContent = h;
-      headTr.appendChild(th);
-    });
-    previewTableHead.appendChild(headTr);
-
-    displayRows.forEach(r => {
+    if (!sortedCallers.length) {
       const tr = document.createElement("tr");
-
-      const tdStatus = document.createElement("td");
-      const badge = document.createElement("span");
-      badge.classList.add("badge");
-      if (r._invalid) {
-        badge.classList.add("badge-invalid");
-        badge.textContent = "Invalid";
-      } else {
-        badge.classList.add("badge-valid");
-        badge.textContent = "OK";
-      }
-      tdStatus.appendChild(badge);
-      tr.appendChild(tdStatus);
-
-      const tdBiz = document.createElement("td");
-      tdBiz.innerHTML = `<strong>${r.business_name || "(missing)"}</strong><br><span class="muted">${r.email || ""}</span>`;
-      tr.appendChild(tdBiz);
-
-      const tdPhone = document.createElement("td");
-      tdPhone.textContent = r.phone || "(missing)";
-      tr.appendChild(tdPhone);
-
-      const tdCity = document.createElement("td");
-      tdCity.textContent = [r.city, r.state].filter(Boolean).join(", ");
-      tr.appendChild(tdCity);
-
-      const tdWeb = document.createElement("td");
-      tdWeb.textContent = r.website || (r.social || "");
-      tr.appendChild(tdWeb);
-
-      const tdPri = document.createElement("td");
-      tdPri.textContent = r.priority || "";
-      tr.appendChild(tdPri);
-
-      const tdStat = document.createElement("td");
-      tdStat.textContent = r.call_status || "";
-      tr.appendChild(tdStat);
-
-      const tdNotes = document.createElement("td");
-      tdNotes.textContent = r.notes || "";
-      tr.appendChild(tdNotes);
-
-      previewTableBody.appendChild(tr);
-    });
-
-    uploadBtn.disabled = !mappedRows.length;
-  }
-
-  previewBtn.addEventListener("click", () => {
-    const file = fileInput.files && fileInput.files[0];
-    if (!file){
-      previewStats.textContent = "Please choose a CSV file first.";
-      previewStats.className = "msg error";
-      return;
-    }
-
-    Papa.parse(file, {
-      header: true,
-      skipEmptyLines: true,
-      complete: results => {
-        parsedRows = results.data || [];
-        buildPreview();
-      },
-      error: err => {
-        previewStats.textContent = "Error parsing CSV: " + err.message;
-        previewStats.className = "msg error";
-      }
-    });
-  });
-
-  uploadBtn.addEventListener("click", async () => {
-    uploadMsg.textContent = "";
-    uploadMsg.className = "msg";
-
-    if (!mappedRows.length){
-      uploadMsg.textContent = "Nothing to upload. Click Preview first.";
-      uploadMsg.className = "msg error";
-      return;
-    }
-
-    const valid = mappedRows.filter(r => !r._invalid);
-    if (!valid.length){
-      uploadMsg.textContent = "All rows are invalid (missing business name or phone). Nothing uploaded.";
-      uploadMsg.className = "msg error";
-      return;
-    }
-
-    uploadBtn.disabled = true;
-    uploadMsg.textContent = "Uploading " + valid.length + " valid rows to Supabase…";
-
-    const cleanRows = valid.map(({_invalid, ...rest}) => rest);
-
-    const { data, error } = await supabaseClient
-      .from("call_leads")
-      .insert(cleanRows);
-
-    if (error){
-      console.error(error);
-      uploadMsg.textContent = "Error inserting rows: " + error.message;
-      uploadMsg.className = "msg error";
+      const td = document.createElement("td");
+      td.colSpan = 3;
+      td.className = "small";
+      td.textContent = "No closed-won leads yet.";
+      tr.appendChild(td);
+      topCallersTableBody.appendChild(tr);
     } else {
-      uploadMsg.textContent = `Uploaded ${cleanRows.length} rows successfully. Invalid rows were skipped.`;
-      uploadMsg.className = "msg ok";
+      sortedCallers.forEach(([email, stats]) => {
+        const tr = document.createElement("tr");
+
+        const tdEmail = document.createElement("td");
+        tdEmail.textContent = email;
+        tr.appendChild(tdEmail);
+
+        const tdClosed = document.createElement("td");
+        tdClosed.textContent = stats.closedWon;
+        tr.appendChild(tdClosed);
+
+        const tdComm = document.createElement("td");
+        tdComm.textContent = formatMoney(stats.commission);
+        tr.appendChild(tdComm);
+
+        topCallersTableBody.appendChild(tr);
+      });
     }
-    uploadBtn.disabled = false;
-  });
+  }
 
   (async () => {
-    await guardAdmin();
+    const user = await guardAdmin();
+    if (!user) return;
+    await loadDashboard();
   })();
 </script>
 </body>
-</html>
+  </html>
