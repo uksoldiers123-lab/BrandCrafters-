@@ -13,6 +13,7 @@
     main { padding:20px; max-width:1200px; margin:0 auto 60px; }
     .card { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); border-radius:14px; padding:18px; margin-bottom:18px; }
     h1, h2 { margin:0 0 10px; }
+    h3 { margin:10px 0 6px; font-size:15px; }
     label { display:block; margin-bottom:8px; font-size:14px; }
     input, select, textarea { width:100%; padding:8px 10px; border-radius:8px; border:1px solid rgba(255,255,255,.18); background:rgba(5,7,18,.9); color:#fff; font-size:14px; }
     button { border-radius:10px; padding:7px 10px; border:0; font-weight:600; cursor:pointer; font-size:12px; }
@@ -33,6 +34,10 @@
     .error { color:#ff8c8c; font-size:13px; margin-top:6px; }
     .success { color:#8fffba; font-size:13px; margin-top:6px; }
     .hidden { display:none; }
+    details { margin-top:8px; }
+    details summary { cursor:pointer; font-size:13px; opacity:.9; }
+    pre { white-space:pre-wrap; font-family:inherit; font-size:12px; background:rgba(0,0,0,.3); padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,.12); }
+    ul { padding-left:18px; margin:6px 0; }
   </style>
 </head>
 <body>
@@ -123,13 +128,91 @@
     </div>
     <div id="saveMsg" class="small"></div>
   </section>
+
+  <!-- RESOURCES FOR CALLERS -->
+  <section class="card">
+    <h2>Resources for Callers</h2>
+    <p class="small">
+      Use this section as your cheat sheet while you call or DM. These match the workbook the admin uses.
+    </p>
+
+    <h3>🔥 Quick Pricing Cheat Sheet</h3>
+    <ul class="small">
+      <li><b>Starter Craft – $249</b> · 1-page site (Home / About / Contact). Best for: small services, lawn care, barbers, solo hustles.</li>
+      <li><b>Business Builder – $699</b> · 3–5 pages. Best for: restaurants, barbershops, HVAC, local clinics, cleaning, etc.</li>
+      <li><b>E-Commerce Store – $1,199</b> · 6–10 pages with cart + checkout. Best for: shops, boutiques, food trucks taking orders online.</li>
+      <li><b>Dashboards (BrandPort)</b> · $199–$399 one-time depending on Lite / Pro / Full.</li>
+      <li><b>Add-Ons</b>: Payment Link Setup $50/link, Business Email $75–$150/mailbox, etc.</li>
+    </ul>
+
+    <p class="small"><b>Commission:</b> Standard is <b>$100 per closed website sale</b> (package sale). Small add-ons alone do <b>not</b> pay commission.</p>
+
+    <details>
+      <summary><b>📞 Phone Script — Cold Call (No Website)</b></summary>
+      <pre>
+Hi, is this {{business_name}}? My name is {{your_name}}, I work with BrandCrafters here in Georgia.
+
+We’ve been looking at local businesses that are hard to find online — and right now, when people search for {{business_type}} in {{city}}, I’m not seeing a website for you.
+
+We build simple, affordable sites that make it easy for customers to find you, call you, and see what you offer. Most of our local clients are up and running for a flat one-time price starting around $249.
+
+Quick question: do you already have someone handling your online presence, or would you be open to seeing what a basic website would look like for your business?
+      </pre>
+    </details>
+
+    <details>
+      <summary><b>📧 Email — Intro Template</b></summary>
+      <pre>
+Subject: Quick website question for {{business_name}}
+
+Hi {{first_name}},
+
+My name is {{your_name}} with BrandCrafters. We build simple, affordable websites for local businesses in Georgia.
+
+When people search for {{business_type}} in {{city}}, it’s hard to find an official website for {{business_name}}. We specialize in basic sites that:
+- Make it easy for customers to find you on Google
+- Show your services, hours, and photos
+- Let people call or message you in one click
+
+Most of our clients launch with a flat one-time price starting at $249 (domain included), and we only add monthly maintenance if you want ongoing updates.
+
+If I send over a one-page summary of options and a couple of examples, would you be open to taking a look?
+
+Best,
+{{your_name}}
+BrandCrafters
+      </pre>
+    </details>
+
+    <details>
+      <summary><b>💬 Social DM Template</b></summary>
+      <pre>
+Hey {{first_name}}, I’m {{your_name}} with BrandCrafters.
+
+I help local businesses in {{city}} get a simple website so customers can find you and see what you offer. Right now it looks like {{business_name}} doesn’t have an official site, so people mainly find you through social or word-of-mouth.
+
+We build clean, mobile-ready sites starting at $249 (domain included) and most jobs are done in 1–2 weeks.
+
+Would you be open to seeing a couple of examples and a quick price breakdown?
+      </pre>
+    </details>
+
+    <details>
+      <summary><b>✅ Closing Line — When They’re Interested</b></summary>
+      <pre>
+Perfect. The next step is simple: we’ll send you a link where you can pick a package and answer a few questions about your business. Once that’s done, we build the site and show you a preview before it goes live.
+
+What’s the best email and cell number for your business, so I can send that over today?
+      </pre>
+    </details>
+  </section>
 </main>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script>
   const SUPABASE_URL = "https://vekoulqehexqosgwacwa.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
-  const LOGIN_PAGE_URL = "dashboard-login.html"; // change if your login page is named different
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiIsInZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
+  const LOGIN_PAGE_URL = "dashboard-login.html";
 
   const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
