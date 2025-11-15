@@ -13,6 +13,7 @@
       --text:#f5f5ff;
       --muted:#b5b7d8;
       --grad:linear-gradient(135deg,#6ea8ff,#b166ff);
+      --danger:rgba(255,120,120,0.14);
     }
     *{box-sizing:border-box;}
     body{
@@ -144,6 +145,22 @@
       filter:brightness(1.05);
       transform:translateY(-1px);
     }
+    .btn-small{
+      padding:4px 10px;
+      font-size:11px;
+      margin-top:0;
+    }
+    .btn-danger{
+      background:var(--danger);
+      color:#ffb3b3;
+      border:1px solid rgba(255,120,120,0.6);
+      box-shadow:none;
+      margin-left:6px;
+    }
+    .btn-danger:hover{
+      background:rgba(255,120,120,0.22);
+      transform:translateY(-1px);
+    }
     table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;}
     th,td{
       border-bottom:1px solid rgba(255,255,255,.08);
@@ -175,6 +192,24 @@
       color:var(--muted);
       font-size:13px;
     }
+    .row-actions .btn{
+      margin-right:4px;
+    }
+    .edit-form label{
+      display:block;
+      font-size:12px;
+      margin-bottom:8px;
+    }
+    .edit-form select,
+    .edit-form input[type="checkbox"]{
+      margin-top:4px;
+    }
+    .toggle-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:4px;
+    }
   </style>
 </head>
 <body>
@@ -200,25 +235,64 @@
   <section id="leadsContent" class="hidden">
     <h1>Leads &amp; CSV Upload</h1>
     <p class="subhead">
-      Upload lead lists, keep contractors fed, and see a quick snapshot of your top 20.
+      Upload lead lists, clean them up, and set which BrandCrafters package + upsells each lead should be pitched.
     </p>
 
+    <!-- UPLOAD + DELETE ALL -->
     <article class="card">
-      <h2>Upload / Replace Leads CSV</h2>
+      <h2>Upload / Add Leads from CSV</h2>
       <p class="small">
-        CSV headers should look like:
-        <b>BusinessName, Phone, Email, AltEmail, Website, Social, City, State, Priority, CallStatus, Notes</b>.
+        CSV headers should look like:<br>
+        <b>
+          BusinessName, Phone, Email, AltEmail, Website, Social, City, State, Priority,
+          CallStatus, Notes, TargetPackage, UpsellMaintenance, UpsellDashboard,
+          UpsellPaymentLinks, UpsellSEO, UpsellSocialKit
+        </b><br>
+        (Upsell columns are optional; “true/false” or “yes/no” will be read.)
       </p>
       <input type="file" id="csvFile" accept=".csv" />
-      <button class="btn" id="uploadBtn" type="button">Upload Leads</button>
+      <div>
+        <button class="btn" id="uploadBtn" type="button">Upload Leads</button>
+        <button class="btn btn-danger" id="deleteAllBtn" type="button">Delete ALL Leads</button>
+      </div>
       <div id="uploadStatus" class="small"></div>
       <div id="uploadError" class="error"></div>
     </article>
 
+    <!-- BULK TARGETING -->
+    <article class="card">
+      <h2>Bulk Targeting (Apply to Visible Leads)</h2>
+      <p class="small">
+        Set a default package + upsells for the leads currently visible in the table below.
+        You can still override per lead in the edit form.
+      </p>
+      <form id="bulkForm" class="edit-form">
+        <label>
+          Target Package
+          <select id="bulkPackage">
+            <option value="">(leave as-is)</option>
+            <option value="Starter Craft">Starter Craft</option>
+            <option value="Business Builder">Business Builder</option>
+            <option value="E-Commerce Store">E-Commerce Store</option>
+          </select>
+        </label>
+        <div class="toggle-row">
+          <label><input type="checkbox" id="bulkMaint" /> Maintenance Plan</label>
+          <label><input type="checkbox" id="bulkDash" /> Dashboard</label>
+          <label><input type="checkbox" id="bulkPayLinks" /> Payment Links</label>
+          <label><input type="checkbox" id="bulkSEO" /> SEO Setup</label>
+          <label><input type="checkbox" id="bulkSocial" /> Social Media Kit</label>
+        </div>
+        <button class="btn btn-small" id="applyBulkBtn" type="button">Apply to Visible Leads</button>
+        <span id="bulkStatus" class="small"></span>
+      </form>
+    </article>
+
+    <!-- SNAPSHOT TABLE -->
     <article class="card">
       <h2>Lead Snapshot (Latest 20)</h2>
       <p class="small">
-        Quick view so you can see what’s in Supabase without logging into the SQL panel.
+        Edit target package and upsells, or delete bad rows. This doesn’t touch older leads beyond the latest 20 you see.
       </p>
       <table id="leadsTable">
         <thead>
@@ -227,11 +301,44 @@
             <th>Phone</th>
             <th>Priority</th>
             <th>Status</th>
+            <th>Package</th>
+            <th>Upsells</th>
             <th>City</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody></tbody>
       </table>
+    </article>
+
+    <!-- SINGLE-LEAD EDIT FORM -->
+    <article class="card hidden" id="editCard">
+      <h2>Edit Lead Targeting</h2>
+      <p class="small" id="editLeadLabel"></p>
+      <form id="editForm" class="edit-form">
+        <input type="hidden" id="editLeadId" />
+        <label>
+          Target Package
+          <select id="editPackage">
+            <option value="">(none yet)</option>
+            <option value="Starter Craft">Starter Craft</option>
+            <option value="Business Builder">Business Builder</option>
+            <option value="E-Commerce Store">E-Commerce Store</option>
+          </select>
+        </label>
+        <div class="toggle-row">
+          <label><input type="checkbox" id="editMaint" /> Maintenance Plan</label>
+          <label><input type="checkbox" id="editDash" /> Dashboard</label>
+          <label><input type="checkbox" id="editPayLinks" /> Payment Links</label>
+          <label><input type="checkbox" id="editSEO" /> SEO Setup</label>
+          <label><input type="checkbox" id="editSocial" /> Social Media Kit</label>
+        </div>
+        <div style="margin-top:10px;">
+          <button class="btn btn-small" type="submit">Save Changes</button>
+          <button class="btn btn-small btn-danger" id="cancelEditBtn" type="button">Cancel</button>
+        </div>
+        <div id="editStatus" class="small"></div>
+      </form>
     </article>
   </section>
 </main>
@@ -251,9 +358,34 @@
 
   const csvFileInput    = document.getElementById("csvFile");
   const uploadBtn       = document.getElementById("uploadBtn");
+  const deleteAllBtn    = document.getElementById("deleteAllBtn");
   const uploadStatus    = document.getElementById("uploadStatus");
   const uploadError     = document.getElementById("uploadError");
   const leadsTableBody  = document.querySelector("#leadsTable tbody");
+
+  const bulkPackageSel  = document.getElementById("bulkPackage");
+  const bulkMaint       = document.getElementById("bulkMaint");
+  const bulkDash        = document.getElementById("bulkDash");
+  const bulkPayLinks    = document.getElementById("bulkPayLinks");
+  const bulkSEO         = document.getElementById("bulkSEO");
+  const bulkSocial      = document.getElementById("bulkSocial");
+  const applyBulkBtn    = document.getElementById("applyBulkBtn");
+  const bulkStatus      = document.getElementById("bulkStatus");
+
+  const editCard        = document.getElementById("editCard");
+  const editLeadLabel   = document.getElementById("editLeadLabel");
+  const editForm        = document.getElementById("editForm");
+  const editLeadId      = document.getElementById("editLeadId");
+  const editPackageSel  = document.getElementById("editPackage");
+  const editMaint       = document.getElementById("editMaint");
+  const editDash        = document.getElementById("editDash");
+  const editPayLinks    = document.getElementById("editPayLinks");
+  const editSEO         = document.getElementById("editSEO");
+  const editSocial      = document.getElementById("editSocial");
+  const editStatus      = document.getElementById("editStatus");
+  const cancelEditBtn   = document.getElementById("cancelEditBtn");
+
+  let leadsCache = []; // latest 20 leads in memory
 
   function showMsg(text) {
     accessMessage.textContent = text;
@@ -312,11 +444,25 @@
       return;
     }
 
+    leadsCache = data || [];
+    renderLeadsTable();
+  }
+
+  function renderLeadsTable() {
     leadsTableBody.innerHTML = "";
-    (data || []).forEach(ld => {
+    (leadsCache || []).forEach(ld => {
       const tr = document.createElement("tr");
+      tr.dataset.id = ld.id;
+
       const priority = (ld.priority || "").toString().toUpperCase();
       const status = (ld.call_status || "new").toLowerCase();
+      const pkg = ld.target_package || "";
+      const upsells = [];
+      if (ld.upsell_maintenance) upsells.push("Maint");
+      if (ld.upsell_dashboard) upsells.push("Dash");
+      if (ld.upsell_payment_links) upsells.push("PayLinks");
+      if (ld.upsell_seo) upsells.push("SEO");
+      if (ld.upsell_social_kit) upsells.push("Social");
 
       const tdBiz = document.createElement("td");
       tdBiz.innerHTML = `<strong>${ld.business_name || ld.BusinessName || "(No name)"}</strong><br><span class="small">${ld.email || ""}</span>`;
@@ -337,9 +483,35 @@
       tdStatus.textContent = status;
       tr.appendChild(tdStatus);
 
+      const tdPkg = document.createElement("td");
+      tdPkg.textContent = pkg || "-";
+      tr.appendChild(tdPkg);
+
+      const tdUpsell = document.createElement("td");
+      tdUpsell.textContent = upsells.length ? upsells.join(", ") : "-";
+      tr.appendChild(tdUpsell);
+
       const tdCity = document.createElement("td");
       tdCity.textContent = ld.city || ld.City || "";
       tr.appendChild(tdCity);
+
+      const tdActions = document.createElement("td");
+      tdActions.className = "row-actions";
+      const editBtn = document.createElement("button");
+      editBtn.className = "btn btn-small";
+      editBtn.type = "button";
+      editBtn.textContent = "Edit";
+      editBtn.addEventListener("click", () => openEdit(ld.id));
+
+      const delBtn = document.createElement("button");
+      delBtn.className = "btn btn-small btn-danger";
+      delBtn.type = "button";
+      delBtn.textContent = "Delete";
+      delBtn.addEventListener("click", () => deleteLead(ld.id));
+
+      tdActions.appendChild(editBtn);
+      tdActions.appendChild(delBtn);
+      tr.appendChild(tdActions);
 
       leadsTableBody.appendChild(tr);
     });
@@ -360,6 +532,12 @@
       rows.push(row);
     }
     return rows;
+  }
+
+  function parseBoolCell(val) {
+    if (!val) return false;
+    const v = val.toString().trim().toLowerCase();
+    return v === "true" || v === "yes" || v === "y" || v === "1";
   }
 
   uploadBtn.addEventListener("click", async () => {
@@ -392,7 +570,13 @@
       state: r.State || null,
       priority: (r.Priority || "A").toUpperCase(),
       call_status: (r.CallStatus || "new").toLowerCase(),
-      notes: r.Notes || null
+      notes: r.Notes || null,
+      target_package: r.TargetPackage || null,
+      upsell_maintenance: parseBoolCell(r.UpsellMaintenance),
+      upsell_dashboard: parseBoolCell(r.UpsellDashboard),
+      upsell_payment_links: parseBoolCell(r.UpsellPaymentLinks),
+      upsell_seo: parseBoolCell(r.UpsellSEO),
+      upsell_social_kit: parseBoolCell(r.UpsellSocialKit)
     }));
 
     const { error } = await supabaseClient.from("call_leads").insert(mapped);
@@ -404,6 +588,136 @@
     }
 
     uploadStatus.textContent = "Leads uploaded successfully.";
+    loadLeads();
+  });
+
+  async function deleteLead(id) {
+    if (!confirm("Delete this lead? This cannot be undone.")) return;
+
+    const { error } = await supabaseClient
+      .from("call_leads")
+      .delete()
+      .eq("id", id);
+
+    if (error) {
+      console.error("Delete lead error:", error);
+      alert("Error deleting lead: " + error.message);
+      return;
+    }
+
+    loadLeads();
+  }
+
+  deleteAllBtn.addEventListener("click", async () => {
+    if (!confirm("Delete ALL leads from call_leads? This cannot be undone.")) return;
+
+    const { error } = await supabaseClient
+      .from("call_leads")
+      .delete()
+      .neq("id", 0); // nuke everything
+
+    if (error) {
+      console.error("Delete all error:", error);
+      alert("Error deleting all leads: " + error.message);
+      return;
+    }
+
+    uploadStatus.textContent = "All leads deleted.";
+    leadsCache = [];
+    renderLeadsTable();
+  });
+
+  function openEdit(id) {
+    const ld = leadsCache.find(x => x.id === id);
+    if (!ld) return;
+
+    editLeadId.value = id;
+    const name = ld.business_name || ld.BusinessName || "(No name)";
+    editLeadLabel.textContent = "Editing: " + name;
+    editPackageSel.value = ld.target_package || "";
+
+    editMaint.checked    = !!ld.upsell_maintenance;
+    editDash.checked     = !!ld.upsell_dashboard;
+    editPayLinks.checked = !!ld.upsell_payment_links;
+    editSEO.checked      = !!ld.upsell_seo;
+    editSocial.checked   = !!ld.upsell_social_kit;
+
+    editStatus.textContent = "";
+    editCard.classList.remove("hidden");
+    editCard.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  cancelEditBtn.addEventListener("click", () => {
+    editCard.classList.add("hidden");
+    editStatus.textContent = "";
+  });
+
+  editForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    editStatus.textContent = "Saving…";
+
+    const id = editLeadId.value;
+    if (!id) return;
+
+    const update = {
+      target_package: editPackageSel.value || null,
+      upsell_maintenance: editMaint.checked,
+      upsell_dashboard: editDash.checked,
+      upsell_payment_links: editPayLinks.checked,
+      upsell_seo: editSEO.checked,
+      upsell_social_kit: editSocial.checked
+    };
+
+    const { error } = await supabaseClient
+      .from("call_leads")
+      .update(update)
+      .eq("id", id);
+
+    if (error) {
+      console.error("Update lead error:", error);
+      editStatus.textContent = "Error: " + error.message;
+      return;
+    }
+
+    editStatus.textContent = "Saved.";
+    await loadLeads();
+    setTimeout(() => {
+      editCard.classList.add("hidden");
+      editStatus.textContent = "";
+    }, 700);
+  });
+
+  applyBulkBtn.addEventListener("click", async () => {
+    bulkStatus.textContent = "Applying…";
+
+    if (!leadsCache.length) {
+      bulkStatus.textContent = "No leads loaded.";
+      return;
+    }
+
+    const payload = {};
+    if (bulkPackageSel.value) {
+      payload.target_package = bulkPackageSel.value;
+    }
+    payload.upsell_maintenance = bulkMaint.checked;
+    payload.upsell_dashboard = bulkDash.checked;
+    payload.upsell_payment_links = bulkPayLinks.checked;
+    payload.upsell_seo = bulkSEO.checked;
+    payload.upsell_social_kit = bulkSocial.checked;
+
+    const ids = leadsCache.map(ld => ld.id);
+    const { error } = await supabaseClient
+      .from("call_leads")
+      .update(payload)
+      .in("id", ids);
+
+    if (error) {
+      console.error("Bulk update error:", error);
+      bulkStatus.textContent = "Error: " + error.message;
+      return;
+    }
+
+    bulkStatus.textContent = "Updated " + ids.length + " leads.";
     loadLeads();
   });
 
