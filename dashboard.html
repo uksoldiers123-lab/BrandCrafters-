@@ -31,6 +31,8 @@
       border:1px solid rgba(255,255,255,.25);
       background:rgba(255,255,255,.04);
       cursor:pointer;
+      margin-top:4px;
+      display:inline-block;
     }
 
     .status-filter-wrap {
@@ -46,6 +48,15 @@
       background:rgba(20,18,32,.9);
       color:inherit;
       font:inherit;
+    }
+
+    .chip {
+      display:inline-block;
+      padding:2px 7px;
+      border-radius:999px;
+      font-size:11px;
+      border:1px solid rgba(255,255,255,.25);
+      opacity:.85;
     }
   </style>
 </head>
@@ -83,15 +94,14 @@
   </nav>
 
   <div class="drawer-backdrop" aria-hidden="true"></div>
-
 </header>
 
 <section class="page-hero">
   <div class="container">
     <h1 class="headline">Admin Dashboard</h1>
     <p class="subhead">
-      Your full control center for orders, support, maintenance, and project links.<br>
-      This panel is <b>admin-only</b> with Supabase Auth.
+      Track website orders, support, maintenance, and your bills in one view.<br>
+      Admin-only, powered by Supabase Auth.
     </p>
   </div>
 </section>
@@ -102,8 +112,12 @@
   <div id="authSection" class="form glass" style="max-width:420px;margin:0 auto 40px;display:none;">
     <h2>Admin Sign In</h2>
     <form id="loginForm">
-      <label>Email <input type="email" name="email" required /></label>
-      <label>Password <input type="password" name="password" required /></label>
+      <label>Email
+        <input type="email" name="email" required />
+      </label>
+      <label>Password
+        <input type="password" name="password" required />
+      </label>
       <button class="btn btn-primary" type="submit">Sign In</button>
       <p id="loginMsg" class="form-note"></p>
     </form>
@@ -112,10 +126,11 @@
   <!-- ADMIN APP -->
   <div id="appSection" style="display:none;">
 
+    <!-- Summary Card -->
     <div class="card" style="margin-bottom:20px;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;">
         <div>
-          <h2 style="margin:0;">Summary</h2>
+          <h2 style="margin:0 0 4px;">Summary</h2>
           <p id="summaryText" class="subhead" style="margin:0;">Loading…</p>
         </div>
 
@@ -131,60 +146,89 @@
               <option value="all">All Statuses</option>
             </select>
           </div>
-
           <button id="logoutBtn" class="btn btn-ghost">Log Out</button>
         </div>
       </div>
     </div>
 
+    <!-- Tabs -->
     <div class="cta-row" style="justify-content:flex-start;gap:10px;margin-bottom:20px;">
       <button id="tabOnboarding" class="btn btn-primary">Website Orders</button>
       <button id="tabSupport" class="btn btn-ghost">Support Requests</button>
     </div>
 
-    <!-- ONBOARDING TABLE -->
+    <!-- Website Orders -->
     <section id="onboardingSection">
       <h2>Website Orders</h2>
-      <div class="glass" style="overflow-x:auto;padding:0;margin-top:10px;">
+      <div class="glass" style="overflow-x:auto;padding:0;margin-top:12px;">
         <table style="width:100%;border-collapse:collapse;font-size:14px;">
           <thead>
-            <tr>
-              <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Created</th>
-              <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Client</th>
-              <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Business</th>
-              <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Package</th>
-              <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Pages</th>
-              <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Add-ons</th>
-              <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Status</th>
-              <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Project Links / Stack</th>
-              <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Notes</th>
-            </tr>
+          <tr>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Created</th>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Client</th>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Business</th>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Package</th>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Pages</th>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Add-ons</th>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Status</th>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Project Links / Stack</th>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Money / Notes</th>
+          </tr>
           </thead>
           <tbody id="onboardingBody">
-            <tr><td colspan="9" style="padding:10px;">Loading…</td></tr>
+          <tr><td colspan="9" style="padding:10px;">Loading…</td></tr>
           </tbody>
         </table>
       </div>
     </section>
 
-    <!-- SUPPORT TABLE -->
+    <!-- Support Requests -->
     <section id="supportSection" style="display:none;">
       <h2>Support Requests</h2>
+      <div class="glass" style="overflow-x:auto;padding:0;margin-top:12px;">
+        <table style="width:100%;border-collapse:collapse;font-size:14px;">
+          <thead>
+          <tr>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Created</th>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Client</th>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Business</th>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Type</th>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Urgency</th>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Status</th>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Details</th>
+          </tr>
+          </thead>
+          <tbody id="supportBody">
+          <tr><td colspan="7" style="padding:10px;">No requests yet.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Bills & Recurring Expenses -->
+    <section id="expensesSection" style="margin-top:32px;margin-bottom:40px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
+        <h2 style="margin:0;">Bills & Recurring Expenses</h2>
+        <button id="addExpenseBtn" class="btn btn-primary" type="button">Add Expense</button>
+      </div>
+      <p class="form-note">
+        Track domains, hosting, tools, and subscriptions – including which ones are billable to clients.
+      </p>
       <div class="glass" style="overflow-x:auto;padding:0;margin-top:10px;">
         <table style="width:100%;border-collapse:collapse;font-size:14px;">
           <thead>
-            <tr>
-              <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Created</th>
-              <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Client</th>
-              <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Business</th>
-              <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Type</th>
-              <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Urgency</th>
-              <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Status</th>
-              <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Details</th>
-            </tr>
+          <tr>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Name / Vendor</th>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Amount</th>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Frequency</th>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Next Due</th>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Category</th>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Client Billing</th>
+            <th style="padding:10px;border-bottom:1px solid rgba(255,255,255,.12);">Notes / Actions</th>
+          </tr>
           </thead>
-          <tbody id="supportBody">
-            <tr><td colspan="7" style="padding:10px;">Loading…</td></tr>
+          <tbody id="expensesBody">
+          <tr><td colspan="7" style="padding:10px;">No expenses yet. Add your first domain, hosting, or email bill.</td></tr>
           </tbody>
         </table>
       </div>
@@ -199,9 +243,7 @@
   </div>
 </footer>
 
-<!-- JS -->
 <script type="module">
-
   import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
   const supabase = createClient(
@@ -223,51 +265,57 @@
 
   const onboardingSection = document.getElementById("onboardingSection");
   const supportSection = document.getElementById("supportSection");
-
   const tabOnboarding = document.getElementById("tabOnboarding");
   const tabSupport = document.getElementById("tabSupport");
-
   const statusFilterSelect = document.getElementById("statusFilter");
+
+  const expensesBody = document.getElementById("expensesBody");
+  const addExpenseBtn = document.getElementById("addExpenseBtn");
 
   let onbData = [];
   let supData = [];
+  let expensesData = [];
   let statusFilter = "new";
 
-  /* Utility */
+  /* Utils */
   function shorten(text, max = 120) {
     if (!text) return "";
     text = String(text);
     return text.length > max ? text.slice(0, max) + "…" : text;
   }
-
-  function formatDate(iso) {
+  function formatDate(isoOrDate) {
+    if (!isoOrDate) return "";
+    const d = isoOrDate instanceof Date ? isoOrDate : new Date(isoOrDate);
+    if (Number.isNaN(d.getTime())) return "";
+    return d.toLocaleDateString();
+  }
+  function formatDateTime(iso) {
     if (!iso) return "";
     const d = new Date(iso);
     return d.toLocaleString();
   }
-
   function humanStatus(s) {
     if (!s || s === "new") return "New";
     if (s === "in_progress") return "In Progress";
     if (s === "done") return "Done";
     return s;
   }
-
   function nextStatus(s) {
     if (!s || s === "new") return "in_progress";
     if (s === "in_progress") return "done";
     return "new";
   }
-
+  function toNum(v) {
+    const n = parseFloat(v);
+    return Number.isNaN(n) ? 0 : n;
+  }
   function isMaintenanceRow(row, table) {
     if (table === "onboarding_submissions") {
       const addons = Array.isArray(row.addons) ? row.addons : [];
       const t = addons.join(" ").toLowerCase();
-      return (
-        t.includes("care lite") ||
-        t.includes("care standard") ||
-        t.includes("care pro")
-      );
+      if (t.includes("care lite") || t.includes("care standard") || t.includes("care pro")) return true;
+      if (toNum(row.monthly_fee) > 0) return true;
+      return false;
     }
     if (table === "support_requests") {
       const rt = (row.request_type || "").toLowerCase();
@@ -275,11 +323,8 @@
     }
     return false;
   }
-
-  /* Main filters */
   function statusPass(row, table) {
     const s = row.status || "new";
-
     switch (statusFilter) {
       case "new": return s === "new";
       case "in_progress": return s === "in_progress";
@@ -290,14 +335,65 @@
     }
   }
 
-  /* Update row status */
+  /* Money summary */
+  function computeSummary() {
+    const now = new Date();
+    const y = now.getFullYear();
+    const m = now.getMonth();
+    const thisMonth = d => d.getFullYear() === y && d.getMonth() === m;
+    const lastMonthDate = new Date(y, m - 1, 1);
+    const lastMonth = d => d.getFullYear() === lastMonthDate.getFullYear() && d.getMonth() === lastMonthDate.getMonth();
+
+    let lastMonthRevenue = 0;
+    let thisMonthRevenue = 0;
+    let mrr = 0;
+
+    onbData.forEach(row => {
+      const paidAt = row.first_paid_at ? new Date(row.first_paid_at) : null;
+      const price = toNum(row.total_price);
+      const monthlyFee = toNum(row.monthly_fee);
+      const monthlyCost = toNum(row.monthly_cost);
+
+      if (paidAt) {
+        if (lastMonth(paidAt)) lastMonthRevenue += price;
+        if (thisMonth(paidAt)) thisMonthRevenue += price;
+      }
+      mrr += monthlyFee;
+    });
+
+    let recurringMonthly = 0;
+    expensesData.forEach(exp => {
+      if (exp.is_active === false) return;
+      const amt = toNum(exp.amount);
+      const freq = (exp.frequency || "monthly").toLowerCase();
+      if (freq === "monthly") recurringMonthly += amt;
+      else if (freq === "yearly") recurringMonthly += (amt / 12);
+      else recurringMonthly += amt;
+    });
+
+    const netMonthly = mrr - recurringMonthly;
+
+    summaryText.innerHTML = `
+      <b>Last month one-time:</b> $${lastMonthRevenue.toFixed(2)}
+      &nbsp;|&nbsp;
+      <b>This month one-time:</b> $${thisMonthRevenue.toFixed(2)}<br>
+      <b>Monthly recurring (MRR):</b> $${mrr.toFixed(2)}
+      &nbsp;|&nbsp;
+      <b>Recurring bills (est.):</b> $${recurringMonthly.toFixed(2)}
+      &nbsp;|&nbsp;
+      <b>Net monthly after bills:</b> $${netMonthly.toFixed(2)}<br>
+      <span style="font-size:12px;opacity:.8;">
+        Orders: ${onbData.length} · Support tickets: ${supData.length} · Active bills: ${expensesData.filter(e => e.is_active !== false).length}
+      </span>
+    `;
+  }
+
   async function updateStatus(table, id, currentStatus) {
     const newStatus = nextStatus(currentStatus);
-
     if (table === "onboarding_submissions") {
-      onbData = onbData.map(r => r.id === id ? { ...r, status: newStatus } : r);
+      onbData = onbData.map(r => r.id === id ? { ...r, status:newStatus } : r);
     } else {
-      supData = supData.map(r => r.id === id ? { ...r, status: newStatus } : r);
+      supData = supData.map(r => r.id === id ? { ...r, status:newStatus } : r);
     }
     renderTables();
 
@@ -309,18 +405,17 @@
     if (error) alert("Error saving status");
   }
 
-  /* Edit project info popup */
   async function editProject(id) {
-    const row = onbData.find(r => r.id == id);
+    const row = onbData.find(r => String(r.id) === String(id));
     if (!row) return;
 
-    const live = prompt("Live website URL:", row.live_url || "");
+    const live = prompt("Live website URL:", row.live_url || "") ?? row.live_url;
     if (live === null) return;
 
-    const repo = prompt("GitHub/Replit repo URL:", row.repo_url || "");
+    const repo = prompt("GitHub / Replit repo URL:", row.repo_url || "") ?? row.repo_url;
     if (repo === null) return;
 
-    const stack = prompt("Stack notes (Supabase, Stripe, Email, Replit, etc.):", row.stack_notes || "");
+    const stack = prompt("Stack notes (Supabase, Stripe, email provider, etc.):", row.stack_notes || "") ?? row.stack_notes;
     if (stack === null) return;
 
     const updated = {
@@ -329,69 +424,344 @@
       stack_notes: stack.trim() || null
     };
 
-    onbData = onbData.map(r =>
-      r.id === id ? { ...r, ...updated } : r
-    );
+    onbData = onbData.map(r => r.id === row.id ? { ...r, ...updated } : r);
     renderTables();
 
     const { error } = await supabase
       .from("onboarding_submissions")
       .update(updated)
-      .eq("id", id);
+      .eq("id", row.id);
 
-    if (error) {
-      alert("Error saving project info");
-    }
+    if (error) alert("Error saving project info");
   }
 
-  /* Attach handlers */
+  async function editMoney(id) {
+    const row = onbData.find(r => String(r.id) === String(id));
+    if (!row) return;
+
+    const totalPrice = prompt("Total one-time price charged (website + add-ons):", row.total_price ?? "") ?? row.total_price;
+    if (totalPrice === null) return;
+
+    const oneTimeCost = prompt("One-time cost to you (optional):", row.one_time_cost ?? "") ?? row.one_time_cost;
+    if (oneTimeCost === null) return;
+
+    const monthlyFee = prompt("Monthly maintenance fee (0 if none):", row.monthly_fee ?? "") ?? row.monthly_fee;
+    if (monthlyFee === null) return;
+
+    const monthlyCost = prompt("Your monthly cost (hosting, etc.):", row.monthly_cost ?? "") ?? row.monthly_cost;
+    if (monthlyCost === null) return;
+
+    const billingDay = prompt("Billing day of month (1–31):", row.billing_day ?? "") ?? row.billing_day;
+    if (billingDay === null) return;
+
+    const paymentNotes = prompt("Payment notes (discounts, cash, etc.):", row.payment_notes ?? "") ?? row.payment_notes;
+    if (paymentNotes === null) return;
+
+    const updated = {
+      total_price: totalPrice === "" ? null : Number(totalPrice),
+      one_time_cost: oneTimeCost === "" ? null : Number(oneTimeCost),
+      monthly_fee: monthlyFee === "" ? 0 : Number(monthlyFee),
+      monthly_cost: monthlyCost === "" ? 0 : Number(monthlyCost),
+      billing_day: billingDay === "" ? null : Number(billingDay),
+      payment_notes: paymentNotes === "" ? null : paymentNotes
+    };
+
+    onbData = onbData.map(r => r.id === row.id ? { ...r, ...updated } : r);
+    renderTables();
+    computeSummary();
+
+    const { error } = await supabase
+      .from("onboarding_submissions")
+      .update(updated)
+      .eq("id", row.id);
+
+    if (error) alert("Error saving money info");
+  }
+
+  async function addExpense() {
+    const name = prompt("Expense name (example: IONOS - clientdomain.com):");
+    if (!name) return;
+
+    const vendor = prompt("Vendor (IONOS, Google, Replit, etc.):") || null;
+    const amountInput = prompt("Amount per billing cycle:", "10.00");
+    if (amountInput === null) return;
+    const amount = Number(amountInput);
+
+    const frequency = prompt("Frequency: monthly / yearly / other", "monthly") || "monthly";
+    const nextDue = prompt("Next due date (YYYY-MM-DD):") || null;
+    const category = prompt("Category (domain, hosting, tools, email, etc.):") || null;
+
+    const billClientAnswer = prompt("Bill client for this? yes/no", "yes") || "yes";
+    const bill_client = !billClientAnswer.toLowerCase().startsWith("n");
+    let client_amount = null;
+    let client_notes = null;
+    let client_project_id = null;
+
+    if (bill_client) {
+      const clientAmountInput = prompt("Client amount (what you charge them per cycle):", amountInput) || amountInput;
+      client_amount = Number(clientAmountInput);
+
+      client_notes = prompt("Client billing notes (e.g. 'invoice yearly'):", "") || null;
+
+      const projectIdInput = prompt("Link to project ID (UUID from onboarding_submissions.id) or leave blank:", "") || "";
+      client_project_id = projectIdInput.trim() || null;
+    }
+
+    const row = {
+      name,
+      vendor,
+      amount,
+      frequency,
+      next_due_date: nextDue || null,
+      category,
+      notes: null,
+      is_active: true,
+      client_project_id,
+      bill_client,
+      client_amount,
+      client_notes
+    };
+
+    const { data, error } = await supabase
+      .from("recurring_expenses")
+      .insert(row)
+      .select("*")
+      .single();
+
+    if (error) {
+      alert("Error adding expense");
+      return;
+    }
+
+    expensesData.push(data);
+    renderExpenses();
+    computeSummary();
+  }
+
+  async function editExpense(id) {
+    const row = expensesData.find(e => String(e.id) === String(id));
+    if (!row) return;
+
+    const name = prompt("Expense name:", row.name || "") ?? row.name;
+    if (name === null) return;
+
+    const vendor = prompt("Vendor:", row.vendor || "") ?? row.vendor;
+    if (vendor === null) return;
+
+    const amountInput = prompt("Amount per billing cycle:", row.amount ?? "") ?? row.amount;
+    if (amountInput === null) return;
+
+    const frequency = prompt("Frequency: monthly / yearly / other", row.frequency || "monthly") ?? row.frequency;
+    if (frequency === null) return;
+
+    const nextDue = prompt("Next due date (YYYY-MM-DD):", row.next_due_date || "") ?? row.next_due_date;
+    if (nextDue === null) return;
+
+    const category = prompt("Category:", row.category || "") ?? row.category;
+    if (category === null) return;
+
+    const billClientAnswer = prompt("Bill client for this? yes/no", row.bill_client ? "yes" : "no") ?? (row.bill_client ? "yes" : "no");
+    const bill_client = !billClientAnswer.toLowerCase().startsWith("n");
+
+    let client_amount = row.client_amount;
+    let client_notes = row.client_notes;
+    let client_project_id = row.client_project_id;
+
+    if (bill_client) {
+      const clientAmountInput = prompt("Client amount (what you charge them per cycle):", row.client_amount ?? amountInput) ?? row.client_amount;
+      client_amount = clientAmountInput === "" || clientAmountInput == null ? null : Number(clientAmountInput);
+
+      client_notes = prompt("Client billing notes:", row.client_notes || "") ?? row.client_notes;
+
+      const projectIdInput = prompt("Link to project ID (UUID from onboarding_submissions.id) or leave blank:", row.client_project_id ?? "") ?? row.client_project_id;
+      client_project_id = projectIdInput && projectIdInput.trim() !== "" ? projectIdInput.trim() : null;
+    } else {
+      client_amount = null;
+      client_notes = row.client_notes;
+      client_project_id = null;
+    }
+
+    const activeInput = prompt("Active? yes/no", row.is_active === false ? "no" : "yes") ?? (row.is_active === false ? "no" : "yes");
+    const is_active = !String(activeInput).toLowerCase().startsWith("n");
+
+    const notes = prompt("Internal notes:", row.notes || "") ?? row.notes;
+
+    const updated = {
+      name,
+      vendor,
+      amount: Number(amountInput),
+      frequency,
+      next_due_date: nextDue || null,
+      category,
+      notes,
+      is_active,
+      client_project_id,
+      bill_client,
+      client_amount,
+      client_notes
+    };
+
+    expensesData = expensesData.map(e => e.id === row.id ? { ...e, ...updated } : e);
+    renderExpenses();
+    computeSummary();
+
+    const { error } = await supabase
+      .from("recurring_expenses")
+      .update(updated)
+      .eq("id", row.id);
+
+    if (error) alert("Error saving expense");
+  }
+
+  function renderExpenses() {
+    expensesBody.innerHTML = "";
+    if (!expensesData.length) {
+      expensesBody.innerHTML = `<tr><td colspan="7" style="padding:10px;">No expenses yet. Add your first bill.</td></tr>`;
+      return;
+    }
+
+    const now = new Date();
+    const in30 = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+
+    expensesData
+      .slice()
+      .sort((a, b) => {
+        const da = a.next_due_date ? new Date(a.next_due_date) : null;
+        const db = b.next_due_date ? new Date(b.next_due_date) : null;
+        if (!da && !db) return 0;
+        if (!da) return 1;
+        if (!db) return -1;
+        return da - db;
+      })
+      .forEach(exp => {
+        const amt = toNum(exp.amount);
+        const freq = (exp.frequency || "monthly").toLowerCase();
+        const nextDue = exp.next_due_date ? new Date(exp.next_due_date) : null;
+        const active = exp.is_active !== false;
+
+        let soonChip = "";
+        if (nextDue && active && nextDue <= in30) {
+          soonChip = `<span class="chip" style="border-color:rgba(240,196,25,.8);">Due soon</span>`;
+        }
+
+        let clientInfo = "";
+        if (exp.bill_client) {
+          const clientAmt = exp.client_amount != null ? `$${toNum(exp.client_amount).toFixed(2)}` : "yes";
+          let clientName = "";
+          if (exp.client_project_id && onbData.length) {
+            const proj = onbData.find(p => String(p.id) === String(exp.client_project_id));
+            if (proj) {
+              clientName = proj.business_name || proj.name || "";
+            }
+          }
+          clientInfo = `
+            <div><span class="chip" style="border-color:rgba(110,168,255,.8);">Client-billable</span></div>
+            <div style="font-size:12px;opacity:.8;">Client: ${clientName || "N/A"} · ${clientAmt}</div>
+            ${exp.client_notes ? `<div style="font-size:11px;opacity:.65;">${shorten(exp.client_notes, 80)}</div>` : ""}
+          `;
+        } else {
+          clientInfo = `<span class="chip" style="opacity:.6;">Not billed to client</span>`;
+        }
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td style="padding:8px;vertical-align:top;">
+            <div><b>${exp.name || ""}</b></div>
+            <div style="font-size:12px;opacity:.7;">${exp.vendor || ""}</div>
+          </td>
+          <td style="padding:8px;vertical-align:top;">$${amt.toFixed(2)}</td>
+          <td style="padding:8px;vertical-align:top;">${freq}</td>
+          <td style="padding:8px;vertical-align:top;">
+            ${exp.next_due_date ? formatDate(exp.next_due_date) : ""}
+            ${soonChip ? `<div style="margin-top:4px;">${soonChip}</div>` : ""}
+          </td>
+          <td style="padding:8px;vertical-align:top;">${exp.category || ""}</td>
+          <td style="padding:8px;vertical-align:top;">${clientInfo}</td>
+          <td style="padding:8px;vertical-align:top;">
+            ${exp.notes ? `<div style="font-size:12px;opacity:.75;">${shorten(exp.notes, 80)}</div>` : ""}
+            <div style="margin-top:4px;">
+              ${active ? '<span class="chip">Active</span>' : '<span class="chip" style="opacity:.6;">Paused</span>'}
+            </div>
+            <button class="btn-mini" data-expense-id="${exp.id}">Edit</button>
+          </td>
+        `;
+        expensesBody.appendChild(tr);
+      });
+
+    document.querySelectorAll("[data-expense-id]").forEach(el => {
+      el.addEventListener("click", () => editExpense(el.dataset.expenseId));
+    });
+  }
+
   function attachHandlers() {
-    document.querySelectorAll("[data-status-id]").forEach(pill => {
-      pill.addEventListener("click", () => {
+    document.querySelectorAll("[data-status-id]").forEach(el => {
+      el.addEventListener("click", () => {
         updateStatus(
-          pill.dataset.table,
-          pill.dataset.statusId,
-          pill.dataset.status
+          el.dataset.table,
+          el.dataset.statusId,
+          el.dataset.status
         );
       });
     });
 
-    document.querySelectorAll("[data-edit-id]").forEach(btn => {
-      btn.addEventListener("click", () => editProject(btn.dataset.editId));
+    document.querySelectorAll("[data-edit-id]").forEach(el => {
+      el.addEventListener("click", () => editProject(el.dataset.editId));
+    });
+
+    document.querySelectorAll("[data-money-id]").forEach(el => {
+      el.addEventListener("click", () => editMoney(el.dataset.moneyId));
     });
   }
 
-  /* Render tables */
   function renderTables() {
-
-    /* ONBOARDING */
     onboardingBody.innerHTML = "";
-    let filteredOnb = onbData.filter(row => statusPass(row, "onboarding_submissions"));
-    if (filteredOnb.length === 0) {
+    const filteredOnb = onbData.filter(row => statusPass(row, "onboarding_submissions"));
+
+    if (!filteredOnb.length) {
       onboardingBody.innerHTML = `<tr><td colspan="9" style="padding:10px;">No orders in this view.</td></tr>`;
     } else {
       filteredOnb.forEach(row => {
         const st = row.status || "new";
+        const addonsText = Array.isArray(row.addons) ? row.addons.join(", ") : "";
+        const pagesText = Array.isArray(row.pages) ? row.pages.join(", ") : "";
 
-        const links = `
-          ${row.live_url ? `<div><a href="${row.live_url}" target="_blank">Live</a></div>` : ""}
-          ${row.repo_url ? `<div><a href="${row.repo_url}" target="_blank">Repo</a></div>` : ""}
-          ${row.stack_notes ? `<div style="font-size:12px;opacity:.7;">${shorten(row.stack_notes,80)}</div>` : ""}
-          <button class="btn-mini" data-edit-id="${row.id}">Edit</button>
+        const moneyBits = [];
+        if (row.total_price != null) moneyBits.push(`One-time: $${toNum(row.total_price).toFixed(2)}`);
+        if (row.one_time_cost != null) moneyBits.push(`Cost: $${toNum(row.one_time_cost).toFixed(2)}`);
+        if (row.monthly_fee) moneyBits.push(`Monthly: $${toNum(row.monthly_fee).toFixed(2)}`);
+        if (row.monthly_cost) moneyBits.push(`Monthly cost: $${toNum(row.monthly_cost).toFixed(2)}`);
+        if (row.billing_day) moneyBits.push(`Billing day: ${row.billing_day}`);
+
+        const moneySummary = moneyBits.join(" · ");
+
+        const linksHTML = `
+          ${row.live_url ? `<div><a href="${row.live_url}" target="_blank" rel="noopener">Live site</a></div>` : ""}
+          ${row.repo_url ? `<div><a href="${row.repo_url}" target="_blank" rel="noopener">Repo</a></div>` : ""}
+          ${row.stack_notes ? `<div style="font-size:12px;opacity:.75;">${shorten(row.stack_notes, 80)}</div>` : ""}
+          <button type="button" class="btn-mini" data-edit-id="${row.id}">Edit Project</button>
+        `;
+
+        const moneyHTML = `
+          ${moneySummary ? `<div>${moneySummary}</div>` : ""}
+          ${row.payment_notes ? `<div style="font-size:12px;opacity:.75;">${shorten(row.payment_notes, 80)}</div>` : ""}
+          <div style="margin-top:4px;font-size:12px;opacity:.75;">
+            ${shorten(row.page_notes || row.extra_notes || "", 100)}
+          </div>
+          <button type="button" class="btn-mini" data-money-id="${row.id}">Edit Money</button>
         `;
 
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td style="padding:8px;">${formatDate(row.created_at)}</td>
-          <td style="padding:8px;">
-            <div><b>${row.name}</b></div>
-            <div style="font-size:12px;opacity:.7;">${row.email}</div>
+          <td style="padding:8px;vertical-align:top;">${formatDateTime(row.created_at)}</td>
+          <td style="padding:8px;vertical-align:top;">
+            <div><b>${row.name || ""}</b></div>
+            <div style="font-size:12px;opacity:.7;">${row.email || ""}</div>
           </td>
-          <td style="padding:8px;">${shorten(row.business_name,40)}</td>
-          <td style="padding:8px;">${row.package_name}</td>
-          <td style="padding:8px;">${(row.pages||[]).join(", ")}</td>
-          <td style="padding:8px;">${(row.addons||[]).join(", ")}</td>
-          <td style="padding:8px;">
+          <td style="padding:8px;vertical-align:top;">${shorten(row.business_name || "", 40)}</td>
+          <td style="padding:8px;vertical-align:top;">${row.package_name || ""}</td>
+          <td style="padding:8px;vertical-align:top;">${pagesText}</td>
+          <td style="padding:8px;vertical-align:top;">${addonsText}</td>
+          <td style="padding:8px;vertical-align:top;">
             <span class="status-pill status-${st}"
                   data-status-id="${row.id}"
                   data-table="onboarding_submissions"
@@ -399,32 +769,31 @@
               ${humanStatus(st)}
             </span>
           </td>
-          <td style="padding:8px;">${links}</td>
-          <td style="padding:8px;">${shorten(row.page_notes||row.extra_notes,120)}</td>
+          <td style="padding:8px;vertical-align:top;">${linksHTML}</td>
+          <td style="padding:8px;vertical-align:top;">${moneyHTML}</td>
         `;
         onboardingBody.appendChild(tr);
       });
     }
 
-    /* SUPPORT */
     supportBody.innerHTML = "";
-    let filteredSup = supData.filter(row => statusPass(row, "support_requests"));
-    if (filteredSup.length === 0) {
+    const filteredSup = supData.filter(row => statusPass(row, "support_requests"));
+    if (!filteredSup.length) {
       supportBody.innerHTML = `<tr><td colspan="7" style="padding:10px;">No requests in this view.</td></tr>`;
     } else {
       filteredSup.forEach(row => {
         const st = row.status || "new";
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td style="padding:8px;">${formatDate(row.created_at)}</td>
-          <td style="padding:8px;">
-            <div><b>${row.name}</b></div>
-            <div style="font-size:12px;opacity:.7;">${row.email}</div>
+          <td style="padding:8px;vertical-align:top;">${formatDateTime(row.created_at)}</td>
+          <td style="padding:8px;vertical-align:top;">
+            <div><b>${row.name || ""}</b></div>
+            <div style="font-size:12px;opacity:.7;">${row.email || ""}</div>
           </td>
-          <td style="padding:8px;">${shorten(row.business,40)}</td>
-          <td style="padding:8px;">${row.request_type}</td>
-          <td style="padding:8px;">${row.urgency}</td>
-          <td style="padding:8px;">
+          <td style="padding:8px;vertical-align:top;">${shorten(row.business || "", 40)}</td>
+          <td style="padding:8px;vertical-align:top;">${row.request_type || ""}</td>
+          <td style="padding:8px;vertical-align:top;">${row.urgency || ""}</td>
+          <td style="padding:8px;vertical-align:top;">
             <span class="status-pill status-${st}"
                   data-status-id="${row.id}"
                   data-table="support_requests"
@@ -432,7 +801,7 @@
               ${humanStatus(st)}
             </span>
           </td>
-          <td style="padding:8px;">${shorten(row.details,160)}</td>
+          <td style="padding:8px;vertical-align:top;">${shorten(row.details || "", 160)}</td>
         `;
         supportBody.appendChild(tr);
       });
@@ -444,35 +813,37 @@
   async function loadData() {
     summaryText.textContent = "Loading…";
 
-    const [onbRes, supRes] = await Promise.all([
-      supabase.from("onboarding_submissions").select("*").order("created_at",{ascending:false}),
-      supabase.from("support_requests").select("*").order("created_at",{ascending:false})
+    const [onbRes, supRes, expRes] = await Promise.all([
+      supabase.from("onboarding_submissions").select("*").order("created_at", { ascending:false }),
+      supabase.from("support_requests").select("*").order("created_at", { ascending:false }),
+      supabase.from("recurring_expenses").select("*").order("next_due_date", { ascending:true })
     ]);
 
     onbData = onbRes.data || [];
     supData = supRes.data || [];
-
-    summaryText.textContent =
-      `Orders: ${onbData.length} — Requests: ${supData.length}`;
+    expensesData = expRes.data || [];
 
     renderTables();
+    renderExpenses();
+    computeSummary();
   }
 
-  /* Tab switching */
   tabOnboarding.addEventListener("click", () => {
     onboardingSection.style.display = "";
     supportSection.style.display = "none";
     tabOnboarding.classList.add("btn-primary");
-    tabSupport.classList.remove("btn-primary");
+    tabOnboarding.classList.remove("btn-ghost");
     tabSupport.classList.add("btn-ghost");
+    tabSupport.classList.remove("btn-primary");
   });
 
   tabSupport.addEventListener("click", () => {
     onboardingSection.style.display = "none";
     supportSection.style.display = "";
     tabSupport.classList.add("btn-primary");
-    tabOnboarding.classList.remove("btn-primary");
+    tabSupport.classList.remove("btn-ghost");
     tabOnboarding.classList.add("btn-ghost");
+    tabOnboarding.classList.remove("btn-primary");
   });
 
   statusFilterSelect.addEventListener("change", () => {
@@ -480,11 +851,13 @@
     renderTables();
   });
 
+  addExpenseBtn.addEventListener("click", addExpense);
+
   loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     loginMsg.textContent = "Signing in…";
-    const fd = new FormData(loginForm);
 
+    const fd = new FormData(loginForm);
     const { error } = await supabase.auth.signInWithPassword({
       email: fd.get("email"),
       password: fd.get("password")
@@ -509,7 +882,7 @@
 
   (async () => {
     const { data } = await supabase.auth.getUser();
-    if (data?.user) {
+    if (data && data.user) {
       authSection.style.display = "none";
       appSection.style.display = "";
       loadData();
