@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>BrandCrafters — Settings</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="dashboard.css" />
+  <script defer src="dashboard.js"></script>
+</head>
+
+<body class="admin-body">
+
+<!-- HEADER -->
+<header class="site-header admin-header">
+  <div class="container header-inner">
+    <a class="logo" href="index.html">
+      <span class="logo-mark">BC</span><span>BrandCrafters</span>
+    </a>
+
+    <nav class="nav desktop-nav">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="pricing.html" class="nav-link">Pricing</a>
+      <a href="customer-inquiry.html" class="nav-link">Customer Portal</a>
+      <span id="userEmail" class="admin-email"></span>
+      <button id="logoutBtn" class="btn btn-outline">Logout</button>
+    </nav>
+
+    <button class="menu-toggle" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <nav class="mobile-drawer admin-drawer" aria-hidden="true">
+    <div class="drawer-header">
+      <a class="logo" href="index.html">
+        <span class="logo-mark">BC</span><span>BrandCrafters</span>
+      </a>
+      <button class="menu-close">✕</button>
+    </div>
+
+    <a class="drawer-link" href="dashboard.html">Dashboard</a>
+    <a class="drawer-link" href="dashboard-leads.html">Lead List</a>
+    <a class="drawer-link" href="dashboard-leads-upload.html">Upload Leads</a>
+    <a class="drawer-link" href="dashboard-demos.html">Demo Library</a>
+    <a class="drawer-link" href="dashboard-communications.html">Scripts & Messages</a>
+    <a class="drawer-link highlight" href="dashboard-settings.html">Settings</a>
+    <button class="drawer-link" id="logoutBtnMobile">Logout</button>
+  </nav>
+
+  <div class="drawer-backdrop"></div>
+</header>
+
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="bc-icon">BC</div>
+    <span class="sidebar-title">Admin Panel</span>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a href="dashboard.html" class="side-item">🏠 Dashboard</a>
+
+    <div class="side-group">
+      <div class="side-label">LEADS</div>
+      <a href="dashboard-leads.html" class="side-sub">📇 Lead List</a>
+      <a href="dashboard-leads-upload.html" class="side-sub">📤 Upload CSV</a>
+    </div>
+
+    <div class="side-group">
+      <div class="side-label">DEMOS</div>
+      <a href="dashboard-demos.html" class="side-sub">🌐 Demo Library</a>
+    </div>
+
+    <div class="side-group">
+      <div class="side-label">COMMUNICATIONS</div>
+      <a href="dashboard-communications.html" class="side-sub">📞 Scripts & Templates</a>
+    </div>
+
+    <div class="side-group">
+      <div class="side-label">SETTINGS</div>
+      <a href="dashboard-settings.html" class="side-sub active">⚙️ System Settings</a>
+    </div>
+  </nav>
+</aside>
+
+
+<!-- MAIN CONTENT -->
+<main class="main-content">
+  <h1>System Settings</h1>
+  <p class="subhead">
+    Control commissions, contractor limits, and demo behavior from one place.
+  </p>
+
+  <section class="grid-2">
+    <!-- Commission Settings -->
+    <div class="card">
+      <h2>Commission Per Package</h2>
+      <p class="muted">
+        Base commission your contractors earn per website sold. You can still bonus extra manually.
+      </p>
+
+      <form id="commissionsForm" onsubmit="saveCommissions(event)">
+        <label>Starter Craft Commission ($)
+          <input id="commission_starter" type="number" min="0" step="1" placeholder="50" />
+        </label>
+
+        <label>Business Builder Commission ($)
+          <input id="commission_business" type="number" min="0" step="1" placeholder="75" />
+        </label>
+
+        <label>E-Commerce Commission ($)
+          <input id="commission_ecommerce" type="number" min="0" step="1" placeholder="100" />
+        </label>
+
+        <button type="submit" class="btn btn-primary" style="margin-top:14px;">Save Commissions</button>
+        <p id="commMsg" class="muted"></p>
+      </form>
+    </div>
+
+    <!-- Lead & Demo Behavior -->
+    <div class="card">
+      <h2>Contractor Limits & Demo Behavior</h2>
+      <p class="muted">
+        Control how many leads they can hold, and how demos auto-match to categories.
+      </p>
+
+      <form id="behaviorForm" onsubmit="saveBehavior(event)">
+        <label>Max Open Leads Per Contractor
+          <input id="contractor_max_open_leads" type="number" min="1" step="1" placeholder="2" />
+        </label>
+
+        <label>
+          <span>Demos Auto-Match Categories</span>
+          <select id="demos_auto_match_enabled">
+            <option value="true">On</option>
+            <option value="false">Off</option>
+          </select>
+        </label>
+
+        <label>
+          <span>Allow Personalized Demo Requests</span>
+          <select id="personalized_demos_enabled">
+            <option value="true">On</option>
+            <option value="false">Off</option>
+          </select>
+        </label>
+
+        <button type="submit" class="btn btn-primary" style="margin-top:14px;">Save Behavior</button>
+        <p id="behMsg" class="muted"></p>
+      </form>
+    </div>
+  </section>
+</main>
+
+
+<!-- SUPABASE -->
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = "https://vekoulqehexqosgwacwa.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiIsInZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
+const ADMIN_EMAIL = "srarnold216@gmail.com";
+
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+/* AUTH GUARD */
+async function guard(){
+  const { data } = await sb.auth.getUser();
+  if (!data.user) return location.href="dashboard-login.html";
+  if (data.user.email !== ADMIN_EMAIL) return location.href="contractor-portal.html";
+  document.getElementById("userEmail").textContent = data.user.email;
+}
+guard();
+
+/* KEYS WE USE */
+const SETTING_KEYS = [
+  "commission_starter",
+  "commission_business",
+  "commission_ecommerce",
+  "contractor_max_open_leads",
+  "demos_auto_match_enabled",
+  "personalized_demos_enabled"
+];
+
+/* LOAD SETTINGS */
+async function loadSettings(){
+  const res = await sb.from("admin_settings").select("*").in("key", SETTING_KEYS);
+  if (res.error){
+    console.error(res.error);
+    return;
+  }
+  const map = {};
+  (res.data || []).forEach(row => { map[row.key] = row.value; });
+
+  document.getElementById("commission_starter").value   = map["commission_starter"]   || "";
+  document.getElementById("commission_business").value  = map["commission_business"]  || "";
+  document.getElementById("commission_ecommerce").value = map["commission_ecommerce"] || "";
+
+  document.getElementById("contractor_max_open_leads").value =
+    map["contractor_max_open_leads"] || "2";
+
+  document.getElementById("demos_auto_match_enabled").value =
+    (map["demos_auto_match_enabled"] ?? "true");
+
+  document.getElementById("personalized_demos_enabled").value =
+    (map["personalized_demos_enabled"] ?? "true");
+}
+
+/* SAVE COMMISSIONS */
+async function saveCommissions(e){
+  e.preventDefault();
+  const rows = [
+    { key:"commission_starter",   value: document.getElementById("commission_starter").value || "50" },
+    { key:"commission_business",  value: document.getElementById("commission_business").value || "75" },
+    { key:"commission_ecommerce", value: document.getElementById("commission_ecommerce").value || "100" }
+  ];
+
+  const res = await sb.from("admin_settings").upsert(rows);
+  const msg = document.getElementById("commMsg");
+  if (res.error){
+    console.error(res.error);
+    msg.textContent = "Error saving commissions.";
+  } else {
+    msg.textContent = "Saved.";
+  }
+}
+
+/* SAVE BEHAVIOR */
+async function saveBehavior(e){
+  e.preventDefault();
+  const rows = [
+    { key:"contractor_max_open_leads", value: document.getElementById("contractor_max_open_leads").value || "2" },
+    { key:"demos_auto_match_enabled",  value: document.getElementById("demos_auto_match_enabled").value },
+    { key:"personalized_demos_enabled", value: document.getElementById("personalized_demos_enabled").value }
+  ];
+
+  const res = await sb.from("admin_settings").upsert(rows);
+  const msg = document.getElementById("behMsg");
+  if (res.error){
+    console.error(res.error);
+    msg.textContent = "Error saving behavior.";
+  } else {
+    msg.textContent = "Saved.";
+  }
+}
+
+loadSettings();
+</script>
+
+</body>
+</html>
