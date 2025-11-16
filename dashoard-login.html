@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Redirecting…</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Instant redirect -->
+  <meta http-equiv="refresh" content="0; url=dashboard.html" />
+
+  <script>
+    // JS fallback for browsers that ignore meta-refresh
+    window.location.href = "dashboard.html";
+  </script>
+
+  <style>
+    body {
+      background:#0b0a14;
+      color:white;
+      font-family: Inter, system-ui, sans-serif;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      height:100vh;
+      text-align:center;
+    }
+    .box {
+      padding:20px;
+      border:1px solid rgba(255,255,255,.1);
+      background:rgba(255,255,255,.05);
+      border-radius:12px;
+      max-width:300px;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    Redirecting to your dashboard…
+  </div>
+</body>
+</html>
