@@ -9,19 +9,25 @@
   <script defer src="script.js"></script>
   <style>
     body.admin-body { margin:0; }
-    .main-content { padding:24px 20px 60px; }
+    .main-content { padding:24px 20px 80px; }
+
     .grid-3 { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
     .grid-2 { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+
     @media (max-width:900px){
       .grid-3,.grid-2{ grid-template-columns:1fr; }
     }
+
     .card.stat-card { min-height:120px; }
     .stat-label { font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); }
     .stat-value { font-size:24px; font-weight:700; margin:6px 0 4px; }
     .muted { color:var(--muted); font-size:13px; }
-    .table { width:100%; border-collapse:collapse; font-size:13px; margin-top:8px; }
+
+    .table-wrap { width:100%; overflow-x:auto; }
+    .table { width:100%; border-collapse:collapse; font-size:13px; margin-top:8px; min-width:620px; }
     .table th,.table td { border-bottom:1px solid rgba(255,255,255,.08); padding:6px 5px; vertical-align:top; }
     .table th { font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); text-align:left; }
+
     .btn-small{
       padding:6px 10px;
       border-radius:999px;
@@ -32,6 +38,7 @@
       cursor:pointer;
     }
     .btn-small:hover{ background:rgba(255,255,255,.12); }
+
     .script-list .template-block{
       border:1px solid rgba(255,255,255,.1);
       border-radius:12px;
@@ -48,6 +55,7 @@
       margin:0;
     }
     .admin-email { font-size:12px; color:var(--muted); margin-right:4px; }
+
     #myLeadForm label{ display:block; font-size:13px; margin-bottom:10px; }
     #myLeadForm input,#myLeadForm textarea,#myLeadForm select{
       width:100%; margin-top:4px; padding:8px 10px;
@@ -55,19 +63,53 @@
       background:rgba(20,18,32,.6); color:var(--text);
       font-size:13px;
     }
+
+    .admin-subnav {
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin:8px 0 20px;
+    }
+    .admin-subnav a {
+      font-size:13px;
+      padding:6px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.16);
+      background:rgba(255,255,255,.04);
+      text-decoration:none;
+      color:var(--text);
+      transition:.18s;
+    }
+    .admin-subnav a:hover {
+      background:rgba(255,255,255,.10);
+      transform:translateY(-1px);
+    }
+    .admin-subnav a.active {
+      border-color:transparent;
+      background:var(--grad);
+      color:#050713;
+      box-shadow:0 0 0 1px rgba(110,168,255,.4);
+      font-weight:600;
+    }
+
+    @media (max-width:640px){
+      .main-content { padding:16px 14px 70px; }
+      h1 { font-size:20px; }
+      .stat-value { font-size:20px; }
+      .admin-subnav { flex-direction:column; }
+      .admin-subnav a { width:100%; text-align:center; }
+    }
   </style>
 </head>
 
 <body class="admin-body">
 
-<!-- HEADER (matches main site with BC icon) -->
 <header class="site-header">
   <div class="container header-inner">
     <a class="logo" href="index.html">
       <span class="logo-mark">BC</span><span>BrandCrafters</span>
     </a>
 
-    <!-- Desktop nav -->
     <nav class="nav desktop-nav">
       <a href="index.html" class="nav-link">Home</a>
       <a href="pricing.html" class="nav-link">Pricing</a>
@@ -78,13 +120,11 @@
       <button id="logoutBtn" class="btn btn-outline">Logout</button>
     </nav>
 
-    <!-- Mobile: Hamburger -->
     <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
   </div>
 
-  <!-- Mobile Drawer -->
   <nav class="mobile-drawer" aria-hidden="true">
     <div class="drawer-header">
       <a class="logo" href="index.html">
@@ -103,12 +143,19 @@
 </header>
 
 <main class="main-content container">
-  <h1>Contractor Portal</h1>
-  <p class="subhead">
-    Work your assigned leads, submit your own leads, and use demos &amp; scripts to close deals.
-  </p>
+  <section>
+    <h1>Contractor Portal</h1>
+    <p class="subhead">
+      Work your assigned leads, submit your own, and use demos &amp; scripts to close deals.
+    </p>
 
-  <!-- SUMMARY STATS -->
+    <nav class="admin-subnav">
+      <a href="dashboard.html">Admin Overview</a>
+      <a href="dashboard-leads-upload.html">Leads &amp; CSV (Admin)</a>
+      <a href="contractor-portal.html" class="active">Contractor Portal</a>
+    </nav>
+  </section>
+
   <section class="grid-3" style="margin-bottom:24px;">
     <div class="card stat-card">
       <div class="stat-label">My Active Leads</div>
@@ -127,7 +174,6 @@
     </div>
   </section>
 
-  <!-- ADD MY LEAD -->
   <section class="card" style="margin-bottom:24px;">
     <h2>Add My Lead</h2>
     <p class="muted">
@@ -179,7 +225,6 @@
     </form>
   </section>
 
-  <!-- MY ACTIVE LEADS + MY SUBMITTED LEADS -->
   <section class="card" style="margin-bottom:24px;">
     <h2>My Leads</h2>
     <p class="muted">
@@ -187,85 +232,90 @@
     </p>
 
     <h3 style="margin-top:0;">Assigned to Me</h3>
-    <table class="table" id="myLeadsTable">
-      <thead>
-        <tr>
-          <th>Business</th>
-          <th>Contact</th>
-          <th>Status</th>
-          <th>Category</th>
-          <th>Package Rec.</th>
-          <th>Mockup?</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+    <div class="table-wrap">
+      <table class="table" id="myLeadsTable">
+        <thead>
+          <tr>
+            <th>Business</th>
+            <th>Contact</th>
+            <th>Status</th>
+            <th>Category</th>
+            <th>Package Rec.</th>
+            <th>Mockup?</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
     <p id="myLeadsMsg" class="muted"></p>
 
     <hr style="margin:18px 0;border-color:rgba(255,255,255,.08);" />
 
     <h3>Leads I Submitted (Finder)</h3>
-    <table class="table" id="mySubmittedTable">
-      <thead>
-        <tr>
-          <th>Business</th>
-          <th>City</th>
-          <th>Category</th>
-          <th>Package</th>
-          <th>Approval</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+    <div class="table-wrap">
+      <table class="table" id="mySubmittedTable">
+        <thead>
+          <tr>
+            <th>Business</th>
+            <th>City</th>
+            <th>Category</th>
+            <th>Package</th>
+            <th>Approval</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
     <p id="mySubmittedMsg" class="muted"></p>
   </section>
 
-  <!-- AVAILABLE LEADS -->
   <section class="card" style="margin-bottom:24px;">
     <h2>Available Leads</h2>
     <p class="muted">
       You can only hold up to your max open leads at once. Claim carefully and work them fully.
     </p>
 
-    <table class="table" id="availableLeadsTable">
-      <thead>
-        <tr>
-          <th>Business</th>
-          <th>Location</th>
-          <th>Phone</th>
-          <th>Category</th>
-          <th>Package Rec.</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+    <div class="table-wrap">
+      <table class="table" id="availableLeadsTable">
+        <thead>
+          <tr>
+            <th>Business</th>
+            <th>Location</th>
+            <th>Phone</th>
+            <th>Category</th>
+            <th>Package Rec.</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
     <p id="availMsg" class="muted"></p>
   </section>
 
-  <!-- DEMO SITES (LIVE ONLY) -->
   <section class="card" style="margin-bottom:24px;">
     <h2>Demo Sites (Live)</h2>
     <p class="muted">
       Use these demo sites as examples when speaking with leads. Match by category when possible.
     </p>
 
-    <table class="table" id="demoTable">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Category</th>
-          <th>Link</th>
-          <th>Notes</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+    <div class="table-wrap">
+      <table class="table" id="demoTable">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Link</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
     <p class="muted" id="demoMsg"></p>
   </section>
 
-  <!-- SCRIPTS & PRICING -->
   <section class="card" style="margin-bottom:24px;">
     <h2>Scripts &amp; Pricing</h2>
     <p class="muted">
@@ -273,7 +323,6 @@
     </p>
 
     <div class="grid-2" style="margin-top:10px;">
-      <!-- Scripts -->
       <div>
         <h3>Call Scripts</h3>
         <div id="scriptList" class="script-list"></div>
@@ -285,33 +334,34 @@
         <div id="dmList" class="script-list"></div>
       </div>
 
-      <!-- Pricing -->
       <div>
         <h3>Pricing Cheat Sheet</h3>
-        <table class="table">
-          <thead>
-            <tr><th>Package</th><th>Price</th><th>Base Commission*</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Starter Craft</td>
-              <td>$249</td>
-              <td id="commStarter">$50</td>
-            </tr>
-            <tr>
-              <td>Business Builder</td>
-              <td>$699</td>
-              <td id="commBusiness">$75</td>
-            </tr>
-            <tr>
-              <td>E-Commerce Store</td>
-              <td>$1,199</td>
-              <td id="commEcommerce">$100</td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-wrap">
+          <table class="table">
+            <thead>
+              <tr><th>Package</th><th>Price</th><th>Base Commission*</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Starter Craft</td>
+                <td>$249</td>
+                <td id="commStarter">$50</td>
+              </tr>
+              <tr>
+                <td>Business Builder</td>
+                <td>$699</td>
+                <td id="commBusiness">$75</td>
+              </tr>
+              <tr>
+                <td>E-Commerce Store</td>
+                <td>$1,199</td>
+                <td id="commEcommerce">$100</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <p class="muted" style="font-size:12px;">
-          *If you both bring the lead and close the sale, admin may add an extra bonus amount on top of the base commission.
+          *If you both bring the lead and close the sale, admin may add an extra bonus on top of the base commission.
         </p>
 
         <h4 style="margin-top:16px;">Maintenance / Add-Ons (for reference)</h4>
@@ -340,11 +390,10 @@
   document.getElementById('year').textContent = new Date().getFullYear();
 </script>
 
-<!-- SUPABASE + PAGE LOGIC -->
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script>
 const SUPABASE_URL = "https://vekoulqehexqosgwacwa.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiIsInZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
 const ADMIN_EMAIL = "srarnold216@gmail.com";
 
 const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -353,17 +402,14 @@ let currentUser = null;
 let maxOpenLeadsGlobal = 2;
 let maxOpenLeadsForUser = 2;
 
-/* AUTH GUARD */
 async function guard(){
   const { data } = await client.auth.getUser();
   if (!data || !data.user){
-    // send to dashboard to login
     window.location.href = "dashboard.html";
     return;
   }
   if (data.user.email === ADMIN_EMAIL){
-    window.location.href = "dashboard.html";
-    return;
+    // admin can still see this if they want
   }
   currentUser = data.user;
   document.getElementById("userEmail").textContent = currentUser.email;
@@ -373,9 +419,7 @@ async function guard(){
 }
 guard();
 
-/* SETTINGS (global + per-contractor) */
 async function loadSettingsAndContractorProfile(){
-  // Global admin_settings
   const settingsRes = await client.from("admin_settings").select("*").in("key", [
     "contractor_max_open_leads",
     "commission_starter",
@@ -394,7 +438,6 @@ async function loadSettingsAndContractorProfile(){
     if (map["commission_ecommerce"]) document.getElementById("commEcommerce").textContent = "$"+map["commission_ecommerce"];
   }
 
-  // Per-contractor override from contractors table
   if (currentUser){
     const contractorRes = await client
       .from("contractors")
@@ -413,7 +456,6 @@ async function loadSettingsAndContractorProfile(){
   document.getElementById("statMaxOpen").textContent = maxOpenLeadsForUser;
 }
 
-/* LOAD ALL MAIN DATA */
 async function loadEverything(){
   await Promise.all([
     loadMyLeads(),
@@ -424,7 +466,6 @@ async function loadEverything(){
   ]);
 }
 
-/* SUBMIT MY LEAD */
 async function submitMyLead(e){
   e.preventDefault();
   if (!currentUser) return;
@@ -464,7 +505,6 @@ async function submitMyLead(e){
   }
 }
 
-/* MY ASSIGNED LEADS */
 async function loadMyLeads(){
   if (!currentUser) return;
   const email = currentUser.email;
@@ -527,7 +567,6 @@ async function loadMyLeads(){
   document.getElementById("myLeadsMsg").textContent = data.length ? "" : "You do not have any assigned leads yet.";
 }
 
-/* MY SUBMITTED LEADS (as finder) */
 async function loadMySubmittedLeads(){
   if (!currentUser) return;
   const email = currentUser.email;
@@ -561,7 +600,6 @@ async function loadMySubmittedLeads(){
   document.getElementById("mySubmittedMsg").textContent = data.length ? "" : "You haven’t submitted any leads yet.";
 }
 
-/* AVAILABLE LEADS (only approved and unassigned) */
 async function loadAvailableLeads(){
   const res = await client.from("call_leads")
     .select("*")
@@ -594,7 +632,6 @@ async function loadAvailableLeads(){
     : "No approved unassigned new leads right now.";
 }
 
-/* CLAIM LEAD (respect per-contractor max open) */
 async function claimLead(id){
   if (!currentUser) return;
   const email = currentUser.email;
@@ -628,7 +665,6 @@ async function claimLead(id){
   }
 }
 
-/* RELEASE LEAD (back to pool) */
 async function releaseLead(id){
   if (!confirm("Release this lead back to the pool?")) return;
 
@@ -647,7 +683,6 @@ async function releaseLead(id){
   }
 }
 
-/* UPDATE STATUS */
 async function updateStatus(id, status){
   const upd = await client.from("call_leads")
     .update({ call_status: status })
@@ -661,7 +696,6 @@ async function updateStatus(id, status){
   }
 }
 
-/* MOCKUP FLAG */
 async function toggleMockup(id, val){
   const upd = await client.from("call_leads")
     .update({ mockup_requested: (val==="true") })
@@ -673,7 +707,6 @@ async function toggleMockup(id, val){
   }
 }
 
-/* DEMO SITES (LIVE ONLY) */
 async function loadDemos(){
   const res = await client.from("demo_sites")
     .select("*")
@@ -704,7 +737,6 @@ async function loadDemos(){
     : "No live demos yet. Admin adds these from the Demo Library.";
 }
 
-/* SCRIPTS & TEMPLATES */
 async function loadTemplates(){
   const res = await client.from("communication_templates")
     .select("*")
@@ -742,7 +774,6 @@ async function loadTemplates(){
   if (!dmDiv.innerHTML)     dmDiv.innerHTML     = `<p class="muted">No DM templates yet.</p>`;
 }
 
-/* LOGOUT HOOKS → back to dashboard (which shows login) */
 document.getElementById("logoutBtn")?.addEventListener("click", async () => {
   await client.auth.signOut();
   window.location.href = "dashboard.html";
