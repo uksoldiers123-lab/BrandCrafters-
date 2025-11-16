@@ -34,7 +34,7 @@
     }
     .portal-grid{
       display:grid;
-      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
       gap:16px;
       align-items:flex-start;
     }
@@ -85,10 +85,19 @@
     .badge-priority-a{background:rgba(115,255,193,.18);}
     .badge-priority-b{background:rgba(255,230,165,.18);}
     .badge-priority-c{background:rgba(255,173,173,.18);}
+
     .badge-status-new{background:rgba(110,168,255,.18);}
     .badge-status-in-progress{background:rgba(255,230,165,.18);}
     .badge-status-closed-won{background:rgba(115,255,193,.18);}
     .badge-status-closed-lost{background:rgba(255,173,173,.18);}
+
+    .badge-mockup{
+      background:rgba(193,171,255,.18);
+      border:1px solid rgba(193,171,255,.5);
+      margin-top:4px;
+      display:inline-block;
+    }
+
     .pill-channel{
       display:inline-block;
       padding:2px 8px;
@@ -105,6 +114,7 @@
       background:rgba(110,168,255,.16);
       margin-left:4px;
     }
+
     .script-body{
       font-size:12px;
       white-space:pre-wrap;
@@ -115,6 +125,7 @@
       padding:8px 10px;
       margin-top:6px;
     }
+
     .scripts-tabs{
       display:flex;
       gap:8px;
@@ -137,6 +148,7 @@
       font-weight:600;
       box-shadow:0 0 0 1px rgba(110,168,255,.4);
     }
+
     .pricing-note{
       margin-bottom:10px;
       padding:10px 10px;
@@ -155,6 +167,7 @@
       font-family:inherit;
       color:#dfe3ff;
     }
+
     .portal-top-bar{
       display:flex;
       justify-content:space-between;
@@ -167,10 +180,118 @@
       color:#b5b7d8;
       text-align:right;
     }
+
     .empty-msg{
       font-size:12px;
       color:#b5b7d8;
       margin-top:6px;
+    }
+
+    .btn-small{
+      display:inline-block;
+      font-size:11px;
+      padding:4px 9px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.25);
+      background:rgba(255,255,255,.06);
+      color:#f5f5ff;
+      cursor:pointer;
+      margin:2px 0;
+    }
+    .btn-small:hover{
+      background:rgba(255,255,255,.14);
+      transform:translateY(-1px);
+    }
+
+    .lead-demos{
+      margin-top:4px;
+      font-size:11px;
+      color:#b5b7d8;
+    }
+    .lead-demos a{
+      color:#dfe3ff;
+      text-decoration:underline;
+      margin-right:6px;
+      font-size:11px;
+    }
+    .lead-demos .demo-actions{
+      margin-top:2px;
+    }
+
+    /* Modal for status update + mockup flag */
+    .modal-backdrop{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.6);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:200;
+    }
+    .modal{
+      background:#0c0f23;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.16);
+      max-width:480px;
+      width:100%;
+      padding:18px 18px 16px;
+      box-shadow:0 18px 45px rgba(0,0,0,.5);
+    }
+    .modal h3{
+      margin:0 0 6px;
+      font-size:18px;
+    }
+    .modal p{
+      margin:0 0 8px;
+      font-size:12px;
+      color:#b5b7d8;
+    }
+    .modal-form label{
+      display:block;
+      font-size:12px;
+      margin-bottom:8px;
+    }
+    .modal-form select,
+    .modal-form input[type="date"],
+    .modal-form textarea{
+      width:100%;
+      margin-top:4px;
+      padding:8px 10px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(7,9,20,.9);
+      color:#f5f5ff;
+      font-size:12px;
+    }
+    .modal-form textarea{
+      resize:vertical;
+      min-height:70px;
+    }
+    .modal-actions{
+      display:flex;
+      justify-content:flex-end;
+      gap:8px;
+      margin-top:10px;
+    }
+    .btn-ghost{
+      border-radius:999px;
+      padding:6px 12px;
+      border:1px solid rgba(255,255,255,.25);
+      background:transparent;
+      color:#f5f5ff;
+      font-size:12px;
+      cursor:pointer;
+    }
+    .btn-primary-small{
+      border-radius:999px;
+      padding:6px 12px;
+      border:none;
+      background:linear-gradient(135deg,#6ea8ff,#b166ff);
+      color:#050713;
+      font-size:12px;
+      font-weight:600;
+      cursor:pointer;
+      box-shadow:0 0 0 1px rgba(110,168,255,.4);
     }
   </style>
   <script defer src="script.js"></script>
@@ -219,7 +340,7 @@
       <div>
         <h1>Contractor Portal</h1>
         <p class="subhead">
-          View leads, scripts, and pricing in one place while you call, email, or DM.
+          View leads, scripts, pricing, and matching demo sites while you call, email, or DM.
         </p>
       </div>
       <div class="portal-user" id="portalUserInfo">Checking login…</div>
@@ -232,16 +353,19 @@
       <article class="portal-card">
         <h2>Leads</h2>
         <p class="small-muted">
-          Admin sees all leads. Contractors see their assigned leads and unassigned leads.
+          You can only have <b>2 active “in progress” leads</b> at a time.  
+          Clear a lead by updating status and explaining what happened.  
+          For good prospects, flag that a <b>mockup / personalized demo</b> should be sent.
         </p>
         <table id="leadsTable">
           <thead>
             <tr>
-              <th>Business</th>
+              <th>Business &amp; Demos</th>
               <th>Phone</th>
               <th>Priority</th>
               <th>Status</th>
               <th>City</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -287,12 +411,75 @@
   document.getElementById('year').textContent = new Date().getFullYear();
 </script>
 
+<!-- Status Update + Mockup Modal -->
+<div class="modal-backdrop" id="statusModalBackdrop">
+  <div class="modal">
+    <h3 id="statusModalTitle">Update Lead Status</h3>
+    <p id="statusModalLeadInfo" class="small-muted"></p>
+    <form id="statusForm" class="modal-form">
+      <label>
+        New Status
+        <select id="statusSelect" required>
+          <option value="in progress">In Progress (still working)</option>
+          <option value="closed won">Closed Won (sale completed)</option>
+          <option value="closed lost">Closed Lost (they said no / failed)</option>
+          <option value="stopped contact">Stopped Contact (no longer pursuing)</option>
+        </select>
+      </label>
+
+      <label>
+        Did you complete the sale?
+        <select id="saleCompletedSelect">
+          <option value="">Select</option>
+          <option value="yes">Yes</option>
+          <option value="no">No</option>
+        </select>
+      </label>
+
+      <label>
+        Sale Date (if completed)
+        <input type="date" id="saleDateInput" />
+      </label>
+
+      <label>
+        Contact Summary (what have you done, what happened?)
+        <textarea id="contactSummaryInput" placeholder="Calls, emails, DMs, what they said, why you’re stopping or how the sale went."></textarea>
+      </label>
+
+      <label>
+        Recommend a mockup/personalized demo for this lead?
+        <select id="mockupRecommendSelect">
+          <option value="">Select</option>
+          <option value="yes">Yes — mockup should be sent</option>
+          <option value="no">No — not needed right now</option>
+        </select>
+      </label>
+
+      <label>
+        Mockup idea / notes
+        <textarea id="mockupNotesInput" placeholder="Which style? Any special notes to admin before a personalized demo is made?"></textarea>
+      </label>
+
+      <label>
+        Disposition (optional short label)
+        <input type="text" id="dispositionInput" placeholder="e.g. turned down, wrong number, hot lead, follow-up later" />
+      </label>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-ghost" id="statusCancelBtn">Cancel</button>
+        <button type="submit" class="btn-primary-small">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <!-- Supabase logic -->
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script>
   const SUPABASE_URL = "https://vekoulqehexqosgwacwa.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
   const ADMIN_EMAIL = "srarnold216@gmail.com";
+  const COMPANY_EMAIL = "support@brandcrafters.com"; // change to your sender email if you want in mailto cc/bcc
 
   const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -305,9 +492,26 @@
   const scriptsEmpty   = document.getElementById("scriptsEmpty");
   const tabButtons     = document.querySelectorAll(".scripts-tab-btn");
 
+  // Modal elements
+  const statusModalBackdrop   = document.getElementById("statusModalBackdrop");
+  const statusModalTitle      = document.getElementById("statusModalTitle");
+  const statusModalLeadInfo   = document.getElementById("statusModalLeadInfo");
+  const statusForm            = document.getElementById("statusForm");
+  const statusSelect          = document.getElementById("statusSelect");
+  const saleCompletedSelect   = document.getElementById("saleCompletedSelect");
+  const saleDateInput         = document.getElementById("saleDateInput");
+  const contactSummaryInput   = document.getElementById("contactSummaryInput");
+  const mockupRecommendSelect = document.getElementById("mockupRecommendSelect");
+  const mockupNotesInput      = document.getElementById("mockupNotesInput");
+  const dispositionInput      = document.getElementById("dispositionInput");
+  const statusCancelBtn       = document.getElementById("statusCancelBtn");
+
   let templatesCache = [];
+  let demoSitesCache = [];
   let currentScriptType = "call";
   let isAdminUser = false;
+  let currentUserEmail = null;
+  let currentLeadForStatus = null; // { id, business_name, call_status }
 
   function setPortalStatus(msg){
     portalUserInfo.textContent = msg;
@@ -344,11 +548,12 @@
       return null;
     }
     if (!data || !data.user) {
-      setPortalStatus("Not logged in. Log in from your BrandCrafters admin/login first.");
+      setPortalStatus("Not logged in. Log in from your BrandCrafters dashboard first.");
       return null;
     }
 
     const email = data.user.email || "";
+    currentUserEmail = email;
     isAdminUser = (email === ADMIN_EMAIL);
 
     if (isAdminUser) {
@@ -361,16 +566,76 @@
     return data.user;
   }
 
+  async function countActiveInProgress(email){
+    const { data, error } = await supabaseClient
+      .from("call_leads")
+      .select("id")
+      .eq("assigned_caller_email", email)
+      .eq("call_status", "in progress");
+
+    if (error) {
+      console.error("countActiveInProgress error:", error);
+      return 0;
+    }
+    return (data || []).length;
+  }
+
+  function getMatchedDemos(category){
+    const cat = (category || "").toLowerCase();
+    if (!cat) return [];
+
+    const exact = demoSitesCache.filter(d => (d.category || "").toLowerCase() === cat && d.is_active !== false);
+    const generic = demoSitesCache.filter(d => (!d.category || d.category.toLowerCase() === "all") && d.is_active !== false);
+
+    return [...exact, ...generic];
+  }
+
+  function buildDemoMailto(lead, demoLabel, demoUrl, personalized = false){
+    const toEmail = lead.email || lead.alt_email || "";
+    if (!toEmail) {
+      alert("No email on file for this lead. Please collect their email first.");
+      return;
+    }
+
+    const subject = encodeURIComponent(
+      personalized
+        ? `${lead.business_name || "Your business"} — personalized website preview`
+        : `${lead.business_name || "Your business"} — sample website demo`
+    );
+
+    const bodyLines = [
+      `Hi ${lead.contact_name || "there"},`,
+      "",
+      personalized
+        ? "As promised, here’s a personalized website demo we put together based on your business:"
+        : "Here’s a sample website demo that matches what we talked about:",
+      "",
+      demoLabel ? `${demoLabel}: ${demoUrl}` : demoUrl,
+      "",
+      "We can customize the colors, images, pages, and content around your exact business, then connect contact forms, booking, or payments if you need.",
+      "",
+      "If you like this direction, just reply to this email and we’ll lock in your build and next steps.",
+      "",
+      "Best,",
+      "BrandCrafters Web Team"
+    ];
+
+    const body = encodeURIComponent(bodyLines.join("\n"));
+
+    // optional: you can put COMPANY_EMAIL in bcc if you want every demo email copied
+    const mailto = `mailto:${toEmail}?subject=${subject}&body=${body}`;
+    window.location.href = mailto;
+  }
+
   async function loadLeads(email) {
     let query = supabaseClient.from("call_leads").select("*");
 
     if (isAdminUser) {
-      // Admin: see everything
-      query = query.order("priority", { ascending: true })
-                   .order("created_at", { ascending: false })
-                   .limit(100);
+      query = query
+        .order("priority", { ascending: true })
+        .order("created_at", { ascending: false })
+        .limit(100);
     } else {
-      // Contractor: only their leads + unassigned
       query = query
         .or(`assigned_caller_email.eq.${email},assigned_caller_email.is.null`)
         .order("priority", { ascending: true })
@@ -399,29 +664,284 @@
     leads.forEach(ld => {
       const tr = document.createElement("tr");
 
+      const category = ld.category || "";
+      const matchedDemos = getMatchedDemos(category);
+
+      // Business + category + mockup + demos (generic + personalized)
       const tdBiz = document.createElement("td");
-      tdBiz.innerHTML = `<strong>${ld.business_name || "(No name)"}</strong><br><span class="small-muted">${ld.email || ""}</span>`;
+      tdBiz.innerHTML = `<strong>${ld.business_name || "(No name)"}</strong>`;
+      const catLine = document.createElement("div");
+      catLine.className = "small-muted";
+      catLine.textContent = category ? `Category: ${category}` : "Category: (not set)";
+      tdBiz.appendChild(catLine);
+
+      if (ld.mockup_recommended) {
+        const mockBadge = document.createElement("span");
+        mockBadge.className = "badge badge-mockup";
+        mockBadge.textContent = "Mockup recommended";
+        tdBiz.appendChild(document.createElement("br"));
+        tdBiz.appendChild(mockBadge);
+      }
+
+      // Personalized demo (if admin assigned one)
+      if (ld.personalized_demo_assigned && ld.personalized_demo_url) {
+        const pDiv = document.createElement("div");
+        pDiv.className = "lead-demos";
+        pDiv.innerHTML = `<strong>Personalized demo:</strong> `;
+        const a = document.createElement("a");
+        a.href = ld.personalized_demo_url;
+        a.target = "_blank";
+        a.textContent = "View";
+        pDiv.appendChild(a);
+
+        const actions = document.createElement("div");
+        actions.className = "demo-actions";
+        const sendBtn = document.createElement("button");
+        sendBtn.className = "btn-small";
+        sendBtn.textContent = "Email personalized demo";
+        sendBtn.addEventListener("click", () =>
+          buildDemoMailto(ld, "Personalized demo", ld.personalized_demo_url, true)
+        );
+        actions.appendChild(sendBtn);
+
+        pDiv.appendChild(actions);
+
+        tdBiz.appendChild(pDiv);
+      }
+
+      // Generic demos from library by category
+      if (matchedDemos.length) {
+        const demoDiv = document.createElement("div");
+        demoDiv.className = "lead-demos";
+        demoDiv.innerHTML = "<strong>Demo library:</strong> ";
+
+        matchedDemos.slice(0,3).forEach(d => {
+          const line = document.createElement("div");
+          const a = document.createElement("a");
+          a.href = d.demo_url;
+          a.target = "_blank";
+          a.textContent = d.name || "Demo";
+          line.appendChild(a);
+
+          const btnWrap = document.createElement("div");
+          btnWrap.className = "demo-actions";
+          const sendBtn = document.createElement("button");
+          sendBtn.className = "btn-small";
+          sendBtn.textContent = "Email this demo";
+          sendBtn.addEventListener("click", () =>
+            buildDemoMailto(ld, d.name || "Website demo", d.demo_url, false)
+          );
+          btnWrap.appendChild(sendBtn);
+
+          line.appendChild(btnWrap);
+          demoDiv.appendChild(line);
+        });
+
+        tdBiz.appendChild(demoDiv);
+      }
+
       tr.appendChild(tdBiz);
 
+      // Phone
       const tdPhone = document.createElement("td");
       tdPhone.textContent = ld.phone || "";
       tr.appendChild(tdPhone);
 
+      // Priority
       const tdPriority = document.createElement("td");
       tdPriority.appendChild(priorityBadge(ld.priority));
       tr.appendChild(tdPriority);
 
+      // Status
       const tdStatus = document.createElement("td");
       tdStatus.appendChild(statusBadge(ld.call_status));
       tr.appendChild(tdStatus);
 
+      // City/State
       const tdCity = document.createElement("td");
       tdCity.textContent = (ld.city || "") + (ld.state ? ", " + ld.state : "");
       tr.appendChild(tdCity);
 
+      // Action
+      const tdAction = document.createElement("td");
+
+      const isMine = ld.assigned_caller_email === currentUserEmail;
+      const isUnassigned = !ld.assigned_caller_email;
+
+      if (isAdminUser) {
+        const assigned = ld.assigned_caller_email || "Unassigned";
+        const infoSpan = document.createElement("span");
+        infoSpan.className = "small-muted";
+        infoSpan.textContent = assigned;
+        tdAction.appendChild(infoSpan);
+      } else {
+        if (isUnassigned) {
+          const claimBtn = document.createElement("button");
+          claimBtn.className = "btn-small";
+          claimBtn.textContent = "Claim";
+          claimBtn.addEventListener("click", () => claimLead(ld.id));
+          tdAction.appendChild(claimBtn);
+        }
+
+        if (isMine) {
+          if (!isUnassigned) {
+            const myLabel = document.createElement("div");
+            myLabel.className = "small-muted";
+            myLabel.textContent = "My lead";
+            tdAction.appendChild(myLabel);
+          }
+
+          const updateBtn = document.createElement("button");
+          updateBtn.className = "btn-small";
+          updateBtn.textContent = "Update";
+          updateBtn.addEventListener("click", () => openStatusModal(ld));
+          tdAction.appendChild(updateBtn);
+        }
+      }
+
       leadsTableBody.appendChild(tr);
     });
   }
+
+  async function claimLead(leadId) {
+    if (!currentUserEmail) return;
+
+    if (!isAdminUser) {
+      const activeCount = await countActiveInProgress(currentUserEmail);
+      if (activeCount >= 2) {
+        alert(
+          "You already have 2 active in-progress leads.\n\n" +
+          "To claim another, update one of your current leads and explain:\n" +
+          "• Did you complete the sale?\n" +
+          "• What day?\n" +
+          "• Are you quitting contact?\n" +
+          "• What contact have you made so far?\n" +
+          "• Did they turn it down / fail?"
+        );
+        return;
+      }
+    }
+
+    const today = new Date().toISOString().slice(0,10);
+    const { error } = await supabaseClient
+      .from("call_leads")
+      .update({
+        assigned_caller_email: currentUserEmail,
+        call_status: "in progress",
+        last_contact_date: today
+      })
+      .eq("id", leadId);
+
+    if (error) {
+      console.error("claimLead error:", error);
+      alert("Could not claim lead: " + error.message);
+      return;
+    }
+
+    loadLeads(currentUserEmail);
+  }
+
+  function openStatusModal(lead){
+    currentLeadForStatus = {
+      id: lead.id,
+      business_name: lead.business_name || "(No name)",
+      call_status: (lead.call_status || "in progress").toLowerCase()
+    };
+
+    statusModalTitle.textContent = "Update Lead Status";
+    statusModalLeadInfo.textContent = currentLeadForStatus.business_name;
+
+    statusSelect.value = currentLeadForStatus.call_status;
+    saleCompletedSelect.value =
+      lead.sale_completed === true ? "yes" :
+      lead.sale_completed === false ? "no" :
+      "";
+    saleDateInput.value = lead.sale_date || "";
+    contactSummaryInput.value = lead.contact_summary || "";
+    dispositionInput.value = lead.disposition || "";
+
+    if (lead.mockup_recommended === true) {
+      mockupRecommendSelect.value = "yes";
+    } else if (lead.mockup_recommended === false) {
+      mockupRecommendSelect.value = "no";
+    } else {
+      mockupRecommendSelect.value = "";
+    }
+    mockupNotesInput.value = lead.mockup_notes || "";
+
+    statusModalBackdrop.style.display = "flex";
+  }
+
+  function closeStatusModal(){
+    statusModalBackdrop.style.display = "none";
+    currentLeadForStatus = null;
+    statusForm.reset();
+  }
+
+  statusCancelBtn.addEventListener("click", () => {
+    closeStatusModal();
+  });
+
+  statusForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!currentLeadForStatus) return;
+    const leadId = currentLeadForStatus.id;
+
+    const newStatus = statusSelect.value;
+    const saleCompletedVal = saleCompletedSelect.value;
+    const saleCompleted = saleCompletedVal === "" ? null : (saleCompletedVal === "yes");
+    const saleDate = saleDateInput.value || null;
+    const contactSummary = contactSummaryInput.value.trim();
+    const disposition = dispositionInput.value.trim() || null;
+
+    const mockupVal = mockupRecommendSelect.value;
+    let mockupRecommended = null;
+    if (mockupVal === "yes") mockupRecommended = true;
+    if (mockupVal === "no")  mockupRecommended = false;
+    const mockupNotes = mockupNotesInput.value.trim() || null;
+
+    if (currentLeadForStatus.call_status === "in progress" && newStatus !== "in progress" && !contactSummary) {
+      alert("Please explain what contact you made and what happened before clearing this lead.");
+      return;
+    }
+
+    if (newStatus === "closed won" && (!saleCompleted || !saleDate)) {
+      const confirmProceed = confirm(
+        "Status is 'Closed Won' but sale completed and/or sale date is missing.\n\n" +
+        "Do you still want to save?"
+      );
+      if (!confirmProceed) return;
+    }
+
+    const today = new Date().toISOString().slice(0,10);
+
+    const updatePayload = {
+      call_status: newStatus,
+      sale_completed: saleCompleted,
+      sale_date: saleDate,
+      contact_summary: contactSummary || null,
+      disposition: disposition,
+      last_contact_date: today,
+      mockup_recommended: mockupRecommended,
+      mockup_notes: mockupNotes
+    };
+
+    const { error } = await supabaseClient
+      .from("call_leads")
+      .update(updatePayload)
+      .eq("id", leadId);
+
+    if (error) {
+      console.error("update lead status error:", error);
+      alert("Could not update lead: " + error.message);
+      return;
+    }
+
+    closeStatusModal();
+    if (currentUserEmail) {
+      loadLeads(currentUserEmail);
+    }
+  });
 
   async function loadTemplates() {
     const { data, error } = await supabaseClient
@@ -441,6 +961,20 @@
     templatesCache = data || [];
     renderPricing();
     renderScripts(currentScriptType);
+  }
+
+  async function loadDemoSites(){
+    const { data, error } = await supabaseClient
+      .from("demo_sites")
+      .select("*")
+      .eq("is_active", true);
+
+    if (error) {
+      console.error("loadDemoSites error:", error);
+      demoSitesCache = [];
+      return;
+    }
+    demoSitesCache = data || [];
   }
 
   function renderPricing() {
@@ -513,6 +1047,36 @@
         rightChips.appendChild(pkg);
       }
 
+      const copyBtn = document.createElement("button");
+      copyBtn.className = "btn-small";
+      copyBtn.style.marginLeft = "6px";
+      copyBtn.textContent = "Copy";
+      copyBtn.addEventListener("click", async () => {
+        const text = t.body || "";
+        try {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(text);
+            copyBtn.textContent = "Copied!";
+            setTimeout(() => copyBtn.textContent = "Copy", 1200);
+          } else {
+            const temp = document.createElement("textarea");
+            temp.value = text;
+            temp.style.position = "fixed";
+            temp.style.opacity = "0";
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand("copy");
+            document.body.removeChild(temp);
+            copyBtn.textContent = "Copied!";
+            setTimeout(() => copyBtn.textContent = "Copy", 1200);
+          }
+        } catch (err) {
+          console.error("Copy failed:", err);
+          alert("Could not copy. You can still select and copy manually.");
+        }
+      });
+
+      rightChips.appendChild(copyBtn);
       titleRow.appendChild(leftTitle);
       titleRow.appendChild(rightChips);
 
@@ -542,8 +1106,9 @@
     if (!user) return;
     const email = user.email || "";
     await Promise.all([
-      loadLeads(email),
-      loadTemplates()
+      loadTemplates(),
+      loadDemoSites(),
+      loadLeads(email)
     ]);
   })();
 </script>
