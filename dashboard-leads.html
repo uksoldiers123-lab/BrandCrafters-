@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>BrandCrafters — Leads</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="dashboard.css" />
+  <script defer src="dashboard.js"></script>
+</head>
+
+<body class="admin-body">
+
+<!-- ============================
+   HEADER (matches main site)
+=============================== -->
+<header class="site-header admin-header">
+  <div class="container header-inner">
+    <a class="logo" href="index.html">
+      <span class="logo-mark">BC</span><span>BrandCrafters</span>
+    </a>
+
+    <nav class="nav desktop-nav">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="pricing.html" class="nav-link">Pricing</a>
+      <a href="customer-inquiry.html" class="nav-link">Customer Portal</a>
+      <span id="userEmail" class="admin-email"></span>
+      <button id="logoutBtn" class="btn btn-outline">Logout</button>
+    </nav>
+
+    <button class="menu-toggle" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <nav class="mobile-drawer admin-drawer" aria-hidden="true">
+    <div class="drawer-header">
+      <a class="logo" href="index.html">
+        <span class="logo-mark">BC</span><span>BrandCrafters</span>
+      </a>
+      <button class="menu-close">✕</button>
+    </div>
+
+    <a class="drawer-link" href="dashboard.html">Dashboard</a>
+    <a class="drawer-link highlight" href="dashboard-leads.html">Lead List</a>
+    <a class="drawer-link" href="dashboard-leads-upload.html">Upload CSV</a>
+    <a class="drawer-link" href="dashboard-demos.html">Demo Library</a>
+    <a class="drawer-link" href="dashboard-communications.html">Scripts & Messages</a>
+    <a class="drawer-link" href="dashboard-settings.html">Settings</a>
+    <button class="drawer-link" id="logoutBtnMobile">Logout</button>
+  </nav>
+
+  <div class="drawer-backdrop"></div>
+</header>
+
+
+
+<!-- ============================
+   SIDEBAR
+=============================== -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="bc-icon">BC</div>
+    <span class="sidebar-title">Admin Panel</span>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a href="dashboard.html" class="side-item">🏠 Dashboard</a>
+
+    <div class="side-group">
+      <div class="side-label">LEADS</div>
+      <a href="dashboard-leads.html" class="side-sub active">📇 Lead List</a>
+      <a href="dashboard-leads-upload.html" class="side-sub">📤 Upload CSV</a>
+    </div>
+
+    <div class="side-group">
+      <div class="side-label">DEMOS</div>
+      <a href="dashboard-demos.html" class="side-sub">🌐 Demo Library</a>
+    </div>
+
+    <div class="side-group">
+      <div class="side-label">COMMUNICATIONS</div>
+      <a href="dashboard-communications.html" class="side-sub">📞 Scripts</a>
+      <a href="dashboard-communications.html#email" class="side-sub">✉️ Emails</a>
+      <a href="dashboard-communications.html#dm" class="side-sub">💬 DM Templates</a>
+    </div>
+
+    <div class="side-group">
+      <div class="side-label">SETTINGS</div>
+      <a href="dashboard-settings.html" class="side-sub">⚙️ System Settings</a>
+    </div>
+  </nav>
+</aside>
+
+
+
+
+<!-- ============================
+   MAIN CONTENT — LEADS
+=============================== -->
+<main class="main-content">
+  <h1>Lead List</h1>
+  <p class="subhead">This is your full list of uploaded and manually added leads.</p>
+
+  <div class="card" style="margin-bottom:25px;">
+    <button class="btn btn-primary" onclick="location.href='dashboard-leads-upload.html'">
+      ➕ Add / Upload Leads
+    </button>
+  </div>
+
+  <div class="card">
+    <table class="table" id="leadsTable">
+      <thead>
+        <tr>
+          <th>Business</th>
+          <th>Phone</th>
+          <th>Status</th>
+          <th>Category</th>
+          <th>Package Rec.</th>
+          <th>Assigned</th>
+          <th>Mockup?</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</main>
+
+
+
+<!-- ============================
+   SUPABASE + PAGE SCRIPT
+=============================== -->
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = "https://vekoulqehexqosgwacwa.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
+const ADMIN_EMAIL = "srarnold216@gmail.com";
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+
+/* =========================================
+   AUTH CHECK
+========================================= */
+async function guard() {
+  const { data } = await db.auth.getUser();
+  if (!data.user) return location.href = "dashboard-login.html";
+
+  if (data.user.email !== ADMIN_EMAIL) {
+    return location.href = "contractor-portal.html";
+  }
+
+  document.getElementById("userEmail").textContent = data.user.email;
+}
+guard();
+
+
+
+/* =========================================
+   LOAD LEADS
+========================================= */
+async function loadLeads() {
+  const res = await db.from("call_leads").select("*").order("created_at", { ascending: false });
+
+  const tbody = document.querySelector("#leadsTable tbody");
+  tbody.innerHTML = "";
+
+  (res.data || []).forEach(lead => {
+    tbody.innerHTML += `
+      <tr>
+        <td><strong>${lead.business_name}</strong><br><span class="muted">${lead.city||""}</span></td>
+        <td>${lead.phone||"—"}</td>
+
+        <td><span class="tag">${lead.call_status||"new"}</span></td>
+
+        <td>${lead.category||"—"}</td>
+
+        <td>${lead.package_recommendation||"—"}</td>
+
+        <td>${lead.assigned_caller_email || "Unassigned"}</td>
+
+        <td>${lead.mockup_requested ? "✅" : "❌"}</td>
+
+        <td>
+          <button class="btn-small" onclick="editLead('${lead.id}')">Edit</button>
+          <button class="btn-small danger" onclick="deleteLead('${lead.id}')">Delete</button>
+        </td>
+      </tr>
+    `;
+  });
+}
+
+loadLeads();
+
+
+
+/* =========================================
+   DELETE LEAD
+========================================= */
+async function deleteLead(id) {
+  if (!confirm("Delete this lead permanently?")) return;
+
+  await db.from("call_leads").delete().eq("id", id);
+  loadLeads();
+}
+
+
+/* =========================================
+   EDIT LEAD (simple redirect for now)
+========================================= */
+function editLead(id) {
+  location.href = "dashboard-leads-upload.html?edit=" + id;
+}
+</script>
+
+</body>
+</html>
