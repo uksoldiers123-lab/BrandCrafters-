@@ -8,41 +8,84 @@
   <link rel="stylesheet" href="styles.css" />
   <script defer src="script.js"></script>
   <style>
-    /* Dashboard-only helpers (piggyback on your existing styles) */
     body.admin-body { margin:0; }
-    .main-content { padding:24px 20px 60px; }
+    .main-content { padding:24px 20px 80px; }
+
     .grid-3 { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
     .grid-2 { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+
     @media (max-width:900px){
       .grid-3,.grid-2{ grid-template-columns:1fr; }
     }
+
     .card.stat-card { min-height:120px; }
     .stat-label { font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); }
     .stat-value { font-size:24px; font-weight:700; margin:6px 0 4px; }
     .muted { color:var(--muted); font-size:13px; }
-    .table { width:100%; border-collapse:collapse; font-size:13px; margin-top:8px; }
+
+    .table-wrap { width:100%; overflow-x:auto; }
+    .table { width:100%; border-collapse:collapse; font-size:13px; margin-top:8px; min-width:520px; }
     .table th,.table td { border-bottom:1px solid rgba(255,255,255,.08); padding:6px 5px; vertical-align:top; }
     .table th { font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); text-align:left; }
     .pill { display:inline-block; padding:2px 8px; border-radius:999px; font-size:11px; }
     .pill-green{ background:rgba(155,255,191,.15); }
     .pill-red{ background:rgba(255,155,155,.15); }
     .pill-blue{ background:rgba(110,168,255,.15); }
+
     .admin-email { font-size:12px; color:var(--muted); margin-right:4px; }
     #loginBox label { display:block; margin-bottom:10px; font-size:14px; }
-    #loginBox input { width:100%; margin-top:4px; padding:10px 12px; border-radius:12px; border:1px solid rgba(255,255,255,.16); background:rgba(20,18,32,.6); color:var(--text); }
+    #loginBox input {
+      width:100%; margin-top:4px; padding:10px 12px;
+      border-radius:12px; border:1px solid rgba(255,255,255,.16);
+      background:rgba(20,18,32,.6); color:var(--text);
+    }
+
+    .admin-subnav {
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin:8px 0 20px;
+    }
+    .admin-subnav a {
+      font-size:13px;
+      padding:6px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.16);
+      background:rgba(255,255,255,.04);
+      text-decoration:none;
+      color:var(--text);
+      transition:.18s;
+    }
+    .admin-subnav a:hover {
+      background:rgba(255,255,255,.10);
+      transform:translateY(-1px);
+    }
+    .admin-subnav a.active {
+      border-color:transparent;
+      background:var(--grad);
+      color:#050713;
+      box-shadow:0 0 0 1px rgba(110,168,255,.4);
+      font-weight:600;
+    }
+
+    @media (max-width:640px){
+      .main-content { padding:16px 14px 70px; }
+      h1 { font-size:20px; }
+      .stat-value { font-size:20px; }
+      .admin-subnav { flex-direction:column; }
+      .admin-subnav a { width:100%; text-align:center; }
+    }
   </style>
 </head>
 
 <body class="admin-body">
 
-<!-- HEADER (same BC icon + menu style as index) -->
 <header class="site-header">
   <div class="container header-inner">
     <a class="logo" href="index.html">
       <span class="logo-mark">BC</span><span>BrandCrafters</span>
     </a>
 
-    <!-- Desktop Nav -->
     <nav class="nav desktop-nav">
       <a href="index.html" class="nav-link">Home</a>
       <a href="pricing.html" class="nav-link">Pricing</a>
@@ -53,13 +96,11 @@
       <button id="logoutBtn" class="btn btn-outline">Logout</button>
     </nav>
 
-    <!-- Mobile: Hamburger -->
     <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
   </div>
 
-  <!-- Mobile Drawer -->
   <nav class="mobile-drawer" aria-hidden="true">
     <div class="drawer-header">
       <a class="logo" href="index.html">
@@ -78,7 +119,6 @@
 
 <main class="main-content container">
 
-  <!-- LOGIN BOX (shown when no user logged in) -->
   <section id="loginBox" class="card" style="max-width:380px;margin:40px auto;display:none;">
     <h1 style="margin-top:0;">Admin / Contractor Login</h1>
     <p class="subhead">
@@ -96,16 +136,20 @@
     <p id="loginMsg" class="muted" style="margin-top:10px;"></p>
   </section>
 
-  <!-- DASHBOARD CONTENT (only shown for ADMIN) -->
   <section id="dashboardContent" style="display:none;">
     <section>
       <h1>Admin Overview</h1>
       <p class="subhead">
         Money snapshot, projects, recurring bills, and lead performance — all in one place.
       </p>
+
+      <nav class="admin-subnav">
+        <a href="dashboard.html" class="active">Overview</a>
+        <a href="dashboard-leads-upload.html">Leads &amp; CSV</a>
+        <a href="contractor-portal.html">Contractor Portal</a>
+      </nav>
     </section>
 
-    <!-- MONEY SUMMARY -->
     <section class="grid-3" style="margin-bottom:16px;">
       <article class="card stat-card">
         <div class="stat-label">Lifetime Project Revenue (one-time)</div>
@@ -126,7 +170,6 @@
       </article>
     </section>
 
-    <!-- PROFITS & LEADS -->
     <section class="grid-3" style="margin-bottom:16px;">
       <article class="card stat-card">
         <div class="stat-label">Est. Monthly Net (Maintenance - Bills)</div>
@@ -151,24 +194,25 @@
       </article>
     </section>
 
-    <!-- PROJECTS & EXPENSES -->
     <section class="grid-2" style="margin-bottom:16px;">
       <article class="card">
         <h2>Client Projects (Onboarding)</h2>
         <p class="muted">
           Last 6 onboarding submissions with total price, monthly fee, and status.
         </p>
-        <table class="table" id="projectsTable">
-          <thead>
-            <tr>
-              <th>Client</th>
-              <th>Total Price</th>
-              <th>Monthly Fee</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+        <div class="table-wrap">
+          <table class="table" id="projectsTable">
+            <thead>
+              <tr>
+                <th>Client</th>
+                <th>Total Price</th>
+                <th>Monthly Fee</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
       </article>
 
       <article class="card">
@@ -176,22 +220,23 @@
         <p class="muted">
           Next 6 active recurring_expenses sorted by next_due_date.
         </p>
-        <table class="table" id="billsTable">
-          <thead>
-            <tr>
-              <th>Bill</th>
-              <th>Due</th>
-              <th>Vendor</th>
-              <th>Amount</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+        <div class="table-wrap">
+          <table class="table" id="billsTable">
+            <thead>
+              <tr>
+                <th>Bill</th>
+                <th>Due</th>
+                <th>Vendor</th>
+                <th>Amount</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
         <p class="muted" id="billsNote"></p>
       </article>
     </section>
 
-    <!-- LEAD SNAPSHOT -->
     <section class="card" style="margin-bottom:24px;">
       <h2>Lead Pipeline Snapshot</h2>
       <p class="muted">
@@ -204,16 +249,18 @@
         </div>
         <div>
           <p class="stat-label">Top Callers (Closed Won)</p>
-          <table class="table" id="topCallersTable">
-            <thead>
-              <tr>
-                <th>Caller</th>
-                <th>Closed Won</th>
-                <th>Est. Commission</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
+          <div class="table-wrap">
+            <table class="table" id="topCallersTable">
+              <thead>
+                <tr>
+                  <th>Caller</th>
+                  <th>Closed Won</th>
+                  <th>Est. Commission</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
         </div>
       </div>
     </section>
@@ -232,16 +279,14 @@
   document.getElementById('year').textContent = new Date().getFullYear();
 </script>
 
-<!-- SUPABASE + LOGIC -->
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script>
 const SUPABASE_URL  = "https://vekoulqehexqosgwacwa.supabase.co";
-const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
+const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiIsInZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
 const ADMIN_EMAIL   = "srarnold216@gmail.com";
 
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
-// DOM refs
 const userEmailSpan   = document.getElementById("userEmail");
 const loginBox        = document.getElementById("loginBox");
 const dashboardContent= document.getElementById("dashboardContent");
@@ -252,7 +297,6 @@ const loginMsg        = document.getElementById("loginMsg");
 const logoutBtn       = document.getElementById("logoutBtn");
 const logoutBtnMobile = document.getElementById("logoutBtnMobile");
 
-// Dashboard metric refs
 const lifetimeRevenue = document.getElementById("lifetimeRevenue");
 const monthlyIncome   = document.getElementById("monthlyIncome");
 const monthlyBills    = document.getElementById("monthlyBills");
@@ -266,7 +310,6 @@ const billsNote           = document.getElementById("billsNote");
 const leadStatusStats     = document.getElementById("leadStatusStats");
 const topCallersTableBody = document.querySelector("#topCallersTable tbody");
 
-// Helpers
 function formatMoney(n) {
   if (n === null || n === undefined || isNaN(Number(n))) return "$0.00";
   return "$" + Number(n).toFixed(2);
@@ -278,11 +321,9 @@ function endOfMonth(date) {
   return new Date(date.getFullYear(), date.getMonth() + 1, 0);
 }
 
-// MAIN GUARD + ROUTER
 async function guardAndRoute() {
   const { data } = await supabaseClient.auth.getUser();
 
-  // Not logged in: show login box, hide admin dashboard
   if (!data || !data.user) {
     userEmailSpan.textContent = "";
     loginBox.style.display = "block";
@@ -293,18 +334,15 @@ async function guardAndRoute() {
   const email = data.user.email || "";
   userEmailSpan.textContent = email;
 
-  // Admin
   if (email === ADMIN_EMAIL) {
     loginBox.style.display = "none";
     dashboardContent.style.display = "block";
     await loadDashboard();
   } else {
-    // Non-admin -> contractor portal
     window.location.href = "contractor-portal.html";
   }
 }
 
-// LOGIN HANDLER
 loginBtn.addEventListener("click", async () => {
   const email = loginEmailInput.value.trim();
   const pw    = loginPwInput.value.trim();
@@ -330,7 +368,6 @@ loginBtn.addEventListener("click", async () => {
   }
 });
 
-// LOGOUT HANDLERS (back to login view)
 async function doLogout() {
   await supabaseClient.auth.signOut();
   await guardAndRoute();
@@ -338,7 +375,6 @@ async function doLogout() {
 logoutBtn?.addEventListener("click", doLogout);
 logoutBtnMobile?.addEventListener("click", doLogout);
 
-// LOAD ADMIN DASHBOARD DATA
 async function loadDashboard() {
   const today = new Date();
   const monthStart = startOfMonth(today);
@@ -358,7 +394,6 @@ async function loadDashboard() {
   const bills      = billsRes.data || [];
   const leads      = leadsRes.data || [];
 
-  // MONEY SUMMARY
   let lifetimeRev       = 0;
   let monthlyFeeTotal   = 0;
   let monthlyBillsTotal = 0;
@@ -379,7 +414,6 @@ async function loadDashboard() {
   monthlyBills.textContent    = formatMoney(monthlyBillsTotal);
   monthlyNet.textContent      = formatMoney(monthlyFeeTotal - monthlyBillsTotal);
 
-  // PROJECTS TABLE (last 6)
   projectsTableBody.innerHTML = "";
   onboarding
     .sort((a, b) => new Date(b.created_at || b.first_paid_at || 0) - new Date(a.created_at || a.first_paid_at || 0))
@@ -415,7 +449,6 @@ async function loadDashboard() {
       projectsTableBody.appendChild(tr);
     });
 
-  // BILLS TABLE
   billsTableBody.innerHTML = "";
   bills
     .filter(b => b.next_due_date)
@@ -447,7 +480,6 @@ async function loadDashboard() {
     ? ""
     : "No recurring_expenses yet. Add them in Supabase when you start paying tools/domains/email.";
 
-  // LEADS SNAPSHOT
   const statusCounts      = {};
   let closedThisMonth     = 0;
   let commissionThisMonth = 0;
@@ -457,17 +489,14 @@ async function loadDashboard() {
     const status = (ld.call_status || "new").toLowerCase();
     statusCounts[status] = (statusCounts[status] || 0) + 1;
 
-    // this-month closed won
     if (status === "closed won" && ld.last_contact_date) {
       const d = new Date(ld.last_contact_date);
-      if (d >= startOfMonth(today) && d <= endOfMonth(today)) {
+      if (d >= monthStart && d <= monthEnd) {
         closedThisMonth += 1;
-        // rough: treat each closed site as $100 for now (base only)
         commissionThisMonth += 100;
       }
     }
 
-    // per-caller stats
     if (ld.assigned_caller_email) {
       const email = ld.assigned_caller_email;
       if (!callerStats.has(email)) {
@@ -476,7 +505,7 @@ async function loadDashboard() {
       const obj = callerStats.get(email);
       if (status === "closed won") {
         obj.closedWon += 1;
-        obj.commission += 100; // same rough estimate
+        obj.commission += 100;
       }
     }
   });
@@ -484,14 +513,12 @@ async function loadDashboard() {
   closedWonMonth.textContent  = closedThisMonth;
   commissionMonth.textContent = formatMoney(commissionThisMonth);
 
-  // Status counts text
   const parts = [];
   Object.entries(statusCounts).forEach(([s, count]) => {
     parts.push(`${s}: ${count}`);
   });
   leadStatusStats.textContent = parts.length ? parts.join(" · ") : "No leads yet.";
 
-  // Top callers table
   topCallersTableBody.innerHTML = "";
   const sortedCallers = Array.from(callerStats.entries())
     .sort((a,b) => b[1].commission - a[1].commission)
@@ -526,11 +553,10 @@ async function loadDashboard() {
   }
 }
 
-// Init
 (async () => {
   await guardAndRoute();
 })();
 </script>
 
 </body>
-</html>
+  </html>
