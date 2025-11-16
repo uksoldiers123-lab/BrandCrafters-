@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>BrandCrafters — Scripts & Messages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="dashboard.css" />
+  <script defer src="dashboard.js"></script>
+</head>
+
+<body class="admin-body">
+
+<!-- HEADER -->
+<header class="site-header admin-header">
+  <div class="container header-inner">
+    <a class="logo" href="index.html">
+      <span class="logo-mark">BC</span><span>BrandCrafters</span>
+    </a>
+
+    <nav class="nav desktop-nav">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="pricing.html" class="nav-link">Pricing</a>
+      <a href="customer-inquiry.html" class="nav-link">Customer Portal</a>
+      <span id="userEmail" class="admin-email"></span>
+      <button id="logoutBtn" class="btn btn-outline">Logout</button>
+    </nav>
+
+    <button class="menu-toggle" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <nav class="mobile-drawer admin-drawer" aria-hidden="true">
+    <div class="drawer-header">
+      <a class="logo" href="index.html">
+        <span class="logo-mark">BC</span><span>BrandCrafters</span>
+      </a>
+      <button class="menu-close">✕</button>
+    </div>
+
+    <a class="drawer-link" href="dashboard.html">Dashboard</a>
+    <a class="drawer-link" href="dashboard-leads.html">Lead List</a>
+    <a class="drawer-link" href="dashboard-leads-upload.html">Upload Leads</a>
+    <a class="drawer-link" href="dashboard-demos.html">Demo Library</a>
+    <a class="drawer-link highlight" href="dashboard-communications.html">Scripts & Messages</a>
+    <a class="drawer-link" href="dashboard-settings.html">Settings</a>
+    <button class="drawer-link" id="logoutBtnMobile">Logout</button>
+  </nav>
+
+  <div class="drawer-backdrop"></div>
+</header>
+
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="bc-icon">BC</div>
+    <span class="sidebar-title">Admin Panel</span>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a href="dashboard.html" class="side-item">🏠 Dashboard</a>
+
+    <div class="side-group">
+      <div class="side-label">LEADS</div>
+      <a href="dashboard-leads.html" class="side-sub">📇 Lead List</a>
+      <a href="dashboard-leads-upload.html" class="side-sub">📤 Upload CSV</a>
+    </div>
+
+    <div class="side-group">
+      <div class="side-label">DEMOS</div>
+      <a href="dashboard-demos.html" class="side-sub">🌐 Demo Library</a>
+    </div>
+
+    <div class="side-group">
+      <div class="side-label">COMMUNICATIONS</div>
+      <a href="dashboard-communications.html" class="side-sub active">📞 Scripts & Templates</a>
+    </div>
+
+    <div class="side-group">
+      <div class="side-label">SETTINGS</div>
+      <a href="dashboard-settings.html" class="side-sub">⚙️ System Settings</a>
+    </div>
+  </nav>
+</aside>
+
+
+<!-- MAIN CONTENT -->
+<main class="main-content">
+  <h1>Scripts & Message Templates</h1>
+  <p class="subhead">
+    Call scripts, email templates, and DM messages your contractors can copy and use.
+  </p>
+
+  <!-- Filter Tabs -->
+  <section class="card" style="margin-bottom:24px;">
+    <div class="filter-row">
+      <button class="chip chip-active" data-type="all" onclick="setFilter('all')">All</button>
+      <button class="chip" data-type="script" onclick="setFilter('script')">Call Scripts</button>
+      <button class="chip" data-type="email" onclick="setFilter('email')">Emails</button>
+      <button class="chip" data-type="dm" onclick="setFilter('dm')">DM / Social</button>
+    </div>
+  </section>
+
+  <!-- Add/Edit Form -->
+  <section class="card">
+    <h2 id="formTitle">Add Template</h2>
+
+    <form id="templateForm" onsubmit="saveTemplate(event)">
+      <input type="hidden" id="template_id" />
+
+      <label>Type
+        <select id="type">
+          <option value="script">Call Script</option>
+          <option value="email">Email</option>
+          <option value="dm">DM / Social Message</option>
+        </select>
+      </label>
+
+      <label>Title
+        <input id="title" placeholder="Cold Call Intro — Local Restaurant" required />
+      </label>
+
+      <label>Content
+        <textarea id="content" rows="6" placeholder="What your contractor reads or pastes…"></textarea>
+      </label>
+
+      <label>Active?
+        <select id="is_active">
+          <option value="true">Yes (show to contractors)</option>
+          <option value="false">No (hide)</option>
+        </select>
+      </label>
+
+      <button type="submit" class="btn btn-primary" style="margin-top:14px;">Save Template</button>
+      <button type="button" class="btn btn-ghost" style="margin-top:14px;margin-left:8px;" onclick="resetForm()">Reset</button>
+
+      <p id="formMsg" class="muted"></p>
+    </form>
+  </section>
+
+  <!-- Template List -->
+  <section class="card" style="margin-top:30px;">
+    <h2>Templates</h2>
+    <table class="table" id="templatesTable">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Type</th>
+          <th>Status</th>
+          <th>Preview</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+</main>
+
+
+<!-- SUPABASE -->
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = "https://vekoulqehexqosgwacwa.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiIsInZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
+const ADMIN_EMAIL = "srarnold216@gmail.com";
+
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+let templatesCache = [];
+let currentFilter = "all";
+
+/* AUTH GUARD */
+async function guard(){
+  const { data } = await sb.auth.getUser();
+  if (!data.user) return location.href="dashboard-login.html";
+  if (data.user.email !== ADMIN_EMAIL) return location.href="contractor-portal.html";
+  document.getElementById("userEmail").textContent = data.user.email;
+}
+guard();
+
+/* LOAD TEMPLATES */
+async function loadTemplates(){
+  const res = await sb.from("communication_templates").select("*").order("created_at",{ascending:false});
+  if (res.error){
+    console.error(res.error);
+    return;
+  }
+  templatesCache = res.data || [];
+  renderTemplates();
+}
+
+function renderTemplates(){
+  const tbody = document.querySelector("#templatesTable tbody");
+  tbody.innerHTML = "";
+
+  const filtered = templatesCache.filter(t => {
+    if (currentFilter==="all") return true;
+    return t.type === currentFilter;
+  });
+
+  filtered.forEach(t => {
+    const preview = (t.content || "").length > 80
+      ? (t.content.slice(0,77) + "…")
+      : (t.content || "");
+
+    tbody.innerHTML += `
+      <tr>
+        <td><strong>${t.title}</strong></td>
+        <td>${t.type}</td>
+        <td>${t.is_active ? "✅ Active" : "⌛ Hidden"}</td>
+        <td class="muted">${preview.replace(/</g,"&lt;")}</td>
+        <td>
+          <button class="btn-small" onclick="editTemplate('${t.id}')">Edit</button>
+          <button class="btn-small" onclick="toggleTemplate('${t.id}', ${t.is_active ? "true" : "false"})">
+            ${t.is_active ? "Hide" : "Make Active"}
+          </button>
+          <button class="btn-small danger" onclick="deleteTemplate('${t.id}')">Delete</button>
+        </td>
+      </tr>
+    `;
+  });
+}
+
+/* FILTER TABS */
+function setFilter(type){
+  currentFilter = type;
+  document.querySelectorAll(".chip").forEach(ch=>{
+    ch.classList.toggle("chip-active", ch.dataset.type===type);
+  });
+  renderTemplates();
+}
+
+/* SAVE TEMPLATE */
+async function saveTemplate(e){
+  e.preventDefault();
+
+  const id = document.getElementById("template_id").value;
+  const body = {
+    type: document.getElementById("type").value,
+    title: document.getElementById("title").value,
+    content: document.getElementById("content").value,
+    is_active: document.getElementById("is_active").value === "true"
+  };
+
+  let res;
+  if (id){
+    res = await sb.from("communication_templates").update(body).eq("id",id);
+  } else {
+    res = await sb.from("communication_templates").insert(body);
+  }
+
+  if (res.error){
+    document.getElementById("formMsg").textContent = "Error saving template.";
+    console.error(res.error);
+  } else {
+    document.getElementById("formMsg").textContent = "Saved!";
+    resetForm();
+    loadTemplates();
+  }
+}
+
+/* EDIT TEMPLATE */
+function editTemplate(id){
+  const t = templatesCache.find(x => x.id === id);
+  if (!t) return;
+
+  document.getElementById("formTitle").textContent = "Edit Template";
+  document.getElementById("template_id").value = t.id;
+  document.getElementById("type").value = t.type || "script";
+  document.getElementById("title").value = t.title || "";
+  document.getElementById("content").value = t.content || "";
+  document.getElementById("is_active").value = t.is_active ? "true":"false";
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+/* RESET FORM */
+function resetForm(){
+  document.getElementById("formTitle").textContent = "Add Template";
+  document.getElementById("template_id").value = "";
+  document.getElementById("templateForm").reset();
+  document.getElementById("type").value = "script";
+  document.getElementById("is_active").value = "true";
+  document.getElementById("formMsg").textContent = "";
+}
+
+/* TOGGLE ACTIVE */
+async function toggleTemplate(id, isActive){
+  const res = await sb.from("communication_templates").update({ is_active: !isActive }).eq("id",id);
+  if (res.error){
+    console.error(res.error);
+  } else {
+    loadTemplates();
+  }
+}
+
+/* DELETE TEMPLATE */
+async function deleteTemplate(id){
+  if (!confirm("Delete this template?")) return;
+  const res = await sb.from("communication_templates").delete().eq("id",id);
+  if (res.error){
+    console.error(res.error);
+  } else {
+    loadTemplates();
+  }
+}
+
+loadTemplates();
+</script>
+
+</body>
+</html>
