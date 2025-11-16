@@ -4,22 +4,22 @@
   <meta charset="utf-8" />
   <title>BrandCrafters — Contractor Portal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <!-- Shared dashboard/site styles -->
   <link rel="stylesheet" href="dashboard.css" />
-  <script defer src="dashboard.js"></script>
 </head>
 
 <body class="admin-body">
 
-<!-- ============================
-   HEADER (same as main site)
-=============================== -->
+<!-- HEADER (matches main site with BC icon) -->
 <header class="site-header admin-header">
   <div class="container header-inner">
     <a class="logo" href="index.html">
       <span class="logo-mark">BC</span><span>BrandCrafters</span>
     </a>
 
+    <!-- Desktop nav -->
     <nav class="nav desktop-nav">
       <a href="index.html" class="nav-link">Home</a>
       <a href="pricing.html" class="nav-link">Pricing</a>
@@ -29,17 +29,19 @@
       <button id="logoutBtn" class="btn btn-outline">Logout</button>
     </nav>
 
+    <!-- Mobile hamburger -->
     <button class="menu-toggle" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
   </div>
 
+  <!-- Mobile drawer -->
   <nav class="mobile-drawer admin-drawer" aria-hidden="true">
     <div class="drawer-header">
       <a class="logo" href="index.html">
         <span class="logo-mark">BC</span><span>BrandCrafters</span>
       </a>
-      <button class="menu-close">✕</button>
+      <button class="menu-close" aria-label="Close menu">✕</button>
     </div>
 
     <a class="drawer-link" href="index.html">Home</a>
@@ -53,14 +55,10 @@
 </header>
 
 
-
-<!-- ============================
-   MAIN CONTENT
-=============================== -->
 <main class="main-content" style="max-width:1100px;margin-inline:auto;">
   <h1>Contractor Portal</h1>
   <p class="subhead">
-    View and work your assigned leads, see demo sites, and use pre-made scripts & pricing.
+    Work your assigned leads, submit your own leads, and use demos &amp; scripts to close deals.
   </p>
 
   <!-- SUMMARY STATS -->
@@ -78,18 +76,72 @@
     <div class="card stat-card">
       <div class="stat-label">Max Open Allowed</div>
       <div class="stat-value" id="statMaxOpen">2</div>
-      <p class="muted">Set by admin.</p>
+      <p class="muted">Set per contractor by admin.</p>
     </div>
   </section>
 
 
-  <!-- MY ACTIVE LEADS -->
+  <!-- ADD MY LEAD -->
   <section class="card" style="margin-bottom:24px;">
-    <h2>My Active Leads</h2>
+    <h2>Add My Lead</h2>
     <p class="muted">
-      These are your leads. Update statuses honestly — they determine bonuses and future assignments.
+      Add a business you found yourself. Admin will approve or deny. If approved, it enters the pool and
+      you can still claim and work it. When you both bring the lead and close the sale, your commission can be boosted (admin decides).
     </p>
 
+    <form id="myLeadForm" onsubmit="submitMyLead(event)">
+      <div class="grid-2">
+        <label>Business Name
+          <input id="ml_business_name" required placeholder="Example Grill &amp; Bar" />
+        </label>
+
+        <label>Phone
+          <input id="ml_phone" required placeholder="(555) 555-5555" />
+        </label>
+
+        <label>Email (optional)
+          <input id="ml_email" type="email" placeholder="info@business.com" />
+        </label>
+
+        <label>Social / Listing URL (optional)
+          <input id="ml_social" placeholder="Google Maps / Facebook / Instagram link" />
+        </label>
+
+        <label>City / Town
+          <input id="ml_city" required placeholder="Unadilla, GA" />
+        </label>
+
+        <label>Category
+          <input id="ml_category" placeholder="Restaurant, HVAC, Lawn Care…" />
+        </label>
+
+        <label>Recommended Package
+          <select id="ml_package_recommendation">
+            <option value="Starter Craft">Starter Craft ($249)</option>
+            <option value="Business Builder" selected>Business Builder ($699)</option>
+            <option value="E-Commerce Store">E-Commerce Store ($1,199)</option>
+          </select>
+        </label>
+
+        <label>Notes for Admin (optional)
+          <textarea id="ml_notes" rows="3" placeholder="Why this is a good lead, what you noticed about their website or lack of site…"></textarea>
+        </label>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="margin-top:14px;">Submit Lead for Approval</button>
+      <p id="myLeadMsg" class="muted"></p>
+    </form>
+  </section>
+
+
+  <!-- MY ACTIVE LEADS + MY SUBMITTED LEADS -->
+  <section class="card" style="margin-bottom:24px;">
+    <h2>My Leads</h2>
+    <p class="muted">
+      Assigned leads you’re working, plus contractor leads you submitted (with approval status).
+    </p>
+
+    <h3 style="margin-top:0;">Assigned to Me</h3>
     <table class="table" id="myLeadsTable">
       <thead>
         <tr>
@@ -105,6 +157,23 @@
       <tbody></tbody>
     </table>
     <p id="myLeadsMsg" class="muted"></p>
+
+    <hr style="margin:18px 0;border-color:rgba(255,255,255,.08);" />
+
+    <h3>Leads I Submitted (Finder)</h3>
+    <table class="table" id="mySubmittedTable">
+      <thead>
+        <tr>
+          <th>Business</th>
+          <th>City</th>
+          <th>Category</th>
+          <th>Package</th>
+          <th>Approval</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <p id="mySubmittedMsg" class="muted"></p>
   </section>
 
 
@@ -132,7 +201,7 @@
   </section>
 
 
-  <!-- DEMO LIBRARY (LIVE ONLY) -->
+  <!-- DEMO SITES (LIVE ONLY) -->
   <section class="card" style="margin-bottom:24px;">
     <h2>Demo Sites (Live)</h2>
     <p class="muted">
@@ -156,7 +225,7 @@
 
   <!-- SCRIPTS & PRICING -->
   <section class="card" style="margin-bottom:24px;">
-    <h2>Scripts & Pricing</h2>
+    <h2>Scripts &amp; Pricing</h2>
     <p class="muted">
       Use these exact scripts or copy/paste messages. Pricing is pre-set — do not discount without approval.
     </p>
@@ -179,7 +248,7 @@
         <h3>Pricing Cheat Sheet</h3>
         <table class="table">
           <thead>
-            <tr><th>Package</th><th>Price</th><th>Commission*</th></tr>
+            <tr><th>Package</th><th>Price</th><th>Base Commission*</th></tr>
           </thead>
           <tbody>
             <tr>
@@ -200,7 +269,7 @@
           </tbody>
         </table>
         <p class="muted" style="font-size:12px;">
-          *Commission amounts are base and may change. Final payouts are confirmed in your monthly report.
+          *If you both bring the lead and close the sale, admin may add an extra bonus amount on top of the base commission.
         </p>
 
         <h4 style="margin-top:16px;">Maintenance / Add-Ons (for reference)</h4>
@@ -218,10 +287,7 @@
 </main>
 
 
-
-<!-- ============================
-   SUPABASE + PAGE LOGIC
-=============================== -->
+<!-- SUPABASE + PAGE LOGIC -->
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script>
 const SUPABASE_URL = "https://vekoulqehexqosgwacwa.supabase.co";
@@ -231,7 +297,8 @@ const ADMIN_EMAIL = "srarnold216@gmail.com";
 const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 let currentUser = null;
-let maxOpenLeads = 2;
+let maxOpenLeadsGlobal = 2;
+let maxOpenLeadsForUser = 2;
 
 /* AUTH GUARD */
 async function guard(){
@@ -240,7 +307,6 @@ async function guard(){
     window.location.href = "dashboard-login.html";
     return;
   }
-  // Admin should not use contractor portal
   if (data.user.email === ADMIN_EMAIL){
     window.location.href = "dashboard.html";
     return;
@@ -248,45 +314,104 @@ async function guard(){
   currentUser = data.user;
   document.getElementById("userEmail").textContent = currentUser.email;
 
-  await loadSettings();
+  await loadSettingsAndContractorProfile();
   await loadEverything();
 }
 guard();
 
-/* SETTINGS (max open + commissions) */
-async function loadSettings(){
-  const res = await client.from("admin_settings").select("*").in("key", [
+/* SETTINGS (global + per-contractor) */
+async function loadSettingsAndContractorProfile(){
+  // 1) Global admin_settings
+  const settingsRes = await client.from("admin_settings").select("*").in("key", [
     "contractor_max_open_leads",
     "commission_starter",
     "commission_business",
     "commission_ecommerce"
   ]);
-  if (res.error){
-    console.error(res.error);
-    return;
+  if (!settingsRes.error){
+    const map = {};
+    (settingsRes.data || []).forEach(row => { map[row.key] = row.value; });
+
+    maxOpenLeadsGlobal = Number(map["contractor_max_open_leads"] || 2);
+    maxOpenLeadsForUser = maxOpenLeadsGlobal;
+
+    if (map["commission_starter"])   document.getElementById("commStarter").textContent   = "$"+map["commission_starter"];
+    if (map["commission_business"])  document.getElementById("commBusiness").textContent  = "$"+map["commission_business"];
+    if (map["commission_ecommerce"]) document.getElementById("commEcommerce").textContent = "$"+map["commission_ecommerce"];
   }
-  const map = {};
-  (res.data || []).forEach(row => { map[row.key] = row.value; });
 
-  maxOpenLeads = Number(map["contractor_max_open_leads"] || 2);
-  document.getElementById("statMaxOpen").textContent = maxOpenLeads;
+  // 2) Per-contractor override from contractors table
+  if (currentUser){
+    const contractorRes = await client
+      .from("contractors")
+      .select("*")
+      .eq("email", currentUser.email)
+      .maybeSingle();
 
-  if (map["commission_starter"])   document.getElementById("commStarter").textContent   = "$"+map["commission_starter"];
-  if (map["commission_business"])  document.getElementById("commBusiness").textContent  = "$"+map["commission_business"];
-  if (map["commission_ecommerce"]) document.getElementById("commEcommerce").textContent = "$"+map["commission_ecommerce"];
+    if (!contractorRes.error && contractorRes.data){
+      const c = contractorRes.data;
+      if (c.max_open_leads && Number(c.max_open_leads) > 0){
+        maxOpenLeadsForUser = Number(c.max_open_leads);
+      }
+    }
+  }
+
+  document.getElementById("statMaxOpen").textContent = maxOpenLeadsForUser;
 }
 
 /* LOAD ALL MAIN DATA */
 async function loadEverything(){
   await Promise.all([
     loadMyLeads(),
+    loadMySubmittedLeads(),
     loadAvailableLeads(),
     loadDemos(),
     loadTemplates()
   ]);
 }
 
-/* MY LEADS */
+/* SUBMIT MY LEAD */
+async function submitMyLead(e){
+  e.preventDefault();
+  if (!currentUser) return;
+
+  const body = {
+    business_name: document.getElementById("ml_business_name").value,
+    phone: document.getElementById("ml_phone").value,
+    email: document.getElementById("ml_email").value || null,
+    social: document.getElementById("ml_social").value || null,
+    city: document.getElementById("ml_city").value,
+    category: document.getElementById("ml_category").value || null,
+    package_recommendation: document.getElementById("ml_package_recommendation").value,
+    call_status: "new",
+    assigned_caller_email: null,
+    lead_source: "contractor",
+    finder_email: currentUser.email,
+    approved: false,
+    finder_bonus_amount: 0,   // admin sets real bonus after sale if you found + closed
+    commission_status: "unpaid"
+  };
+
+  const notes = document.getElementById("ml_notes").value;
+  if (notes){
+    console.log("Lead notes:", notes);
+    // later you can add a notes column or a log table if you want to store this
+  }
+
+  const res = await client.from("call_leads").insert(body);
+  const msgEl = document.getElementById("myLeadMsg");
+
+  if (res.error){
+    console.error(res.error);
+    msgEl.textContent = "Error submitting lead.";
+  } else {
+    msgEl.textContent = "Lead submitted. Waiting for admin approval.";
+    document.getElementById("myLeadForm").reset();
+    await loadMySubmittedLeads();
+  }
+}
+
+/* MY ASSIGNED LEADS */
 async function loadMyLeads(){
   if (!currentUser) return;
   const email = currentUser.email;
@@ -304,14 +429,11 @@ async function loadMyLeads(){
   let closedWonCount = 0;
 
   data.forEach(L => {
-    if (["closed won","closed lost","failed"].includes((L.call_status||"").toLowerCase())) {
-      // Not active
-    } else {
-      activeCount++;
-    }
-    if ((L.call_status||"").toLowerCase() === "closed won") closedWonCount++;
+    const stLower = (L.call_status || "new").toLowerCase();
+    if (!["closed won","closed lost","failed"].includes(stLower)) activeCount++;
+    if (stLower === "closed won") closedWonCount++;
 
-    const status = (L.call_status || "new");
+    const status = L.call_status || "new";
 
     tbody.innerHTML += `
       <tr>
@@ -349,15 +471,50 @@ async function loadMyLeads(){
 
   document.getElementById("statActiveLeads").textContent = activeCount;
   document.getElementById("statClosedWon").textContent = closedWonCount;
-  document.getElementById("myLeadsMsg").textContent = data.length ? "" : "You do not have any leads assigned yet.";
+  document.getElementById("myLeadsMsg").textContent = data.length ? "" : "You do not have any assigned leads yet.";
 }
 
-/* AVAILABLE LEADS */
+/* MY SUBMITTED LEADS (as finder) — they always see these */
+async function loadMySubmittedLeads(){
+  if (!currentUser) return;
+  const email = currentUser.email;
+
+  const res = await client.from("call_leads")
+    .select("*")
+    .eq("finder_email", email)
+    .order("created_at",{ascending:false});
+
+  const data = res.data || [];
+  const tbody = document.querySelector("#mySubmittedTable tbody");
+  tbody.innerHTML = "";
+
+  data.forEach(L => {
+    let approvalText = "Approved";
+    if (L.approved === false) approvalText = "Pending Approval";
+    if (L.approved === true && !L.assigned_caller_email) approvalText = "Approved (in pool)";
+    if (L.approved === true && L.assigned_caller_email) approvalText = "Approved (claimed)";
+
+    tbody.innerHTML += `
+      <tr>
+        <td><strong>${L.business_name||"—"}</strong></td>
+        <td>${L.city||"—"}</td>
+        <td>${L.category||"—"}</td>
+        <td>${L.package_recommendation||"—"}</td>
+        <td class="muted">${approvalText}</td>
+      </tr>
+    `;
+  });
+
+  document.getElementById("mySubmittedMsg").textContent = data.length ? "" : "You haven’t submitted any leads yet.";
+}
+
+/* AVAILABLE LEADS (only approved and unassigned) */
 async function loadAvailableLeads(){
   const res = await client.from("call_leads")
     .select("*")
     .is("assigned_caller_email", null)
     .eq("call_status","new")
+    .eq("approved", true)
     .order("created_at",{ascending:false});
 
   const data = res.data || [];
@@ -381,15 +538,14 @@ async function loadAvailableLeads(){
 
   document.getElementById("availMsg").textContent = data.length
     ? ""
-    : "No unassigned new leads right now.";
+    : "No approved unassigned new leads right now.";
 }
 
-/* CLAIM LEAD (respect max open) */
+/* CLAIM LEAD (respect per-contractor max open) */
 async function claimLead(id){
   if (!currentUser) return;
   const email = currentUser.email;
 
-  // Count open leads
   const res = await client.from("call_leads")
     .select("id, call_status")
     .eq("assigned_caller_email", email);
@@ -401,15 +557,15 @@ async function claimLead(id){
     if (!["closed won","closed lost","failed"].includes(st)) openCount++;
   });
 
-  if (openCount >= maxOpenLeads){
-    alert("You already have the maximum number of open leads. Close or release some before claiming more.");
+  if (openCount >= maxOpenLeadsForUser){
+    alert("You already have the maximum number of open leads you are allowed. Close or release some before claiming more.");
     return;
   }
 
   const upd = await client.from("call_leads")
     .update({ assigned_caller_email: email, call_status: "working" })
     .eq("id", id)
-    .is("assigned_caller_email", null); // only if still unassigned
+    .is("assigned_caller_email", null);
 
   if (upd.error){
     console.error(upd.error);
@@ -532,7 +688,39 @@ async function loadTemplates(){
   if (!emailDiv.innerHTML)  emailDiv.innerHTML  = `<p class="muted">No email templates yet.</p>`;
   if (!dmDiv.innerHTML)     dmDiv.innerHTML     = `<p class="muted">No DM templates yet.</p>`;
 }
+
+/* LOGOUT HOOKS */
+document.getElementById("logoutBtn")?.addEventListener("click", async () => {
+  await client.auth.signOut();
+  window.location.href = "dashboard-login.html";
+});
+document.getElementById("logoutBtnMobile")?.addEventListener("click", async () => {
+  await client.auth.signOut();
+  window.location.href = "dashboard-login.html";
+});
+
+/* MOBILE NAV TOGGLE */
+const menuToggle = document.querySelector(".menu-toggle");
+const drawer = document.querySelector(".mobile-drawer");
+const backdrop = document.querySelector(".drawer-backdrop");
+const closeBtn = document.querySelector(".menu-close");
+
+if (menuToggle && drawer && backdrop && closeBtn) {
+  menuToggle.addEventListener("click", () => {
+    document.body.classList.add("drawer-open");
+    menuToggle.setAttribute("aria-expanded", "true");
+    drawer.setAttribute("aria-hidden", "false");
+  });
+  closeBtn.addEventListener("click", closeDrawer);
+  backdrop.addEventListener("click", closeDrawer);
+
+  function closeDrawer() {
+    document.body.classList.remove("drawer-open");
+    menuToggle.setAttribute("aria-expanded", "false");
+    drawer.setAttribute("aria-hidden", "true");
+  }
+}
 </script>
 
 </body>
-</html>
+                                          </html>
