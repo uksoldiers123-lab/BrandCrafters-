@@ -5,823 +5,310 @@
   <title>BrandCrafters — Admin Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
-  <style>
-    :root{
-      --bg:#050713;
-      --panel:rgba(255,255,255,.04);
-      --border:rgba(255,255,255,.08);
-      --text:#f5f5ff;
-      --muted:#b5b7d8;
-      --grad:linear-gradient(135deg,#6ea8ff,#b166ff);
-    }
-    *{box-sizing:border-box;}
-    body{
-      margin:0;
-      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-      background:
-        radial-gradient(1200px 600px at -10% -10%, #18122f 0, rgba(24,18,47,0) 60%),
-        var(--bg);
-      color:var(--text);
-    }
-    a{text-decoration:none;color:var(--text);}
-
-    /* Shared header/footer style to match main site */
-    .site-header{
-      position:sticky;top:0;z-index:40;
-      background:rgba(11,10,20,.92);
-      backdrop-filter:blur(14px);
-      border-bottom:1px solid rgba(255,255,255,.08);
-    }
-    .container{max-width:1100px;margin:0 auto;padding:0 20px;}
-    .header-inner{
-      display:flex;align-items:center;justify-content:space-between;
-      gap:16px;height:64px;
-    }
-    .logo{
-      display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.18em;
-      text-transform:uppercase;font-size:13px;
-    }
-    .logo-mark{
-      display:inline-grid;place-items:center;width:36px;height:36px;border-radius:12px;
-      background:var(--grad);color:#050713;font-weight:800;font-size:16px;
-    }
-    .desktop-nav{display:flex;align-items:center;gap:10px;}
-    .nav-link{
-      position:relative;padding:8px 12px;border-radius:999px;font-size:13px;
-      border:1px solid transparent;
-    }
-    .nav-link:hover{background:rgba(255,255,255,.06);}
-    .nav-link.active::after{
-      content:"";position:absolute;left:12px;right:12px;bottom:4px;height:2px;
-      border-radius:999px;background:var(--grad);
-    }
-    .btn{
-      display:inline-block;padding:8px 14px;border-radius:999px;font-size:13px;
-      font-weight:600;border:1px solid transparent;cursor:pointer;transition:.18s;
-    }
-    .btn-outline{
-      border-color:rgba(255,255,255,.26);
-      background:rgba(255,255,255,.04);
-      color:var(--text);
-    }
-    .btn-primary{
-      background:var(--grad);
-      color:#050713;
-      box-shadow:0 0 0 1px rgba(110,168,255,.4);
-    }
-    .btn-small{
-      font-size:11px;
-      padding:4px 10px;
-      border-radius:999px;
-    }
-    .btn-muted{
-      border-color:rgba(255,255,255,.18);
-      background:rgba(255,255,255,.04);
-      color:var(--muted);
-    }
-    .btn:hover{transform:translateY(-1px);filter:brightness(1.05);}
-
-    .menu-toggle{display:none;}
-    .mobile-drawer,.drawer-backdrop{display:none;}
-
-    @media (max-width: 900px){
-      .desktop-nav{display:none;}
-      .menu-toggle{
-        display:flex;flex-direction:column;gap:4px;
-        width:40px;height:40px;align-items:center;justify-content:center;
-        border:1px solid rgba(255,255,255,.14);
-        background:rgba(255,255,255,.06);
-        border-radius:12px;
-      }
-      .menu-toggle span{width:20px;height:2px;background:#fff;border-radius:2px;}
-      .mobile-drawer{
-        position:fixed;inset:0 0 0 auto;width:82%;max-width:340px;
-        background:#050713;transform:translateX(100%);
-        transition:transform .22s;z-index:200;
-        border-left:1px solid rgba(255,255,255,.12);
-        display:block;
-      }
-      .drawer-header{
-        display:flex;align-items:center;justify-content:space-between;
-        padding:16px;border-bottom:1px solid rgba(255,255,255,.1);
-      }
-      .drawer-link{display:block;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.06);}
-      .drawer-link.highlight{
-        margin:10px 12px;border-radius:999px;text-align:center;
-        background:var(--grad);color:#050713;font-weight:600;border-bottom:none;
-      }
-      .drawer-backdrop{
-        position:fixed;inset:0;background:rgba(0,0,0,.55);
-        opacity:0;pointer-events:none;transition:opacity .22s;
-        display:block;z-index:150;
-      }
-      body.drawer-open .mobile-drawer{transform:translateX(0);}
-      body.drawer-open .drawer-backdrop{opacity:1;pointer-events:auto;}
-    }
-
-    .site-footer{
-      border-top:1px solid rgba(255,255,255,.08);
-      background:rgba(11,10,20,.92);
-      color:var(--muted);
-      font-size:13px;
-      padding:14px 0 18px;
-      margin-top:32px;
-    }
-    .footer-inner{
-      display:flex;justify-content:center;align-items:center;gap:8px;
-      flex-wrap:wrap;
-    }
-    .admin-link{
-      margin-left:8px;font-size:12px;
-      padding:4px 10px;border-radius:999px;
-      border:1px solid rgba(255,255,255,.22);
-    }
-
-    /* DASHBOARD LAYOUT */
-    main{
-      max-width:1100px;margin:18px auto 60px;
-      padding:0 16px;
-    }
-    h1{margin:0 0 6px;font-size:22px;}
-    .subhead{margin:0 0 18px;font-size:13px;color:var(--muted);}
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(3,minmax(0,1fr));
-      gap:12px;
-    }
-    .grid-2{
-      display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:12px;
-    }
-    @media (max-width:900px){
-      .grid{grid-template-columns:1fr;}
-      .grid-2{grid-template-columns:1fr;}
-    }
-    .card{
-      background:var(--panel);
-      border-radius:16px;
-      border:1px solid var(--border);
-      padding:16px 14px;
-    }
-    .card h2{margin:0 0 8px;font-size:16px;}
-    .card p{margin:0 0 6px;font-size:13px;}
-    .stat-label{
-      font-size:11px;text-transform:uppercase;
-      letter-spacing:.06em;color:var(--muted);
-    }
-    .stat-value{
-      font-size:20px;font-weight:700;margin-top:4px;
-    }
-    .stat-sub{font-size:11px;color:var(--muted);margin-top:2px;}
-    .pill{
-      display:inline-block;padding:2px 8px;border-radius:999px;
-      font-size:11px;
-    }
-    .pill-green{background:rgba(155,255,191,.18);border:1px solid rgba(155,255,191,.4);}
-    .pill-red{background:rgba(255,155,155,.15);border:1px solid rgba(255,155,155,.4);}
-    .pill-blue{background:rgba(110,168,255,.15);border:1px solid rgba(110,168,255,.4);}
-    .pill-muted{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.18);color:var(--muted);}
-    table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;}
-    th,td{
-      border-bottom:1px solid rgba(255,255,255,.08);
-      padding:5px 4px;
-      vertical-align:top;
-    }
-    th{
-      text-align:left;
-      font-size:11px;
-      text-transform:uppercase;
-      letter-spacing:.05em;
-      color:var(--muted);
-    }
-    .small{font-size:12px;color:var(--muted);}
-    .top-bar{
-      display:flex;justify-content:space-between;align-items:center;gap:10px;
-      margin-bottom:8px;
-    }
-    .user-email{font-size:12px;color:var(--muted);}
-    .logout-btn{
-      border-radius:999px;
-      padding:6px 12px;
-      border:1px solid rgba(255,255,255,.7);
-      background:rgba(255,255,255,.08);
-      color:var(--text);
-      font-size:12px;
-      cursor:pointer;
-      box-shadow:0 0 0 1px rgba(110,168,255,.4);
-      transition:.18s;
-    }
-    .logout-btn:hover{
-      background:rgba(255,255,255,.16);
-      transform:translateY(-1px);
-    }
-
-    .card-header-row{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:8px;
-      margin-bottom:6px;
-    }
-    .card-header-row h2{margin:0;font-size:15px;}
-    .chip-row{
-      display:flex;
-      flex-wrap:wrap;
-      gap:6px;
-      margin-top:4px;
-    }
-  </style>
+  <link rel="stylesheet" href="dashboard.css" />
+  <script defer src="dashboard.js"></script>
 </head>
-<body>
-<header class="site-header">
+
+<body class="admin-body">
+
+<!-- ============================
+   HEADER (matches main site)
+=============================== -->
+<header class="site-header admin-header">
   <div class="container header-inner">
     <a class="logo" href="index.html">
       <span class="logo-mark">BC</span><span>BrandCrafters</span>
     </a>
 
-    <!-- Desktop Nav -->
     <nav class="nav desktop-nav">
       <a href="index.html" class="nav-link">Home</a>
       <a href="pricing.html" class="nav-link">Pricing</a>
-      <a href="customer-inquiry.html" class="btn btn-outline">Customer Portal</a>
-      <a href="contractor-portal.html" class="btn btn-outline">Contractor Portal</a>
+      <a href="customer-inquiry.html" class="nav-link">Customer Portal</a>
+      <span id="userEmail" class="admin-email"></span>
+      <button id="logoutBtn" class="btn btn-outline">Logout</button>
     </nav>
 
-    <!-- Mobile: Hamburger -->
-    <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
+    <button class="menu-toggle" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
   </div>
 
-  <!-- Mobile Drawer (V8) -->
-  <nav class="mobile-drawer" aria-hidden="true">
+  <nav class="mobile-drawer admin-drawer" aria-hidden="true">
     <div class="drawer-header">
       <a class="logo" href="index.html">
         <span class="logo-mark">BC</span><span>BrandCrafters</span>
       </a>
-      <button class="menu-close" aria-label="Close menu">✕</button>
+      <button class="menu-close">✕</button>
     </div>
+
     <a class="drawer-link" href="index.html">Home</a>
     <a class="drawer-link" href="pricing.html">Pricing</a>
     <a class="drawer-link" href="customer-inquiry.html">Customer Portal</a>
-    <a class="drawer-link highlight" href="contractor-portal.html">Contractor Portal</a>
+    <a class="drawer-link highlight" href="dashboard.html">Admin Dashboard</a>
+    <button class="drawer-link" id="logoutBtnMobile">Logout</button>
   </nav>
-  <div class="drawer-backdrop" aria-hidden="true"></div>
+
+  <div class="drawer-backdrop"></div>
 </header>
 
-<main>
-  <section class="top-bar">
-    <div>
-      <h1>Admin Dashboard</h1>
-      <p class="subhead">
-        One place to see project money, monthly maintenance, recurring bills, leads, and demo sites.
-      </p>
-    </div>
-    <div>
-      <div class="user-email" id="userEmail">Checking auth…</div>
-      <button id="logoutBtn" class="logout-btn">Log Out</button>
-    </div>
-  </section>
 
-  <!-- MONEY SUMMARY -->
-  <section class="grid">
-    <article class="card">
-      <div class="stat-label">Lifetime Project Revenue (one-time)</div>
+
+
+<!-- ============================
+   SIDEBAR (Admin Only)
+=============================== -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="bc-icon">BC</div>
+    <span class="sidebar-title">Admin Panel</span>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a href="dashboard.html" class="side-item active">🏠 Dashboard</a>
+
+    <div class="side-group">
+      <div class="side-label">LEADS</div>
+      <a href="dashboard-leads.html" class="side-sub">📇 Lead List</a>
+      <a href="dashboard-leads-upload.html" class="side-sub">📤 Upload CSV</a>
+    </div>
+
+    <div class="side-group">
+      <div class="side-label">DEMOS</div>
+      <a href="dashboard-demos.html" class="side-sub">🌐 Demo Library</a>
+      <a href="dashboard-demos.html#add" class="side-sub">➕ Add Demo</a>
+    </div>
+
+    <div class="side-group">
+      <div class="side-label">COMMUNICATIONS</div>
+      <a href="dashboard-communications.html" class="side-sub">📞 Call Scripts</a>
+      <a href="dashboard-communications.html#email" class="side-sub">✉️ Email Templates</a>
+      <a href="dashboard-communications.html#dm" class="side-sub">💬 DM Templates</a>
+    </div>
+
+    <div class="side-group">
+      <div class="side-label">SETTINGS</div>
+      <a href="dashboard-settings.html" class="side-sub">⚙️ System Settings</a>
+    </div>
+  </nav>
+</aside>
+
+
+
+
+<!-- ============================
+   MAIN CONTENT
+=============================== -->
+<main class="main-content">
+  <h1>Dashboard Overview</h1>
+  <p class="subhead">Your money, leads, and project performance.</p>
+
+
+  <!-- MONEY CARDS -->
+  <section class="grid-3">
+    <div class="card stat-card">
+      <div class="stat-label">Lifetime Project Revenue</div>
       <div class="stat-value" id="lifetimeRevenue">$0.00</div>
-      <div class="stat-sub">Sum of total_price on onboarding submissions.</div>
-    </article>
+      <p class="muted">Total one-time money from projects.</p>
+    </div>
 
-    <article class="card">
+    <div class="card stat-card">
       <div class="stat-label">Active Monthly Income</div>
       <div class="stat-value" id="monthlyIncome">$0.00</div>
-      <div class="stat-sub">
-        Sum of monthly_fee for all projects with monthly_fee &gt; 0.
-      </div>
-    </article>
+      <p class="muted">Maintenance fees from clients.</p>
+    </div>
 
-    <article class="card">
-      <div class="stat-label">Active Monthly Bills (Tools & Client Bills)</div>
+    <div class="card stat-card">
+      <div class="stat-label">Monthly Bills</div>
       <div class="stat-value" id="monthlyBills">$0.00</div>
-      <div class="stat-sub">
-        recurring_expenses where frequency = 'monthly' and is_active = true.
-      </div>
-    </article>
+      <p class="muted">Tools + domain renewals + client bills.</p>
+    </div>
   </section>
 
-  <!-- PROFITS & LEADS SUMMARY -->
-  <section class="grid" style="margin-top:12px;">
-    <article class="card">
-      <div class="stat-label">Est. Monthly Net (Maintenance - Bills)</div>
+
+  <section class="grid-3">
+    <div class="card stat-card">
+      <div class="stat-label">Estimated Net (Monthly)</div>
       <div class="stat-value" id="monthlyNet">$0.00</div>
-      <div class="stat-sub">
-        Quick view if maintenance fees can cover recurring expenses.
-      </div>
-    </article>
+      <p class="muted">Maintenance minus bills.</p>
+    </div>
 
-    <article class="card">
-      <div class="stat-label">Closed Won Leads · This Month</div>
+    <div class="card stat-card">
+      <div class="stat-label">Closed Won (This Month)</div>
       <div class="stat-value" id="closedWonMonth">0</div>
-      <div class="stat-sub">
-        Leads in call_leads where status = 'closed won' this month.
-      </div>
-    </article>
+      <p class="muted">Sales from contractors.</p>
+    </div>
 
-    <article class="card">
-      <div class="stat-label">Estimated Commissions · This Month</div>
+    <div class="card stat-card">
+      <div class="stat-label">Commission Owed</div>
       <div class="stat-value" id="commissionMonth">$0.00</div>
-      <div class="stat-sub">
-        Based on website commissions (e.g. $100 per closed website sale).
-      </div>
-    </article>
+      <p class="muted">$50‒$100 per sale (package based).</p>
+    </div>
   </section>
 
-  <!-- PROJECTS & BILLS -->
-  <section class="grid-2" style="margin-top:16px;">
-    <article class="card">
-      <h2>Client Projects (Onboarding)</h2>
-      <p class="small">
-        Last 6 onboarding submissions with totals and monthly fees.
-      </p>
-      <table id="projectsTable">
-        <thead>
-          <tr>
-            <th>Client</th>
-            <th>Total Price</th>
-            <th>Monthly Fee</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </article>
 
-    <article class="card">
-      <h2>Upcoming Recurring Bills</h2>
-      <p class="small">
-        Next 6 active recurring_expenses sorted by next_due_date.
-      </p>
-      <table id="billsTable">
-        <thead>
-          <tr>
-            <th>Bill</th>
-            <th>Due</th>
-            <th>Vendor</th>
-            <th>Amount</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-      <p class="small" id="billsNote"></p>
-    </article>
-  </section>
+
+
+  <!-- RECENT PROJECTS -->
+  <h2 style="margin-top:40px;">Recent Projects</h2>
+  <div class="card">
+    <table class="table" id="projectsTable">
+      <thead>
+        <tr>
+          <th>Client</th>
+          <th>Total</th>
+          <th>Monthly</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+
+
+
+  <!-- UPCOMING BILLS -->
+  <h2 style="margin-top:40px;">Upcoming Bills</h2>
+  <div class="card">
+    <table class="table" id="billsTable">
+      <thead>
+        <tr>
+          <th>Bill</th>
+          <th>Due</th>
+          <th>Vendor</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <p id="billsNote" class="muted"></p>
+  </div>
+
+
+
 
   <!-- LEAD SNAPSHOT -->
-  <section class="card" style="margin-top:16px;">
-    <h2>Lead Pipeline Snapshot</h2>
-    <p class="small">
-      Quick check before you go deeper into the full Leads & CSV dashboard.
-    </p>
+  <h2 style="margin-top:40px;">Lead Snapshot</h2>
+  <div class="card">
     <div class="grid-2">
       <div>
-        <p class="stat-label">Counts by Status</p>
-        <p class="small" id="leadStatusStats">Loading…</p>
+        <p class="stat-label">Status Overview</p>
+        <p id="leadStatusStats" class="muted">Loading…</p>
       </div>
+
       <div>
-        <p class="stat-label">Top Callers (Closed Won)</p>
-        <table id="topCallersTable">
+        <p class="stat-label">Top Contractors</p>
+        <table class="table" id="topCallersTable">
           <thead>
-            <tr>
-              <th>Caller</th>
-              <th>Closed Won</th>
-              <th>Est. Commission</th>
-            </tr>
+            <tr><th>Caller</th><th>Closed</th><th>Commission</th></tr>
           </thead>
           <tbody></tbody>
         </table>
       </div>
     </div>
-  </section>
+  </div>
 
-  <!-- DEMO LIBRARY WITH LIVE TOGGLE -->
-  <section class="card" style="margin-top:16px;">
-    <div class="card-header-row">
-      <h2>Demo Library</h2>
-      <div class="chip-row">
-        <button class="btn btn-small btn-muted" id="refreshDemosBtn">Refresh</button>
-        <button class="btn btn-small btn-primary" id="publishAllBtn">Make All Drafts Live</button>
-      </div>
-    </div>
-    <p class="small">
-      Placeholder demos for each niche. Edit URLs/notes in Supabase or update the real sites, then flip them live here.
-    </p>
-    <table id="demoTable">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Category</th>
-          <th>URL</th>
-          <th>Status</th>
-          <th>Toggle</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </section>
 </main>
 
-<footer class="site-footer">
-  <div class="container footer-inner">
-    <div>
-      © <span id="year"></span> BrandCrafters — A division of Egyptian Hype LLC
-      <a href="dashboard.html" class="admin-link">Admin</a>
-    </div>
-  </div>
-</footer>
 
-<script>
-  document.getElementById('year').textContent = new Date().getFullYear();
 
-  // Mobile nav toggle reuse
-  const menuToggle = document.querySelector('.menu-toggle');
-  const mobileDrawer = document.querySelector('.mobile-drawer');
-  const drawerBackdrop = document.querySelector('.drawer-backdrop');
-  const menuClose = document.querySelector('.menu-close');
 
-  function setDrawer(open){
-    if(open){ document.body.classList.add('drawer-open'); }
-    else{ document.body.classList.remove('drawer-open'); }
-  }
-  if(menuToggle){
-    menuToggle.addEventListener('click', () => setDrawer(true));
-  }
-  if(menuClose){
-    menuClose.addEventListener('click', () => setDrawer(false));
-  }
-  if(drawerBackdrop){
-    drawerBackdrop.addEventListener('click', () => setDrawer(false));
-  }
-</script>
-
+<!-- SUPABASE -->
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script>
-  const SUPABASE_URL = "https://vekoulqehexqosgwacwa.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
-  const ADMIN_EMAIL = "srarnold216@gmail.com";
-  const LOGIN_PAGE_URL = "dashboard-login.html"; // your login page
+const SUPABASE_URL = "https://vekoulqehexqosgwacwa.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
+const ADMIN_EMAIL = "srarnold216@gmail.com";
 
-  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  const userEmailSpan     = document.getElementById("userEmail");
-  const logoutBtn         = document.getElementById("logoutBtn");
-
-  const lifetimeRevenueEl = document.getElementById("lifetimeRevenue");
-  const monthlyIncomeEl   = document.getElementById("monthlyIncome");
-  const monthlyBillsEl    = document.getElementById("monthlyBills");
-  const monthlyNetEl      = document.getElementById("monthlyNet");
-  const closedWonMonthEl  = document.getElementById("closedWonMonth");
-  const commissionMonthEl = document.getElementById("commissionMonth");
-
-  const projectsTableBody = document.querySelector("#projectsTable tbody");
-  const billsTableBody    = document.querySelector("#billsTable tbody");
-  const billsNote         = document.getElementById("billsNote");
-  const leadStatusStats   = document.getElementById("leadStatusStats");
-  const topCallersTableBody = document.querySelector("#topCallersTable tbody");
-
-  const demoTableBody     = document.querySelector("#demoTable tbody");
-  const refreshDemosBtn   = document.getElementById("refreshDemosBtn");
-  const publishAllBtn     = document.getElementById("publishAllBtn");
-
-  async function guardAdmin() {
-    const { data, error } = await supabaseClient.auth.getUser();
-    if (error) {
-      console.error("auth error:", error);
-      window.location.href = LOGIN_PAGE_URL;
-      return null;
-    }
-    if (!data || !data.user) {
-      window.location.href = LOGIN_PAGE_URL;
-      return null;
-    }
-
-    const email = data.user.email;
-    userEmailSpan.textContent = email || "(no email)";
-
-    if (email !== ADMIN_EMAIL) {
-      window.location.href = "contractor-portal.html";
-      return null;
-    }
-    return data.user;
+/* AUTH GUARD */
+async function guard() {
+  const { data } = await client.auth.getUser();
+  if (!data.user) {
+    window.location.href = "dashboard-login.html";
+    return;
   }
+  if (data.user.email !== ADMIN_EMAIL) {
+    window.location.href = "contractor-portal.html";
+    return;
+  }
+  document.getElementById("userEmail").textContent = data.user.email;
+}
+guard();
 
-  logoutBtn.addEventListener("click", async () => {
-    await supabaseClient.auth.signOut();
-    window.location.href = LOGIN_PAGE_URL;
+
+function money(x){return "$"+Number(x||0).toFixed(2);}
+
+
+/* LOAD DASHBOARD DATA */
+async function loadAll() {
+  const [onb, bills, leads] = await Promise.all([
+    client.from("onboarding_submissions").select("*"),
+    client.from("recurring_expenses").select("*"),
+    client.from("call_leads").select("*")
+  ]);
+
+  const onboarding = onb.data || [];
+  const expenses = bills.data || [];
+  const calls = leads.data || [];
+
+  // money
+  let total=0, monthly=0;
+  onboarding.forEach(p=>{
+    total += Number(p.total_price||0);
+    monthly += Number(p.monthly_fee||0);
   });
 
-  function formatMoney(n) {
-    if (n === null || n === undefined || isNaN(Number(n))) return "$0.00";
-    return "$" + Number(n).toFixed(2);
-  }
+  document.getElementById("lifetimeRevenue").textContent = money(total);
+  document.getElementById("monthlyIncome").textContent = money(monthly);
 
-  function startOfMonth(date) {
-    return new Date(date.getFullYear(), date.getMonth(), 1);
-  }
-  function endOfMonth(date) {
-    return new Date(date.getFullYear(), date.getMonth() + 1, 0);
-  }
+  let billsMonthly=0;
+  expenses.forEach(b=>{
+    if (b.frequency==="monthly") billsMonthly += Number(b.amount||0);
+  });
 
-  async function loadDashboard() {
-    const today = new Date();
-    const monthStart = startOfMonth(today);
-    const monthEnd = endOfMonth(today);
+  document.getElementById("monthlyBills").textContent = money(billsMonthly);
+  document.getElementById("monthlyNet").textContent = money(monthly-billsMonthly);
 
-    const [onboardingRes, billsRes, leadsRes, demosRes] = await Promise.all([
-      supabaseClient.from("onboarding_submissions").select("*"),
-      supabaseClient.from("recurring_expenses").select("*").eq("is_active", true),
-      supabaseClient.from("call_leads").select("*"),
-      supabaseClient.from("demo_sites").select("*")  // show all demos (live + draft) to admin
-    ]);
 
-    if (onboardingRes.error) console.error("Onboarding error:", onboardingRes.error);
-    if (billsRes.error) console.error("Bills error:", billsRes.error);
-    if (leadsRes.error) console.error("Leads error:", leadsRes.error);
-    if (demosRes.error) console.error("Demo error:", demosRes.error);
+  // recent projects
+  const tbody = document.querySelector("#projectsTable tbody");
+  tbody.innerHTML="";
+  onboarding.slice(0,6).forEach(p=>{
+    tbody.innerHTML += `
+      <tr>
+        <td>${p.business_name||"—"}</td>
+        <td>${money(p.total_price)}</td>
+        <td>${money(p.monthly_fee)}</td>
+        <td>${p.status}</td>
+      </tr>`;
+  });
 
-    const onboarding = onboardingRes.data || [];
-    const bills      = billsRes.data || [];
-    const leads      = leadsRes.data || [];
-    const demos      = demosRes.data || [];
 
-    /* MONEY SUMMARY */
-    let lifetimeRev = 0;
-    let monthlyFeeTotal = 0;
+  // bills list
+  const tb2 = document.querySelector("#billsTable tbody");
+  tb2.innerHTML="";
+  expenses.slice(0,6).forEach(b=>{
+    tb2.innerHTML+=`
+    <tr>
+      <td>${b.name}</td>
+      <td>${b.next_due_date||""}</td>
+      <td>${b.vendor||""}</td>
+      <td>${money(b.amount)}</td>
+    </tr>`;
+  });
 
-    onboarding.forEach(p => {
-      if (p.total_price) lifetimeRev += Number(p.total_price) || 0;
-      if (p.monthly_fee) monthlyFeeTotal += Number(p.monthly_fee) || 0;
-    });
 
-    lifetimeRevenueEl.textContent = formatMoney(lifetimeRev);
-    monthlyIncomeEl.textContent   = formatMoney(monthlyFeeTotal);
+  // leads stats
+  const stats={};
+  calls.forEach(c=> stats[c.call_status] = (stats[c.call_status]||0)+1 );
+  document.getElementById("leadStatusStats").textContent =
+    Object.entries(stats).map(([s,n])=>`${s}: ${n}`).join(" • ");
+}
 
-    let monthlyBillsTotal = 0;
-    bills.forEach(b => {
-      if (b.frequency === "monthly" && b.amount) {
-        monthlyBillsTotal += Number(b.amount) || 0;
-      }
-    });
-    monthlyBillsEl.textContent = formatMoney(monthlyBillsTotal);
-    monthlyNetEl.textContent   = formatMoney(monthlyFeeTotal - monthlyBillsTotal);
-
-    /* PROJECTS TABLE */
-    projectsTableBody.innerHTML = "";
-    onboarding
-      .sort((a, b) => new Date(b.created_at || b.first_paid_at || 0) - new Date(a.created_at || a.first_paid_at || 0))
-      .slice(0, 6)
-      .forEach(p => {
-        const tr = document.createElement("tr");
-        const clientName = p.business_name || p.client_name || "(No name)";
-        const status = (p.status || "new").toLowerCase();
-
-        const tdClient = document.createElement("td");
-        tdClient.innerHTML = `<strong>${clientName}</strong><br><span class="small">${p.currency || "USD"}</span>`;
-        tr.appendChild(tdClient);
-
-        const tdTotal = document.createElement("td");
-        tdTotal.textContent = p.total_price ? formatMoney(p.total_price) : "—";
-        tr.appendChild(tdTotal);
-
-        const tdMonthly = document.createElement("td");
-        tdMonthly.textContent = p.monthly_fee ? formatMoney(p.monthly_fee) : "—";
-        tr.appendChild(tdMonthly);
-
-        const tdStatus = document.createElement("td");
-        const pill = document.createElement("span");
-        pill.className = "pill " + (status === "completed"
-          ? "pill-green"
-          : status === "cancelled"
-          ? "pill-red"
-          : "pill-blue");
-        pill.textContent = status;
-        tdStatus.appendChild(pill);
-        tr.appendChild(tdStatus);
-
-        projectsTableBody.appendChild(tr);
-      });
-
-    /* BILLS TABLE */
-    billsTableBody.innerHTML = "";
-    bills
-      .filter(b => b.next_due_date)
-      .sort((a,b) => new Date(a.next_due_date) - new Date(b.next_due_date))
-      .slice(0,6)
-      .forEach(b => {
-        const tr = document.createElement("tr");
-        const tdName = document.createElement("td");
-        tdName.innerHTML = `<strong>${b.name}</strong><br><span class="small">${b.category || ""}</span>`;
-        tr.appendChild(tdName);
-
-        const tdDue = document.createElement("td");
-        tdDue.textContent = b.next_due_date || "";
-        tr.appendChild(tdDue);
-
-        const tdVendor = document.createElement("td");
-        tdVendor.textContent = b.vendor || "";
-        tr.appendChild(tdVendor);
-
-        const tdAmt = document.createElement("td");
-        tdAmt.textContent = formatMoney(b.amount);
-        tr.appendChild(tdAmt);
-
-        billsTableBody.appendChild(tr);
-      });
-    billsNote.textContent = bills.length ? "" : "No recurring_expenses found yet. Add them in Supabase.";
-
-    /* LEADS SNAPSHOT */
-    const statusCounts = {};
-    let closedThisMonth = 0;
-    let commissionThisMonth = 0;
-    const callerStats = new Map();
-
-    leads.forEach(ld => {
-      const status = (ld.call_status || "new").toLowerCase();
-      statusCounts[status] = (statusCounts[status] || 0) + 1;
-
-      if (status === "closed won" && ld.last_contact_date) {
-        const d = new Date(ld.last_contact_date);
-        if (d >= monthStart && d <= monthEnd) {
-          closedThisMonth += 1;
-          commissionThisMonth += 100; // base commission per closed website sale
-        }
-      }
-
-      if (ld.assigned_caller_email) {
-        const email = ld.assigned_caller_email;
-        if (!callerStats.has(email)) {
-          callerStats.set(email, { closedWon:0, commission:0 });
-        }
-        const obj = callerStats.get(email);
-        if (status === "closed won") {
-          obj.closedWon += 1;
-          obj.commission += 100;
-        }
-      }
-    });
-
-    closedWonMonthEl.textContent  = closedThisMonth;
-    commissionMonthEl.textContent = formatMoney(commissionThisMonth);
-
-    const parts = [];
-    Object.entries(statusCounts).forEach(([s, count]) => {
-      parts.push(`${s}: ${count}`);
-    });
-    leadStatusStats.textContent = parts.length ? parts.join(" · ") : "No leads yet.";
-
-    topCallersTableBody.innerHTML = "";
-    const sortedCallers = Array.from(callerStats.entries())
-      .sort((a,b) => b[1].commission - a[1].commission)
-      .slice(0,5);
-
-    if (!sortedCallers.length) {
-      const tr = document.createElement("tr");
-      const td = document.createElement("td");
-      td.colSpan = 3;
-      td.className = "small";
-      td.textContent = "No closed-won leads yet.";
-      tr.appendChild(td);
-      topCallersTableBody.appendChild(tr);
-    } else {
-      sortedCallers.forEach(([email, stats]) => {
-        const tr = document.createElement("tr");
-        const tdEmail = document.createElement("td");
-        tdEmail.textContent = email;
-        tr.appendChild(tdEmail);
-
-        const tdClosed = document.createElement("td");
-        tdClosed.textContent = stats.closedWon;
-        tr.appendChild(tdClosed);
-
-        const tdComm = document.createElement("td");
-        tdComm.textContent = formatMoney(stats.commission);
-        tr.appendChild(tdComm);
-
-        topCallersTableBody.appendChild(tr);
-      });
-    }
-
-    /* DEMO LIBRARY TABLE (WITH LIVE TOGGLE) */
-    renderDemoTable(demos);
-  }
-
-  function renderDemoTable(demos){
-    demoTableBody.innerHTML = "";
-
-    if (!demos.length) {
-      const tr = document.createElement("tr");
-      const td = document.createElement("td");
-      td.colSpan = 5;
-      td.className = "small";
-      td.textContent = "No demos in demo_sites yet. Seed placeholders or add rows in Supabase.";
-      tr.appendChild(td);
-      demoTableBody.appendChild(tr);
-      return;
-    }
-
-    demos
-      .sort((a,b) => {
-        // Live first, then by category/name
-        if (a.is_active === b.is_active) {
-          return (a.category || "").localeCompare(b.category || "");
-        }
-        return a.is_active ? -1 : 1;
-      })
-      .forEach(d => {
-        const tr = document.createElement("tr");
-
-        const tdName = document.createElement("td");
-        tdName.textContent = d.name || "(No name)";
-        tr.appendChild(tdName);
-
-        const tdCat = document.createElement("td");
-        tdCat.textContent = d.category || "—";
-        tr.appendChild(tdCat);
-
-        const tdUrl = document.createElement("td");
-        if (d.demo_url) {
-          const a = document.createElement("a");
-          a.href = d.demo_url;
-          a.target = "_blank";
-          a.textContent = "View";
-          tdUrl.appendChild(a);
-        } else {
-          tdUrl.textContent = "—";
-        }
-        tr.appendChild(tdUrl);
-
-        const tdStatus = document.createElement("td");
-        const pill = document.createElement("span");
-        pill.className = "pill " + (d.is_active ? "pill-green" : "pill-muted");
-        pill.textContent = d.is_active ? "Live" : "Draft";
-        tdStatus.appendChild(pill);
-        tr.appendChild(tdStatus);
-
-        const tdToggle = document.createElement("td");
-        const btn = document.createElement("button");
-        btn.className = "btn btn-small " + (d.is_active ? "btn-muted" : "btn-primary");
-        btn.textContent = d.is_active ? "Set Draft" : "Make Live";
-        btn.addEventListener("click", () => toggleDemoLive(d.id, !!d.is_active));
-        tdToggle.appendChild(btn);
-        tr.appendChild(tdToggle);
-
-        demoTableBody.appendChild(tr);
-      });
-  }
-
-  async function toggleDemoLive(id, isActiveNow){
-    const { error } = await supabaseClient
-      .from("demo_sites")
-      .update({ is_active: !isActiveNow })
-      .eq("id", id);
-
-    if (error) {
-      console.error("toggle demo error:", error);
-      alert("Could not update demo status. Check console/logs.");
-      return;
-    }
-    await reloadDemoTableOnly();
-  }
-
-  async function publishAllDrafts(){
-    const { error } = await supabaseClient
-      .from("demo_sites")
-      .update({ is_active: true })
-      .eq("is_active", false);
-
-    if (error) {
-      console.error("publish all error:", error);
-      alert("Could not publish all drafts. Check console/logs.");
-      return;
-    }
-    await reloadDemoTableOnly();
-  }
-
-  async function reloadDemoTableOnly(){
-    const { data, error } = await supabaseClient.from("demo_sites").select("*");
-    if (error) {
-      console.error("reload demo error:", error);
-      return;
-    }
-    renderDemoTable(data || []);
-  }
-
-  refreshDemosBtn.addEventListener("click", reloadDemoTableOnly);
-  publishAllBtn.addEventListener("click", publishAllDrafts);
-
-  (async () => {
-    const user = await guardAdmin();
-    if (!user) return;
-    await loadDashboard();
-  })();
+loadAll();
 </script>
+
 </body>
 </html>
