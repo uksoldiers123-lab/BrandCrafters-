@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>BrandCrafters — Demo Library</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="dashboard.css" />
+  <script defer src="dashboard.js"></script>
+</head>
+
+<body class="admin-body">
+
+<!-- ============================
+   HEADER (same as main site)
+=============================== -->
+<header class="site-header admin-header">
+  <div class="container header-inner">
+    <a class="logo" href="index.html">
+      <span class="logo-mark">BC</span><span>BrandCrafters</span>
+    </a>
+
+    <nav class="nav desktop-nav">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="pricing.html" class="nav-link">Pricing</a>
+      <a href="customer-inquiry.html" class="nav-link">Customer Portal</a>
+      <span id="userEmail" class="admin-email"></span>
+      <button id="logoutBtn" class="btn btn-outline">Logout</button>
+    </nav>
+
+    <button class="menu-toggle" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <nav class="mobile-drawer admin-drawer" aria-hidden="true">
+    <div class="drawer-header">
+      <a class="logo" href="index.html">
+        <span class="logo-mark">BC</span><span>BrandCrafters</span>
+      </a>
+      <button class="menu-close">✕</button>
+    </div>
+
+    <a class="drawer-link" href="dashboard.html">Dashboard</a>
+    <a class="drawer-link" href="dashboard-leads.html">Lead List</a>
+    <a class="drawer-link" href="dashboard-leads-upload.html">Upload Leads</a>
+    <a class="drawer-link highlight" href="dashboard-demos.html">Demo Library</a>
+    <a class="drawer-link" href="dashboard-communications.html">Scripts & Messages</a>
+    <a class="drawer-link" href="dashboard-settings.html">Settings</a>
+    <button class="drawer-link" id="logoutBtnMobile">Logout</button>
+  </nav>
+
+  <div class="drawer-backdrop"></div>
+</header>
+
+
+
+<!-- ============================
+   SIDEBAR
+=============================== -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="bc-icon">BC</div>
+    <span class="sidebar-title">Admin Panel</span>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a href="dashboard.html" class="side-item">🏠 Dashboard</a>
+
+    <div class="side-group">
+      <div class="side-label">LEADS</div>
+      <a href="dashboard-leads.html" class="side-sub">📇 Lead List</a>
+      <a href="dashboard-leads-upload.html" class="side-sub">📤 Upload CSV</a>
+    </div>
+
+    <div class="side-group">
+      <div class="side-label">DEMOS</div>
+      <a href="dashboard-demos.html" class="side-sub active">🌐 Demo Library</a>
+    </div>
+
+    <div class="side-group">
+      <div class="side-label">COMMUNICATIONS</div>
+      <a href="dashboard-communications.html" class="side-sub">📞 Scripts</a>
+      <a href="dashboard-communications.html#email" class="side-sub">✉️ Emails</a>
+      <a href="dashboard-communications.html#dm" class="side-sub">💬 DM Templates</a>
+    </div>
+
+    <div class="side-group">
+      <div class="side-label">SETTINGS</div>
+      <a href="dashboard-settings.html" class="side-sub">⚙️ System Settings</a>
+    </div>
+  </nav>
+</aside>
+
+
+
+<!-- ============================
+   MAIN CONTENT — DEMO LIBRARY
+=============================== -->
+<main class="main-content">
+  <h1>Demo Library</h1>
+  <p class="subhead">
+    Manage demo sites used to sell leads. Toggle Live/Draft, add new demos, or update URLs and notes.
+  </p>
+
+  <!-- Stats + bulk actions -->
+  <section class="grid-3" style="margin-bottom:24px;">
+    <div class="card stat-card">
+      <div class="stat-label">Total Demos</div>
+      <div class="stat-value" id="demoTotal">0</div>
+      <p class="muted">All demos in your library.</p>
+    </div>
+    <div class="card stat-card">
+      <div class="stat-label">Live</div>
+      <div class="stat-value" id="demoLive">0</div>
+      <p class="muted">Visible to contractors.</p>
+    </div>
+    <div class="card stat-card">
+      <div class="stat-label">Draft</div>
+      <div class="stat-value" id="demoDraft">0</div>
+      <p class="muted">Hidden until you go live.</p>
+    </div>
+  </section>
+
+  <section class="card" style="margin-bottom:24px;">
+    <button class="btn btn-primary" onclick="publishAll()">Make All Demos Live</button>
+    <span id="bulkMsg" class="muted" style="margin-left:12px;"></span>
+  </section>
+
+  <!-- Add / Edit form -->
+  <section class="card" id="add">
+    <h2 id="formTitle">Add Demo</h2>
+
+    <form id="demoForm" onsubmit="saveDemo(event)">
+      <input type="hidden" id="demo_id" />
+
+      <label>Demo Name
+        <input id="name" required placeholder="Restaurant One-Page Demo" />
+      </label>
+
+      <label>Category
+        <input id="category" placeholder="Restaurant, Barber, Lawn Care, HVAC…" />
+      </label>
+
+      <label>Demo URL
+        <input id="demo_url" placeholder="https://yourdemo.example.com" />
+      </label>
+
+      <label>Notes
+        <textarea id="notes" rows="3" placeholder="Any details for you / contractors…"></textarea>
+      </label>
+
+      <label>Status
+        <select id="is_active">
+          <option value="true">Live</option>
+          <option value="false">Draft</option>
+        </select>
+      </label>
+
+      <button type="submit" class="btn btn-primary" style="margin-top:14px;">Save Demo</button>
+      <button type="button" class="btn btn-ghost" style="margin-top:14px;margin-left:8px;" onclick="resetForm()">Reset</button>
+
+      <p id="formMsg" class="muted"></p>
+    </form>
+  </section>
+
+  <!-- Demo list -->
+  <section class="card" style="margin-top:30px;">
+    <h2>All Demos</h2>
+    <table class="table" id="demoTable">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Category</th>
+          <th>URL</th>
+          <th>Status</th>
+          <th>Notes</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+</main>
+
+
+
+<!-- ============================
+   SUPABASE
+=============================== -->
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = "https://vekoulqehexqosgwacwa.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiIsInZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
+const ADMIN_EMAIL = "srarnold216@gmail.com";
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+
+/* AUTH GUARD */
+async function guard(){
+  const { data } = await sb.auth.getUser();
+  if (!data.user) return location.href="dashboard-login.html";
+  if (data.user.email !== ADMIN_EMAIL) return location.href="contractor-portal.html";
+  document.getElementById("userEmail").textContent = data.user.email;
+}
+guard();
+
+
+
+/* LOAD DEMOS */
+let cachedDemos = [];
+
+async function loadDemos(){
+  const res = await sb.from("demo_sites").select("*").order("created_at",{ascending:false});
+  if (res.error){
+    console.error(res.error);
+    return;
+  }
+  cachedDemos = res.data || [];
+
+  const total = cachedDemos.length;
+  const live  = cachedDemos.filter(d=>d.is_active).length;
+  const draft = total - live;
+
+  document.getElementById("demoTotal").textContent = total;
+  document.getElementById("demoLive").textContent  = live;
+  document.getElementById("demoDraft").textContent = draft;
+
+  const tbody = document.querySelector("#demoTable tbody");
+  tbody.innerHTML = "";
+
+  cachedDemos.forEach(d => {
+    const shortUrl = d.demo_url ? (d.demo_url.length>30 ? d.demo_url.slice(0,27)+"..." : d.demo_url) : "—";
+
+    tbody.innerHTML += `
+      <tr>
+        <td><strong>${d.name}</strong></td>
+        <td>${d.category || "—"}</td>
+        <td>${d.demo_url ? `<a href="${d.demo_url}" target="_blank" class="muted">${shortUrl}</a>` : "—"}</td>
+        <td>${d.is_active ? "✅ Live" : "⌛ Draft"}</td>
+        <td class="muted">${d.notes || ""}</td>
+        <td>
+          <button class="btn-small" onclick="editDemo('${d.id}')">Edit</button>
+          <button class="btn-small" onclick="toggleDemo('${d.id}', ${d.is_active ? "true" : "false"})">
+            ${d.is_active ? "Set Draft" : "Make Live"}
+          </button>
+          <button class="btn-small danger" onclick="deleteDemo('${d.id}')">Delete</button>
+        </td>
+      </tr>
+    `;
+  });
+}
+
+loadDemos();
+
+
+
+/* SAVE DEMO */
+async function saveDemo(e){
+  e.preventDefault();
+  const id = document.getElementById("demo_id").value;
+
+  const body = {
+    name: document.getElementById("name").value,
+    category: document.getElementById("category").value,
+    demo_url: document.getElementById("demo_url").value,
+    notes: document.getElementById("notes").value,
+    is_active: document.getElementById("is_active").value === "true"
+  };
+
+  let res;
+  if (id){
+    res = await sb.from("demo_sites").update(body).eq("id",id);
+  } else {
+    res = await sb.from("demo_sites").insert(body);
+  }
+
+  if (res.error){
+    document.getElementById("formMsg").textContent = "Error saving demo.";
+    console.error(res.error);
+  } else {
+    document.getElementById("formMsg").textContent = "Saved!";
+    resetForm();
+    loadDemos();
+  }
+}
+
+
+
+/* EDIT DEMO */
+function editDemo(id){
+  const d = cachedDemos.find(x => x.id === id);
+  if (!d) return;
+
+  document.getElementById("formTitle").textContent = "Edit Demo";
+  document.getElementById("demo_id").value = d.id;
+  document.getElementById("name").value = d.name || "";
+  document.getElementById("category").value = d.category || "";
+  document.getElementById("demo_url").value = d.demo_url || "";
+  document.getElementById("notes").value = d.notes || "";
+  document.getElementById("is_active").value = d.is_active ? "true" : "false";
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+
+
+/* RESET FORM */
+function resetForm(){
+  document.getElementById("formTitle").textContent = "Add Demo";
+  document.getElementById("demo_id").value = "";
+  document.getElementById("demoForm").reset();
+  document.getElementById("is_active").value = "false";
+  document.getElementById("formMsg").textContent = "";
+}
+
+
+
+/* TOGGLE LIVE/DRAFT */
+async function toggleDemo(id, isActive){
+  const res = await sb.from("demo_sites").update({ is_active: !isActive }).eq("id",id);
+  if (res.error){
+    console.error(res.error);
+    return;
+  }
+  loadDemos();
+}
+
+
+
+/* DELETE DEMO */
+async function deleteDemo(id){
+  if (!confirm("Delete this demo?")) return;
+  const res = await sb.from("demo_sites").delete().eq("id",id);
+  if (res.error){
+    console.error(res.error);
+    return;
+  }
+  loadDemos();
+}
+
+
+
+/* PUBLISH ALL LIVE */
+async function publishAll(){
+  const res = await sb.from("demo_sites").update({ is_active: true }).eq("is_active", false);
+  if (res.error){
+    document.getElementById("bulkMsg").textContent = "Error updating demos.";
+    console.error(res.error);
+  } else {
+    document.getElementById("bulkMsg").textContent = "All demos set to Live.";
+    loadDemos();
+  }
+}
+</script>
+
+</body>
+  </html>
