@@ -2,18 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>BrandCrafters — Leads</title>
+  <title>BrandCrafters — Lead Management</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="dashboard.css" />
-  <script defer src="dashboard.js"></script>
 </head>
 
 <body class="admin-body">
-
-<!-- ============================
-   HEADER (matches main site)
-=============================== -->
 <header class="site-header admin-header">
   <div class="container header-inner">
     <a class="logo" href="index.html">
@@ -21,9 +16,13 @@
     </a>
 
     <nav class="nav desktop-nav">
-      <a href="index.html" class="nav-link">Home</a>
-      <a href="pricing.html" class="nav-link">Pricing</a>
-      <a href="customer-inquiry.html" class="nav-link">Customer Portal</a>
+      <a href="dashboard.html" class="nav-link">Admin Home</a>
+      <a href="dashboard-leads.html" class="nav-link active">Leads</a>
+      <a href="dashboard-leads-upload.html" class="nav-link">CSV Upload</a>
+      <a href="dashboard-demos.html" class="nav-link">Demo Library</a>
+      <a href="dashboard-communications.html" class="nav-link">Scripts</a>
+      <a href="dashboard-settings.html" class="nav-link">Settings</a>
+
       <span id="userEmail" class="admin-email"></span>
       <button id="logoutBtn" class="btn btn-outline">Logout</button>
     </nav>
@@ -41,11 +40,11 @@
       <button class="menu-close">✕</button>
     </div>
 
-    <a class="drawer-link" href="dashboard.html">Dashboard</a>
-    <a class="drawer-link highlight" href="dashboard-leads.html">Lead List</a>
-    <a class="drawer-link" href="dashboard-leads-upload.html">Upload CSV</a>
+    <a class="drawer-link" href="dashboard.html">Admin Home</a>
+    <a class="drawer-link" href="dashboard-leads.html">Leads</a>
+    <a class="drawer-link" href="dashboard-leads-upload.html">CSV Upload</a>
     <a class="drawer-link" href="dashboard-demos.html">Demo Library</a>
-    <a class="drawer-link" href="dashboard-communications.html">Scripts & Messages</a>
+    <a class="drawer-link" href="dashboard-communications.html">Scripts</a>
     <a class="drawer-link" href="dashboard-settings.html">Settings</a>
     <button class="drawer-link" id="logoutBtnMobile">Logout</button>
   </nav>
@@ -54,165 +53,418 @@
 </header>
 
 
+<main class="main-content" style="max-width:1100px;margin-inline:auto;">
+  <h1>Leads & Commissions</h1>
+  <p class="subhead">
+    Approve contractor-submitted leads, control finder bonuses, and manage assignment.
+  </p>
 
-<!-- ============================
-   SIDEBAR
-=============================== -->
-<aside class="sidebar">
-  <div class="sidebar-header">
-    <div class="bc-icon">BC</div>
-    <span class="sidebar-title">Admin Panel</span>
-  </div>
-
-  <nav class="sidebar-nav">
-    <a href="dashboard.html" class="side-item">🏠 Dashboard</a>
-
-    <div class="side-group">
-      <div class="side-label">LEADS</div>
-      <a href="dashboard-leads.html" class="side-sub active">📇 Lead List</a>
-      <a href="dashboard-leads-upload.html" class="side-sub">📤 Upload CSV</a>
-    </div>
-
-    <div class="side-group">
-      <div class="side-label">DEMOS</div>
-      <a href="dashboard-demos.html" class="side-sub">🌐 Demo Library</a>
-    </div>
-
-    <div class="side-group">
-      <div class="side-label">COMMUNICATIONS</div>
-      <a href="dashboard-communications.html" class="side-sub">📞 Scripts</a>
-      <a href="dashboard-communications.html#email" class="side-sub">✉️ Emails</a>
-      <a href="dashboard-communications.html#dm" class="side-sub">💬 DM Templates</a>
-    </div>
-
-    <div class="side-group">
-      <div class="side-label">SETTINGS</div>
-      <a href="dashboard-settings.html" class="side-sub">⚙️ System Settings</a>
-    </div>
-  </nav>
-</aside>
+  <!-- SUMMARY BAR -->
+  <section class="grid-3" style="margin-bottom:24px;">
+    <article class="card stat-card">
+      <div class="stat-label">Pending Contractor Leads</div>
+      <div class="stat-value" id="statPending">0</div>
+      <p class="muted">leads where lead_source = contractor and approved = false.</p>
+    </article>
+    <article class="card stat-card">
+      <div class="stat-label">Total Approved Leads</div>
+      <div class="stat-value" id="statApproved">0</div>
+      <p class="muted">Approved leads (admin + contractor).</p>
+    </article>
+    <article class="card stat-card">
+      <div class="stat-label">Total Closed Won</div>
+      <div class="stat-value" id="statClosedWon">0</div>
+      <p class="muted">Leads with status = closed won.</p>
+    </article>
+  </section>
 
 
+  <!-- PENDING CONTRACTOR LEADS -->
+  <section class="card" style="margin-bottom:24px;">
+    <h2>Pending Contractor-Submitted Leads</h2>
+    <p class="muted">
+      These were added by contractors. Approve to move to the main lead pool, or deny if they’re low-quality.
+    </p>
 
-
-<!-- ============================
-   MAIN CONTENT — LEADS
-=============================== -->
-<main class="main-content">
-  <h1>Lead List</h1>
-  <p class="subhead">This is your full list of uploaded and manually added leads.</p>
-
-  <div class="card" style="margin-bottom:25px;">
-    <button class="btn btn-primary" onclick="location.href='dashboard-leads-upload.html'">
-      ➕ Add / Upload Leads
-    </button>
-  </div>
-
-  <div class="card">
-    <table class="table" id="leadsTable">
+    <table class="table" id="pendingTable">
       <thead>
         <tr>
           <th>Business</th>
-          <th>Phone</th>
-          <th>Status</th>
-          <th>Category</th>
+          <th>Contact</th>
+          <th>Category / City</th>
+          <th>Finder</th>
           <th>Package Rec.</th>
-          <th>Assigned</th>
-          <th>Mockup?</th>
+          <th>Bonus</th>
           <th>Actions</th>
         </tr>
       </thead>
       <tbody></tbody>
     </table>
-  </div>
+    <p id="pendingMsg" class="muted"></p>
+  </section>
+
+
+  <!-- ALL LEADS OVERVIEW -->
+  <section class="card" style="margin-bottom:24px;">
+    <h2>All Leads Overview</h2>
+    <p class="muted">
+      Quick view of all leads (approved + unapproved). You can tweak bonus, package, and assignment here.
+    </p>
+
+    <table class="table" id="allLeadsTable">
+      <thead>
+        <tr>
+          <th>Business</th>
+          <th>Status</th>
+          <th>Source</th>
+          <th>Finder</th>
+          <th>Assigned To</th>
+          <th>Package</th>
+          <th>Bonus</th>
+          <th>Approved?</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <p id="allLeadsMsg" class="muted"></p>
+  </section>
+
 </main>
 
 
-
-<!-- ============================
-   SUPABASE + PAGE SCRIPT
-=============================== -->
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script>
 const SUPABASE_URL = "https://vekoulqehexqosgwacwa.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiIsInZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
 const ADMIN_EMAIL = "srarnold216@gmail.com";
-const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-/* =========================================
-   AUTH CHECK
-========================================= */
-async function guard() {
-  const { data } = await db.auth.getUser();
-  if (!data.user) return location.href = "dashboard-login.html";
+let currentUser = null;
 
+// AUTH GUARD
+(async function guard() {
+  const { data } = await client.auth.getUser();
+  if (!data.user) {
+    window.location.href = "dashboard-login.html";
+    return;
+  }
   if (data.user.email !== ADMIN_EMAIL) {
-    return location.href = "contractor-portal.html";
+    window.location.href = "contractor-portal.html";
+    return;
+  }
+  currentUser = data.user;
+  document.getElementById("userEmail").textContent = currentUser.email;
+
+  await loadLeads();
+})();
+
+// LOGOUT
+document.getElementById("logoutBtn").addEventListener("click", async () => {
+  await client.auth.signOut();
+  window.location.href = "dashboard-login.html";
+});
+const logoutMobile = document.getElementById("logoutBtnMobile");
+if (logoutMobile) {
+  logoutMobile.addEventListener("click", async () => {
+    await client.auth.signOut();
+    window.location.href = "dashboard-login.html";
+  });
+}
+
+// MOBILE NAV TOGGLE (reuse style)
+const menuToggle = document.querySelector(".menu-toggle");
+const drawer = document.querySelector(".mobile-drawer");
+const backdrop = document.querySelector(".drawer-backdrop");
+const closeBtn = document.querySelector(".menu-close");
+
+if (menuToggle && drawer && backdrop && closeBtn) {
+  menuToggle.addEventListener("click", () => {
+    document.body.classList.add("drawer-open");
+    menuToggle.setAttribute("aria-expanded", "true");
+    drawer.setAttribute("aria-hidden", "false");
+  });
+  closeBtn.addEventListener("click", closeDrawer);
+  backdrop.addEventListener("click", closeDrawer);
+
+  function closeDrawer() {
+    document.body.classList.remove("drawer-open");
+    menuToggle.setAttribute("aria-expanded", "false");
+    drawer.setAttribute("aria-hidden", "true");
+  }
+}
+
+
+// CORE LOAD FUNCTION
+async function loadLeads() {
+  const { data, error } = await client
+    .from("call_leads")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error(error);
+    return;
   }
 
-  document.getElementById("userEmail").textContent = data.user.email;
+  const leads = data || [];
+  renderSummary(leads);
+  renderPending(leads);
+  renderAll(leads);
 }
-guard();
 
 
+// SUMMARY STATS
+function renderSummary(leads) {
+  const pending = leads.filter(l => l.lead_source === "contractor" && l.approved === false);
+  const approved = leads.filter(l => l.approved === true);
+  const closedWon = leads.filter(l => (l.call_status || "").toLowerCase() === "closed won");
 
-/* =========================================
-   LOAD LEADS
-========================================= */
-async function loadLeads() {
-  const res = await db.from("call_leads").select("*").order("created_at", { ascending: false });
+  document.getElementById("statPending").textContent = pending.length;
+  document.getElementById("statApproved").textContent = approved.length;
+  document.getElementById("statClosedWon").textContent = closedWon.length;
+}
 
-  const tbody = document.querySelector("#leadsTable tbody");
+
+// PENDING CONTRACTOR LEADS TABLE
+function renderPending(leads) {
+  const pending = leads.filter(l =>
+    l.lead_source === "contractor" && (l.approved === false || l.approved === null)
+  );
+
+  const tbody = document.querySelector("#pendingTable tbody");
+  const msgEl = document.getElementById("pendingMsg");
   tbody.innerHTML = "";
 
-  (res.data || []).forEach(lead => {
+  if (!pending.length) {
+    msgEl.textContent = "No pending contractor-submitted leads right now.";
+    return;
+  }
+  msgEl.textContent = "";
+
+  pending.forEach(l => {
+    const finder = l.finder_email || "—";
+    const pkg = l.package_recommendation || "—";
+    const city = l.city || "—";
+    const cat = l.category || "—";
+    const bonus = Number(l.finder_bonus_amount || 0);
+
     tbody.innerHTML += `
       <tr>
-        <td><strong>${lead.business_name}</strong><br><span class="muted">${lead.city||""}</span></td>
-        <td>${lead.phone||"—"}</td>
-
-        <td><span class="tag">${lead.call_status||"new"}</span></td>
-
-        <td>${lead.category||"—"}</td>
-
-        <td>${lead.package_recommendation||"—"}</td>
-
-        <td>${lead.assigned_caller_email || "Unassigned"}</td>
-
-        <td>${lead.mockup_requested ? "✅" : "❌"}</td>
-
         <td>
-          <button class="btn-small" onclick="editLead('${lead.id}')">Edit</button>
-          <button class="btn-small danger" onclick="deleteLead('${lead.id}')">Delete</button>
+          <strong>${l.business_name || "—"}</strong><br/>
+          <span class="muted">${city}</span>
+        </td>
+        <td>
+          <div>${l.phone || "—"}</div>
+          <div class="muted">${l.email || ""}</div>
+        </td>
+        <td>
+          <div>${cat}</div>
+        </td>
+        <td>
+          <span class="muted">${finder}</span>
+        </td>
+        <td>
+          <select onchange="updatePackage('${l.id}', this.value)">
+            <option value="Starter Craft" ${pkg === "Starter Craft" ? "selected" : ""}>Starter Craft</option>
+            <option value="Business Builder" ${pkg === "Business Builder" ? "selected" : ""}>Business Builder</option>
+            <option value="E-Commerce Store" ${pkg === "E-Commerce Store" ? "selected" : ""}>E-Commerce Store</option>
+          </select>
+        </td>
+        <td>
+          <select onchange="updateBonus('${l.id}', this.value)">
+            <option value="0" ${bonus === 0 ? "selected" : ""}>$0</option>
+            <option value="50" ${bonus === 50 ? "selected" : ""}>$50</option>
+            <option value="75" ${bonus === 75 ? "selected" : ""}>$75</option>
+            <option value="100" ${bonus === 100 ? "selected" : ""}>$100</option>
+          </select>
+        </td>
+        <td>
+          <button class="btn-small" onclick="approveLead('${l.id}')">Approve</button>
+          <button class="btn-small danger" onclick="denyLead('${l.id}')">Deny</button>
         </td>
       </tr>
     `;
   });
 }
 
-loadLeads();
 
+// ALL LEADS TABLE
+function renderAll(leads) {
+  const tbody = document.querySelector("#allLeadsTable tbody");
+  const msgEl = document.getElementById("allLeadsMsg");
+  tbody.innerHTML = "";
 
+  if (!leads.length) {
+    msgEl.textContent = "No leads in the system yet.";
+    return;
+  }
+  msgEl.textContent = "";
 
-/* =========================================
-   DELETE LEAD
-========================================= */
-async function deleteLead(id) {
-  if (!confirm("Delete this lead permanently?")) return;
+  leads.forEach(l => {
+    const status = (l.call_status || "new");
+    const source = l.lead_source || "admin";
+    const finder = l.finder_email || "—";
+    const assigned = l.assigned_caller_email || "—";
+    const pkg = l.package_recommendation || "—";
+    const bonus = Number(l.finder_bonus_amount || 0);
+    const isApproved = l.approved === true;
 
-  await db.from("call_leads").delete().eq("id", id);
-  loadLeads();
+    tbody.innerHTML += `
+      <tr>
+        <td>
+          <strong>${l.business_name || "—"}</strong><br/>
+          <span class="muted">${l.city || ""}</span>
+        </td>
+        <td>${status}</td>
+        <td>${source}</td>
+        <td><span class="muted">${finder}</span></td>
+        <td>
+          <input
+            type="email"
+            value="${assigned === "—" ? "" : assigned}"
+            placeholder="caller email"
+            onchange="assignLead('${l.id}', this.value)"
+          />
+        </td>
+        <td>
+          <select onchange="updatePackage('${l.id}', this.value)">
+            <option value="Starter Craft" ${pkg === "Starter Craft" ? "selected" : ""}>Starter</option>
+            <option value="Business Builder" ${pkg === "Business Builder" ? "selected" : ""}>Business</option>
+            <option value="E-Commerce Store" ${pkg === "E-Commerce Store" ? "selected" : ""}>E-Comm</option>
+          </select>
+        </td>
+        <td>
+          <select onchange="updateBonus('${l.id}', this.value)">
+            <option value="0" ${bonus === 0 ? "selected" : ""}>$0</option>
+            <option value="50" ${bonus === 50 ? "selected" : ""}>$50</option>
+            <option value="75" ${bonus === 75 ? "selected" : ""}>$75</option>
+            <option value="100" ${bonus === 100 ? "selected" : ""}>$100</option>
+          </select>
+        </td>
+        <td>
+          <select onchange="updateApproved('${l.id}', this.value)">
+            <option value="true" ${isApproved ? "selected" : ""}>Yes</option>
+            <option value="false" ${!isApproved ? "selected" : ""}>No</option>
+          </select>
+        </td>
+      </tr>
+    `;
+  });
 }
 
 
-/* =========================================
-   EDIT LEAD (simple redirect for now)
-========================================= */
-function editLead(id) {
-  location.href = "dashboard-leads-upload.html?edit=" + id;
+// ACTION HELPERS (GLOBAL)
+
+
+async function approveLead(id) {
+  const { error } = await client
+    .from("call_leads")
+    .update({
+      approved: true,
+      approved_at: new Date().toISOString(),
+      approved_by: currentUser ? currentUser.email : null
+    })
+    .eq("id", id);
+
+  if (error) {
+    console.error(error);
+    alert("Error approving lead.");
+  } else {
+    loadLeads();
+  }
+}
+
+async function denyLead(id) {
+  if (!confirm("Deny and effectively hide this lead?")) return;
+
+  const { error } = await client
+    .from("call_leads")
+    .update({
+      approved: false,
+      approved_at: null,
+      approved_by: currentUser ? currentUser.email : null
+    })
+    .eq("id", id);
+
+  if (error) {
+    console.error(error);
+    alert("Error denying lead.");
+  } else {
+    loadLeads();
+  }
+}
+
+async function updatePackage(id, pkg) {
+  const { error } = await client
+    .from("call_leads")
+    .update({ package_recommendation: pkg })
+    .eq("id", id);
+
+  if (error) {
+    console.error(error);
+    alert("Error updating package.");
+  }
+}
+
+async function updateBonus(id, val) {
+  const amount = Number(val) || 0;
+  const { error } = await client
+    .from("call_leads")
+    .update({ finder_bonus_amount: amount })
+    .eq("id", id);
+
+  if (error) {
+    console.error(error);
+    alert("Error updating bonus.");
+  }
+}
+
+async function updateApproved(id, val) {
+  const approved = (val === "true");
+  const updateObj = {
+    approved
+  };
+  if (approved) {
+    updateObj.approved_at = new Date().toISOString();
+    updateObj.approved_by = currentUser ? currentUser.email : null;
+  } else {
+    updateObj.approved_at = null;
+    updateObj.approved_by = currentUser ? currentUser.email : null;
+  }
+
+  const { error } = await client
+    .from("call_leads")
+    .update(updateObj)
+    .eq("id", id);
+
+  if (error) {
+    console.error(error);
+    alert("Error updating approval status.");
+  } else {
+    loadLeads();
+  }
+}
+
+async function assignLead(id, email) {
+  const cleanEmail = email.trim() || null;
+
+  const { error } = await client
+    .from("call_leads")
+    .update({
+      assigned_caller_email: cleanEmail,
+      call_status: cleanEmail ? "working" : "new"
+    })
+    .eq("id", id);
+
+  if (error) {
+    console.error(error);
+    alert("Error assigning lead.");
+  } else {
+    loadLeads();
+  }
 }
 </script>
-
 </body>
 </html>
