@@ -27,12 +27,14 @@
     .table { width:100%; border-collapse:collapse; font-size:13px; margin-top:8px; min-width:520px; }
     .table th,.table td { border-bottom:1px solid rgba(255,255,255,.08); padding:6px 5px; vertical-align:top; }
     .table th { font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); text-align:left; }
+
     .pill { display:inline-block; padding:2px 8px; border-radius:999px; font-size:11px; }
     .pill-green{ background:rgba(155,255,191,.15); }
     .pill-red{ background:rgba(255,155,155,.15); }
     .pill-blue{ background:rgba(110,168,255,.15); }
 
     .admin-email { font-size:12px; color:var(--muted); margin-right:4px; }
+
     #loginBox label { display:block; margin-bottom:10px; font-size:14px; }
     #loginBox input {
       width:100%; margin-top:4px; padding:10px 12px;
@@ -80,6 +82,7 @@
 
 <body class="admin-body">
 
+<!-- HEADER matches index.html style -->
 <header class="site-header">
   <div class="container header-inner">
     <a class="logo" href="index.html">
@@ -119,10 +122,12 @@
 
 <main class="main-content container">
 
+  <!-- LOGIN (shown when no Supabase user) -->
   <section id="loginBox" class="card" style="max-width:380px;margin:40px auto;display:none;">
-    <h1 style="margin-top:0;">Admin / Contractor Login</h1>
+    <h1 style="margin-top:0;">Dashboard Login</h1>
     <p class="subhead">
-      Use your BrandCrafters login. Admin sees this dashboard. Contractors are sent to the Contractor Portal.
+      Use your BrandCrafters email and password.  
+      Admins see this dashboard; contractors are sent to the Contractor Portal.
     </p>
 
     <label>Email
@@ -136,23 +141,31 @@
     <p id="loginMsg" class="muted" style="margin-top:10px;"></p>
   </section>
 
+  <!-- ADMIN DASHBOARD (only shows for admin email) -->
   <section id="dashboardContent" style="display:none;">
     <section>
       <h1>Admin Overview</h1>
       <p class="subhead">
-        Money snapshot, projects, recurring bills, and lead performance — all in one place.
+        Money snapshot, projects, recurring bills, and lead performance.
       </p>
 
+      <!-- Dashboard menu -->
       <nav class="admin-subnav">
         <a href="dashboard.html" class="active">Overview</a>
         <a href="dashboard-leads-upload.html">Leads &amp; CSV</a>
+        <a href="dashboard-leads.html">Leads Board</a>
+        <a href="dashboard-demos.html">Demo Library</a>
+        <a href="dashboard-communications.html">Scripts &amp; Messages</a>
+        <a href="dashboard-commissions.html">Commissions</a>
+        <a href="dashboard-settings.html">Settings</a>
         <a href="contractor-portal.html">Contractor Portal</a>
       </nav>
     </section>
 
+    <!-- STATS ROW 1 -->
     <section class="grid-3" style="margin-bottom:16px;">
       <article class="card stat-card">
-        <div class="stat-label">Lifetime Project Revenue (one-time)</div>
+        <div class="stat-label">Lifetime Project Revenue</div>
         <div class="stat-value" id="lifetimeRevenue">$0.00</div>
         <div class="muted">Sum of total_price on onboarding submissions.</div>
       </article>
@@ -160,43 +173,41 @@
       <article class="card stat-card">
         <div class="stat-label">Active Monthly Income</div>
         <div class="stat-value" id="monthlyIncome">$0.00</div>
-        <div class="muted">Sum of monthly_fee for projects with monthly_fee &gt; 0.</div>
+        <div class="muted">Sum of monthly_fee on active projects.</div>
       </article>
 
       <article class="card stat-card">
         <div class="stat-label">Active Monthly Bills</div>
         <div class="stat-value" id="monthlyBills">$0.00</div>
-        <div class="muted">Active recurring_expenses with frequency = 'monthly'.</div>
+        <div class="muted">Active recurring_expenses billed monthly.</div>
       </article>
     </section>
 
+    <!-- STATS ROW 2 -->
     <section class="grid-3" style="margin-bottom:16px;">
       <article class="card stat-card">
-        <div class="stat-label">Est. Monthly Net (Maintenance - Bills)</div>
+        <div class="stat-label">Est. Monthly Net</div>
         <div class="stat-value" id="monthlyNet">$0.00</div>
-        <div class="muted">Quick check if maintenance covers recurring expenses.</div>
+        <div class="muted">Maintenance income minus active monthly bills.</div>
       </article>
 
       <article class="card stat-card">
-        <div class="stat-label">Closed Won Leads · This Month</div>
+        <div class="stat-label">Closed Won · This Month</div>
         <div class="stat-value" id="closedWonMonth">0</div>
-        <div class="muted">
-          call_leads where call_status = 'closed won' and last_contact_date in this month.
-        </div>
+        <div class="muted">Leads with call_status = 'closed won' this month.</div>
       </article>
 
       <article class="card stat-card">
-        <div class="stat-label">Estimated Commissions · This Month</div>
+        <div class="stat-label">Est. Commissions · This Month</div>
         <div class="stat-value" id="commissionMonth">$0.00</div>
-        <div class="muted">
-          Rough estimate based on closed won leads (we can refine later).
-        </div>
+        <div class="muted">Rough estimate based on closed won leads.</div>
       </article>
     </section>
 
+    <!-- PROJECTS + BILLS -->
     <section class="grid-2" style="margin-bottom:16px;">
       <article class="card">
-        <h2>Client Projects (Onboarding)</h2>
+        <h2>Client Projects</h2>
         <p class="muted">
           Last 6 onboarding submissions with total price, monthly fee, and status.
         </p>
@@ -237,10 +248,11 @@
       </article>
     </section>
 
+    <!-- LEADS SNAPSHOT -->
     <section class="card" style="margin-bottom:24px;">
       <h2>Lead Pipeline Snapshot</h2>
       <p class="muted">
-        Quick health check before you dive into the full Leads dashboard.
+        Overview of lead statuses and top callers.
       </p>
       <div class="grid-2">
         <div>
@@ -248,7 +260,7 @@
           <p class="muted" id="leadStatusStats">Loading…</p>
         </div>
         <div>
-          <p class="stat-label">Top Callers (Closed Won)</p>
+          <p class="stat-label">Top Callers</p>
           <div class="table-wrap">
             <table class="table" id="topCallersTable">
               <thead>
@@ -281,282 +293,288 @@
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script>
-const SUPABASE_URL  = "https://vekoulqehexqosgwacwa.supabase.co";
-const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiIsInZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
-const ADMIN_EMAIL   = "srarnold216@gmail.com";
+  // Use the SAME Supabase project + anon key as before
+  const SUPABASE_URL  = "https://vekoulqehexqosgwacwa.supabase.co";
+  const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
+  const ADMIN_EMAIL   = "srarnold216@gmail.com";
 
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
-const userEmailSpan   = document.getElementById("userEmail");
-const loginBox        = document.getElementById("loginBox");
-const dashboardContent= document.getElementById("dashboardContent");
-const loginBtn        = document.getElementById("loginBtn");
-const loginEmailInput = document.getElementById("loginEmail");
-const loginPwInput    = document.getElementById("loginPassword");
-const loginMsg        = document.getElementById("loginMsg");
-const logoutBtn       = document.getElementById("logoutBtn");
-const logoutBtnMobile = document.getElementById("logoutBtnMobile");
+  const userEmailSpan    = document.getElementById("userEmail");
+  const loginBox         = document.getElementById("loginBox");
+  const dashboardContent = document.getElementById("dashboardContent");
+  const loginBtn         = document.getElementById("loginBtn");
+  const loginEmailInput  = document.getElementById("loginEmail");
+  const loginPwInput     = document.getElementById("loginPassword");
+  const loginMsg         = document.getElementById("loginMsg");
+  const logoutBtn        = document.getElementById("logoutBtn");
+  const logoutBtnMobile  = document.getElementById("logoutBtnMobile");
 
-const lifetimeRevenue = document.getElementById("lifetimeRevenue");
-const monthlyIncome   = document.getElementById("monthlyIncome");
-const monthlyBills    = document.getElementById("monthlyBills");
-const monthlyNet      = document.getElementById("monthlyNet");
-const closedWonMonth  = document.getElementById("closedWonMonth");
-const commissionMonth = document.getElementById("commissionMonth");
+  const lifetimeRevenue = document.getElementById("lifetimeRevenue");
+  const monthlyIncome   = document.getElementById("monthlyIncome");
+  const monthlyBills    = document.getElementById("monthlyBills");
+  const monthlyNet      = document.getElementById("monthlyNet");
+  const closedWonMonth  = document.getElementById("closedWonMonth");
+  const commissionMonth = document.getElementById("commissionMonth");
 
-const projectsTableBody   = document.querySelector("#projectsTable tbody");
-const billsTableBody      = document.querySelector("#billsTable tbody");
-const billsNote           = document.getElementById("billsNote");
-const leadStatusStats     = document.getElementById("leadStatusStats");
-const topCallersTableBody = document.querySelector("#topCallersTable tbody");
+  const projectsTableBody   = document.querySelector("#projectsTable tbody");
+  const billsTableBody      = document.querySelector("#billsTable tbody");
+  const billsNote           = document.getElementById("billsNote");
+  const leadStatusStats     = document.getElementById("leadStatusStats");
+  const topCallersTableBody = document.querySelector("#topCallersTable tbody");
 
-function formatMoney(n) {
-  if (n === null || n === undefined || isNaN(Number(n))) return "$0.00";
-  return "$" + Number(n).toFixed(2);
-}
-function startOfMonth(date) {
-  return new Date(date.getFullYear(), date.getMonth(), 1);
-}
-function endOfMonth(date) {
-  return new Date(date.getFullYear(), date.getMonth() + 1, 0);
-}
-
-async function guardAndRoute() {
-  const { data } = await supabaseClient.auth.getUser();
-
-  if (!data || !data.user) {
-    userEmailSpan.textContent = "";
-    loginBox.style.display = "block";
-    dashboardContent.style.display = "none";
-    return;
+  function formatMoney(n) {
+    if (n === null || n === undefined || isNaN(Number(n))) return "$0.00";
+    return "$" + Number(n).toFixed(2);
+  }
+  function startOfMonth(date) {
+    return new Date(date.getFullYear(), date.getMonth(), 1);
+  }
+  function endOfMonth(date) {
+    return new Date(date.getFullYear(), date.getMonth() + 1, 0);
   }
 
-  const email = data.user.email || "";
-  userEmailSpan.textContent = email;
+  async function guardAndRender() {
+    const { data } = await supabaseClient.auth.getUser();
 
-  if (email === ADMIN_EMAIL) {
-    loginBox.style.display = "none";
-    dashboardContent.style.display = "block";
-    await loadDashboard();
-  } else {
-    window.location.href = "contractor-portal.html";
-  }
-}
-
-loginBtn.addEventListener("click", async () => {
-  const email = loginEmailInput.value.trim();
-  const pw    = loginPwInput.value.trim();
-
-  if (!email || !pw) {
-    loginMsg.textContent = "Please enter email and password.";
-    return;
-  }
-
-  loginMsg.textContent = "Checking…";
-
-  const { error } = await supabaseClient.auth.signInWithPassword({
-    email,
-    password: pw
-  });
-
-  if (error) {
-    console.error(error);
-    loginMsg.textContent = "Login failed — check your credentials.";
-  } else {
-    loginMsg.textContent = "Success. Loading dashboard…";
-    await guardAndRoute();
-  }
-});
-
-async function doLogout() {
-  await supabaseClient.auth.signOut();
-  await guardAndRoute();
-}
-logoutBtn?.addEventListener("click", doLogout);
-logoutBtnMobile?.addEventListener("click", doLogout);
-
-async function loadDashboard() {
-  const today = new Date();
-  const monthStart = startOfMonth(today);
-  const monthEnd   = endOfMonth(today);
-
-  const [onboardingRes, billsRes, leadsRes] = await Promise.all([
-    supabaseClient.from("onboarding_submissions").select("*"),
-    supabaseClient.from("recurring_expenses").select("*").eq("is_active", true),
-    supabaseClient.from("call_leads").select("*")
-  ]);
-
-  if (onboardingRes.error) console.error("Onboarding error:", onboardingRes.error);
-  if (billsRes.error)      console.error("Bills error:", billsRes.error);
-  if (leadsRes.error)      console.error("Leads error:", leadsRes.error);
-
-  const onboarding = onboardingRes.data || [];
-  const bills      = billsRes.data || [];
-  const leads      = leadsRes.data || [];
-
-  let lifetimeRev       = 0;
-  let monthlyFeeTotal   = 0;
-  let monthlyBillsTotal = 0;
-
-  onboarding.forEach(p => {
-    if (p.total_price) lifetimeRev     += Number(p.total_price) || 0;
-    if (p.monthly_fee) monthlyFeeTotal += Number(p.monthly_fee) || 0;
-  });
-
-  bills.forEach(b => {
-    if (b.frequency === "monthly" && b.amount) {
-      monthlyBillsTotal += Number(b.amount) || 0;
+    if (!data || !data.user) {
+      // Not logged in → show login form
+      userEmailSpan.textContent = "";
+      loginBox.style.display = "block";
+      dashboardContent.style.display = "none";
+      return;
     }
-  });
 
-  lifetimeRevenue.textContent = formatMoney(lifetimeRev);
-  monthlyIncome.textContent   = formatMoney(monthlyFeeTotal);
-  monthlyBills.textContent    = formatMoney(monthlyBillsTotal);
-  monthlyNet.textContent      = formatMoney(monthlyFeeTotal - monthlyBillsTotal);
+    const email = data.user.email || "";
+    userEmailSpan.textContent = email;
 
-  projectsTableBody.innerHTML = "";
-  onboarding
-    .sort((a, b) => new Date(b.created_at || b.first_paid_at || 0) - new Date(a.created_at || a.first_paid_at || 0))
-    .slice(0, 6)
-    .forEach(p => {
-      const tr = document.createElement("tr");
-      const clientName = p.business_name || p.client_name || "(No name)";
-      const status     = (p.status || "new").toLowerCase();
+    if (email === ADMIN_EMAIL) {
+      // Admin sees dashboard
+      loginBox.style.display = "none";
+      dashboardContent.style.display = "block";
+      await loadDashboard();
+    } else {
+      // Contractor → send to contractor portal
+      window.location.href = "contractor-portal.html";
+    }
+  }
 
-      const tdClient = document.createElement("td");
-      tdClient.innerHTML = `<strong>${clientName}</strong><br><span class="muted">${p.currency || "USD"}</span>`;
-      tr.appendChild(tdClient);
+  loginBtn.addEventListener("click", async () => {
+    const email = loginEmailInput.value.trim();
+    const pw    = loginPwInput.value.trim();
 
-      const tdTotal = document.createElement("td");
-      tdTotal.textContent = p.total_price ? formatMoney(p.total_price) : "—";
-      tr.appendChild(tdTotal);
+    if (!email || !pw) {
+      loginMsg.textContent = "Please enter email and password.";
+      return;
+    }
 
-      const tdMonthly = document.createElement("td");
-      tdMonthly.textContent = p.monthly_fee ? formatMoney(p.monthly_fee) : "—";
-      tr.appendChild(tdMonthly);
+    loginMsg.textContent = "Checking…";
 
-      const tdStatus = document.createElement("td");
-      const pill = document.createElement("span");
-      const pillCls =
-        status === "completed" ? "pill pill-green" :
-        status === "cancelled" ? "pill pill-red"  :
-                                 "pill pill-blue";
-      pill.className = pillCls;
-      pill.textContent = status;
-      tdStatus.appendChild(pill);
-      tr.appendChild(tdStatus);
-
-      projectsTableBody.appendChild(tr);
+    const { error } = await supabaseClient.auth.signInWithPassword({
+      email,
+      password: pw
     });
 
-  billsTableBody.innerHTML = "";
-  bills
-    .filter(b => b.next_due_date)
-    .sort((a,b) => new Date(a.next_due_date) - new Date(b.next_due_date))
-    .slice(0,6)
-    .forEach(b => {
-      const tr = document.createElement("tr");
+    if (error) {
+      console.error(error);
+      loginMsg.textContent = "Login failed: " + (error.message || "check your credentials.");
+    } else {
+      loginMsg.textContent = "Success. Loading dashboard…";
+      await guardAndRender();
+    }
+  });
 
-      const tdName = document.createElement("td");
-      tdName.innerHTML = `<strong>${b.name}</strong><br><span class="muted">${b.category || ""}</span>`;
-      tr.appendChild(tdName);
+  async function doLogout() {
+    await supabaseClient.auth.signOut();
+    await guardAndRender();
+  }
+  logoutBtn?.addEventListener("click", doLogout);
+  logoutBtnMobile?.addEventListener("click", doLogout);
 
-      const tdDue = document.createElement("td");
-      tdDue.textContent = b.next_due_date || "";
-      tr.appendChild(tdDue);
+  async function loadDashboard() {
+    const today = new Date();
+    const monthStart = startOfMonth(today);
+    const monthEnd   = endOfMonth(today);
 
-      const tdVendor = document.createElement("td");
-      tdVendor.textContent = b.vendor || "";
-      tr.appendChild(tdVendor);
+    const [onboardingRes, billsRes, leadsRes] = await Promise.all([
+      supabaseClient.from("onboarding_submissions").select("*"),
+      supabaseClient.from("recurring_expenses").select("*").eq("is_active", true),
+      supabaseClient.from("call_leads").select("*")
+    ]);
 
-      const tdAmt = document.createElement("td");
-      tdAmt.textContent = formatMoney(b.amount);
-      tr.appendChild(tdAmt);
+    if (onboardingRes.error) console.error("Onboarding error:", onboardingRes.error);
+    if (billsRes.error)      console.error("Bills error:", billsRes.error);
+    if (leadsRes.error)      console.error("Leads error:", leadsRes.error);
 
-      billsTableBody.appendChild(tr);
+    const onboarding = onboardingRes.data || [];
+    const bills      = billsRes.data || [];
+    const leads      = leadsRes.data || [];
+
+    let lifetimeRev       = 0;
+    let monthlyFeeTotal   = 0;
+    let monthlyBillsTotal = 0;
+
+    onboarding.forEach(p => {
+      if (p.total_price) lifetimeRev     += Number(p.total_price) || 0;
+      if (p.monthly_fee) monthlyFeeTotal += Number(p.monthly_fee) || 0;
     });
 
-  billsNote.textContent = bills.length
-    ? ""
-    : "No recurring_expenses yet. Add them in Supabase when you start paying tools/domains/email.";
-
-  const statusCounts      = {};
-  let closedThisMonth     = 0;
-  let commissionThisMonth = 0;
-  const callerStats       = new Map();
-
-  leads.forEach(ld => {
-    const status = (ld.call_status || "new").toLowerCase();
-    statusCounts[status] = (statusCounts[status] || 0) + 1;
-
-    if (status === "closed won" && ld.last_contact_date) {
-      const d = new Date(ld.last_contact_date);
-      if (d >= monthStart && d <= monthEnd) {
-        closedThisMonth += 1;
-        commissionThisMonth += 100;
+    bills.forEach(b => {
+      if (b.frequency === "monthly" && b.amount) {
+        monthlyBillsTotal += Number(b.amount) || 0;
       }
-    }
+    });
 
-    if (ld.assigned_caller_email) {
-      const email = ld.assigned_caller_email;
-      if (!callerStats.has(email)) {
-        callerStats.set(email, { closedWon:0, commission:0 });
+    lifetimeRevenue.textContent = formatMoney(lifetimeRev);
+    monthlyIncome.textContent   = formatMoney(monthlyFeeTotal);
+    monthlyBills.textContent    = formatMoney(monthlyBillsTotal);
+    monthlyNet.textContent      = formatMoney(monthlyFeeTotal - monthlyBillsTotal);
+
+    // Projects table
+    projectsTableBody.innerHTML = "";
+    onboarding
+      .sort((a, b) => new Date(b.created_at || b.first_paid_at || 0) - new Date(a.created_at || a.first_paid_at || 0))
+      .slice(0, 6)
+      .forEach(p => {
+        const tr = document.createElement("tr");
+        const clientName = p.business_name || p.client_name || "(No name)";
+        const status     = (p.status || "new").toLowerCase();
+
+        const tdClient = document.createElement("td");
+        tdClient.innerHTML = `<strong>${clientName}</strong><br><span class="muted">${p.currency || "USD"}</span>`;
+        tr.appendChild(tdClient);
+
+        const tdTotal = document.createElement("td");
+        tdTotal.textContent = p.total_price ? formatMoney(p.total_price) : "—";
+        tr.appendChild(tdTotal);
+
+        const tdMonthly = document.createElement("td");
+        tdMonthly.textContent = p.monthly_fee ? formatMoney(p.monthly_fee) : "—";
+        tr.appendChild(tdMonthly);
+
+        const tdStatus = document.createElement("td");
+        const pill = document.createElement("span");
+        pill.className =
+          status === "completed" ? "pill pill-green" :
+          status === "cancelled" ? "pill pill-red"  :
+                                   "pill pill-blue";
+        pill.textContent = status;
+        tdStatus.appendChild(pill);
+        tr.appendChild(tdStatus);
+
+        projectsTableBody.appendChild(tr);
+      });
+
+    // Bills table
+    billsTableBody.innerHTML = "";
+    bills
+      .filter(b => b.next_due_date)
+      .sort((a,b) => new Date(a.next_due_date) - new Date(b.next_due_date))
+      .slice(0,6)
+      .forEach(b => {
+        const tr = document.createElement("tr");
+
+        const tdName = document.createElement("td");
+        tdName.innerHTML = `<strong>${b.name}</strong><br><span class="muted">${b.category || ""}</span>`;
+        tr.appendChild(tdName);
+
+        const tdDue = document.createElement("td");
+        tdDue.textContent = b.next_due_date || "";
+        tr.appendChild(tdDue);
+
+        const tdVendor = document.createElement("td");
+        tdVendor.textContent = b.vendor || "";
+        tr.appendChild(tdVendor);
+
+        const tdAmt = document.createElement("td");
+        tdAmt.textContent = formatMoney(b.amount);
+        tr.appendChild(tdAmt);
+
+        billsTableBody.appendChild(tr);
+      });
+
+    billsNote.textContent = bills.length
+      ? ""
+      : "No recurring_expenses yet. Add them in Supabase when you start paying tools/domains/email.";
+
+    // Leads snapshot
+    const statusCounts      = {};
+    let closedThisMonth     = 0;
+    let commissionThisMonth = 0;
+    const callerStats       = new Map();
+
+    leads.forEach(ld => {
+      const status = (ld.call_status || "new").toLowerCase();
+      statusCounts[status] = (statusCounts[status] || 0) + 1;
+
+      if (status === "closed won" && ld.last_contact_date) {
+        const d = new Date(ld.last_contact_date);
+        if (d >= monthStart && d <= monthEnd) {
+          closedThisMonth += 1;
+          commissionThisMonth += 100;
+        }
       }
-      const obj = callerStats.get(email);
-      if (status === "closed won") {
-        obj.closedWon += 1;
-        obj.commission += 100;
+
+      if (ld.assigned_caller_email) {
+        const email = ld.assigned_caller_email;
+        if (!callerStats.has(email)) {
+          callerStats.set(email, { closedWon:0, commission:0 });
+        }
+        const obj = callerStats.get(email);
+        if (status === "closed won") {
+          obj.closedWon += 1;
+          obj.commission += 100;
+        }
       }
-    }
-  });
+    });
 
-  closedWonMonth.textContent  = closedThisMonth;
-  commissionMonth.textContent = formatMoney(commissionThisMonth);
+    closedWonMonth.textContent  = closedThisMonth;
+    commissionMonth.textContent = formatMoney(commissionThisMonth);
 
-  const parts = [];
-  Object.entries(statusCounts).forEach(([s, count]) => {
-    parts.push(`${s}: ${count}`);
-  });
-  leadStatusStats.textContent = parts.length ? parts.join(" · ") : "No leads yet.";
+    const parts = [];
+    Object.entries(statusCounts).forEach(([s, count]) => {
+      parts.push(`${s}: ${count}`);
+    });
+    leadStatusStats.textContent = parts.length ? parts.join(" · ") : "No leads yet.";
 
-  topCallersTableBody.innerHTML = "";
-  const sortedCallers = Array.from(callerStats.entries())
-    .sort((a,b) => b[1].commission - a[1].commission)
-    .slice(0,5);
+    topCallersTableBody.innerHTML = "";
+    const sortedCallers = Array.from(callerStats.entries())
+      .sort((a,b) => b[1].commission - a[1].commission)
+      .slice(0,5);
 
-  if (!sortedCallers.length) {
-    const tr = document.createElement("tr");
-    const td = document.createElement("td");
-    td.colSpan = 3;
-    td.className = "muted";
-    td.textContent = "No closed-won leads yet.";
-    tr.appendChild(td);
-    topCallersTableBody.appendChild(tr);
-  } else {
-    sortedCallers.forEach(([email, stats]) => {
+    if (!sortedCallers.length) {
       const tr = document.createElement("tr");
-
-      const tdEmail = document.createElement("td");
-      tdEmail.textContent = email;
-      tr.appendChild(tdEmail);
-
-      const tdClosed = document.createElement("td");
-      tdClosed.textContent = stats.closedWon;
-      tr.appendChild(tdClosed);
-
-      const tdComm = document.createElement("td");
-      tdComm.textContent = formatMoney(stats.commission);
-      tr.appendChild(tdComm);
-
+      const td = document.createElement("td");
+      td.colSpan = 3;
+      td.className = "muted";
+      td.textContent = "No closed-won leads yet.";
+      tr.appendChild(td);
       topCallersTableBody.appendChild(tr);
-    });
-  }
-}
+    } else {
+      sortedCallers.forEach(([email, stats]) => {
+        const tr = document.createElement("tr");
 
-(async () => {
-  await guardAndRoute();
-})();
+        const tdEmail = document.createElement("td");
+        tdEmail.textContent = email;
+        tr.appendChild(tdEmail);
+
+        const tdClosed = document.createElement("td");
+        tdClosed.textContent = stats.closedWon;
+        tr.appendChild(tdClosed);
+
+        const tdComm = document.createElement("td");
+        tdComm.textContent = formatMoney(stats.commission);
+        tr.appendChild(tdComm);
+
+        topCallersTableBody.appendChild(tr);
+      });
+    }
+  }
+
+  (async () => {
+    await guardAndRender();
+  })();
 </script>
 
 </body>
-  </html>
+</html>
