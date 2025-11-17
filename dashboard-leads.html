@@ -2,469 +2,567 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>BrandCrafters — Lead Management</title>
+  <title>BrandCrafters — Lead List</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="dashboard.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <script defer src="script.js"></script>
+  <style>
+    body.dashboard-body { margin:0; }
+    .main-content { padding:24px 20px 80px; }
+
+    .grid-4 {
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:16px;
+    }
+    .grid-2 {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:16px;
+    }
+    @media (max-width:1100px){
+      .grid-4{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+    }
+    @media (max-width:780px){
+      .grid-4,.grid-2{ grid-template-columns:1fr; }
+    }
+
+    .stat-label {
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      color:var(--muted);
+    }
+    .stat-value {
+      font-size:24px;
+      font-weight:700;
+      margin:6px 0 4px;
+    }
+    .muted { color:var(--muted); font-size:13px; }
+
+    .table-wrap { width:100%; overflow-x:auto; }
+    table {
+      width:100%;
+      border-collapse:collapse;
+      font-size:13px;
+      min-width:780px;
+    }
+    th,td {
+      border-bottom:1px solid rgba(255,255,255,.08);
+      padding:6px 5px;
+      vertical-align:top;
+      text-align:left;
+    }
+    th {
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+      color:var(--muted);
+    }
+
+    .pill {
+      display:inline-block;
+      padding:2px 8px;
+      border-radius:999px;
+      font-size:11px;
+    }
+    .pill-blue  { background:rgba(110,168,255,.18); }
+    .pill-green { background:rgba(155,255,191,.18); }
+    .pill-red   { background:rgba(255,155,155,.18); }
+    .pill-gray  { background:rgba(200,200,220,.15); }
+
+    .btn-small {
+      font-size:12px;
+      padding:4px 8px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.22);
+      background:rgba(255,255,255,.06);
+      cursor:pointer;
+      margin-right:4px;
+      margin-top:2px;
+    }
+    .btn-small.primary {
+      border-color:transparent;
+      background:var(--grad);
+      color:#050713;
+      box-shadow:0 0 0 1px rgba(110,168,255,.4);
+      font-weight:600;
+    }
+    .btn-small:disabled {
+      opacity:.5;
+      cursor:not-allowed;
+    }
+
+    .admin-subnav {
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin:8px 0 20px;
+    }
+    .admin-subnav a {
+      font-size:13px;
+      padding:6px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.16);
+      background:rgba(255,255,255,.04);
+      text-decoration:none;
+      color:var(--text);
+      transition:.18s;
+    }
+    .admin-subnav a:hover {
+      background:rgba(255,255,255,.10);
+      transform:translateY(-1px);
+    }
+    .admin-subnav a.active {
+      border-color:transparent;
+      background:var(--grad);
+      color:#050713;
+      box-shadow:0 0 0 1px rgba(110,168,255,.4);
+      font-weight:600;
+    }
+
+    .admin-email { font-size:12px; color:var(--muted); margin-right:4px; }
+
+    .filters-row {
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      align-items:center;
+      margin-bottom:10px;
+    }
+    .filters-row select,
+    .filters-row input {
+      padding:8px 10px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,.16);
+      background:rgba(20,18,32,.7);
+      color:var(--text);
+      font-size:13px;
+    }
+
+    @media (max-width:640px){
+      .main-content { padding:16px 14px 70px; }
+      h1 { font-size:20px; }
+      .stat-value { font-size:20px; }
+      .admin-subnav { flex-direction:column; }
+      .admin-subnav a { width:100%; text-align:center; }
+      table { min-width:0; font-size:12px; }
+    }
+  </style>
 </head>
 
-<body class="admin-body">
-<header class="site-header admin-header">
+<body class="dashboard-body">
+
+<!-- HEADER -->
+<header class="site-header">
   <div class="container header-inner">
     <a class="logo" href="index.html">
       <span class="logo-mark">BC</span><span>BrandCrafters</span>
     </a>
 
     <nav class="nav desktop-nav">
-      <a href="dashboard.html" class="nav-link">Admin Home</a>
-      <a href="dashboard-leads.html" class="nav-link active">Leads</a>
-      <a href="dashboard-leads-upload.html" class="nav-link">CSV Upload</a>
-      <a href="dashboard-demos.html" class="nav-link">Demo Library</a>
-      <a href="dashboard-communications.html" class="nav-link">Scripts</a>
-      <a href="dashboard-settings.html" class="nav-link">Settings</a>
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="pricing.html" class="nav-link">Pricing</a>
+      <a href="customer-inquiry.html" class="nav-link">Customer Portal</a>
+      <a href="dashboard.html" class="nav-link active">Admin</a>
 
       <span id="userEmail" class="admin-email"></span>
       <button id="logoutBtn" class="btn btn-outline">Logout</button>
     </nav>
 
-    <button class="menu-toggle" aria-expanded="false">
+    <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
   </div>
 
-  <nav class="mobile-drawer admin-drawer" aria-hidden="true">
+  <nav class="mobile-drawer" aria-hidden="true">
     <div class="drawer-header">
       <a class="logo" href="index.html">
         <span class="logo-mark">BC</span><span>BrandCrafters</span>
       </a>
-      <button class="menu-close">✕</button>
+      <button class="menu-close" aria-label="Close menu">✕</button>
     </div>
-
-    <a class="drawer-link" href="dashboard.html">Admin Home</a>
-    <a class="drawer-link" href="dashboard-leads.html">Leads</a>
-    <a class="drawer-link" href="dashboard-leads-upload.html">CSV Upload</a>
-    <a class="drawer-link" href="dashboard-demos.html">Demo Library</a>
-    <a class="drawer-link" href="dashboard-communications.html">Scripts</a>
-    <a class="drawer-link" href="dashboard-settings.html">Settings</a>
+    <a class="drawer-link" href="index.html">Home</a>
+    <a class="drawer-link" href="pricing.html">Pricing</a>
+    <a class="drawer-link" href="customer-inquiry.html">Customer Portal</a>
+    <a class="drawer-link highlight" href="dashboard.html">Admin</a>
     <button class="drawer-link" id="logoutBtnMobile">Logout</button>
   </nav>
-
-  <div class="drawer-backdrop"></div>
+  <div class="drawer-backdrop" aria-hidden="true"></div>
 </header>
 
-
-<main class="main-content" style="max-width:1100px;margin-inline:auto;">
-  <h1>Leads & Commissions</h1>
-  <p class="subhead">
-    Approve contractor-submitted leads, control finder bonuses, and manage assignment.
-  </p>
-
-  <!-- SUMMARY BAR -->
-  <section class="grid-3" style="margin-bottom:24px;">
-    <article class="card stat-card">
-      <div class="stat-label">Pending Contractor Leads</div>
-      <div class="stat-value" id="statPending">0</div>
-      <p class="muted">leads where lead_source = contractor and approved = false.</p>
-    </article>
-    <article class="card stat-card">
-      <div class="stat-label">Total Approved Leads</div>
-      <div class="stat-value" id="statApproved">0</div>
-      <p class="muted">Approved leads (admin + contractor).</p>
-    </article>
-    <article class="card stat-card">
-      <div class="stat-label">Total Closed Won</div>
-      <div class="stat-value" id="statClosedWon">0</div>
-      <p class="muted">Leads with status = closed won.</p>
-    </article>
-  </section>
-
-
-  <!-- PENDING CONTRACTOR LEADS -->
-  <section class="card" style="margin-bottom:24px;">
-    <h2>Pending Contractor-Submitted Leads</h2>
-    <p class="muted">
-      These were added by contractors. Approve to move to the main lead pool, or deny if they’re low-quality.
+<main class="main-content container">
+  <section>
+    <h1>Lead List</h1>
+    <p class="subhead">
+      Full view of all leads in your system. Filter by status or search by business, niche, or caller.
     </p>
 
-    <table class="table" id="pendingTable">
-      <thead>
-        <tr>
-          <th>Business</th>
-          <th>Contact</th>
-          <th>Category / City</th>
-          <th>Finder</th>
-          <th>Package Rec.</th>
-          <th>Bonus</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-    <p id="pendingMsg" class="muted"></p>
+    <!-- ADMIN DASH NAV -->
+    <nav class="admin-subnav">
+      <a href="dashboard.html">Overview</a>
+      <a href="dashboard-leads.html" class="active">Lead List</a>
+      <a href="dashboard-leads-upload.html">Upload Leads</a>
+      <a href="dashboard-demos.html">Demo Library</a>
+      <a href="dashboard-communications.html">Scripts &amp; Messages</a>
+      <a href="dashboard-commissions.html">Commissions</a>
+      <a href="dashboard-settings.html">Settings</a>
+      <a href="contractor-portal.html">Contractor Portal</a>
+    </nav>
   </section>
 
-
-  <!-- ALL LEADS OVERVIEW -->
-  <section class="card" style="margin-bottom:24px;">
-    <h2>All Leads Overview</h2>
-    <p class="muted">
-      Quick view of all leads (approved + unapproved). You can tweak bonus, package, and assignment here.
-    </p>
-
-    <table class="table" id="allLeadsTable">
-      <thead>
-        <tr>
-          <th>Business</th>
-          <th>Status</th>
-          <th>Source</th>
-          <th>Finder</th>
-          <th>Assigned To</th>
-          <th>Package</th>
-          <th>Bonus</th>
-          <th>Approved?</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-    <p id="allLeadsMsg" class="muted"></p>
+  <!-- STATS -->
+  <section class="grid-4" style="margin-bottom:16px;">
+    <article class="card">
+      <div class="stat-label">Total Leads</div>
+      <div class="stat-value" id="totalLeads">0</div>
+      <div class="muted">All rows in call_leads.</div>
+    </article>
+    <article class="card">
+      <div class="stat-label">Open</div>
+      <div class="stat-value" id="openLeads">0</div>
+      <div class="muted">new · in progress · follow up</div>
+    </article>
+    <article class="card">
+      <div class="stat-label">Closed Won</div>
+      <div class="stat-value" id="wonLeads">0</div>
+      <div class="muted">Deals you’ve closed.</div>
+    </article>
+    <article class="card">
+      <div class="stat-label">Closed Lost / DNC</div>
+      <div class="stat-value" id="lostLeads">0</div>
+      <div class="muted">closed lost · do not contact</div>
+    </article>
   </section>
 
+  <!-- FILTERS + TABLE -->
+  <section class="card">
+    <div class="filters-row">
+      <label class="muted">Status
+        <select id="statusFilter">
+          <option value="all">All</option>
+          <option value="open">Open (new / in progress / follow up)</option>
+          <option value="new">new</option>
+          <option value="in progress">in progress</option>
+          <option value="follow up">follow up</option>
+          <option value="closed won">closed won</option>
+          <option value="closed lost">closed lost</option>
+          <option value="do not contact">do not contact</option>
+        </select>
+      </label>
+
+      <label class="muted">Search
+        <input id="searchInput" placeholder="Business, niche, city, caller email…" />
+      </label>
+    </div>
+
+    <div class="table-wrap">
+      <table id="leadsTable">
+        <thead>
+          <tr>
+            <th>Business / Niche</th>
+            <th>Contact</th>
+            <th>Status</th>
+            <th>Assigned To</th>
+            <th>Package</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <p id="leadsNote" class="muted" style="margin-top:8px;"></p>
+  </section>
 </main>
 
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      © <span id="year"></span> BrandCrafters — A division of Egyptian Hype LLC
+      <a href="dashboard.html" class="admin-link">Admin</a>
+    </div>
+  </div>
+</footer>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script>
-const SUPABASE_URL = "https://vekoulqehexqosgwacwa.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiIsInZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
-const ADMIN_EMAIL = "srarnold216@gmail.com";
+  const SUPABASE_URL  = "https://vekoulqehexqosgwacwa.supabase.co";
+  const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
+  const ADMIN_EMAIL   = "srarnold216@gmail.com";
 
-const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
-let currentUser = null;
+  const userEmailSpan   = document.getElementById("userEmail");
+  const logoutBtn       = document.getElementById("logoutBtn");
+  const logoutBtnMobile = document.getElementById("logoutBtnMobile");
 
-// AUTH GUARD
-(async function guard() {
-  const { data } = await client.auth.getUser();
-  if (!data.user) {
-    window.location.href = "dashboard-login.html";
-    return;
+  const totalLeadsEl = document.getElementById("totalLeads");
+  const openLeadsEl  = document.getElementById("openLeads");
+  const wonLeadsEl   = document.getElementById("wonLeads");
+  const lostLeadsEl  = document.getElementById("lostLeads");
+
+  const statusFilter   = document.getElementById("statusFilter");
+  const searchInput    = document.getElementById("searchInput");
+  const leadsTableBody = document.querySelector("#leadsTable tbody");
+  const leadsNote      = document.getElementById("leadsNote");
+
+  let allLeads = [];
+
+  async function guardAdmin() {
+    const { data } = await supabaseClient.auth.getUser();
+    if (!data || !data.user) {
+      window.location.href = "dashboard.html";
+      return null;
+    }
+    const email = data.user.email || "";
+    userEmailSpan.textContent = email;
+    if (email !== ADMIN_EMAIL) {
+      window.location.href = "contractor-portal.html";
+      return null;
+    }
+    return data.user;
   }
-  if (data.user.email !== ADMIN_EMAIL) {
-    window.location.href = "contractor-portal.html";
-    return;
+
+  async function doLogout() {
+    await supabaseClient.auth.signOut();
+    window.location.href = "dashboard.html";
   }
-  currentUser = data.user;
-  document.getElementById("userEmail").textContent = currentUser.email;
+  logoutBtn?.addEventListener("click", doLogout);
+  logoutBtnMobile?.addEventListener("click", doLogout);
 
-  await loadLeads();
-})();
+  function isOpenStatus(s) {
+    if (!s) return false;
+    const v = s.toLowerCase();
+    return ["new","in progress","follow up"].includes(v);
+  }
 
-// LOGOUT
-document.getElementById("logoutBtn").addEventListener("click", async () => {
-  await client.auth.signOut();
-  window.location.href = "dashboard-login.html";
-});
-const logoutMobile = document.getElementById("logoutBtnMobile");
-if (logoutMobile) {
-  logoutMobile.addEventListener("click", async () => {
-    await client.auth.signOut();
-    window.location.href = "dashboard-login.html";
+  function isLostStatus(s) {
+    if (!s) return false;
+    const v = s.toLowerCase();
+    return ["closed lost","do not contact"].includes(v);
+  }
+
+  function pillForStatus(status) {
+    const s = (status || "new").toLowerCase();
+    const span = document.createElement("span");
+    if (s === "closed won") span.className = "pill pill-green";
+    else if (isLostStatus(s)) span.className = "pill pill-red";
+    else span.className = "pill pill-blue";
+    span.textContent = s;
+    return span;
+  }
+
+  function formatPhone(p) {
+    if (!p) return "";
+    return p;
+  }
+
+  function applyFilters() {
+    const statusVal = statusFilter.value;
+    const q = searchInput.value.trim().toLowerCase();
+
+    let rows = [...allLeads];
+
+    if (statusVal !== "all") {
+      rows = rows.filter(ld => {
+        const s = (ld.call_status || "new").toLowerCase();
+        if (statusVal === "open") return isOpenStatus(s);
+        return s === statusVal;
+      });
+    }
+
+    if (q) {
+      rows = rows.filter(ld => {
+        const hay = [
+          ld.business_name,
+          ld.business,
+          ld.niche,
+          ld.category,
+          ld.city,
+          ld.state,
+          ld.location,
+          ld.assigned_caller_email,
+          ld.finder_email
+        ].filter(Boolean).join(" ").toLowerCase();
+        return hay.includes(q);
+      });
+    }
+
+    renderTable(rows);
+  }
+
+  function renderTable(leads) {
+    leadsTableBody.innerHTML = "";
+    if (!leads.length) {
+      const tr = document.createElement("tr");
+      const td = document.createElement("td");
+      td.colSpan = 6;
+      td.className = "muted";
+      td.textContent = "No leads match your filters.";
+      tr.appendChild(td);
+      leadsTableBody.appendChild(tr);
+      leadsNote.textContent = "";
+      return;
+    }
+
+    leads.forEach(ld => {
+      const tr = document.createElement("tr");
+
+      // Business / Niche
+      const tdBiz = document.createElement("td");
+      tdBiz.innerHTML =
+        `<strong>${ld.business_name || ld.business || "(No name)"}</strong><br>` +
+        `<span class="muted">${ld.niche || ld.category || ""}</span>`;
+      tr.appendChild(tdBiz);
+
+      // Contact
+      const tdContact = document.createElement("td");
+      const lines = [];
+      if (ld.phone) lines.push(formatPhone(ld.phone));
+      if (ld.email) lines.push(ld.email);
+      const loc = ld.location || [ld.city, ld.state].filter(Boolean).join(", ");
+      if (loc) lines.push(loc);
+      tdContact.innerHTML = lines.join("<br>");
+      tr.appendChild(tdContact);
+
+      // Status
+      const tdStatus = document.createElement("td");
+      tdStatus.appendChild(pillForStatus(ld.call_status));
+      tr.appendChild(tdStatus);
+
+      // Assigned
+      const tdAssigned = document.createElement("td");
+      tdAssigned.innerHTML =
+        `<div class="muted" style="font-size:12px;">` +
+        (ld.assigned_caller_email || "Unassigned") +
+        `</div>`;
+      tr.appendChild(tdAssigned);
+
+      // Package
+      const tdPkg = document.createElement("td");
+      const pkg = ld.recommended_package || ld.package_target || "";
+      const upsell = ld.recommended_upsells || ld.upsell_notes || "";
+      tdPkg.innerHTML =
+        (pkg ? `<strong>${pkg}</strong>` : "—") +
+        (upsell ? `<br><span class="muted">${upsell}</span>` : "");
+      tr.appendChild(tdPkg);
+
+      // Actions
+      const tdActions = document.createElement("td");
+
+      // Status select
+      const select = document.createElement("select");
+      ["new","in progress","follow up","closed won","closed lost","do not contact"].forEach(opt => {
+        const o = document.createElement("option");
+        o.value = opt;
+        o.textContent = opt;
+        if ((ld.call_status || "new").toLowerCase() === opt) o.selected = true;
+        select.appendChild(o);
+      });
+      select.style.fontSize = "12px";
+      select.style.marginBottom = "4px";
+      select.addEventListener("change", async () => {
+        await updateLead(ld.id, { call_status: select.value });
+      });
+      tdActions.appendChild(select);
+
+      // Assign to email quick input
+      const assignInput = document.createElement("input");
+      assignInput.type = "email";
+      assignInput.placeholder = "assign@caller.com";
+      assignInput.value = ld.assigned_caller_email || "";
+      assignInput.style.display = "block";
+      assignInput.style.margin = "4px 0";
+      assignInput.style.fontSize = "12px";
+      assignInput.style.padding = "4px 6px";
+      assignInput.style.borderRadius = "8px";
+      assignInput.style.border = "1px solid rgba(255,255,255,.18)";
+      assignInput.style.background = "rgba(20,18,32,.7)";
+      assignInput.style.color = "inherit";
+      tdActions.appendChild(assignInput);
+
+      const assignBtn = document.createElement("button");
+      assignBtn.className = "btn-small primary";
+      assignBtn.textContent = "Assign";
+      assignBtn.addEventListener("click", async () => {
+        const email = assignInput.value.trim() || null;
+        await updateLead(ld.id, { assigned_caller_email: email });
+      });
+      tdActions.appendChild(assignBtn);
+
+      const clearBtn = document.createElement("button");
+      clearBtn.className = "btn-small";
+      clearBtn.textContent = "Clear";
+      clearBtn.addEventListener("click", async () => {
+        assignInput.value = "";
+        await updateLead(ld.id, { assigned_caller_email: null });
+      });
+      tdActions.appendChild(clearBtn);
+
+      tr.appendChild(tdActions);
+      leadsTableBody.appendChild(tr);
+    });
+
+    leadsNote.textContent = `${leads.length} lead(s) shown.`;
+  }
+
+  async function updateLead(id, patch) {
+    if (!id) return;
+    const { error } = await supabaseClient
+      .from("call_leads")
+      .update(patch)
+      .eq("id", id);
+    if (error) {
+      console.error("update lead error:", error);
+    } else {
+      // Refresh allLeads & re-apply filters
+      await loadLeads();
+    }
+  }
+
+  async function loadLeads() {
+    const { data, error } = await supabaseClient
+      .from("call_leads")
+      .select("*")
+      .order("created_at", { ascending:false });
+
+    if (error) {
+      console.error("call_leads error:", error);
+      leadsNote.textContent = "Error loading leads. Check console.";
+      return;
+    }
+
+    allLeads = data || [];
+
+    // Stats
+    const total = allLeads.length;
+    const open  = allLeads.filter(ld => isOpenStatus(ld.call_status)).length;
+    const won   = allLeads.filter(ld => (ld.call_status || "").toLowerCase() === "closed won").length;
+    const lost  = allLeads.filter(ld => isLostStatus(ld.call_status)).length;
+
+    totalLeadsEl.textContent = total;
+    openLeadsEl.textContent  = open;
+    wonLeadsEl.textContent   = won;
+    lostLeadsEl.textContent  = lost;
+
+    applyFilters();
+  }
+
+  statusFilter.addEventListener("change", applyFilters);
+  searchInput.addEventListener("input", () => {
+    // small debounce is overkill; just re-filter on each input
+    applyFilters();
   });
-}
 
-// MOBILE NAV TOGGLE (reuse style)
-const menuToggle = document.querySelector(".menu-toggle");
-const drawer = document.querySelector(".mobile-drawer");
-const backdrop = document.querySelector(".drawer-backdrop");
-const closeBtn = document.querySelector(".menu-close");
-
-if (menuToggle && drawer && backdrop && closeBtn) {
-  menuToggle.addEventListener("click", () => {
-    document.body.classList.add("drawer-open");
-    menuToggle.setAttribute("aria-expanded", "true");
-    drawer.setAttribute("aria-hidden", "false");
-  });
-  closeBtn.addEventListener("click", closeDrawer);
-  backdrop.addEventListener("click", closeDrawer);
-
-  function closeDrawer() {
-    document.body.classList.remove("drawer-open");
-    menuToggle.setAttribute("aria-expanded", "false");
-    drawer.setAttribute("aria-hidden", "true");
-  }
-}
-
-
-// CORE LOAD FUNCTION
-async function loadLeads() {
-  const { data, error } = await client
-    .from("call_leads")
-    .select("*")
-    .order("created_at", { ascending: false });
-
-  if (error) {
-    console.error(error);
-    return;
-  }
-
-  const leads = data || [];
-  renderSummary(leads);
-  renderPending(leads);
-  renderAll(leads);
-}
-
-
-// SUMMARY STATS
-function renderSummary(leads) {
-  const pending = leads.filter(l => l.lead_source === "contractor" && l.approved === false);
-  const approved = leads.filter(l => l.approved === true);
-  const closedWon = leads.filter(l => (l.call_status || "").toLowerCase() === "closed won");
-
-  document.getElementById("statPending").textContent = pending.length;
-  document.getElementById("statApproved").textContent = approved.length;
-  document.getElementById("statClosedWon").textContent = closedWon.length;
-}
-
-
-// PENDING CONTRACTOR LEADS TABLE
-function renderPending(leads) {
-  const pending = leads.filter(l =>
-    l.lead_source === "contractor" && (l.approved === false || l.approved === null)
-  );
-
-  const tbody = document.querySelector("#pendingTable tbody");
-  const msgEl = document.getElementById("pendingMsg");
-  tbody.innerHTML = "";
-
-  if (!pending.length) {
-    msgEl.textContent = "No pending contractor-submitted leads right now.";
-    return;
-  }
-  msgEl.textContent = "";
-
-  pending.forEach(l => {
-    const finder = l.finder_email || "—";
-    const pkg = l.package_recommendation || "—";
-    const city = l.city || "—";
-    const cat = l.category || "—";
-    const bonus = Number(l.finder_bonus_amount || 0);
-
-    tbody.innerHTML += `
-      <tr>
-        <td>
-          <strong>${l.business_name || "—"}</strong><br/>
-          <span class="muted">${city}</span>
-        </td>
-        <td>
-          <div>${l.phone || "—"}</div>
-          <div class="muted">${l.email || ""}</div>
-        </td>
-        <td>
-          <div>${cat}</div>
-        </td>
-        <td>
-          <span class="muted">${finder}</span>
-        </td>
-        <td>
-          <select onchange="updatePackage('${l.id}', this.value)">
-            <option value="Starter Craft" ${pkg === "Starter Craft" ? "selected" : ""}>Starter Craft</option>
-            <option value="Business Builder" ${pkg === "Business Builder" ? "selected" : ""}>Business Builder</option>
-            <option value="E-Commerce Store" ${pkg === "E-Commerce Store" ? "selected" : ""}>E-Commerce Store</option>
-          </select>
-        </td>
-        <td>
-          <select onchange="updateBonus('${l.id}', this.value)">
-            <option value="0" ${bonus === 0 ? "selected" : ""}>$0</option>
-            <option value="50" ${bonus === 50 ? "selected" : ""}>$50</option>
-            <option value="75" ${bonus === 75 ? "selected" : ""}>$75</option>
-            <option value="100" ${bonus === 100 ? "selected" : ""}>$100</option>
-          </select>
-        </td>
-        <td>
-          <button class="btn-small" onclick="approveLead('${l.id}')">Approve</button>
-          <button class="btn-small danger" onclick="denyLead('${l.id}')">Deny</button>
-        </td>
-      </tr>
-    `;
-  });
-}
-
-
-// ALL LEADS TABLE
-function renderAll(leads) {
-  const tbody = document.querySelector("#allLeadsTable tbody");
-  const msgEl = document.getElementById("allLeadsMsg");
-  tbody.innerHTML = "";
-
-  if (!leads.length) {
-    msgEl.textContent = "No leads in the system yet.";
-    return;
-  }
-  msgEl.textContent = "";
-
-  leads.forEach(l => {
-    const status = (l.call_status || "new");
-    const source = l.lead_source || "admin";
-    const finder = l.finder_email || "—";
-    const assigned = l.assigned_caller_email || "—";
-    const pkg = l.package_recommendation || "—";
-    const bonus = Number(l.finder_bonus_amount || 0);
-    const isApproved = l.approved === true;
-
-    tbody.innerHTML += `
-      <tr>
-        <td>
-          <strong>${l.business_name || "—"}</strong><br/>
-          <span class="muted">${l.city || ""}</span>
-        </td>
-        <td>${status}</td>
-        <td>${source}</td>
-        <td><span class="muted">${finder}</span></td>
-        <td>
-          <input
-            type="email"
-            value="${assigned === "—" ? "" : assigned}"
-            placeholder="caller email"
-            onchange="assignLead('${l.id}', this.value)"
-          />
-        </td>
-        <td>
-          <select onchange="updatePackage('${l.id}', this.value)">
-            <option value="Starter Craft" ${pkg === "Starter Craft" ? "selected" : ""}>Starter</option>
-            <option value="Business Builder" ${pkg === "Business Builder" ? "selected" : ""}>Business</option>
-            <option value="E-Commerce Store" ${pkg === "E-Commerce Store" ? "selected" : ""}>E-Comm</option>
-          </select>
-        </td>
-        <td>
-          <select onchange="updateBonus('${l.id}', this.value)">
-            <option value="0" ${bonus === 0 ? "selected" : ""}>$0</option>
-            <option value="50" ${bonus === 50 ? "selected" : ""}>$50</option>
-            <option value="75" ${bonus === 75 ? "selected" : ""}>$75</option>
-            <option value="100" ${bonus === 100 ? "selected" : ""}>$100</option>
-          </select>
-        </td>
-        <td>
-          <select onchange="updateApproved('${l.id}', this.value)">
-            <option value="true" ${isApproved ? "selected" : ""}>Yes</option>
-            <option value="false" ${!isApproved ? "selected" : ""}>No</option>
-          </select>
-        </td>
-      </tr>
-    `;
-  });
-}
-
-
-// ACTION HELPERS (GLOBAL)
-
-
-async function approveLead(id) {
-  const { error } = await client
-    .from("call_leads")
-    .update({
-      approved: true,
-      approved_at: new Date().toISOString(),
-      approved_by: currentUser ? currentUser.email : null
-    })
-    .eq("id", id);
-
-  if (error) {
-    console.error(error);
-    alert("Error approving lead.");
-  } else {
-    loadLeads();
-  }
-}
-
-async function denyLead(id) {
-  if (!confirm("Deny and effectively hide this lead?")) return;
-
-  const { error } = await client
-    .from("call_leads")
-    .update({
-      approved: false,
-      approved_at: null,
-      approved_by: currentUser ? currentUser.email : null
-    })
-    .eq("id", id);
-
-  if (error) {
-    console.error(error);
-    alert("Error denying lead.");
-  } else {
-    loadLeads();
-  }
-}
-
-async function updatePackage(id, pkg) {
-  const { error } = await client
-    .from("call_leads")
-    .update({ package_recommendation: pkg })
-    .eq("id", id);
-
-  if (error) {
-    console.error(error);
-    alert("Error updating package.");
-  }
-}
-
-async function updateBonus(id, val) {
-  const amount = Number(val) || 0;
-  const { error } = await client
-    .from("call_leads")
-    .update({ finder_bonus_amount: amount })
-    .eq("id", id);
-
-  if (error) {
-    console.error(error);
-    alert("Error updating bonus.");
-  }
-}
-
-async function updateApproved(id, val) {
-  const approved = (val === "true");
-  const updateObj = {
-    approved
-  };
-  if (approved) {
-    updateObj.approved_at = new Date().toISOString();
-    updateObj.approved_by = currentUser ? currentUser.email : null;
-  } else {
-    updateObj.approved_at = null;
-    updateObj.approved_by = currentUser ? currentUser.email : null;
-  }
-
-  const { error } = await client
-    .from("call_leads")
-    .update(updateObj)
-    .eq("id", id);
-
-  if (error) {
-    console.error(error);
-    alert("Error updating approval status.");
-  } else {
-    loadLeads();
-  }
-}
-
-async function assignLead(id, email) {
-  const cleanEmail = email.trim() || null;
-
-  const { error } = await client
-    .from("call_leads")
-    .update({
-      assigned_caller_email: cleanEmail,
-      call_status: cleanEmail ? "working" : "new"
-    })
-    .eq("id", id);
-
-  if (error) {
-    console.error(error);
-    alert("Error assigning lead.");
-  } else {
-    loadLeads();
-  }
-}
+  (async () => {
+    const user = await guardAdmin();
+    if (!user) return;
+    await loadLeads();
+  })();
 </script>
 </body>
 </html>
