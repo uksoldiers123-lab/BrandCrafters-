@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>BrandCrafters — Upload Leads</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script defer src="script.js"></script>
+  <style>
+    body.dashboard-body { margin:0; }
+    .main-content { padding:24px 20px 80px; }
+
+    .grid-2 {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:16px;
+    }
+    @media (max-width:900px){
+      .grid-2{ grid-template-columns:1fr; }
+    }
+
+    .muted { color:var(--muted); font-size:13px; }
+
+    .admin-subnav {
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin:8px 0 20px;
+    }
+    .admin-subnav a {
+      font-size:13px;
+      padding:6px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.16);
+      background:rgba(255,255,255,.04);
+      text-decoration:none;
+      color:var(--text);
+      transition:.18s;
+    }
+    .admin-subnav a:hover {
+      background:rgba(255,255,255,.10);
+      transform:translateY(-1px);
+    }
+    .admin-subnav a.active {
+      border-color:transparent;
+      background:var(--grad);
+      color:#050713;
+      box-shadow:0 0 0 1px rgba(110,168,255,.4);
+      font-weight:600;
+    }
+
+    .admin-email { font-size:12px; color:var(--muted); margin-right:4px; }
+
+    .upload-box {
+      border:1px dashed rgba(255,255,255,.25);
+      border-radius:14px;
+      padding:16px;
+      background:rgba(255,255,255,.03);
+    }
+
+    .upload-box input[type="file"] {
+      margin-top:8px;
+      font-size:13px;
+    }
+
+    .table-wrap { width:100%; overflow-x:auto; margin-top:8px; }
+    table {
+      width:100%;
+      border-collapse:collapse;
+      font-size:13px;
+      min-width:620px;
+    }
+    th,td {
+      border-bottom:1px solid rgba(255,255,255,.08);
+      padding:6px 5px;
+      vertical-align:top;
+      text-align:left;
+    }
+    th {
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+      color:var(--muted);
+    }
+
+    .btn-small {
+      font-size:12px;
+      padding:4px 8px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.22);
+      background:rgba(255,255,255,.06);
+      cursor:pointer;
+      margin-right:4px;
+      margin-top:2px;
+    }
+    .btn-small.primary {
+      border-color:transparent;
+      background:var(--grad);
+      color:#050713;
+      box-shadow:0 0 0 1px rgba(110,168,255,.4);
+      font-weight:600;
+    }
+    .btn-small.danger {
+      background:rgba(255,80,80,.18);
+      border-color:rgba(255,80,80,.5);
+    }
+    .btn-small:disabled {
+      opacity:.5;
+      cursor:not-allowed;
+    }
+
+    @media (max-width:640px){
+      .main-content { padding:16px 14px 70px; }
+      h1 { font-size:20px; }
+      table { min-width:0; font-size:12px; }
+      .admin-subnav { flex-direction:column; }
+      .admin-subnav a { width:100%; text-align:center; }
+    }
+  </style>
+</head>
+
+<body class="dashboard-body">
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="logo" href="index.html">
+      <span class="logo-mark">BC</span><span>BrandCrafters</span>
+    </a>
+
+    <nav class="nav desktop-nav">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="pricing.html" class="nav-link">Pricing</a>
+      <a href="customer-inquiry.html" class="nav-link">Customer Portal</a>
+      <a href="dashboard.html" class="nav-link active">Admin</a>
+
+      <span id="userEmail" class="admin-email"></span>
+      <button id="logoutBtn" class="btn btn-outline">Logout</button>
+    </nav>
+
+    <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <nav class="mobile-drawer" aria-hidden="true">
+    <div class="drawer-header">
+      <a class="logo" href="index.html">
+        <span class="logo-mark">BC</span><span>BrandCrafters</span>
+      </a>
+      <button class="menu-close" aria-label="Close menu">✕</button>
+    </div>
+    <a class="drawer-link" href="index.html">Home</a>
+    <a class="drawer-link" href="pricing.html">Pricing</a>
+    <a class="drawer-link" href="customer-inquiry.html">Customer Portal</a>
+    <a class="drawer-link highlight" href="dashboard.html">Admin</a>
+    <button class="drawer-link" id="logoutBtnMobile">Logout</button>
+  </nav>
+  <div class="drawer-backdrop" aria-hidden="true"></div>
+</header>
+
+<main class="main-content container">
+  <section>
+    <h1>Upload Leads (CSV)</h1>
+    <p class="subhead">
+      Import new leads from a CSV file and review recent uploads.
+      These will show up on the admin Lead List and in the contractor portal.
+    </p>
+
+    <!-- ADMIN NAV -->
+    <nav class="admin-subnav">
+      <a href="dashboard.html">Overview</a>
+      <a href="dashboard-leads.html">Lead List</a>
+      <a href="dashboard-leads-upload.html" class="active">Upload Leads</a>
+      <a href="dashboard-demos.html">Demo Library</a>
+      <a href="dashboard-communications.html">Scripts &amp; Messages</a>
+      <a href="dashboard-commissions.html">Commissions</a>
+      <a href="dashboard-settings.html">Settings</a>
+      <a href="contractor-portal.html">Contractor Portal</a>
+    </nav>
+  </section>
+
+  <section class="grid-2">
+    <!-- LEFT: UPLOAD / PREVIEW -->
+    <article class="card">
+      <h2>1. Upload CSV</h2>
+      <p class="muted">
+        Expected headers (case-insensitive):<br/>
+        <code>BusinessName, Phone, Email, City, State, Category, Website, Priority</code><br/>
+        Extra columns will be ignored.
+      </p>
+
+      <div class="upload-box">
+        <input type="file" id="csvFile" accept=".csv" />
+        <p class="muted" id="uploadStatus" style="margin-top:8px;"></p>
+
+        <button id="importBtn" class="btn btn-primary" style="margin-top:10px;" disabled>
+          Import 0 leads
+        </button>
+      </div>
+
+      <div id="previewWrap" style="margin-top:16px; display:none;">
+        <h3 style="margin:0 0 4px;">Preview</h3>
+        <p class="muted" id="previewNote"></p>
+        <div class="table-wrap">
+          <table id="previewTable">
+            <thead>
+              <tr>
+                <th>Business</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>City/State</th>
+                <th>Category</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </article>
+
+    <!-- RIGHT: RECENT LEADS -->
+    <article class="card">
+      <h2>2. Recent Leads (Last 50)</h2>
+      <p class="muted">
+        Quick look at the latest imported leads. You can delete a row here if something
+        was uploaded by mistake.
+      </p>
+
+      <div class="table-wrap">
+        <table id="recentLeadsTable">
+          <thead>
+            <tr>
+              <th>Business</th>
+              <th>Contact</th>
+              <th>Category</th>
+              <th>Created</th>
+              <th>Delete</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p class="muted" id="recentLeadsNote" style="margin-top:8px;"></p>
+    </article>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      © <span id="year"></span> BrandCrafters — A division of Egyptian Hype LLC
+      <a href="dashboard.html" class="admin-link">Admin</a>
+    </div>
+  </div>
+</footer>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL  = "https://vekoulqehexqosgwacwa.supabase.co";
+  const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
+  const ADMIN_EMAIL   = "srarnold216@gmail.com";
+
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+  const userEmailSpan   = document.getElementById("userEmail");
+  const logoutBtn       = document.getElementById("logoutBtn");
+  const logoutBtnMobile = document.getElementById("logoutBtnMobile");
+
+  const csvFileInput  = document.getElementById("csvFile");
+  const uploadStatus  = document.getElementById("uploadStatus");
+  const importBtn     = document.getElementById("importBtn");
+
+  const previewWrap   = document.getElementById("previewWrap");
+  const previewNote   = document.getElementById("previewNote");
+  const previewBody   = document.querySelector("#previewTable tbody");
+
+  const recentLeadsBody = document.querySelector("#recentLeadsTable tbody");
+  const recentLeadsNote = document.getElementById("recentLeadsNote");
+
+  let parsedRows = []; // from CSV
+
+  async function guardAdmin() {
+    const { data } = await supabaseClient.auth.getUser();
+    if (!data || !data.user) {
+      window.location.href = "dashboard.html";
+      return null;
+    }
+    const email = data.user.email || "";
+    userEmailSpan.textContent = email;
+    if (email !== ADMIN_EMAIL) {
+      window.location.href = "contractor-portal.html";
+      return null;
+    }
+    return data.user;
+  }
+
+  async function doLogout() {
+    await supabaseClient.auth.signOut();
+    window.location.href = "dashboard.html";
+  }
+  logoutBtn?.addEventListener("click", doLogout);
+  logoutBtnMobile?.addEventListener("click", doLogout);
+
+  function parseCSV(text) {
+    const lines = text.split(/\r?\n/).filter(l => l.trim().length);
+    if (!lines.length) return [];
+
+    const headers = lines[0].split(",").map(h => h.trim().toLowerCase());
+    const rows = [];
+
+    for (let i = 1; i < lines.length; i++) {
+      const cols = lines[i].split(",");
+      if (cols.every(c => !c.trim())) continue;
+
+      const rowObj = {};
+      headers.forEach((h, idx) => {
+        rowObj[h] = (cols[idx] || "").trim();
+      });
+      rows.push(rowObj);
+    }
+    return rows;
+  }
+
+  function mapRowToLead(obj) {
+    // header names normalized to lowercase
+    const get = (keys) => {
+      for (const k of keys) {
+        if (obj[k] && obj[k].length) return obj[k];
+      }
+      return null;
+    };
+
+    const business = get(["businessname","business","name"]);
+    const phone    = get(["phone","phone number","phone_number"]);
+    const email    = get(["email","emailaddress","email_address"]);
+    const city     = get(["city"]);
+    const state    = get(["state"]);
+    const category = get(["category","niche","type"]);
+    const website  = get(["website","website_url","url"]);
+    const priority = get(["priority"]);
+
+    const location = (city || state) ? [city, state].filter(Boolean).join(", ") : null;
+
+    return {
+      business_name: business,
+      phone,
+      email,
+      city,
+      state,
+      location,
+      niche: category,
+      website_url: website,
+      priority,
+      call_status: "new"
+    };
+  }
+
+  function renderPreview() {
+    previewBody.innerHTML = "";
+    if (!parsedRows.length) {
+      previewWrap.style.display = "none";
+      importBtn.disabled = true;
+      importBtn.textContent = "Import 0 leads";
+      return;
+    }
+    previewWrap.style.display = "block";
+
+    const max = Math.min(parsedRows.length, 10);
+    previewNote.textContent = `Showing first ${max} of ${parsedRows.length} row(s).`;
+
+    for (let i = 0; i < max; i++) {
+      const obj = parsedRows[i];
+      const lead = mapRowToLead(obj);
+
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${lead.business_name || ""}</td>
+        <td>${lead.phone || ""}</td>
+        <td>${lead.email || ""}</td>
+        <td>${lead.location || ""}</td>
+        <td>${lead.niche || ""}</td>
+      `;
+      previewBody.appendChild(tr);
+    }
+
+    importBtn.disabled = false;
+    importBtn.textContent = `Import ${parsedRows.length} lead(s)`;
+  }
+
+  csvFileInput.addEventListener("change", () => {
+    const file = csvFileInput.files[0];
+    parsedRows = [];
+    uploadStatus.textContent = "";
+    previewBody.innerHTML = "";
+    previewWrap.style.display = "none";
+    importBtn.disabled = true;
+    importBtn.textContent = "Import 0 leads";
+
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const text = e.target.result;
+        parsedRows = parseCSV(text);
+        if (!parsedRows.length) {
+          uploadStatus.textContent = "No data rows found in CSV.";
+        } else {
+          uploadStatus.textContent = `Loaded ${parsedRows.length} row(s). Review preview below.`;
+        }
+        renderPreview();
+      } catch (err) {
+        console.error("CSV parse error:", err);
+        uploadStatus.textContent = "Error reading CSV. Check format.";
+      }
+    };
+    reader.readAsText(file);
+  });
+
+  importBtn.addEventListener("click", async () => {
+    if (!parsedRows.length) return;
+
+    importBtn.disabled = true;
+    importBtn.textContent = "Importing…";
+    uploadStatus.textContent = "";
+
+    const leadsToInsert = parsedRows.map(mapRowToLead);
+
+    // Supabase can insert in chunks (avoid huge single insert)
+    const chunkSize = 200;
+    let inserted = 0;
+    for (let i = 0; i < leadsToInsert.length; i += chunkSize) {
+      const chunk = leadsToInsert.slice(i, i + chunkSize);
+      const { error } = await supabaseClient
+        .from("call_leads")
+        .insert(chunk);
+
+      if (error) {
+        console.error("Insert error:", error);
+        uploadStatus.textContent = `Stopped on error after ${inserted} rows. Check console.`;
+        importBtn.disabled = false;
+        importBtn.textContent = "Import again";
+        await loadRecentLeads();
+        return;
+      }
+      inserted += chunk.length;
+    }
+
+    uploadStatus.textContent = `Imported ${inserted} lead(s).`;
+    importBtn.textContent = `Imported ${inserted} lead(s)`;
+    parsedRows = [];
+    csvFileInput.value = "";
+    renderPreview();
+    await loadRecentLeads();
+  });
+
+  function formatDate(dStr) {
+    if (!dStr) return "";
+    const d = new Date(dStr);
+    if (isNaN(d.getTime())) return dStr;
+    return d.toLocaleDateString();
+  }
+
+  async function loadRecentLeads() {
+    const { data, error } = await supabaseClient
+      .from("call_leads")
+      .select("*")
+      .order("created_at", { ascending:false })
+      .limit(50);
+
+    if (error) {
+      console.error("recent leads error:", error);
+      recentLeadsNote.textContent = "Error loading recent leads.";
+      return;
+    }
+
+    const leads = data || [];
+    recentLeadsBody.innerHTML = "";
+
+    if (!leads.length) {
+      const tr = document.createElement("tr");
+      const td = document.createElement("td");
+      td.colSpan = 5;
+      td.className = "muted";
+      td.textContent = "No leads yet.";
+      tr.appendChild(td);
+      recentLeadsBody.appendChild(tr);
+      recentLeadsNote.textContent = "";
+      return;
+    }
+
+    leads.forEach(ld => {
+      const tr = document.createElement("tr");
+
+      const tdBiz = document.createElement("td");
+      tdBiz.innerHTML = `<strong>${ld.business_name || ld.business || "(No name)"}</strong>`;
+      recentLeadsBody.appendChild(tr);
+
+      tr.appendChild(tdBiz);
+
+      const tdContact = document.createElement("td");
+      const lines = [];
+      if (ld.phone) lines.push(ld.phone);
+      if (ld.email) lines.push(ld.email);
+      tdContact.innerHTML = lines.join("<br>");
+      tr.appendChild(tdContact);
+
+      const tdCat = document.createElement("td");
+      tdCat.textContent = ld.niche || ld.category || "";
+      tr.appendChild(tdCat);
+
+      const tdDate = document.createElement("td");
+      tdDate.textContent = formatDate(ld.created_at);
+      tr.appendChild(tdDate);
+
+      const tdDel = document.createElement("td");
+      const delBtn = document.createElement("button");
+      delBtn.className = "btn-small danger";
+      delBtn.textContent = "Delete";
+      delBtn.addEventListener("click", async () => {
+        if (!confirm("Delete this lead?")) return;
+        const { error } = await supabaseClient
+          .from("call_leads")
+          .delete()
+          .eq("id", ld.id);
+        if (error) {
+          console.error("delete lead error:", error);
+        }
+        await loadRecentLeads();
+      });
+      tdDel.appendChild(delBtn);
+      tr.appendChild(tdDel);
+    });
+
+    recentLeadsNote.textContent = `${leads.length} recent lead(s).`;
+  }
+
+  (async () => {
+    const user = await guardAdmin();
+    if (!user) return;
+    await loadRecentLeads();
+  })();
+</script>
+</body>
+</html>
