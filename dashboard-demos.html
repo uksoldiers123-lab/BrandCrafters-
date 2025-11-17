@@ -4,17 +4,155 @@
   <meta charset="utf-8" />
   <title>BrandCrafters — Demo Library</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="dashboard.css" />
-  <script defer src="dashboard.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script defer src="script.js"></script>
+  <style>
+    body.dashboard-body { margin:0; }
+    .main-content { padding:24px 20px 80px; }
+
+    .grid-3 {
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:16px;
+    }
+    .grid-2 {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:16px;
+    }
+    @media (max-width:900px){
+      .grid-3,.grid-2{ grid-template-columns:1fr; }
+    }
+
+    .stat-label {
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      color:var(--muted);
+    }
+    .stat-value {
+      font-size:24px;
+      font-weight:700;
+      margin:6px 0 4px;
+    }
+    .muted { color:var(--muted); font-size:13px; }
+
+    .table-wrap { width:100%; overflow-x:auto; }
+    table {
+      width:100%;
+      border-collapse:collapse;
+      font-size:13px;
+      min-width:640px;
+    }
+    th,td {
+      border-bottom:1px solid rgba(255,255,255,.08);
+      padding:6px 5px;
+      vertical-align:top;
+      text-align:left;
+    }
+    th {
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+      color:var(--muted);
+    }
+
+    .pill {
+      display:inline-block;
+      padding:2px 8px;
+      border-radius:999px;
+      font-size:11px;
+    }
+    .pill-blue  { background:rgba(110,168,255,.18); }
+    .pill-green { background:rgba(155,255,191,.18); }
+    .pill-gray  { background:rgba(200,200,220,.15); }
+
+    .btn-small {
+      font-size:12px;
+      padding:4px 8px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.22);
+      background:rgba(255,255,255,.06);
+      cursor:pointer;
+      margin-right:4px;
+    }
+    .btn-small.primary {
+      border-color:transparent;
+      background:var(--grad);
+      color:#050713;
+      box-shadow:0 0 0 1px rgba(110,168,255,.4);
+      font-weight:600;
+    }
+    .btn-small:disabled {
+      opacity:.5;
+      cursor:not-allowed;
+    }
+
+    .admin-subnav {
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin:8px 0 20px;
+    }
+    .admin-subnav a {
+      font-size:13px;
+      padding:6px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.16);
+      background:rgba(255,255,255,.04);
+      text-decoration:none;
+      color:var(--text);
+      transition:.18s;
+    }
+    .admin-subnav a:hover {
+      background:rgba(255,255,255,.10);
+      transform:translateY(-1px);
+    }
+    .admin-subnav a.active {
+      border-color:transparent;
+      background:var(--grad);
+      color:#050713;
+      box-shadow:0 0 0 1px rgba(110,168,255,.4);
+      font-weight:600;
+    }
+
+    .admin-email { font-size:12px; color:var(--muted); margin-right:4px; }
+
+    form.compact label {
+      display:block;
+      margin-bottom:10px;
+      font-size:13px;
+    }
+    form.compact input,
+    form.compact textarea,
+    form.compact select {
+      width:100%;
+      margin-top:4px;
+      padding:9px 10px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,.16);
+      background:rgba(20,18,32,.6);
+      color:var(--text);
+      font-size:13px;
+    }
+    form.compact textarea { resize:vertical; }
+
+    @media (max-width:640px){
+      .main-content { padding:16px 14px 70px; }
+      h1 { font-size:20px; }
+      .stat-value { font-size:20px; }
+      .admin-subnav { flex-direction:column; }
+      .admin-subnav a { width:100%; text-align:center; }
+      table { min-width:0; font-size:12px; }
+    }
+  </style>
 </head>
 
-<body class="admin-body">
+<body class="dashboard-body">
 
-<!-- ============================
-   HEADER (same as main site)
-=============================== -->
-<header class="site-header admin-header">
+<!-- HEADER (same as index/dashboard) -->
+<header class="site-header">
   <div class="container header-inner">
     <a class="logo" href="index.html">
       <span class="logo-mark">BC</span><span>BrandCrafters</span>
@@ -24,335 +162,411 @@
       <a href="index.html" class="nav-link">Home</a>
       <a href="pricing.html" class="nav-link">Pricing</a>
       <a href="customer-inquiry.html" class="nav-link">Customer Portal</a>
+      <a href="dashboard.html" class="nav-link active">Admin</a>
+
       <span id="userEmail" class="admin-email"></span>
       <button id="logoutBtn" class="btn btn-outline">Logout</button>
     </nav>
 
-    <button class="menu-toggle" aria-expanded="false">
+    <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
   </div>
 
-  <nav class="mobile-drawer admin-drawer" aria-hidden="true">
+  <nav class="mobile-drawer" aria-hidden="true">
     <div class="drawer-header">
       <a class="logo" href="index.html">
         <span class="logo-mark">BC</span><span>BrandCrafters</span>
       </a>
-      <button class="menu-close">✕</button>
+      <button class="menu-close" aria-label="Close menu">✕</button>
     </div>
-
-    <a class="drawer-link" href="dashboard.html">Dashboard</a>
-    <a class="drawer-link" href="dashboard-leads.html">Lead List</a>
-    <a class="drawer-link" href="dashboard-leads-upload.html">Upload Leads</a>
-    <a class="drawer-link highlight" href="dashboard-demos.html">Demo Library</a>
-    <a class="drawer-link" href="dashboard-communications.html">Scripts & Messages</a>
-    <a class="drawer-link" href="dashboard-settings.html">Settings</a>
+    <a class="drawer-link" href="index.html">Home</a>
+    <a class="drawer-link" href="pricing.html">Pricing</a>
+    <a class="drawer-link" href="customer-inquiry.html">Customer Portal</a>
+    <a class="drawer-link highlight" href="dashboard.html">Admin</a>
     <button class="drawer-link" id="logoutBtnMobile">Logout</button>
   </nav>
-
-  <div class="drawer-backdrop"></div>
+  <div class="drawer-backdrop" aria-hidden="true"></div>
 </header>
 
+<main class="main-content container">
+  <section>
+    <h1>Demo Library</h1>
+    <p class="subhead">
+      Manage demo sites used to sell leads. Toggle live/draft, control what contractors can see,
+      and add new demo URLs as you build them.
+    </p>
 
+    <!-- ADMIN DASHBOARD NAV -->
+    <nav class="admin-subnav">
+      <a href="dashboard.html">Overview</a>
+      <a href="dashboard-leads.html">Lead List</a>
+      <a href="dashboard-leads-upload.html">Upload Leads</a>
+      <a href="dashboard-demos.html" class="active">Demo Library</a>
+      <a href="dashboard-communications.html">Scripts &amp; Messages</a>
+      <a href="dashboard-commissions.html">Commissions</a>
+      <a href="dashboard-settings.html">Settings</a>
+      <a href="contractor-portal.html">Contractor Portal</a>
+    </nav>
+  </section>
 
-<!-- ============================
-   SIDEBAR
-=============================== -->
-<aside class="sidebar">
-  <div class="sidebar-header">
-    <div class="bc-icon">BC</div>
-    <span class="sidebar-title">Admin Panel</span>
-  </div>
-
-  <nav class="sidebar-nav">
-    <a href="dashboard.html" class="side-item">🏠 Dashboard</a>
-
-    <div class="side-group">
-      <div class="side-label">LEADS</div>
-      <a href="dashboard-leads.html" class="side-sub">📇 Lead List</a>
-      <a href="dashboard-leads-upload.html" class="side-sub">📤 Upload CSV</a>
-    </div>
-
-    <div class="side-group">
-      <div class="side-label">DEMOS</div>
-      <a href="dashboard-demos.html" class="side-sub active">🌐 Demo Library</a>
-    </div>
-
-    <div class="side-group">
-      <div class="side-label">COMMUNICATIONS</div>
-      <a href="dashboard-communications.html" class="side-sub">📞 Scripts</a>
-      <a href="dashboard-communications.html#email" class="side-sub">✉️ Emails</a>
-      <a href="dashboard-communications.html#dm" class="side-sub">💬 DM Templates</a>
-    </div>
-
-    <div class="side-group">
-      <div class="side-label">SETTINGS</div>
-      <a href="dashboard-settings.html" class="side-sub">⚙️ System Settings</a>
-    </div>
-  </nav>
-</aside>
-
-
-
-<!-- ============================
-   MAIN CONTENT — DEMO LIBRARY
-=============================== -->
-<main class="main-content">
-  <h1>Demo Library</h1>
-  <p class="subhead">
-    Manage demo sites used to sell leads. Toggle Live/Draft, add new demos, or update URLs and notes.
-  </p>
-
-  <!-- Stats + bulk actions -->
-  <section class="grid-3" style="margin-bottom:24px;">
-    <div class="card stat-card">
+  <!-- STATS -->
+  <section class="grid-3" style="margin-bottom:16px;">
+    <article class="card">
       <div class="stat-label">Total Demos</div>
-      <div class="stat-value" id="demoTotal">0</div>
-      <p class="muted">All demos in your library.</p>
-    </div>
-    <div class="card stat-card">
+      <div class="stat-value" id="totalDemos">0</div>
+      <div class="muted">All demos in your library (live + draft).</div>
+    </article>
+    <article class="card">
       <div class="stat-label">Live</div>
-      <div class="stat-value" id="demoLive">0</div>
-      <p class="muted">Visible to contractors.</p>
-    </div>
-    <div class="card stat-card">
-      <div class="stat-label">Draft</div>
-      <div class="stat-value" id="demoDraft">0</div>
-      <p class="muted">Hidden until you go live.</p>
-    </div>
+      <div class="stat-value" id="liveDemos">0</div>
+      <div class="muted">Marked "live" and ready to show.</div>
+    </article>
+    <article class="card">
+      <div class="stat-label">Visible to Contractors</div>
+      <div class="stat-value" id="visibleDemos">0</div>
+      <div class="muted">Live + visible in contractor portal.</div>
+    </article>
   </section>
 
-  <section class="card" style="margin-bottom:24px;">
-    <button class="btn btn-primary" onclick="publishAll()">Make All Demos Live</button>
-    <span id="bulkMsg" class="muted" style="margin-left:12px;"></span>
-  </section>
+  <!-- TABLE + ADD FORM -->
+  <section class="grid-2">
+    <article class="card">
+      <h2>All Demos</h2>
+      <p class="muted">
+        Use this list when you’re assigning demos to niches or matching with leads.
+        Live + visible items will be auto-surfaced to contractors by category.
+      </p>
+      <div class="table-wrap">
+        <table id="demoTable">
+          <thead>
+            <tr>
+              <th>Name / Niche</th>
+              <th>URL</th>
+              <th>Status</th>
+              <th>Contractors</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p class="muted" id="demoTableNote" style="margin-top:8px;"></p>
+    </article>
 
-  <!-- Add / Edit form -->
-  <section class="card" id="add">
-    <h2 id="formTitle">Add Demo</h2>
+    <article class="card">
+      <h2>Add / Edit Demo</h2>
+      <p class="muted">
+        Add new demo sites as you build them. Use <b>niche/category</b> to match
+        against lead categories (e.g. “food truck”, “HVAC”, “lawn care”).
+      </p>
 
-    <form id="demoForm" onsubmit="saveDemo(event)">
-      <input type="hidden" id="demo_id" />
+      <form id="demoForm" class="compact">
+        <input type="hidden" name="id" id="demoId" />
 
-      <label>Demo Name
-        <input id="name" required placeholder="Restaurant One-Page Demo" />
-      </label>
+        <label>Demo Name
+          <input name="name" id="demoName" placeholder="e.g. Food Truck Hero" required />
+        </label>
+        <label>Niche / Category
+          <input name="category" id="demoCategory" placeholder="e.g. food truck, HVAC, salon" />
+        </label>
+        <label>Demo URL
+          <input name="url" id="demoUrl" placeholder="https://example-demo.com" required />
+        </label>
+        <label>Status
+          <select name="status" id="demoStatus">
+            <option value="live">Live</option>
+            <option value="draft">Draft</option>
+          </select>
+        </label>
+        <label>Visible to contractors?
+          <select name="visible" id="demoVisible">
+            <option value="true">Yes, show in contractor portal</option>
+            <option value="false">No, admin only</option>
+          </select>
+        </label>
+        <label>Notes
+          <textarea name="notes" id="demoNotes" rows="4" placeholder="What this demo is for, special talking points…"></textarea>
+        </label>
 
-      <label>Category
-        <input id="category" placeholder="Restaurant, Barber, Lawn Care, HVAC…" />
-      </label>
-
-      <label>Demo URL
-        <input id="demo_url" placeholder="https://yourdemo.example.com" />
-      </label>
-
-      <label>Notes
-        <textarea id="notes" rows="3" placeholder="Any details for you / contractors…"></textarea>
-      </label>
-
-      <label>Status
-        <select id="is_active">
-          <option value="true">Live</option>
-          <option value="false">Draft</option>
-        </select>
-      </label>
-
-      <button type="submit" class="btn btn-primary" style="margin-top:14px;">Save Demo</button>
-      <button type="button" class="btn btn-ghost" style="margin-top:14px;margin-left:8px;" onclick="resetForm()">Reset</button>
-
-      <p id="formMsg" class="muted"></p>
-    </form>
-  </section>
-
-  <!-- Demo list -->
-  <section class="card" style="margin-top:30px;">
-    <h2>All Demos</h2>
-    <table class="table" id="demoTable">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Category</th>
-          <th>URL</th>
-          <th>Status</th>
-          <th>Notes</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+        <button type="submit" class="btn btn-primary" style="margin-top:8px;">
+          Save Demo
+        </button>
+        <button type="button" id="resetDemoFormBtn" class="btn btn-ghost" style="margin-top:8px;margin-left:4px;">
+          Clear Form
+        </button>
+        <p id="demoFormMsg" class="muted" style="margin-top:8px;"></p>
+      </form>
+    </article>
   </section>
 </main>
 
-
-
-<!-- ============================
-   SUPABASE
-=============================== -->
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      © <span id="year"></span> BrandCrafters — A division of Egyptian Hype LLC
+      <a href="dashboard.html" class="admin-link">Admin</a>
+    </div>
+  </div>
+</footer>
 <script>
-const SUPABASE_URL = "https://vekoulqehexqosgwacwa.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiIsInZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
-const ADMIN_EMAIL = "srarnold216@gmail.com";
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-
-/* AUTH GUARD */
-async function guard(){
-  const { data } = await sb.auth.getUser();
-  if (!data.user) return location.href="dashboard-login.html";
-  if (data.user.email !== ADMIN_EMAIL) return location.href="contractor-portal.html";
-  document.getElementById("userEmail").textContent = data.user.email;
-}
-guard();
-
-
-
-/* LOAD DEMOS */
-let cachedDemos = [];
-
-async function loadDemos(){
-  const res = await sb.from("demo_sites").select("*").order("created_at",{ascending:false});
-  if (res.error){
-    console.error(res.error);
-    return;
-  }
-  cachedDemos = res.data || [];
-
-  const total = cachedDemos.length;
-  const live  = cachedDemos.filter(d=>d.is_active).length;
-  const draft = total - live;
-
-  document.getElementById("demoTotal").textContent = total;
-  document.getElementById("demoLive").textContent  = live;
-  document.getElementById("demoDraft").textContent = draft;
-
-  const tbody = document.querySelector("#demoTable tbody");
-  tbody.innerHTML = "";
-
-  cachedDemos.forEach(d => {
-    const shortUrl = d.demo_url ? (d.demo_url.length>30 ? d.demo_url.slice(0,27)+"..." : d.demo_url) : "—";
-
-    tbody.innerHTML += `
-      <tr>
-        <td><strong>${d.name}</strong></td>
-        <td>${d.category || "—"}</td>
-        <td>${d.demo_url ? `<a href="${d.demo_url}" target="_blank" class="muted">${shortUrl}</a>` : "—"}</td>
-        <td>${d.is_active ? "✅ Live" : "⌛ Draft"}</td>
-        <td class="muted">${d.notes || ""}</td>
-        <td>
-          <button class="btn-small" onclick="editDemo('${d.id}')">Edit</button>
-          <button class="btn-small" onclick="toggleDemo('${d.id}', ${d.is_active ? "true" : "false"})">
-            ${d.is_active ? "Set Draft" : "Make Live"}
-          </button>
-          <button class="btn-small danger" onclick="deleteDemo('${d.id}')">Delete</button>
-        </td>
-      </tr>
-    `;
-  });
-}
-
-loadDemos();
-
-
-
-/* SAVE DEMO */
-async function saveDemo(e){
-  e.preventDefault();
-  const id = document.getElementById("demo_id").value;
-
-  const body = {
-    name: document.getElementById("name").value,
-    category: document.getElementById("category").value,
-    demo_url: document.getElementById("demo_url").value,
-    notes: document.getElementById("notes").value,
-    is_active: document.getElementById("is_active").value === "true"
-  };
-
-  let res;
-  if (id){
-    res = await sb.from("demo_sites").update(body).eq("id",id);
-  } else {
-    res = await sb.from("demo_sites").insert(body);
-  }
-
-  if (res.error){
-    document.getElementById("formMsg").textContent = "Error saving demo.";
-    console.error(res.error);
-  } else {
-    document.getElementById("formMsg").textContent = "Saved!";
-    resetForm();
-    loadDemos();
-  }
-}
-
-
-
-/* EDIT DEMO */
-function editDemo(id){
-  const d = cachedDemos.find(x => x.id === id);
-  if (!d) return;
-
-  document.getElementById("formTitle").textContent = "Edit Demo";
-  document.getElementById("demo_id").value = d.id;
-  document.getElementById("name").value = d.name || "";
-  document.getElementById("category").value = d.category || "";
-  document.getElementById("demo_url").value = d.demo_url || "";
-  document.getElementById("notes").value = d.notes || "";
-  document.getElementById("is_active").value = d.is_active ? "true" : "false";
-
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}
-
-
-
-/* RESET FORM */
-function resetForm(){
-  document.getElementById("formTitle").textContent = "Add Demo";
-  document.getElementById("demo_id").value = "";
-  document.getElementById("demoForm").reset();
-  document.getElementById("is_active").value = "false";
-  document.getElementById("formMsg").textContent = "";
-}
-
-
-
-/* TOGGLE LIVE/DRAFT */
-async function toggleDemo(id, isActive){
-  const res = await sb.from("demo_sites").update({ is_active: !isActive }).eq("id",id);
-  if (res.error){
-    console.error(res.error);
-    return;
-  }
-  loadDemos();
-}
-
-
-
-/* DELETE DEMO */
-async function deleteDemo(id){
-  if (!confirm("Delete this demo?")) return;
-  const res = await sb.from("demo_sites").delete().eq("id",id);
-  if (res.error){
-    console.error(res.error);
-    return;
-  }
-  loadDemos();
-}
-
-
-
-/* PUBLISH ALL LIVE */
-async function publishAll(){
-  const res = await sb.from("demo_sites").update({ is_active: true }).eq("is_active", false);
-  if (res.error){
-    document.getElementById("bulkMsg").textContent = "Error updating demos.";
-    console.error(res.error);
-  } else {
-    document.getElementById("bulkMsg").textContent = "All demos set to Live.";
-    loadDemos();
-  }
-}
+  document.getElementById('year').textContent = new Date().getFullYear();
 </script>
 
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL  = "https://vekoulqehexqosgwacwa.supabase.co";
+  const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZla291bHFlaGV4cW9zZ3dhY3dhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxNTYxNTUsImV4cCI6MjA3ODczMjE1NX0.B9gSHAb_cLCcjCzXM5FegDIKsuQwHCqAFXslfAzzrQ4";
+  const ADMIN_EMAIL   = "srarnold216@gmail.com";
+
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+  const userEmailSpan   = document.getElementById("userEmail");
+  const logoutBtn       = document.getElementById("logoutBtn");
+  const logoutBtnMobile = document.getElementById("logoutBtnMobile");
+
+  const totalDemosEl   = document.getElementById("totalDemos");
+  const liveDemosEl    = document.getElementById("liveDemos");
+  const visibleDemosEl = document.getElementById("visibleDemos");
+
+  const demoTableBody  = document.querySelector("#demoTable tbody");
+  const demoTableNote  = document.getElementById("demoTableNote");
+
+  const demoForm       = document.getElementById("demoForm");
+  const demoFormMsg    = document.getElementById("demoFormMsg");
+  const resetDemoFormBtn = document.getElementById("resetDemoFormBtn");
+
+  const demoIdInput    = document.getElementById("demoId");
+  const demoNameInput  = document.getElementById("demoName");
+  const demoCategoryInput = document.getElementById("demoCategory");
+  const demoUrlInput   = document.getElementById("demoUrl");
+  const demoStatusInput= document.getElementById("demoStatus");
+  const demoVisibleInput= document.getElementById("demoVisible");
+  const demoNotesInput = document.getElementById("demoNotes");
+
+  async function guardAdmin() {
+    const { data } = await supabaseClient.auth.getUser();
+    if (!data || !data.user) {
+      // Not logged in → go to main dashboard login
+      window.location.href = "dashboard.html";
+      return null;
+    }
+    const email = data.user.email || "";
+    userEmailSpan.textContent = email;
+
+    if (email !== ADMIN_EMAIL) {
+      // Contractors shouldn’t view this page
+      window.location.href = "contractor-portal.html";
+      return null;
+    }
+    return data.user;
+  }
+
+  async function doLogout() {
+    await supabaseClient.auth.signOut();
+    window.location.href = "dashboard.html";
+  }
+  logoutBtn?.addEventListener("click", doLogout);
+  logoutBtnMobile?.addEventListener("click", doLogout);
+
+  function formatStatusPill(status) {
+    const s = (status || "draft").toLowerCase();
+    const span = document.createElement("span");
+    if (s === "live") {
+      span.className = "pill pill-green";
+    } else {
+      span.className = "pill pill-gray";
+    }
+    span.textContent = s;
+    return span;
+  }
+
+  function formatVisiblePill(visible) {
+    const v = !!visible;
+    const span = document.createElement("span");
+    span.className = v ? "pill pill-blue" : "pill pill-gray";
+    span.textContent = v ? "Visible" : "Hidden";
+    return span;
+  }
+
+  function fillFormFromRow(row) {
+    demoIdInput.value       = row.id || "";
+    demoNameInput.value     = row.name || "";
+    demoCategoryInput.value = row.category || row.niche || "";
+    demoUrlInput.value      = row.url || row.demo_url || "";
+    demoStatusInput.value   = (row.status || "live").toLowerCase() === "draft" ? "draft" : "live";
+    demoVisibleInput.value  = row.visible_to_contractors ? "true" : "false";
+    demoNotesInput.value    = row.notes || "";
+    demoFormMsg.textContent = "Editing existing demo. Save to update.";
+  }
+
+  function clearForm() {
+    demoIdInput.value       = "";
+    demoNameInput.value     = "";
+    demoCategoryInput.value = "";
+    demoUrlInput.value      = "";
+    demoStatusInput.value   = "live";
+    demoVisibleInput.value  = "true";
+    demoNotesInput.value    = "";
+    demoFormMsg.textContent = "";
+  }
+  resetDemoFormBtn.addEventListener("click", clearForm);
+
+  async function loadDemos() {
+    const { data, error } = await supabaseClient
+      .from("demo_library")
+      .select("*")
+      .order("created_at", { ascending:false });
+
+    if (error) {
+      console.error("demo_library error:", error);
+      demoTableNote.textContent = "Error loading demos. Check console logs.";
+      return;
+    }
+
+    const demos = data || [];
+
+    // Stats
+    const total    = demos.length;
+    const live     = demos.filter(d => (d.status || "").toLowerCase() === "live").length;
+    const visible  = demos.filter(d => d.visible_to_contractors && (d.status || "").toLowerCase() === "live").length;
+
+    totalDemosEl.textContent   = total;
+    liveDemosEl.textContent    = live;
+    visibleDemosEl.textContent = visible;
+
+    // Table
+    demoTableBody.innerHTML = "";
+    if (!demos.length) {
+      const tr = document.createElement("tr");
+      const td = document.createElement("td");
+      td.colSpan = 5;
+      td.className = "muted";
+      td.textContent = "No demos yet. Add your first one with the form on the right.";
+      tr.appendChild(td);
+      demoTableBody.appendChild(tr);
+      demoTableNote.textContent = "";
+      return;
+    }
+
+    demos.forEach(row => {
+      const tr = document.createElement("tr");
+
+      const tdName = document.createElement("td");
+      tdName.innerHTML = `<strong>${row.name || "(Untitled demo)"}</strong><br><span class="muted">${row.category || row.niche || ""}</span>`;
+      tr.appendChild(tdName);
+
+      const tdUrl = document.createElement("td");
+      if (row.url || row.demo_url) {
+        const a = document.createElement("a");
+        a.href = row.url || row.demo_url;
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+        a.textContent = row.url || row.demo_url;
+        tdUrl.appendChild(a);
+      } else {
+        tdUrl.textContent = "—";
+      }
+      tr.appendChild(tdUrl);
+
+      const tdStatus = document.createElement("td");
+      tdStatus.appendChild(formatStatusPill(row.status));
+      tr.appendChild(tdStatus);
+
+      const tdVisible = document.createElement("td");
+      tdVisible.appendChild(formatVisiblePill(row.visible_to_contractors));
+      tr.appendChild(tdVisible);
+
+      const tdActions = document.createElement("td");
+
+      const editBtn = document.createElement("button");
+      editBtn.className = "btn-small";
+      editBtn.textContent = "Edit";
+      editBtn.addEventListener("click", () => fillFormFromRow(row));
+      tdActions.appendChild(editBtn);
+
+      const toggleLiveBtn = document.createElement("button");
+      toggleLiveBtn.className = "btn-small";
+      toggleLiveBtn.textContent = (row.status || "live").toLowerCase() === "live" ? "Set Draft" : "Set Live";
+      toggleLiveBtn.addEventListener("click", async () => {
+        const newStatus = (row.status || "live").toLowerCase() === "live" ? "draft" : "live";
+        await supabaseClient.from("demo_library").update({ status:newStatus }).eq("id", row.id);
+        await loadDemos();
+      });
+      tdActions.appendChild(toggleLiveBtn);
+
+      const toggleVisibleBtn = document.createElement("button");
+      toggleVisibleBtn.className = "btn-small";
+      toggleVisibleBtn.textContent = row.visible_to_contractors ? "Hide" : "Show";
+      toggleVisibleBtn.addEventListener("click", async () => {
+        await supabaseClient
+          .from("demo_library")
+          .update({ visible_to_contractors: !row.visible_to_contractors })
+          .eq("id", row.id);
+        await loadDemos();
+      });
+      tdActions.appendChild(toggleVisibleBtn);
+
+      tr.appendChild(tdActions);
+      demoTableBody.appendChild(tr);
+    });
+
+    demoTableNote.textContent = "";
+  }
+
+  demoForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const id       = demoIdInput.value || null;
+    const name     = demoNameInput.value.trim();
+    const category = demoCategoryInput.value.trim() || null;
+    const url      = demoUrlInput.value.trim();
+    const status   = demoStatusInput.value || "live";
+    const visible  = demoVisibleInput.value === "true";
+    const notes    = demoNotesInput.value.trim() || null;
+
+    if (!name || !url) {
+      demoFormMsg.textContent = "Name and URL are required.";
+      return;
+    }
+
+    const payload = {
+      name,
+      category,
+      url,
+      status,
+      visible_to_contractors: visible,
+      notes
+    };
+
+    demoFormMsg.textContent = "Saving…";
+
+    let error;
+    if (id) {
+      ({ error } = await supabaseClient
+        .from("demo_library")
+        .update(payload)
+        .eq("id", id));
+    } else {
+      ({ error } = await supabaseClient
+        .from("demo_library")
+        .insert(payload));
+    }
+
+    if (error) {
+      console.error("demo save error:", error);
+      demoFormMsg.textContent = "Error saving demo. Check console.";
+    } else {
+      demoFormMsg.textContent = "Saved.";
+      clearForm();
+      await loadDemos();
+    }
+  });
+
+  (async () => {
+    const user = await guardAdmin();
+    if (!user) return;
+    await loadDemos();
+  })();
+</script>
 </body>
   </html>
